@@ -61,7 +61,8 @@ export default function Home() {
         <StepsRoot defaultValue={1} count={3}>
           <StepsList>
             <StepsItem index={0} title="Choose your bot type" />
-            <StepsItem index={1} title="Customize your bot" />
+            <StepsItem index={1} title="Name your bot" />
+            <StepsItem index={2} title="Customize your bot" />
           </StepsList>
           <StepsContent index={0}>
             <Heading as="h2" size="md">
@@ -81,8 +82,13 @@ export default function Home() {
               </SelectContent>
             </SelectRoot>
           </StepsContent>
-          <StepsContent index={1}>Here is where we would add fields to customize the bot as needed, based on the type of bot selected.</StepsContent>
-          <StepsCompletedContent>All steps are complete!</StepsCompletedContent>
+          <StepsContent index={1}>
+            <Field label="Name" marginBottom={6} width="320px">
+              <Input placeholder="Enter a name for your bot..." />
+            </Field>
+          </StepsContent>
+          <StepsContent index={2}>Here is where we would add fields to customize the bot as needed, based on the type of bot selected.</StepsContent>
+          <StepsCompletedContent>Now the steps are complete, and this is where we would submit the info to Bitpart to create a new bot.</StepsCompletedContent>
           <Group>
             <StepsPrevTrigger asChild>
               <Button variant="outline" size="sm">
@@ -96,12 +102,6 @@ export default function Home() {
             </StepsNextTrigger>
           </Group>
         </StepsRoot>
-        <form>
-          <Field label="Name" marginBottom={6}>
-            <Input placeholder="Enter a name for your bot..."/>
-          </Field>
-          <Button>Submit</Button>
-        </form>
       </Container>
     </Box>
   );
