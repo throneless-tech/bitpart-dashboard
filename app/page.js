@@ -10,12 +10,20 @@ import {
   Flex,
   Group,
   Heading,
+  HStack,
+  Icon,
   Input,
+  Stack,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 
 // component imports
 import { ColorModeButton } from "@/components/ui/color-mode";
+import {
+  RadioCardItem,
+  RadioCardLabel,
+  RadioCardRoot,
+} from "@/components/ui/radio-card"
 import {
   SelectContent,
   SelectItem,
@@ -34,14 +42,40 @@ import {
   StepsRoot,
 } from "@/components/ui/steps"
 
-const frameworks = createListCollection({
-  items: [
-    { label: "Broadcast", value: "broadcast" },
-    { label: "Help Desk", value: "helpdesk" },
-    { label: "Tip Line", value: "tipline" },
-    { label: "VPN", value: "vpn" },
-  ],
-})
+// icons imports
+import { CgModem } from "react-icons/cg";
+import { FaSimCard } from "react-icons/fa";
+import { IoHelpBuoySharp } from "react-icons/io5";
+import { LuLightbulb } from "react-icons/lu";
+import { TbBuildingBroadcastTower } from "react-icons/tb";
+
+const frameworks = [
+  { value: "broadcast",
+    title: "Broadcast",
+    description: "Create a distributed list to enable secure, efficient mass communication while protecting the privacy of both senders and recipients.",
+    icon: <TbBuildingBroadcastTower />
+  },
+  { value: "esim",
+    title: "eSIM",
+    description: "Distribute eSIMS to users who request codes with anonymity.",
+    icon: <FaSimCard />
+  },
+  { value: "helpdesk",
+    title: "Help Desk",
+    description: "Answer questions to common digital security and other issues without a user needing to identify themselves.",
+    icon: <IoHelpBuoySharp />
+  },
+  { value: "tipline",
+    title: "Tip Line",
+    description: "Receive tips about goings on from users who can share the information anonymously.",
+    icon: <LuLightbulb />
+  },
+  { value: "vpn",
+    title: "VPN",
+    description: "Distribute VPN codes to users who request the codes with anonymity.",
+    icon: <CgModem />
+  },
+]
 
 export default function Home() {
   return (
@@ -65,22 +99,35 @@ export default function Home() {
             <StepsItem index={2} title="Customize your bot" />
           </StepsList>
           <StepsContent index={0}>
-            <Heading as="h2" size="md">
-              What type of bot do you want to create?
+            <Heading as="h2" marginTop={10} size="md">
+              What kind of bot do you want to create?
             </Heading>
-            <SelectRoot size="sm" width="320px">
-              <SelectLabel>Select a bot framework</SelectLabel>
-              <SelectTrigger>
-                <SelectValueText placeholder="Choose one" />
-              </SelectTrigger>
-              <SelectContent>
-                {frameworks.items.map((type) => (
-                  <SelectItem item={type} key={type.value}>
-                    {type.label}
-                  </SelectItem>
+            <RadioCardRoot
+              align="center"
+              defaultValue="broadcast"
+              justify="center"
+              marginY={6}
+              maxW="4xl"
+              orientation="vertical"
+            >
+              <RadioCardLabel>Choose your bot type</RadioCardLabel>
+              <Stack align="stretch" direction={["column", "row"]}>
+                {frameworks.map((item) => (
+                  <RadioCardItem
+                    label={item.title}
+                    description={item.description}
+                    icon={
+                      <Icon fontSize="2xl" color="fg.subtle">
+                        {item.icon}
+                      </Icon>
+                    }
+                    indicator={false}
+                    key={item.value}
+                    value={item.value}
+                  />
                 ))}
-              </SelectContent>
-            </SelectRoot>
+              </Stack>
+            </RadioCardRoot>
           </StepsContent>
           <StepsContent index={1}>
             <Field label="Name" marginBottom={6} width="320px">
