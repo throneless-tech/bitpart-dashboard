@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import styles from "./page.module.css";
 
@@ -14,6 +16,7 @@ import {
   Icon,
   Input,
   Stack,
+  Text
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 
@@ -48,29 +51,35 @@ import { FaSimCard } from "react-icons/fa";
 import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
+import { useEffect, useState } from "react";
 
 const frameworks = [
-  { value: "broadcast",
+  {
+    value: "broadcast",
     title: "Broadcast",
     description: "Create a distributed list to enable secure, efficient mass communication while protecting the privacy of both senders and recipients.",
     icon: <TbBuildingBroadcastTower />
   },
-  { value: "esim",
+  {
+    value: "esim",
     title: "eSIM",
     description: "Distribute eSIMS to users who request codes with anonymity.",
     icon: <FaSimCard />
   },
-  { value: "helpdesk",
+  {
+    value: "helpdesk",
     title: "Help Desk",
     description: "Answer questions to common digital security and other issues without a user needing to identify themselves.",
     icon: <IoHelpBuoySharp />
   },
-  { value: "tipline",
+  {
+    value: "tipline",
     title: "Tip Line",
     description: "Receive tips about goings on from users who can share the information anonymously.",
     icon: <LuLightbulb />
   },
-  { value: "vpn",
+  {
+    value: "vpn",
     title: "VPN",
     description: "Distribute VPN codes to users who request the codes with anonymity.",
     icon: <CgModem />
@@ -78,6 +87,14 @@ const frameworks = [
 ]
 
 export default function Home() {
+  const [botType, setBotType] = useState("broadcast");
+
+  const updateBotType = (event) => {
+    setBotType(event.target.value)
+  };
+
+  useEffect(() => { }, [botType]);
+
   return (
     <Box>
       <Container py={6}>
@@ -108,7 +125,9 @@ export default function Home() {
               justify="center"
               marginY={6}
               maxW="4xl"
+              onChange={updateBotType}
               orientation="vertical"
+              value={botType}
             >
               <RadioCardLabel>Choose your bot type</RadioCardLabel>
               <Stack align="stretch" direction={["column", "row"]}>
@@ -134,7 +153,45 @@ export default function Home() {
               <Input placeholder="Enter a name for your bot..." />
             </Field>
           </StepsContent>
-          <StepsContent index={2}>Here is where we would add fields to customize the bot as needed, based on the type of bot selected.</StepsContent>
+          <StepsContent index={2}>
+            {botType == "broadcast" ? (
+              <>
+                <Text>
+                  Customizing broadcast bot here...
+                </Text>
+              </>
+            ) : botType == "esim" ? (
+              <>
+                <Text>
+                  Customizing esim bot here...
+                </Text>
+              </>
+            ) : botType == "helpdesk" ? (
+              <>
+                <Text>
+                  Customzing help desk bot here...
+                </Text>
+              </>
+            ) : botType == "tipline" ? (
+              <>
+                <Text>
+                  Customizing tip line bot here...
+                </Text>
+              </>
+            ) : botType == "vpn" ? (
+              <>
+                <Text>
+                  Customizing VPN bot here...
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text>
+                  Something went wrong. Please contact a system administrator: no bot type selected.
+                </Text>
+              </>
+            )}
+          </StepsContent>
           <StepsCompletedContent>Now the steps are complete, and this is where we would submit the info to Bitpart to create a new bot.</StepsCompletedContent>
           <Group>
             <StepsPrevTrigger asChild>
