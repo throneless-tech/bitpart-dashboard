@@ -5,6 +5,11 @@ export const loginSchema = object({
   code: string().required()
 });
 
+export const broadcastSchema = object({
+  name: string().required(),
+  welcomeMessage: string().required(),
+});
+
 
 // If any form fields are invalid, return early
 if (!validatedFields.success) {

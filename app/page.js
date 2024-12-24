@@ -28,14 +28,6 @@ import {
   RadioCardRoot,
 } from "@/components/ui/radio-card"
 import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "@/components/ui/select"
-import {
   StepsCompletedContent,
   StepsContent,
   StepsItem,
@@ -44,6 +36,8 @@ import {
   StepsPrevTrigger,
   StepsRoot,
 } from "@/components/ui/steps"
+
+import { BroadcastForm } from "@/components/forms/broadcast";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -156,9 +150,7 @@ export default function Home() {
           <StepsContent index={2}>
             {botType == "broadcast" ? (
               <>
-                <Text>
-                  Customizing broadcast bot here...
-                </Text>
+                <BroadcastForm />
               </>
             ) : botType == "esim" ? (
               <>
