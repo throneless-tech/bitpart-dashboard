@@ -1,3 +1,6 @@
+// base imports
+import * as Yup from 'yup';
+
 // chakra imports
 import {
   Input,
@@ -5,11 +8,11 @@ import {
 } from "@chakra-ui/react"
 import { Field } from "@/components/ui/field"
 
-// vaidation imports
-import { broadcastSchema } from "@/app/lib/definitions";
-
 export const BroadcastForm = () => {
-  let validatedfields = await broadcastSchema.validate(fields);
+  const broadcastSchema = Yup.object({
+    name: Yup.string().required(),
+    welcomeMessage: Yup.string().required(),
+  });
 
   return (
     <form>
