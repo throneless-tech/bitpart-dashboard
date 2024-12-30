@@ -6,7 +6,10 @@ import Image from "next/image";
 // form validation imports
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { broadcastSchema } from "./lib/forms";
+import {
+  broadcastSchema,
+  esimSchema
+} from "./lib/forms";
 
 // style imports
 import styles from "./page.module.css";
@@ -46,6 +49,7 @@ import {
 } from "@/components/ui/steps"
 
 import { BroadcastForm } from "@/components/forms/broadcast";
+import { EsimForm } from "@/components/forms/esim";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -177,9 +181,7 @@ export default function Home() {
               </>
             ) : botType == "esim" ? (
               <>
-                <Text>
-                  Customizing esim bot here...
-                </Text>
+                  <EsimForm schema={esimSchema} />
               </>
             ) : botType == "helpdesk" ? (
               <>

@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 
-export const BroadcastForm = ({ schema }) => {
+export const EsimForm = ({ schema }) => {
   const { register, control, errors } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -19,37 +19,26 @@ export const BroadcastForm = ({ schema }) => {
 
   const { fields, append, remove } = useFieldArray({
     control: control,
-    name: 'faq',
+    name: 'locations',
   });
 
   return (
     <>
       <Field
         errorText="Field is required"
-        helperText="Name your list. It can mirror the bot name or be different."
+        helperText="Name of your organization"
         invalid={!!errors?.name}
-        label="List name"
+        label="Organization name"
         required
         {...register('name')}
       >
-        <Input placeholder="Special broadcast list" />
+        <Input placeholder="e-sim Distribution Org" />
       </Field>
       <Field
         errorText="Field is required"
-        helperText="The message that greets someone joining your list."
-        invalid={!!errors?.welcomeMessage}
-        label="Welcome message"
-        marginTop={4}
-        required
-        {...register('welcomeMessage')}
-      >
-        <Textarea placeholder="Start typing..." />
-      </Field>
-      <Field
-        errorText="Field is required"
-        helperText="Describe the list and its rules."
+        helperText="Describe your organization for the 'About us' section."
         invalid={!!errors?.description}
-        label="Description and rules"
+        label="Organization description"
         marginTop={4}
         required
         {...register('description')}
@@ -57,22 +46,43 @@ export const BroadcastForm = ({ schema }) => {
         <Textarea placeholder="Start typing..." />
       </Field>
       <Field
-        errorText="Field must be a string of text."
-        helperText="Include safety tips for the list."
-        invalid={!!errors?.safetyTips}
-        label="Safety tips"
+        errorText="Field is required"
+        helperText="Describe the privacy policy for a user interacting with this bot."
+        invalid={!!errors?.privacyPolicy}
+        label="Privacy policy"
         marginTop={4}
-        {...register('safetyTips')}
+        required
+        {...register('privacyPolicy')}
+      >
+        <Textarea placeholder="Start typing..." />
+      </Field>
+      <Field
+        errorText="Field must be a string of text."
+        helperText="Include activation instructions for how a user can activate an e-sim."
+        invalid={!!errors?.activationInstructions}
+        label="Activation instructions"
+        marginTop={4}
+        {...register('activationInstructions')}
+      >
+        <Textarea placeholder="Start typing..." />
+      </Field>
+      <Field
+        errorText="Field must be a string of text."
+        helperText="Include helpful instructions for what a user should do if their e-sim is not working."
+        invalid={!!errors?.helpInstructions}
+        label="Help section"
+        marginTop={4}
+        {...register('helpInstructions')}
       >
         <Textarea placeholder="Start typing..." />
       </Field>
       <Field
         errorText="Fill out all the fields that you add."
-        helperText="Add as many FAQ for the list as you need. Keep in mind this will appear as a text message, so we recommend six (6) or fewer question/answer combos."
-        invalid={!!errors?.faq}
-        label="FAQ"
+        helperText="List the locations where a user can use an e-sim."
+        invalid={!!errors?.locations}
+        label="e-sim Locations"
         marginTop={4}
-        {...register('FAQ')}
+        {...register('locations')}
       >
         {fields.map((f, i) => {
           return (
@@ -86,10 +96,9 @@ export const BroadcastForm = ({ schema }) => {
               width='100%'
             >
               <Stack width='100%'>
-                <Input name='question' placeholder="Question" />
-                <Input name='answer' placeholder="Answer" />
+                <Input name='place' />
               </Stack>
-              {i > 0 && 
+              {i > 0 &&
                 <Button
                   onClick={() => remove(i)}
                   height={6}
@@ -104,13 +113,12 @@ export const BroadcastForm = ({ schema }) => {
         <Button
           onClick={() =>
             append({
-              question: '',
-              answer: '',
+              place: ''
             })
           }
           variant="subtle"
         >
-          Add FAQ
+          Add location
         </Button>
       </Field>
     </>
