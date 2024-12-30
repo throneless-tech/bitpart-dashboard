@@ -54,7 +54,7 @@ export const EsimForm = ({ schema }) => {
         required
         {...register('privacyPolicy')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Field must be a string of text."
@@ -64,7 +64,7 @@ export const EsimForm = ({ schema }) => {
         marginTop={4}
         {...register('activationInstructions')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Field must be a string of text."
@@ -74,7 +74,7 @@ export const EsimForm = ({ schema }) => {
         marginTop={4}
         {...register('helpInstructions')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Fill out all the fields that you add."

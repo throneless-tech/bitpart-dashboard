@@ -84,17 +84,17 @@ export const VpnForm = ({ schema }) => {
       </Field>
       <Field
         errorText="Field must be a string of text."
-        helperText="Include activation instructions for how a user can activate an e-sim."
+        helperText="Include instructions for how a user can activate a vpn."
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}
         {...register('activationInstructions')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Fill out all the fields that you add."
-        helperText="List the locations where a user can use an e-sim."
+        helperText="List the locations where a user can use a vpn."
         invalid={!!errors?.locations}
         label="VPN locations"
         marginTop={4}

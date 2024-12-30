@@ -54,7 +54,7 @@ export const BroadcastForm = ({ schema }) => {
         required
         {...register('description')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Field must be a string of text."
@@ -64,7 +64,7 @@ export const BroadcastForm = ({ schema }) => {
         marginTop={4}
         {...register('safetyTips')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea />
       </Field>
       <Field
         errorText="Fill out all the fields that you add."
