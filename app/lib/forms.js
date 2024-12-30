@@ -17,3 +17,12 @@ export const esimSchema = yup.object({
   helpInstructions: yup.string(),
   locations: yup.string().required(),
 });
+
+export const helpdeskSchema = yup.object({
+  name: yup.string().required(),
+  referral: yup.string().required(),
+  storageTime: yup.number().required(),
+  storageAccess: yup.string(),
+  privacyPolicy: yup.string().required(),
+  problems: yup.string(),
+});

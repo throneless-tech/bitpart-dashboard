@@ -8,7 +8,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   broadcastSchema,
-  esimSchema
+  esimSchema,
+  helpdeskSchema
 } from "./lib/forms";
 
 // style imports
@@ -50,6 +51,7 @@ import {
 
 import { BroadcastForm } from "@/components/forms/broadcast";
 import { EsimForm } from "@/components/forms/esim";
+import { HelpdeskForm } from "@/components/forms/helpdesk";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -122,7 +124,7 @@ export default function Home() {
           </Button>
         </Flex>
       </Container>
-      <Container marginBottom={6}>
+      <Container marginBottom={6} maxW="4xl">
         <Heading as="h1" marginBottom={4} size="xl">
           Create a new bot
         </Heading>
@@ -150,8 +152,15 @@ export default function Home() {
               orientation="vertical"
               value={botType}
             >
-              <RadioCardLabel>Choose your bot type</RadioCardLabel>
-              <Stack align="stretch" direction={["column", "row"]}>
+              <RadioCardLabel>Choose your bot type:</RadioCardLabel>
+              <Stack
+                align="stretch"
+                direction={["column", "row"]}
+                flexWrap="wrap"
+                gap={4}
+                justifyContent="center"
+                marginTop={3}
+              >
                 {frameworks.map((item) => (
                   <RadioCardItem
                     label={item.title}
@@ -163,6 +172,9 @@ export default function Home() {
                     }
                     indicator={false}
                     key={item.value}
+                    maxWidth={300}
+                    minWidth={300}
+                    width={300}
                     value={item.value}
                   />
                 ))}
@@ -181,13 +193,12 @@ export default function Home() {
               </>
             ) : botType == "esim" ? (
               <>
-                  <EsimForm schema={esimSchema} />
+                <EsimForm schema={esimSchema} />
               </>
             ) : botType == "helpdesk" ? (
               <>
-                <Text>
-                  Customzing help desk bot here...
-                </Text>
+                <HelpdeskForm schema={helpdeskSchema} />
+
               </>
             ) : botType == "tipline" ? (
               <>
