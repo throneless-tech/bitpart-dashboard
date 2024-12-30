@@ -1,6 +1,14 @@
 "use client"
 
+// next imports
 import Image from "next/image";
+
+// form validation imports
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { broadcastSchema } from "./lib/forms";
+
+// style imports
 import styles from "./page.module.css";
 
 // chakra ui imports
@@ -83,9 +91,20 @@ const frameworks = [
 export default function Home() {
   const [botType, setBotType] = useState("broadcast");
 
+  // set the path that a user takes depending on which bot type they select
   const updateBotType = (event) => {
     setBotType(event.target.value)
   };
+
+  // form validation
+  const { register, handleSubmit, errors } = useForm({
+    mode: 'onBlur',
+    resolver: yupResolver(`${botType}Schema`),
+  });
+
+  const validateForm = async (event) => {
+    console.log(event);
+  }
 
   useEffect(() => { }, [botType]);
 
@@ -99,11 +118,15 @@ export default function Home() {
           </Button>
         </Flex>
       </Container>
-      <Container>
+      <Container marginBottom={6}>
         <Heading as="h1" marginBottom={4} size="xl">
           Create a new bot
         </Heading>
-        <StepsRoot defaultValue={1} count={3}>
+        <StepsRoot
+          count={3}
+          defaultValue={1}
+          onStepComplete={validateForm}
+        >
           <StepsList>
             <StepsItem index={0} title="Choose your bot type" />
             <StepsItem index={1} title="Name your bot" />
@@ -150,7 +173,7 @@ export default function Home() {
           <StepsContent index={2}>
             {botType == "broadcast" ? (
               <>
-                <BroadcastForm />
+                <BroadcastForm schema={broadcastSchema} />
               </>
             ) : botType == "esim" ? (
               <>
