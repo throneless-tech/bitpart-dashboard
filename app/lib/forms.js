@@ -26,3 +26,18 @@ export const helpdeskSchema = yup.object({
   privacyPolicy: yup.string().required(),
   problems: yup.string(),
 });
+
+export const tiplineSchema = yup.object({
+  name: yup.string().required(),
+  privacyPolicy: yup.string().required(),
+});
+
+export const vpnSchema = yup.object({
+  name: yup.string().required(),
+  description: yup.string().required(),
+  storageTime: yup.number().required(),
+  vpnName: yup.string().required(),
+  activationInstructions: yup.string(),
+  locations: yup.string().required(),
+  faq: yup.string(),
+});

@@ -10,8 +10,13 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import {
+  NumberInputField,
+  NumberInputLabel,
+  NumberInputRoot,
+} from "@/components/ui/number-input"
 
-export const EsimForm = ({ schema }) => {
+export const VpnForm = ({ schema }) => {
   const { register, control, errors } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -32,7 +37,7 @@ export const EsimForm = ({ schema }) => {
         required
         {...register('name')}
       >
-        <Input placeholder="e-sim Distribution Org" />
+        <Input placeholder="VPN Distribution Org" />
       </Field>
       <Field
         errorText="Field is required"
@@ -47,14 +52,35 @@ export const EsimForm = ({ schema }) => {
       </Field>
       <Field
         errorText="Field is required"
-        helperText="Describe the privacy policy for a user interacting with this bot."
-        invalid={!!errors?.privacyPolicy}
-        label="Privacy policy"
+        helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
+        invalid={!!errors?.storageTime}
+        label="Storage length of time"
         marginTop={4}
         required
-        {...register('privacyPolicy')}
+        {...register('storageTime')}
       >
-        <Textarea placeholder="Start typing..." />
+        <NumberInputRoot
+          min={1}
+          formatOptions={{
+            style: "unit",
+            unit: "hour",
+            unitDisplay: "long",
+          }}
+        >
+          <NumberInputLabel />
+          <NumberInputField />
+        </NumberInputRoot>
+      </Field>
+      <Field
+        errorText="Field is required"
+        helperText="Name of VPN provider"
+        invalid={!!errors?.vpnName}
+        label="VPN provider name"
+        marginTop={4}
+        required
+        {...register('vpnName')}
+      >
+        <Input />
       </Field>
       <Field
         errorText="Field must be a string of text."
@@ -67,20 +93,10 @@ export const EsimForm = ({ schema }) => {
         <Textarea placeholder="Start typing..." />
       </Field>
       <Field
-        errorText="Field must be a string of text."
-        helperText="Include helpful instructions for what a user should do if their e-sim is not working."
-        invalid={!!errors?.helpInstructions}
-        label="Help section"
-        marginTop={4}
-        {...register('helpInstructions')}
-      >
-        <Textarea placeholder="Start typing..." />
-      </Field>
-      <Field
         errorText="Fill out all the fields that you add."
         helperText="List the locations where a user can use an e-sim."
         invalid={!!errors?.locations}
-        label="e-sim locations"
+        label="VPN locations"
         marginTop={4}
         {...register('locations')}
       >

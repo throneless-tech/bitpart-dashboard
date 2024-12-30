@@ -9,7 +9,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
   broadcastSchema,
   esimSchema,
-  helpdeskSchema
+  helpdeskSchema,
+  tiplineSchema,
+  vpnSchema
 } from "./lib/forms";
 
 // style imports
@@ -52,6 +54,8 @@ import {
 import { BroadcastForm } from "@/components/forms/broadcast";
 import { EsimForm } from "@/components/forms/esim";
 import { HelpdeskForm } from "@/components/forms/helpdesk";
+import { TiplineForm } from "@/components/forms/tipline";
+import { VpnForm } from "@/components/forms/vpn";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -198,19 +202,14 @@ export default function Home() {
             ) : botType == "helpdesk" ? (
               <>
                 <HelpdeskForm schema={helpdeskSchema} />
-
               </>
             ) : botType == "tipline" ? (
               <>
-                <Text>
-                  Customizing tip line bot here...
-                </Text>
+                <TiplineForm schema={tiplineSchema} />
               </>
             ) : botType == "vpn" ? (
               <>
-                <Text>
-                  Customizing VPN bot here...
-                </Text>
+                <VpnForm schema={vpnSchema} />
               </>
             ) : (
               <>
