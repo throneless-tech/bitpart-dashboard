@@ -69,26 +69,26 @@ const frameworks = [
   {
     value: "broadcast",
     title: "Broadcast",
-    description: "Create a distributed list to enable secure, efficient mass communication while protecting the privacy of both senders and recipients.",
+    description: "Send messages to many recipients while protecting the privacy of both senders and recipients.",
     icon: <TbBuildingBroadcastTower />
+  },
+  {
+    value: "tipline",
+    title: "Tipline",
+    description: "Set up an automated system to receive tips anonymously and securely.",
+    icon: <LuLightbulb />
+  },
+  {
+    value: "helpdesk",
+    title: "Helpdesk",
+    description: "Set up an automated system to answer questions anonymously and securely.",
+    icon: <IoHelpBuoySharp />
   },
   {
     value: "esim",
     title: "eSIM",
     description: "Distribute eSIMS to users who request codes with anonymity.",
     icon: <FaSimCard />
-  },
-  {
-    value: "helpdesk",
-    title: "Help Desk",
-    description: "Answer questions to common digital security and other issues without a user needing to identify themselves.",
-    icon: <IoHelpBuoySharp />
-  },
-  {
-    value: "tipline",
-    title: "Tip Line",
-    description: "Receive tips about goings on from users who can share the information anonymously.",
-    icon: <LuLightbulb />
   },
   {
     value: "vpn",
@@ -186,11 +186,27 @@ export default function Home() {
             </RadioCardRoot>
           </StepsContent>
           <StepsContent index={1}>
+            <Heading
+              as="h3"
+              marginBottom={4}
+              marginTop={10}
+              size="md"
+            >
+              Building a {botType} bot
+            </Heading>
             <Field label="Name" marginBottom={6} width="320px">
               <Input placeholder="Enter a name for your bot..." />
             </Field>
           </StepsContent>
           <StepsContent index={2}>
+            <Heading
+              as="h3"
+              marginBottom={4}
+              marginTop={10}
+              size="md"
+            >
+              Building a {botType} bot
+            </Heading>
             {botType == "broadcast" ? (
               <>
                 <BroadcastForm schema={broadcastSchema} />

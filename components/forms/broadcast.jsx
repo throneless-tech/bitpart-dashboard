@@ -26,7 +26,7 @@ export const BroadcastForm = ({ schema }) => {
     <>
       <Field
         errorText="Field is required"
-        helperText="Name your list. It can mirror the bot name or be different."
+        helperText="Name your list. This is the name that is visible to your users. It can mirror the bot name or be different."
         invalid={!!errors?.name}
         label="List name"
         required
@@ -36,20 +36,9 @@ export const BroadcastForm = ({ schema }) => {
       </Field>
       <Field
         errorText="Field is required"
-        helperText="The message that greets someone joining your list."
-        invalid={!!errors?.welcomeMessage}
-        label="Welcome message"
-        marginTop={4}
-        required
-        {...register('welcomeMessage')}
-      >
-        <Textarea placeholder="Start typing..." />
-      </Field>
-      <Field
-        errorText="Field is required"
-        helperText="Describe the list and its rules."
+        helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."
         invalid={!!errors?.description}
-        label="Description and rules"
+        label="List description"
         marginTop={4}
         required
         {...register('description')}
@@ -58,7 +47,7 @@ export const BroadcastForm = ({ schema }) => {
       </Field>
       <Field
         errorText="Field must be a string of text."
-        helperText="Include safety tips for the list."
+        helperText="Include safety tips for the list recipients, such as what to do in an emergency or best practices for digital security hygiene."
         invalid={!!errors?.safetyTips}
         label="Safety tips"
         marginTop={4}
@@ -68,11 +57,11 @@ export const BroadcastForm = ({ schema }) => {
       </Field>
       <Field
         errorText="Fill out all the fields that you add."
-        helperText="Add as many FAQ for the list as you need. Keep in mind this will appear as a text message, so we recommend six (6) or fewer question/answer combos."
+        helperText="If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user."
         invalid={!!errors?.faq}
-        label="FAQ"
+        label="FAQs"
         marginTop={4}
-        {...register('FAQ')}
+        {...register('faq')}
       >
         {fields.map((f, i) => {
           return (
@@ -89,7 +78,7 @@ export const BroadcastForm = ({ schema }) => {
                 <Input name='question' placeholder="Question" />
                 <Input name='answer' placeholder="Answer" />
               </Stack>
-              {i > 0 && 
+              {i >= 0 && 
                 <Button
                   onClick={() => remove(i)}
                   height={6}
