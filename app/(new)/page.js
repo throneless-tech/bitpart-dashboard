@@ -14,6 +14,7 @@ import {
   tiplineSchema,
   vpnSchema
 } from "../lib/forms";
+import * as yup from 'yup';
 
 // style imports
 import styles from "../page.module.css";
@@ -100,25 +101,58 @@ const frameworks = [
   },
 ]
 
+const botSchema = yup
+  .object()
+  .shape({
+    botType: yup.string(),
+  })
+  .required();
+
 export default function Home() {
   const [botType, setBotType] = useState("broadcast");
+  const [stepCount, setStepCount] = useState(0);
 
   // set the path that a user takes depending on which bot type they select
   const updateBotType = (event) => {
     setBotType(event.target.value)
   };
 
+  // update the step count based on prev or next
+  const updateStepCount = (step) => {
+    setStepCount(stepCount => stepCount += step);
+  }
+
   // form validation
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
-    resolver: yupResolver(`${botType}Schema`),
+    resolver: async (data, context, options) => {
+      // you can debug your validation schema here
+      // console.log('formData', data)
+      if (stepCount > 0) {
+        console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
+
+        return yupResolver(`${botType}Schema`)(data, context, options);
+      } else {
+        return yupResolver(botSchema)(data, context, options);
+      };
+    },
   });
 
-  const validateForm = async (event) => {
-    console.log(event);
+  const validateForm = async (values, e) => {
+    console.log('validating: ', values);
+    
+
+    if (stepCount > 3) {
+      console.log('final step! submit data here...');
+      
+    } else {
+
+    }
   }
 
-  useEffect(() => { }, [botType]);
+  const onError = (errors, e) => console.log('Error!', errors, e);
+
+  useEffect(() => { }, [botType, stepCount]);
 
   return (
     <Box>
@@ -135,9 +169,9 @@ export default function Home() {
           Create a new bot
         </Heading>
         <StepsRoot
-          count={3}
+          count={4}
           defaultValue={1}
-          onStepComplete={validateForm}
+          onStepChange={handleSubmit(validateForm, onError)}
         >
           <StepsList>
             <StepsItem index={0} title="Choose your bot type" />
@@ -182,6 +216,7 @@ export default function Home() {
                     minWidth={300}
                     width={300}
                     value={item.value}
+                    {...register('botType')}
                   />
                 ))}
               </Stack>
@@ -235,16 +270,29 @@ export default function Home() {
               </>
             )}
           </StepsContent>
-          <StepsCompletedContent>Please double check that the following information is correct. You will not be able to update this later.</StepsCompletedContent>
+          <StepsContent index={3}>
+            Please double check that the following information is correct. You will not be able to update this later.
+          </StepsContent>
+          <StepsCompletedContent>
+            You have created a new bot!
+          </StepsCompletedContent>
           <Group>
             <StepsPrevTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button
+                onClick={() => updateStepCount(-1)}
+                size="sm"
+                variant="outline"
+              >
                 Prev
               </Button>
             </StepsPrevTrigger>
             <StepsNextTrigger asChild>
-              <Button variant="outline" size="sm">
-                Next
+              <Button
+                onClick={() => updateStepCount(1)}
+                size="sm"
+                variant="outline"
+              >
+                {stepCount > 2 ? "Submit" : "Next"}
               </Button>
             </StepsNextTrigger>
           </Group>
