@@ -12,10 +12,10 @@ import {
   helpdeskSchema,
   tiplineSchema,
   vpnSchema
-} from "./lib/forms";
+} from "../lib/forms";
 
 // style imports
-import styles from "./page.module.css";
+import styles from "../page.module.css";
 
 // chakra ui imports
 import {
