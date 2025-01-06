@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
+  basicsSchema,
   broadcastSchema,
   esimSchema,
   helpdeskSchema,
@@ -51,6 +52,7 @@ import {
   StepsRoot,
 } from "@/components/ui/steps"
 
+import { BasicsForm } from "@/components/forms/basics";
 import { BroadcastForm } from "@/components/forms/broadcast";
 import { EsimForm } from "@/components/forms/esim";
 import { HelpdeskForm } from "@/components/forms/helpdesk";
@@ -192,11 +194,9 @@ export default function Home() {
               marginTop={10}
               size="md"
             >
-              Building a {botType} bot
+              Building {botType} bot
             </Heading>
-            <Field label="Name" marginBottom={6} width="320px">
-              <Input placeholder="Enter a name for your bot..." />
-            </Field>
+            <BasicsForm schema={basicsSchema} />
           </StepsContent>
           <StepsContent index={2}>
             <Heading
@@ -205,7 +205,7 @@ export default function Home() {
               marginTop={10}
               size="md"
             >
-              Building a {botType} bot
+              Building {botType} bot
             </Heading>
             {botType == "broadcast" ? (
               <>
