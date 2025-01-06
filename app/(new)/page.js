@@ -235,7 +235,7 @@ export default function Home() {
               </>
             )}
           </StepsContent>
-          <StepsCompletedContent>Now the steps are complete, and this is where we would submit the info to Bitpart to create a new bot.</StepsCompletedContent>
+          <StepsCompletedContent>Please double check that the following information is correct. You will not be able to update this later.</StepsCompletedContent>
           <Group>
             <StepsPrevTrigger asChild>
               <Button variant="outline" size="sm">

@@ -46,5 +46,6 @@ export const vpnSchema = yup.object({
   vpnName: yup.string().required(),
   activationInstructions: yup.string(),
   locations: yup.string().required(),
+  plans: yup.string().required(),
   faq: yup.string(),
 });

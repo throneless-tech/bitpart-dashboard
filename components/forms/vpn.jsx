@@ -22,9 +22,22 @@ export const VpnForm = ({ schema }) => {
     resolver: yupResolver(schema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: locationFields,
+    append: locationAppend,
+    remove: locationRemove,
+  } = useFieldArray({
     control: control,
     name: 'locations',
+  });
+
+  const {
+    fields: planFields,
+    append: planAppend,
+    remove: planRemove,
+  } = useFieldArray({
+    control: control,
+    name: 'plans',
   });
 
   return (
@@ -100,7 +113,7 @@ export const VpnForm = ({ schema }) => {
         marginTop={4}
         {...register('locations')}
       >
-        {fields.map((f, i) => {
+        {locationFields.map((f, i) => {
           return (
             <Stack
               alignItems={'center'}
@@ -114,9 +127,9 @@ export const VpnForm = ({ schema }) => {
               <Stack width='100%'>
                 <Input name='place' />
               </Stack>
-              {i > 0 &&
+              {i >= 0 &&
                 <Button
-                  onClick={() => remove(i)}
+                  onClick={() => locationRemove(i)}
                   height={6}
                   width={1}
                 >
@@ -128,13 +141,58 @@ export const VpnForm = ({ schema }) => {
         })}
         <Button
           onClick={() =>
-            append({
+            locationAppend({
               place: ''
             })
           }
           variant="subtle"
         >
           Add location
+        </Button>
+      </Field>
+      <Field
+        errorText="Fill out all the fields that you add."
+        helperText="List the different types of plans a user can ask for."
+        invalid={!!errors?.plans}
+        label="VPN plans"
+        marginTop={4}
+        {...register('plans')}
+      >
+        {planFields.map((f, i) => {
+          return (
+            <Stack
+              alignItems={'center'}
+              direction={['column', 'row']}
+              justifyContent="flex-start"
+              key={f.id}
+              marginBottom={4}
+              spacing={20}
+              width='100%'
+            >
+              <Stack width='100%'>
+                <Input name='place' />
+              </Stack>
+              {i >= 0 &&
+                <Button
+                  onClick={() => planRemove(i)}
+                  height={6}
+                  width={1}
+                >
+                  X
+                </Button>
+              }
+            </Stack>
+          );
+        })}
+        <Button
+          onClick={() =>
+            planAppend({
+              place: ''
+            })
+          }
+          variant="subtle"
+        >
+          Add plan info
         </Button>
       </Field>
     </>
