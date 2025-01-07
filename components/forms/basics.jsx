@@ -1,48 +1,38 @@
 // base imports
-import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFormContext } from 'react-hook-form';
 
 // chakra imports
-import {
-  Input,
-  Stack,
-  Textarea
-} from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
+import { Input } from "@chakra-ui/react";
+
+// component imports
 import { Field } from "@/components/ui/field";
 
-export const BasicsForm = ({ schema }) => {
-  const { register, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
-  });
-
+export const BasicsForm = () => {
+  const { register, formState: { errors }, } = useFormContext();
 
   return (
     <>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.name && errors.name.message}
         helperText="Give your bot a name."
         invalid={!!errors?.name}
         label="Name"
         marginBottom={6}
         required
         width="320px"
-        {...register('name')}
       >
-        <Input />
+        <Input {...register('name')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.phone && errors.phone.message}
         helperText="Enter the phone number for your bot."
         invalid={!!errors?.phone}
         label="Phone number"
         marginBottom={6}
         required
         width="320px"
-        {...register('phone')}
       >
-        <Input />
+        <Input {...register('phone')} />
       </Field>
     </>
   )

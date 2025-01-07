@@ -1,5 +1,5 @@
 // base imports
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // chakra imports
@@ -11,11 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 
-export const BroadcastForm = ({ schema }) => {
-  const { register, control, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
-  });
+export const BroadcastForm = () => {
+  const { register, control, formState: { errors } } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control: control,
@@ -25,38 +22,35 @@ export const BroadcastForm = ({ schema }) => {
   return (
     <>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.name && errors.name.message}
         helperText="Name your list. This is the name that is visible to your users. It can mirror the bot name or be different."
         invalid={!!errors?.name}
         label="List name"
         required
-        {...register('name')}
       >
-        <Input placeholder="Special broadcast list" />
+        <Input placeholder="Special broadcast list" {...register('name')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.description && errors.description.message}
         helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."
         invalid={!!errors?.description}
         label="List description"
         marginTop={4}
         required
-        {...register('description')}
       >
-        <Textarea />
+        <Textarea {...register('description')} />
       </Field>
       <Field
-        errorText="Field must be a string of text."
+        errorText={!!errors?.safetyTips && errors.safetyTips.message}
         helperText="Include safety tips for the list recipients, such as what to do in an emergency or best practices for digital security hygiene."
         invalid={!!errors?.safetyTips}
         label="Safety tips"
         marginTop={4}
-        {...register('safetyTips')}
       >
-        <Textarea />
+        <Textarea {...register('safetyTips')} />
       </Field>
       <Field
-        errorText="Fill out all the fields that you add."
+        errorText={!!errors?.faq && errors.faq.message}
         helperText="If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user."
         invalid={!!errors?.faq}
         label="FAQs"

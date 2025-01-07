@@ -4,7 +4,7 @@
 import Image from "next/image";
 
 // form validation imports
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   basicsSchema,
@@ -123,36 +123,49 @@ export default function Home() {
   }
 
   // form validation
-  const { register, handleSubmit, errors } = useForm({
+  // const { register, handleSubmit, errors, } = useForm({
+
+  const methods = useForm({
     mode: 'onBlur',
+    reValidateMode: 'onBlur',
     resolver: async (data, context, options) => {
       // you can debug your validation schema here
       // console.log('formData', data)
-      if (stepCount > 0) {
+      // console.log('step count: ', stepCount);
+      // console.log('bot type: ', botType);
+      
+      if (stepCount == 0) {
+        return yupResolver(botSchema)({ botType: botType }, context, options);
+      } else if (stepCount == 1) {
+        return yupResolver(basicsSchema)(data, context, options);
+
+      } else {
         console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
 
         return yupResolver(`${botType}Schema`)(data, context, options);
-      } else {
-        return yupResolver(botSchema)(data, context, options);
       };
     },
   });
 
+  const { isValid } = useFormState(methods);
+
   const validateForm = async (values, e) => {
-    console.log('validating: ', values);
-    
+    // console.log('e: ', e);
 
     if (stepCount > 3) {
       console.log('final step! submit data here...');
-      
+
     } else {
 
     }
+    
   }
 
-  const onError = (errors, e) => console.log('Error!', errors, e);
+  const onError = (errors, e) => {
+    alert('An error occured');
+  };
 
-  useEffect(() => { }, [botType, stepCount]);
+  useEffect(() => {}, [botType, isValid, stepCount]);
 
   return (
     <Box>
@@ -168,135 +181,140 @@ export default function Home() {
         <Heading as="h1" marginBottom={4} size="xl">
           Create a new bot
         </Heading>
-        <StepsRoot
-          count={4}
-          defaultValue={1}
-          onStepChange={handleSubmit(validateForm, onError)}
-        >
-          <StepsList>
-            <StepsItem index={0} title="Choose your bot type" />
-            <StepsItem index={1} title="Name your bot" />
-            <StepsItem index={2} title="Customize your bot" />
-          </StepsList>
-          <StepsContent index={0}>
-            <Heading as="h2" marginTop={10} size="md">
-              What kind of bot do you want to create?
-            </Heading>
-            <RadioCardRoot
-              align="center"
-              defaultValue="broadcast"
-              justify="center"
-              marginY={6}
-              maxW="4xl"
-              onChange={updateBotType}
-              orientation="vertical"
-              value={botType}
-            >
-              <RadioCardLabel>Choose your bot type:</RadioCardLabel>
-              <Stack
-                align="stretch"
-                direction={["column", "row"]}
-                flexWrap="wrap"
-                gap={4}
-                justifyContent="center"
-                marginTop={3}
+        <FormProvider {...methods}>
+          <StepsRoot
+            count={4}
+            defaultValue={1}
+            onStepChange={(e) => {
+              methods.handleSubmit(validateForm, onError)(e);
+            }}
+          >
+            <StepsList>
+              <StepsItem index={0} title="Choose your bot type" />
+              <StepsItem index={1} title="Name your bot" />
+              <StepsItem index={2} title="Customize your bot" />
+            </StepsList>
+            <StepsContent index={0}>
+              <Heading as="h2" marginTop={10} size="md">
+                What kind of bot do you want to create?
+              </Heading>
+              <RadioCardRoot
+                align="center"
+                defaultValue="broadcast"
+                justify="center"
+                marginY={6}
+                maxW="4xl"
+                onChange={updateBotType}
+                orientation="vertical"
+                value={botType}
               >
-                {frameworks.map((item) => (
-                  <RadioCardItem
-                    label={item.title}
-                    description={item.description}
-                    icon={
-                      <Icon fontSize="2xl" color="fg.subtle">
-                        {item.icon}
-                      </Icon>
-                    }
-                    indicator={false}
-                    key={item.value}
-                    maxWidth={300}
-                    minWidth={300}
-                    width={300}
-                    value={item.value}
-                    {...register('botType')}
-                  />
-                ))}
-              </Stack>
-            </RadioCardRoot>
-          </StepsContent>
-          <StepsContent index={1}>
-            <Heading
-              as="h3"
-              marginBottom={4}
-              marginTop={10}
-              size="md"
-            >
-              Building {botType} bot
-            </Heading>
-            <BasicsForm schema={basicsSchema} />
-          </StepsContent>
-          <StepsContent index={2}>
-            <Heading
-              as="h3"
-              marginBottom={4}
-              marginTop={10}
-              size="md"
-            >
-              Building {botType} bot
-            </Heading>
-            {botType == "broadcast" ? (
-              <>
-                <BroadcastForm schema={broadcastSchema} />
-              </>
-            ) : botType == "esim" ? (
-              <>
-                <EsimForm schema={esimSchema} />
-              </>
-            ) : botType == "helpdesk" ? (
-              <>
-                <HelpdeskForm schema={helpdeskSchema} />
-              </>
-            ) : botType == "tipline" ? (
-              <>
-                <TiplineForm schema={tiplineSchema} />
-              </>
-            ) : botType == "vpn" ? (
-              <>
-                <VpnForm schema={vpnSchema} />
-              </>
-            ) : (
-              <>
-                <Text>
-                  Something went wrong. Please contact a system administrator: no bot type selected.
-                </Text>
-              </>
-            )}
-          </StepsContent>
-          <StepsContent index={3}>
-            Please double check that the following information is correct. You will not be able to update this later.
-          </StepsContent>
-          <StepsCompletedContent>
-            You have created a new bot!
-          </StepsCompletedContent>
-          <Group>
-            <StepsPrevTrigger asChild>
-              <Button
-                onClick={() => updateStepCount(-1)}
-                size="sm"
-                variant="outline"
+                <RadioCardLabel>Choose your bot type:</RadioCardLabel>
+                <Stack
+                  align="stretch"
+                  direction={["column", "row"]}
+                  flexWrap="wrap"
+                  gap={4}
+                  justifyContent="center"
+                  marginTop={3}
+                >
+                  {frameworks.map((item) => (
+                    <RadioCardItem
+                      label={item.title}
+                      description={item.description}
+                      icon={
+                        <Icon fontSize="2xl" color="fg.subtle">
+                          {item.icon}
+                        </Icon>
+                      }
+                      indicator={false}
+                      key={item.value}
+                      maxWidth={300}
+                      minWidth={300}
+                      width={300}
+                      value={item.value}
+                      {...methods.register('botType')}
+                    />
+                  ))}
+                </Stack>
+              </RadioCardRoot>
+            </StepsContent>
+            <StepsContent index={1}>
+              <Heading
+                as="h3"
+                marginBottom={4}
+                marginTop={10}
+                size="md"
               >
-                Prev
-              </Button>
-            </StepsPrevTrigger>
-            <StepsNextTrigger asChild>
-              <Button
-                onClick={() => updateStepCount(1)}
-                size="sm"
-                variant="outline"
+                Building {botType} bot
+              </Heading>
+              <BasicsForm />
+            </StepsContent>
+            <StepsContent index={2}>
+              <Heading
+                as="h3"
+                marginBottom={4}
+                marginTop={10}
+                size="md"
               >
-                {stepCount > 2 ? "Submit" : "Next"}
-              </Button>
-            </StepsNextTrigger>
-          </Group>
-        </StepsRoot>
+                Building {botType} bot
+              </Heading>
+              {botType == "broadcast" ? (
+                <>
+                  <BroadcastForm />
+                </>
+              ) : botType == "esim" ? (
+                <>
+                  <EsimForm schema={esimSchema} />
+                </>
+              ) : botType == "helpdesk" ? (
+                <>
+                  <HelpdeskForm schema={helpdeskSchema} />
+                </>
+              ) : botType == "tipline" ? (
+                <>
+                  <TiplineForm schema={tiplineSchema} />
+                </>
+              ) : botType == "vpn" ? (
+                <>
+                  <VpnForm schema={vpnSchema} />
+                </>
+              ) : (
+                <>
+                  <Text>
+                    Something went wrong. Please contact a system administrator: no bot type selected.
+                  </Text>
+                </>
+              )}
+            </StepsContent>
+            <StepsContent index={3}>
+              Please double check that the following information is correct. You will not be able to update this later.
+            </StepsContent>
+            <StepsCompletedContent>
+              You have created a new bot!
+            </StepsCompletedContent>
+            <Group>
+              <StepsPrevTrigger asChild>
+                <Button
+                  onClick={() => updateStepCount(-1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  Prev
+                </Button>
+              </StepsPrevTrigger>
+              <StepsNextTrigger asChild>
+                <Button
+                  disabled={!isValid}
+                  onClick={() => updateStepCount(1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  {stepCount > 2 ? "Submit" : "Next"}
+                </Button>
+              </StepsNextTrigger>
+            </Group>
+          </StepsRoot>
+        </FormProvider>
       </Container>
     </Box>
   );
