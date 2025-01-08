@@ -130,9 +130,12 @@ export default function Home() {
 
   const methods = useForm({
     mode: 'onBlur',
+    defaultValues: {
+      faq: [],
+    },
     resolver: async (data, context, options) => {
       // you can debug your validation schema here
-      // console.log('formData', data);
+      console.log('formData', data);
       // console.log('step count: ', stepCount);
       // console.log('bot type: ', botType);
       console.log('context: ', context);
@@ -143,25 +146,35 @@ export default function Home() {
 
       // console.log('this data: ', thisData);
 
-      if (stepCount == 0) {
-        return yupResolver(botSchema)({ botType: botType }, context, options);
-      } else if (stepCount == 1) {
-        return yupResolver(basicsSchema)(thisData, context, options);
-      } else {
-        // console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
+      // return {
+      //   values: {},
+      //   errors: {
+      //     items: data.items.map(() => ({ message: "test" }))
+      //   }
+      // };
 
-        // console.log(`onto custom step for ${botType}Schema`);
+      return yupResolver(`${botType}Schema`)(data, context, options);
 
 
-        return yupResolver(`${botType}Schema`)(data, context, options);
-      };
+      // if (stepCount == 0) {
+      //   return yupResolver(botSchema)({ botType: botType }, context, options);
+      // } else if (stepCount == 1) {
+      //   return yupResolver(basicsSchema)(thisData, context, options);
+      // } else {
+      //   // console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
+
+      //   // console.log(`onto custom step for ${botType}Schema`);
+
+
+      //   return yupResolver(`${botType}Schema`)(data, context, options);
+      // };
     },
   });
 
   // const { isValid } = useFormState(methods);
 
   const validateForm = async (values, e) => {
-    // console.log('valid e: ', e);
+    console.log('valid e: ', e);
 
     if (stepCount > 3) {
       console.log('final step! submit data here...');
@@ -173,7 +186,7 @@ export default function Home() {
   }
 
   const onError = (errors, e) => {
-    // console.log('error e: ', e.step);
+    console.log('error e: ', errors);
 
     alert('Please fix the form errors before continuing on.');
 

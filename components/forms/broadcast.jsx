@@ -14,7 +14,7 @@ export const BroadcastForm = () => {
   const { register, control, formState: { errors } } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
-    control: control,
+    control,
     name: 'faq',
   });
 
@@ -49,7 +49,8 @@ export const BroadcastForm = () => {
         <Textarea {...register('safetyTips')} />
       </Field>
       <Field
-        errorText={!!errors?.faq && errors.faq.message}
+        errorText="You must fill out all the fields you add. Please delete empty fields."
+        // errorText={!!errors?.faq && errors.faq.message}
         helperText="If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user."
         invalid={!!errors?.faq}
         label="FAQs"
