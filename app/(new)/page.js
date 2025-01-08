@@ -111,9 +111,12 @@ const botSchema = yup
 export default function Home() {
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
+  const [formData, setFormData] = useState({});
 
   // set the path that a user takes depending on which bot type they select
   const updateBotType = (event) => {
+    // console.log('update bot type fx: ', event.target.value);
+
     setBotType(event.target.value)
   };
 
@@ -127,30 +130,38 @@ export default function Home() {
 
   const methods = useForm({
     mode: 'onBlur',
-    reValidateMode: 'onBlur',
     resolver: async (data, context, options) => {
       // you can debug your validation schema here
-      // console.log('formData', data)
+      // console.log('formData', data);
       // console.log('step count: ', stepCount);
       // console.log('bot type: ', botType);
-      
+      console.log('context: ', context);
+      console.log('options: ', options);
+
+      const thisData = data;
+      thisData.botType = botType;
+
+      // console.log('this data: ', thisData);
+
       if (stepCount == 0) {
         return yupResolver(botSchema)({ botType: botType }, context, options);
       } else if (stepCount == 1) {
-        return yupResolver(basicsSchema)(data, context, options);
-
+        return yupResolver(basicsSchema)(thisData, context, options);
       } else {
-        console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
+        // console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
+
+        // console.log(`onto custom step for ${botType}Schema`);
+
 
         return yupResolver(`${botType}Schema`)(data, context, options);
       };
     },
   });
 
-  const { isValid } = useFormState(methods);
+  // const { isValid } = useFormState(methods);
 
   const validateForm = async (values, e) => {
-    // console.log('e: ', e);
+    // console.log('valid e: ', e);
 
     if (stepCount > 3) {
       console.log('final step! submit data here...');
@@ -158,14 +169,22 @@ export default function Home() {
     } else {
 
     }
-    
+
   }
 
   const onError = (errors, e) => {
-    alert('An error occured');
+    // console.log('error e: ', e.step);
+
+    alert('Please fix the form errors before continuing on.');
+
+    if (e.step == 0) {
+      setStepCount(stepCount => stepCount += 1);
+    } else if (stepCount > 0) {
+      setStepCount(stepCount => stepCount -= 1);
+    }
   };
 
-  useEffect(() => {}, [botType, isValid, stepCount]);
+  useEffect(() => { }, [botType, stepCount]);
 
   return (
     <Box>
@@ -184,7 +203,7 @@ export default function Home() {
         <FormProvider {...methods}>
           <StepsRoot
             count={4}
-            defaultValue={1}
+            step={stepCount}
             onStepChange={(e) => {
               methods.handleSubmit(validateForm, onError)(e);
             }}
@@ -206,7 +225,6 @@ export default function Home() {
                 maxW="4xl"
                 onChange={updateBotType}
                 orientation="vertical"
-                value={botType}
               >
                 <RadioCardLabel>Choose your bot type:</RadioCardLabel>
                 <Stack
@@ -272,7 +290,7 @@ export default function Home() {
                 </>
               ) : botType == "tipline" ? (
                 <>
-                  <TiplineForm schema={tiplineSchema} />
+                  <TiplineForm />
                 </>
               ) : botType == "vpn" ? (
                 <>
@@ -304,7 +322,7 @@ export default function Home() {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  disabled={!isValid}
+                  // disabled={!isValid}
                   onClick={() => updateStepCount(1)}
                   size="sm"
                   variant="outline"

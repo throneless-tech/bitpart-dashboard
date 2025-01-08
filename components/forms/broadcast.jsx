@@ -1,6 +1,5 @@
 // base imports
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 // chakra imports
 import {
@@ -55,7 +54,6 @@ export const BroadcastForm = () => {
         invalid={!!errors?.faq}
         label="FAQs"
         marginTop={4}
-        {...register('faq')}
       >
         {fields.map((f, i) => {
           return (
@@ -69,10 +67,18 @@ export const BroadcastForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Input name='question' placeholder="Question" />
-                <Input name='answer' placeholder="Answer" />
+                <Input
+                  name='question'
+                  placeholder="Question"
+                  {...register(`faq.${i}.question`)}
+                />
+                <Input
+                  name='answer'
+                  placeholder="Answer"
+                  {...register(`faq.${i}.answer`)}
+                />
               </Stack>
-              {i >= 0 && 
+              {i >= 0 &&
                 <Button
                   onClick={() => remove(i)}
                   height={6}

@@ -13,15 +13,15 @@ export const BasicsForm = () => {
   return (
     <>
       <Field
-        errorText={!!errors?.name && errors.name.message}
+        errorText={!!errors?.botName && errors.botName.message}
         helperText="Give your bot a name."
-        invalid={!!errors?.name}
+        invalid={!!errors?.botName}
         label="Name"
         marginBottom={6}
         required
         width="320px"
       >
-        <Input {...register('name')} />
+        <Input {...register('botName')} />
       </Field>
       <Field
         errorText={!!errors?.phone && errors.phone.message}

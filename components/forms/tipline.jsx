@@ -1,6 +1,5 @@
 // base imports
-import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFormContext } from 'react-hook-form';
 
 // chakra imports
 import {
@@ -10,34 +9,29 @@ import {
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 
-export const TiplineForm = ({ schema }) => {
-  const { register, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
-  });
+export const TiplineForm = () => {
+    const { register, formState: { errors }, } = useFormContext();
 
   return (
     <>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.name && errors.name.message}
         helperText="Name your tipline. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
         label="Tipline name"
         required
-        {...register('name')}
       >
-        <Input />
+        <Input {...register('name')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the privacy policy for a user interacting with this bot."
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
         marginTop={4}
         required
-        {...register('privacyPolicy')}
       >
-        <Textarea />
+        <Textarea {...register('privacyPolicy')} />
       </Field>
     </>
   )

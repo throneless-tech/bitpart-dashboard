@@ -4,7 +4,7 @@ import * as yup from 'yup';
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 export const basicsSchema = yup.object({
-  name: yup.string().required(),
+  botName: yup.string().required(),
   phone: yup.string().required().matches(phoneRegExp, 'Phone number is not valid')
 });
 
@@ -13,7 +13,13 @@ export const broadcastSchema = yup.object({
   about: yup.string().required(),
   description: yup.string().required(),
   safetyTips: yup.string(),
-  faq: yup.string(),
+  faq: yup.array()
+    .of(
+      yup.object({
+        question: yup.string(),
+        checked: yup.boolean(),
+      })
+    ),
 });
 
 export const esimSchema = yup.object({
