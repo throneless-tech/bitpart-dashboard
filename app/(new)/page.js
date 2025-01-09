@@ -6,15 +6,7 @@ import Image from "next/image";
 // form validation imports
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  basicsSchema,
-  broadcastSchema,
-  esimSchema,
-  helpdeskSchema,
-  tiplineSchema,
-  vpnSchema
-} from "../lib/forms";
-import * as yup from 'yup';
+import { schema } from "../lib/forms";
 
 // style imports
 import styles from "../page.module.css";
@@ -101,13 +93,6 @@ const frameworks = [
   },
 ]
 
-const botSchema = yup
-  .object()
-  .shape({
-    botType: yup.string(),
-  })
-  .required();
-
 export default function Home() {
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
@@ -130,45 +115,7 @@ export default function Home() {
 
   const methods = useForm({
     mode: 'onBlur',
-    defaultValues: {
-      faq: [],
-    },
-    resolver: async (data, context, options) => {
-      // you can debug your validation schema here
-      console.log('formData', data);
-      // console.log('step count: ', stepCount);
-      // console.log('bot type: ', botType);
-      console.log('context: ', context);
-      console.log('options: ', options);
-
-      const thisData = data;
-      thisData.botType = botType;
-
-      // console.log('this data: ', thisData);
-
-      // return {
-      //   values: {},
-      //   errors: {
-      //     items: data.items.map(() => ({ message: "test" }))
-      //   }
-      // };
-
-      return yupResolver(`${botType}Schema`)(data, context, options);
-
-
-      // if (stepCount == 0) {
-      //   return yupResolver(botSchema)({ botType: botType }, context, options);
-      // } else if (stepCount == 1) {
-      //   return yupResolver(basicsSchema)(thisData, context, options);
-      // } else {
-      //   // console.log('validation result', await yupResolver(`${botType}Schema`)(data, context, options))
-
-      //   // console.log(`onto custom step for ${botType}Schema`);
-
-
-      //   return yupResolver(`${botType}Schema`)(data, context, options);
-      // };
-    },
+    resolver: yupResolver(schema),
   });
 
   // const { isValid } = useFormState(methods);
@@ -223,7 +170,7 @@ export default function Home() {
           >
             <StepsList>
               <StepsItem index={0} title="Choose your bot type" />
-              <StepsItem index={1} title="Name your bot" />
+              <StepsItem index={1} title="Bot basics" />
               <StepsItem index={2} title="Customize your bot" />
             </StepsList>
             <StepsContent index={0}>
@@ -295,11 +242,11 @@ export default function Home() {
                 </>
               ) : botType == "esim" ? (
                 <>
-                  <EsimForm schema={esimSchema} />
+                  <EsimForm />
                 </>
               ) : botType == "helpdesk" ? (
                 <>
-                  <HelpdeskForm schema={helpdeskSchema} />
+                  <HelpdeskForm />
                 </>
               ) : botType == "tipline" ? (
                 <>
@@ -307,7 +254,7 @@ export default function Home() {
                 </>
               ) : botType == "vpn" ? (
                 <>
-                  <VpnForm schema={vpnSchema} />
+                  <VpnForm />
                 </>
               ) : (
                 <>

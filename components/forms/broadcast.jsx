@@ -3,6 +3,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 
 // chakra imports
 import {
+  Fieldset,
   Input,
   Stack,
   Textarea
@@ -11,13 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 
 export const BroadcastForm = () => {
-  const { register, control, formState: { errors } } = useFormContext();
+  const { register, control, formState: { errors } } = useFormContext({
+    defaultValues: {
+      faq: [],
+    },
+  });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'faq',
   });
-
+  
   return (
     <>
       <Field
@@ -48,14 +53,19 @@ export const BroadcastForm = () => {
       >
         <Textarea {...register('safetyTips')} />
       </Field>
-      <Field
-        errorText="You must fill out all the fields you add. Please delete empty fields."
-        // errorText={!!errors?.faq && errors.faq.message}
-        helperText="If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user."
+      <Fieldset.Root
         invalid={!!errors?.faq}
         label="FAQs"
         marginTop={4}
       >
+        <Stack>
+          <Fieldset.Legend>
+            FAQs
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user.
+          </Fieldset.HelperText>
+        </Stack>
         {fields.map((f, i) => {
           return (
             <Stack
@@ -68,16 +78,22 @@ export const BroadcastForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Input
-                  name='question'
-                  placeholder="Question"
-                  {...register(`faq.${i}.question`)}
-                />
-                <Input
-                  name='answer'
-                  placeholder="Answer"
-                  {...register(`faq.${i}.answer`)}
-                />
+                <Field
+                // errorText={!!errors?.`faq.${i}.question` && errors.`faq.${i}.question`.message}
+                >
+                  <Input
+                    // name={`faq[${i}].question`}
+                    placeholder="Question"
+                    {...register(`faq.${i}.question`)}
+                  />
+                </Field>
+                <Field>
+                  <Input
+                    // name={`faq[${i}].answer`}
+                    placeholder="Answer"
+                    {...register(`faq.${i}.answer`)}
+                  />
+                </Field>
               </Stack>
               {i >= 0 &&
                 <Button
@@ -102,7 +118,7 @@ export const BroadcastForm = () => {
         >
           Add FAQ
         </Button>
-      </Field>
+      </Fieldset.Root>
     </>
   )
 }
