@@ -135,13 +135,13 @@ export default function Home() {
   const onError = (errors, e) => {
     console.log('error e: ', errors);
 
-    alert('Please fix the form errors before continuing on.');
+    // alert('Please fix the form errors before continuing on.');
 
-    if (e.step == 0) {
-      setStepCount(stepCount => stepCount += 1);
-    } else if (stepCount > 0) {
-      setStepCount(stepCount => stepCount -= 1);
-    }
+    // if (e.step == 0) {
+    //   setStepCount(stepCount => stepCount += 1);
+    // } else if (stepCount > 0) {
+    //   setStepCount(stepCount => stepCount -= 1);
+    // }
   };
 
   useEffect(() => { }, [botType, stepCount]);

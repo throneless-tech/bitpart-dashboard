@@ -1,9 +1,9 @@
 // base imports
-import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 // chakra imports
 import {
+  Fieldset,
   Input,
   Stack,
   Textarea
@@ -11,10 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 
-export const EsimForm = ({ schema }) => {
-  const { register, control, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
+export const esimForm = () => {
+  const { register, control, formState: { errors } } = useFormContext({
+    defaultValues: {
+      locations: [],
+      plans: [],
+    },
   });
 
   const {
@@ -22,7 +24,7 @@ export const EsimForm = ({ schema }) => {
     append: locationAppend,
     remove: locationRemove,
   } = useFieldArray({
-    control: control,
+    control,
     name: 'locations',
   });
 
@@ -31,72 +33,72 @@ export const EsimForm = ({ schema }) => {
     append: planAppend,
     remove: planRemove,
   } = useFieldArray({
-    control: control,
+    control,
     name: 'plans',
   });
 
   return (
     <>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.name && errors.name.message}
         helperText="Name of your organization"
         invalid={!!errors?.name}
         label="Organization name"
         required
-        {...register('name')}
       >
-        <Input placeholder="e-sim Distribution Org" />
+        <Input placeholder="e-sim Distribution Org" {...register('name')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.description && errors.description.message}
         helperText="Describe your organization for the 'About us' section."
         invalid={!!errors?.description}
         label="Organization description"
         marginTop={4}
         required
-        {...register('description')}
       >
-        <Textarea placeholder="Start typing..." />
+        <Textarea placeholder="Start typing..." {...register('description')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the privacy policy for a user interacting with this bot."
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
         marginTop={4}
         required
-        {...register('privacyPolicy')}
       >
-        <Textarea />
+        <Textarea {...register('privacyPolicy')} />
       </Field>
       <Field
-        errorText="Field must be a string of text."
+        errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
         helperText="Include activation instructions for how a user can activate an e-sim."
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}
-        {...register('activationInstructions')}
       >
-        <Textarea />
+        <Textarea {...register('activationInstructions')} />
       </Field>
       <Field
-        errorText="Field must be a string of text."
+        errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
         helperText="Include helpful instructions for what a user should do if their e-sim is not working."
         invalid={!!errors?.helpInstructions}
         label="Help section"
         marginTop={4}
-        {...register('helpInstructions')}
       >
-        <Textarea />
+        <Textarea {...register('helpInstructions')} />
       </Field>
-      <Field
-        errorText="Fill out all the fields that you add."
-        helperText="List the locations where a user can use a vpn."
+      <Fieldset.Root
         invalid={!!errors?.locations}
-        label="VPN locations"
+        label="esim locations"
         marginTop={4}
-        {...register('locations')}
       >
+        <Stack>
+          <Fieldset.Legend>
+            esim locations
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            List the locations where a user can use an esim.
+          </Fieldset.HelperText>
+        </Stack>
         {locationFields.map((f, i) => {
           return (
             <Stack
@@ -108,9 +110,12 @@ export const EsimForm = ({ schema }) => {
               spacing={20}
               width='100%'
             >
-              <Stack width='100%'>
-                <Input name='place' />
-              </Stack>
+              <Field>
+                <Input
+                  placeholder='Enter a location'
+                  {...register(`locations.${i}.place`)}
+                />
+              </Field>
               {i >= 0 &&
                 <Button
                   onClick={() => locationRemove(i)}
@@ -130,18 +135,24 @@ export const EsimForm = ({ schema }) => {
             })
           }
           variant="subtle"
+          width={40}
         >
           Add location
         </Button>
-      </Field>
-      <Field
-        errorText="Fill out all the fields that you add."
-        helperText="List the different types of plans a user can ask for."
+      </Fieldset.Root>
+      <Fieldset.Root
         invalid={!!errors?.plans}
-        label="VPN plans"
+        label="esim plans"
         marginTop={4}
-        {...register('plans')}
       >
+        <Stack>
+          <Fieldset.Legend>
+            esim plans
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            List the different types of plans a user can ask for.
+          </Fieldset.HelperText>
+        </Stack>
         {planFields.map((f, i) => {
           return (
             <Stack
@@ -154,7 +165,18 @@ export const EsimForm = ({ schema }) => {
               width='100%'
             >
               <Stack width='100%'>
-                <Input name='place' />
+                <Field>
+                  <Input
+                    placeholder="Amount of data"
+                    {...register(`plans.${i}.amount`)}
+                  />
+                </Field>
+                <Field>
+                  <Input
+                    placeholder="Length of time"
+                    {...register(`faq.${i}.length`)}
+                  />
+                </Field>
               </Stack>
               {i >= 0 &&
                 <Button
@@ -175,10 +197,11 @@ export const EsimForm = ({ schema }) => {
             })
           }
           variant="subtle"
+          width={40}
         >
           Add plan info
         </Button>
-      </Field>
+      </Fieldset.Root>
     </>
   )
 }

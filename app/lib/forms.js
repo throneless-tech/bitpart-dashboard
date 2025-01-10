@@ -26,7 +26,7 @@ export const schema = yup.object({
       .of(
         yup.object({
           question: yup.string().required(),
-          answer: yup.boolean().required(),
+          answer: yup.string().required(),
         })
       )
       .optional(),
@@ -59,7 +59,7 @@ export const schema = yup.object({
       .of(
         yup.object({
           amount: yup.string().required(),
-          length: yup.boolean().required(),
+          length: yup.string().required(),
         })
       )
       .optional(),
@@ -70,15 +70,22 @@ export const schema = yup.object({
   }),
   storageTime: yup.number().when("botType", {
     is: "helpdesk" || "vpn",
-    then: () => yup.number().required(),
+    then: () => yup.number().required("Enter a length of time, in hours."),
   }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",
     then: () => yup.string().optional(),
   }),
-  problems: yup.string().when("botType", {
+  problems: yup.array().when("botType", {
     is: "helpdesk",
-    then: () => yup.string().optional(),
+    then: () => yup.array()
+      .of(
+        yup.object({
+          problem: yup.string().required(),
+          solution: yup.string().required(),
+        })
+      )
+      .optional(),
   }),
   vpnName: yup.string().when("botType", {
     is: "vpn",

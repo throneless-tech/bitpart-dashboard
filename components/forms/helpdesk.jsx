@@ -1,9 +1,9 @@
 // base imports
-import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 
 // chakra imports
 import {
+  Fieldset,
   Input,
   Stack,
   Textarea
@@ -16,48 +16,47 @@ import {
   NumberInputRoot,
 } from "@/components/ui/number-input"
 
-export const HelpdeskForm = ({ schema }) => {
-  const { register, control, errors } = useForm({
-    mode: 'onBlur',
-    resolver: yupResolver(schema),
+export const HelpdeskForm = () => {
+  const { register, control, formState: { errors } } = useFormContext({
+    defaultValues: {
+      problems: [],
+    },
   });
 
   const { fields, append, remove } = useFieldArray({
-    control: control,
+    control,
     name: 'problems',
   });
 
   return (
     <>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.name && errors.name.message}
         helperText="Name your helpdesk. It can mirror the bot name or be different."
         invalid={!!errors?.name}
         label="Helpdesk name"
         required
-        {...register('name')}
       >
-        <Input />
+        <Input {...register('name')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.referral && errors.referral.message}
         helperText="Who or where a user should contact for immediate assistance."
         invalid={!!errors?.referral}
         label="Referral"
         marginTop={4}
         required
-        {...register('referral')}
       >
-        <Input />
+        <Input {...register('referral')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
         label="Storage length of time"
         marginTop={4}
         required
-        {...register('storageTime')}
+
       >
         <NumberInputRoot
           min={1}
@@ -66,40 +65,44 @@ export const HelpdeskForm = ({ schema }) => {
             unit: "hour",
             unitDisplay: "long",
           }}
+          {...register('storageTime')}
         >
           <NumberInputLabel />
           <NumberInputField />
         </NumberInputRoot>
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.storageAccess && errors.storageAccess.message}
         helperText="Who will have access to the information stored."
         invalid={!!errors?.storageAccess}
         label="Storage access"
         marginTop={4}
-        {...register('storageAccess')}
       >
-        <Textarea />
+        <Textarea {...register('storageAccess')} />
       </Field>
       <Field
-        errorText="Field is required"
+        errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the privacy policy for a user interacting with this bot."
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
         marginTop={4}
         required
-        {...register('privacyPolicy')}
       >
-        <Textarea />
+        <Textarea {...register('privacyPolicy')} />
       </Field>
-      <Field
-        errorText="Fill out all the fields that you add."
-        helperText="Add as many problem areas for the help desk as you need. Keep in mind this will appear as a text message, so we recommend six (6) or fewer question/answer combos."
+      <Fieldset.Root
         invalid={!!errors?.problems}
         label="Problem areas"
         marginTop={4}
-        {...register('problems')}
       >
+        <Stack>
+          <Fieldset.Legend>
+            Problems
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            Add as many problem areas for the help desk as you need. Keep in mind this will appear as a text message, so we recommend four (4) or fewer question/answer combos.
+          </Fieldset.HelperText>
+        </Stack>
         {fields.map((f, i) => {
           return (
             <Stack
@@ -112,10 +115,20 @@ export const HelpdeskForm = ({ schema }) => {
               width='100%'
             >
               <Stack width='100%'>
-                <Input name='problem' placeholder="Problem" />
-                <Textarea name='solution' placeholder="Steps to solve" />
+                <Field
+                  errorText={!!errors?.problems?.i.problem && errors.problems.i.problem.message}
+                >
+                  <Input 
+                    placeholder="Problem"
+                    {...register(`problems.${i}.problem`)}
+                  />
+                </Field>
+                <Textarea
+                  placeholder="Steps to solve"
+                  {...register(`problems.${i}.solution`)}
+                />
               </Stack>
-              {i > 0 && 
+              {i >= 0 &&
                 <Button
                   onClick={() => remove(i)}
                   height={6}
@@ -135,10 +148,11 @@ export const HelpdeskForm = ({ schema }) => {
             })
           }
           variant="subtle"
+          width={40}
         >
           Add problem area
         </Button>
-      </Field>
+      </Fieldset.Root>
     </>
   )
 }

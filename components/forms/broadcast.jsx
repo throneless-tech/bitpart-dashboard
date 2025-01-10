@@ -78,18 +78,14 @@ export const BroadcastForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Field
-                // errorText={!!errors?.`faq.${i}.question` && errors.`faq.${i}.question`.message}
-                >
+                <Field>
                   <Input
-                    // name={`faq[${i}].question`}
                     placeholder="Question"
                     {...register(`faq.${i}.question`)}
                   />
                 </Field>
                 <Field>
                   <Input
-                    // name={`faq[${i}].answer`}
                     placeholder="Answer"
                     {...register(`faq.${i}.answer`)}
                   />
@@ -115,6 +111,7 @@ export const BroadcastForm = () => {
             })
           }
           variant="subtle"
+          width={40}
         >
           Add FAQ
         </Button>
