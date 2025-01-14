@@ -51,6 +51,7 @@ export const EsimForm = () => {
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Describe your organization for the 'About us' section."
+        info="description"
         invalid={!!errors?.description}
         label="Organization description"
         marginTop={4}
@@ -61,6 +62,7 @@ export const EsimForm = () => {
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the privacy policy for a user interacting with this bot."
+        info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
         marginTop={4}
@@ -71,6 +73,7 @@ export const EsimForm = () => {
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
         helperText="Include activation instructions for how a user can activate an e-sim."
+        info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}
@@ -80,6 +83,7 @@ export const EsimForm = () => {
       <Field
         errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
         helperText="Include helpful instructions for what a user should do if their e-sim is not working."
+        info="helpInstructions"
         invalid={!!errors?.helpInstructions}
         label="Help section"
         marginTop={4}

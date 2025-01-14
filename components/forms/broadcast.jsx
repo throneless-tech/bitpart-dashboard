@@ -37,6 +37,7 @@ export const BroadcastForm = () => {
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."
+        info="description"
         invalid={!!errors?.description}
         label="List description"
         marginTop={4}
@@ -47,6 +48,7 @@ export const BroadcastForm = () => {
       <Field
         errorText={!!errors?.safetyTips && errors.safetyTips.message}
         helperText="Include safety tips for the list recipients, such as what to do in an emergency or best practices for digital security hygiene."
+        info="safetyTips"
         invalid={!!errors?.safetyTips}
         label="Safety tips"
         marginTop={4}

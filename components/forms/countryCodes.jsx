@@ -1,6 +1,6 @@
 export const CountryCodes = () => (
   <>
-    <option disabled selected>Select a country code</option>
+    <option disabled defaultValue="0" value="0">Select a country code</option>
     <option value="93">Afghanistan +93</option>
     <option value="358">Aland Islands +358</option>
     <option value="355">Albania +355</option>

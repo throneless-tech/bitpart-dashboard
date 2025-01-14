@@ -56,6 +56,7 @@ export const VpnForm = () => {
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Describe your organization for the 'About us' section."
+        info="description"
         invalid={!!errors?.description}
         label="Organization description"
         marginTop={4}
@@ -97,6 +98,7 @@ export const VpnForm = () => {
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
         helperText="Include instructions for how a user can activate a vpn."
+        info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}

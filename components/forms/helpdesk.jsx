@@ -83,6 +83,7 @@ export const HelpdeskForm = () => {
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the privacy policy for a user interacting with this bot."
+        info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
         marginTop={4}
