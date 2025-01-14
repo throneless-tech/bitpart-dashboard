@@ -54,7 +54,6 @@ export const BroadcastForm = () => {
         <Textarea {...register('safetyTips')} />
       </Field>
       <Fieldset.Root
-        invalid={!!errors?.faq}
         label="FAQs"
         marginTop={4}
       >
@@ -78,13 +77,19 @@ export const BroadcastForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Field>
+                <Field
+                  invalid={!!errors?.faq}
+                  errorText={errors.faq?.question}
+                >
                   <Input
                     placeholder="Question"
                     {...register(`faq.${i}.question`)}
                   />
                 </Field>
-                <Field>
+                <Field
+                  invalid={!!errors?.faq}
+                  errorText={errors.faq?.answer}
+                >
                   <Input
                     placeholder="Answer"
                     {...register(`faq.${i}.answer`)}

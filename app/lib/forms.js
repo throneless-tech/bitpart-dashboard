@@ -2,11 +2,24 @@
 import * as yup from 'yup';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+//handle parenthesis
 
 export const schema = yup.object({
-  botType: yup.string().required('must choose which bot type'),
-  botName: yup.string().required('name is required'),
+  botType: yup.string().required('Choose a bot type'),
+  botName: yup.string().required('name is a required field'),
   phone: yup.string().required().matches(phoneRegExp, 'phone number is not valid'),
+  countryCode: yup.string().required(),
+  contacts: yup.array().when("botType", {
+    is: "broadcast",
+    then: () => yup.array()
+      .of(
+        yup.object({
+          phone: yup.string().required().matches(phoneRegExp, 'phone number is not valid'),
+          countryCode: yup.string().required(),
+        })
+      )
+      .optional(),
+  }),
   name: yup.string().required(),
   description: yup.string().when("botType", {
     is: "broadcast" || "esim" || "vpn",
@@ -68,9 +81,9 @@ export const schema = yup.object({
     is: "helpdesk",
     then: () => yup.string().required(),
   }),
-  storageTime: yup.number().when("botType", {
+  storageTime: yup.number("Enter a number").when("botType", {
     is: "helpdesk" || "vpn",
-    then: () => yup.number().required("Enter a length of time, in hours."),
+    then: () => yup.number("Enter a number").required("Enter a length of time, in hours."),
   }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",

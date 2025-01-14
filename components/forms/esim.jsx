@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 
-export const esimForm = () => {
+export const EsimForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
       locations: [],
@@ -46,7 +46,7 @@ export const esimForm = () => {
         label="Organization name"
         required
       >
-        <Input placeholder="e-sim Distribution Org" {...register('name')} />
+        <Input placeholder="eSim Distribution Org" {...register('name')} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -87,16 +87,15 @@ export const esimForm = () => {
         <Textarea {...register('helpInstructions')} />
       </Field>
       <Fieldset.Root
-        invalid={!!errors?.locations}
-        label="esim locations"
+        label="eSim locations"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            esim locations
+            eSim locations
           </Fieldset.Legend>
           <Fieldset.HelperText>
-            List the locations where a user can use an esim.
+            List the locations where a user can use an eSim.
           </Fieldset.HelperText>
         </Stack>
         {locationFields.map((f, i) => {
@@ -110,7 +109,10 @@ export const esimForm = () => {
               spacing={20}
               width='100%'
             >
-              <Field>
+              <Field
+                invalid={!!errors?.locations}
+                errorText={errors.locations?.place}
+              >
                 <Input
                   placeholder='Enter a location'
                   {...register(`locations.${i}.place`)}
@@ -141,13 +143,12 @@ export const esimForm = () => {
         </Button>
       </Fieldset.Root>
       <Fieldset.Root
-        invalid={!!errors?.plans}
-        label="esim plans"
+        label="eSim plans"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            esim plans
+            eSim plans
           </Fieldset.Legend>
           <Fieldset.HelperText>
             List the different types of plans a user can ask for.
@@ -165,13 +166,19 @@ export const esimForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Field>
+                <Field
+                  invalid={!!errors?.plans}
+                  errorText={errors.plans?.amount}
+                >
                   <Input
                     placeholder="Amount of data"
                     {...register(`plans.${i}.amount`)}
                   />
                 </Field>
-                <Field>
+                <Field
+                  invalid={!!errors?.plans}
+                  errorText={errors.plans?.length}
+                >
                   <Input
                     placeholder="Length of time"
                     {...register(`faq.${i}.length`)}

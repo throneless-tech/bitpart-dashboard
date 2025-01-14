@@ -91,7 +91,6 @@ export const HelpdeskForm = () => {
         <Textarea {...register('privacyPolicy')} />
       </Field>
       <Fieldset.Root
-        invalid={!!errors?.problems}
         label="Problem areas"
         marginTop={4}
       >
@@ -116,17 +115,23 @@ export const HelpdeskForm = () => {
             >
               <Stack width='100%'>
                 <Field
-                  errorText={!!errors?.problems?.i.problem && errors.problems.i.problem.message}
+                  invalid={!!errors?.problems}
+                  errorText={errors.problems?.problem}
                 >
-                  <Input 
+                  <Input
                     placeholder="Problem"
                     {...register(`problems.${i}.problem`)}
                   />
                 </Field>
-                <Textarea
-                  placeholder="Steps to solve"
-                  {...register(`problems.${i}.solution`)}
-                />
+                <Field
+                  invalid={!!errors?.problems}
+                  errorText={errors.problems?.solution}
+                >
+                  <Textarea
+                    placeholder="Steps to solve"
+                    {...register(`problems.${i}.solution`)}
+                  />
+                </Field>
               </Stack>
               {i >= 0 &&
                 <Button

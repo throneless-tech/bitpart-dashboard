@@ -225,7 +225,7 @@ export default function Home() {
               >
                 Building {botType} bot
               </Heading>
-              <BasicsForm />
+              <BasicsForm botType={botType} />
             </StepsContent>
             <StepsContent index={2}>
               <Heading

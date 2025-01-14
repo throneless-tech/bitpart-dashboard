@@ -104,7 +104,6 @@ export const VpnForm = () => {
         <Textarea {...register('activationInstructions')} />
       </Field>
       <Fieldset.Root
-        invalid={!!errors?.locations}
         label="VPN locations"
         marginTop={4}
       >
@@ -127,7 +126,10 @@ export const VpnForm = () => {
               spacing={20}
               width='100%'
             >
-              <Field>
+              <Field
+                invalid={!!errors?.locations}
+                errorText={errors.locations?.place}
+              >
                 <Input
                   placeholder='Enter a location'
                   {...register(`locations.${i}.place`)}
@@ -158,7 +160,6 @@ export const VpnForm = () => {
         </Button>
       </Fieldset.Root>
       <Fieldset.Root
-        invalid={!!errors?.plans}
         label="VPN plans"
         marginTop={4}
       >
@@ -182,13 +183,19 @@ export const VpnForm = () => {
               width='100%'
             >
               <Stack width='100%'>
-                <Field>
+                <Field
+                  invalid={!!errors?.plans}
+                  errorText={errors.plans?.amount}
+                >
                   <Input
                     placeholder="Amount of data"
                     {...register(`plans.${i}.amount`)}
                   />
                 </Field>
-                <Field>
+                <Field
+                  invalid={!!errors?.plans}
+                  errorText={errors.plans?.length}
+                >
                   <Input
                     placeholder="Length of time"
                     {...register(`faq.${i}.length`)}
