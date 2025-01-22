@@ -45,10 +45,12 @@ import {
   StepsRoot,
 } from "@/components/ui/steps"
 
+// form imports
 import { BasicsForm } from "@/components/forms/basics";
 import { BroadcastForm } from "@/components/forms/broadcast";
 import { EsimForm } from "@/components/forms/esim";
 import { HelpdeskForm } from "@/components/forms/helpdesk";
+import { Summary } from "@/components/forms/summary";
 import { TiplineForm } from "@/components/forms/tipline";
 import { VpnForm } from "@/components/forms/vpn";
 
@@ -96,7 +98,8 @@ const frameworks = [
 export default function Home() {
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState([]);
+  const [formErrors, setFormErrors] = useState([]);
 
   // set the path that a user takes depending on which bot type they select
   const updateBotType = (event) => {
@@ -113,12 +116,13 @@ export default function Home() {
   // form validation
   // const { register, handleSubmit, errors, } = useForm({
 
+
   const methods = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 
-  // const { isValid } = useFormState(methods);
+  const values = methods.getValues();
 
   const validateForm = async (values, e) => {
     console.log('valid e: ', e);
@@ -133,7 +137,36 @@ export default function Home() {
   }
 
   const onError = (errors, e) => {
-    console.log('error e: ', errors);
+    console.log('errors: ', errors);
+    console.log('values: ', values);
+    
+    let newErrors = [];
+
+    for (var prop in errors) {      
+      // console.log('error prop is: ', prop);
+      if (Object.prototype.hasOwnProperty.call(errors, prop)) {        
+        newErrors.push(prop);
+      }
+    }
+
+    setFormErrors(newErrors);
+
+    let newData = [];
+
+    for (var prop in values) {
+      if (Object.prototype.hasOwnProperty.call(values, prop)) {
+        if (values[prop] && values[prop].length) {
+          const newProp = {
+            name: prop,
+            value: values[prop]
+          };
+          newData.push(newProp);
+        }
+      }
+    }
+    // console.log('new data!!', newData);
+
+    setFormData(newData);
 
     // alert('Please fix the form errors before continuing on.');
 
@@ -144,7 +177,11 @@ export default function Home() {
     // }
   };
 
-  useEffect(() => { }, [botType, stepCount]);
+  useEffect(() => {
+
+  }, [formErrors, formData])
+
+  useEffect(() => { }, [botType, formData, stepCount]);
 
   return (
     <Box>
@@ -266,6 +303,7 @@ export default function Home() {
             </StepsContent>
             <StepsContent index={3}>
               Please double check that the following information is correct. You will not be able to update this later.
+              <Summary data={formData} errors={formErrors} />
             </StepsContent>
             <StepsCompletedContent>
               You have created a new bot!

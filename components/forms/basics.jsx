@@ -49,14 +49,14 @@ export const BasicsForm = (props) => {
         width={320}
       >
         <NativeSelectRoot>
-          <NativeSelectField>
+          <NativeSelectField {...register('countryCode')}>
             <CountryCodes />
           </NativeSelectField>
         </NativeSelectRoot>
       </Field>
       <Field
         errorText={!!errors?.phone && errors.phone.message}
-        helperText="Enter the phone number for your bot, including country code."
+        helperText="Enter the phone number for your bot."
         invalid={!!errors?.phone}
         label="Phone number"
         marginBottom={6}
@@ -96,10 +96,13 @@ export const BasicsForm = (props) => {
                       invalid={!!errors.contacts}
                       errorText={errors.contacts?.countryCode}
                     >
-                      <NativeSelectRoot size="sm" width="320px">
+                      <NativeSelectRoot
+                        size="sm"
+                        width="320px"
+                      >
                         <NativeSelectField
                           placeholder="Select a country code"
-                          {...register("framework")}
+                          {...register(`contacts.${i}.countryCode`)}
                         >
                         <CountryCodes />
                         </NativeSelectField>

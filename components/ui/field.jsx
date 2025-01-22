@@ -26,11 +26,6 @@ export const Field = React.forwardRef(function Field(props, ref) {
 
   const [open, setOpen] = React.useState(false);
 
-  React.useEffect(() => {
-    console.log(info);
-
-  }, []);
-
   return (
     <ChakraField.Root ref={ref} {...rest}>
       {label && (

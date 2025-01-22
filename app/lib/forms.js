@@ -6,28 +6,28 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 
 export const schema = yup.object({
   botType: yup.string().required('Choose a bot type'),
-  botName: yup.string().required('name is a required field'),
-  phone: yup.string().required().matches(phoneRegExp, 'phone number is not valid'),
-  countryCode: yup.string().required(),
+  botName: yup.string().required('Bot name is required'),
+  phone: yup.string().required().matches(phoneRegExp, 'Phone number is not valid'),
+  countryCode: yup.string().required('Country code is required '),
   contacts: yup.array().when("botType", {
     is: "broadcast",
     then: () => yup.array()
       .of(
         yup.object({
-          phone: yup.string().required().matches(phoneRegExp, 'phone number is not valid'),
-          countryCode: yup.string().required(),
+          phone: yup.string().required('Phone number is required').matches(phoneRegExp, 'Phone number is not valid'),
+          countryCode: yup.string('Country code is required').required(),
         })
       )
       .optional(),
   }),
-  name: yup.string().required(),
+  name: yup.string().required("Name is required"),
   description: yup.string().when("botType", {
     is: "broadcast" || "esim" || "vpn",
-    then: () => yup.string().required(),
+    then: () => yup.string().required("Description is required"),
   }),
   about: yup.string().when("botType", {
     is: "broadcast",
-    then: () => yup.string().required(),
+    then: () => yup.string().optional(),
   }),
   safetyTips: yup.string().when("botType", {
     is: "broadcast",
@@ -38,15 +38,15 @@ export const schema = yup.object({
     then: () => yup.array()
       .of(
         yup.object({
-          question: yup.string().required(),
-          answer: yup.string().required(),
+          question: yup.string().required("Question is required"),
+          answer: yup.string().required("Answer is required"),
         })
       )
       .optional(),
   }),
   privacyPolicy: yup.string().when("botType", {
     is: "esim" || "helpdesk" || "tipline",
-    then: () => yup.string().required(),
+    then: () => yup.string().required("Privacy policy is required"),
   }),
   activationInstructions: yup.string().when("botType", {
     is: "esim" || "vpn",
@@ -61,7 +61,7 @@ export const schema = yup.object({
     then: () => yup.array()
       .of(
         yup.object({
-          place: yup.string().required(),
+          place: yup.string().required("A location is required"),
         })
       )
       .optional(),
@@ -71,15 +71,15 @@ export const schema = yup.object({
     then: () => yup.array()
       .of(
         yup.object({
-          amount: yup.string().required(),
-          length: yup.string().required(),
+          amount: yup.string().required("An amount is required"),
+          length: yup.string().required("A length of time is required"),
         })
       )
       .optional(),
   }),
   referral: yup.string().when("botType", {
     is: "helpdesk",
-    then: () => yup.string().required(),
+    then: () => yup.string().required("A referral person or place is required"),
   }),
   storageTime: yup.number("Enter a number").when("botType", {
     is: "helpdesk" || "vpn",
@@ -94,14 +94,14 @@ export const schema = yup.object({
     then: () => yup.array()
       .of(
         yup.object({
-          problem: yup.string().required(),
-          solution: yup.string().required(),
+          problem: yup.string().required("A problem is required"),
+          solution: yup.string().required("A solution is required"),
         })
       )
       .optional(),
   }),
   vpnName: yup.string().when("botType", {
     is: "vpn",
-    then: () => yup.string().required('name of the VPN service is required'),
+    then: () => yup.string().required('Name of the VPN service is required'),
   }),
 });
