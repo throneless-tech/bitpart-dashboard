@@ -1,7 +1,7 @@
 import { object, string } from 'yup';
 
-export const loginSchema = object({
-  email: string().email().required(),
+export const LoginSchema = object({
+  // email: string().email().required(),
   code: string().required()
 });
 

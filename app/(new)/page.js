@@ -1,4 +1,5 @@
 "use client"
+import { serverAction } from '@/app/lib/actions';
 
 // next imports
 import Image from "next/image";
@@ -61,6 +62,7 @@ import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 import { useEffect, useState } from "react";
+import { redirect } from 'next/dist/server/api-utils';
 
 const frameworks = [
   {
@@ -96,6 +98,11 @@ const frameworks = [
 ]
 
 export default function Home() {
+  const session = serverAction();
+
+  if (!session) {
+    redirect('/login');
+  }
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [formData, setFormData] = useState([]);
