@@ -31,8 +31,19 @@ export const HelpdeskForm = () => {
   return (
     <>
       <Field
+        errorText={!!errors?.botName && errors.botName.message}
+        helperText="Give your bot a name."
+        invalid={!!errors?.botName}
+        label="Bot name"
+        marginBottom={6}
+        required
+        width="320px"
+      >
+        <Input {...register('botName')} />
+      </Field>
+      <Field
         errorText={!!errors?.name && errors.name.message}
-        helperText="Name your helpdesk. It can mirror the bot name or be different."
+        helperText="Name your helpdesk. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
         label="Helpdesk name"
         required
@@ -41,7 +52,7 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.referral && errors.referral.message}
-        helperText="Who or where a user should contact for immediate assistance."
+        helperText="Who or where a person should contact for immediate assistance."
         invalid={!!errors?.referral}
         label="Referral"
         marginTop={4}
@@ -49,7 +60,7 @@ export const HelpdeskForm = () => {
       >
         <Input {...register('referral')} />
       </Field>
-      <Field
+      {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
@@ -70,7 +81,7 @@ export const HelpdeskForm = () => {
           <NumberInputLabel />
           <NumberInputField />
         </NumberInputRoot>
-      </Field>
+      </Field> */}
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
         helperText="Who will have access to the information stored."
@@ -78,11 +89,11 @@ export const HelpdeskForm = () => {
         label="Storage access"
         marginTop={4}
       >
-        <Textarea {...register('storageAccess')} />
+        <Input {...register('storageAccess')} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the privacy policy for a user interacting with this bot."
+        helperText="Describe the privacy policy for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"

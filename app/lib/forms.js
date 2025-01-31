@@ -81,10 +81,10 @@ export const schema = yup.object({
     is: "helpdesk",
     then: () => yup.string().required("A referral person or place is required"),
   }),
-  storageTime: yup.number("Enter a number").when("botType", {
-    is: "helpdesk" || "vpn",
-    then: () => yup.number("Enter a number").required("Enter a length of time, in hours."),
-  }),
+  // storageTime: yup.number("Enter a number").when("botType", {
+  //   is: "helpdesk" || "vpn",
+  //   then: () => yup.number("Enter a number").required("Enter a length of time, in hours."),
+  // }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",
     then: () => yup.string().optional(),

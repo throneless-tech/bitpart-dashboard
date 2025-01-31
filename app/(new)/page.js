@@ -24,13 +24,18 @@ import {
   HStack,
   Icon,
   Input,
+  Link,
   Stack,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field"
 
 // component imports
-import { ColorModeButton } from "@/components/ui/color-mode";
+import {
+  ColorModeButton,
+  useColorMode,
+  useColorModeValue,
+} from "@/components/ui/color-mode"
 import {
   RadioCardItem,
   RadioCardLabel,
@@ -74,25 +79,25 @@ const frameworks = [
   {
     value: "tipline",
     title: "Tipline",
-    description: "Set up an automated system to receive tips anonymously and securely.",
+    description: "Set up an automated system to receive tips.",
     icon: <LuLightbulb />
   },
   {
     value: "helpdesk",
     title: "Helpdesk",
-    description: "Set up an automated system to answer questions anonymously and securely.",
+    description: "Set up an automated system to answer questions.",
     icon: <IoHelpBuoySharp />
   },
   {
     value: "esim",
     title: "eSIM",
-    description: "Distribute eSIMS to users who request codes with anonymity.",
+    description: "Distribute eSIMs to users who request codes.",
     icon: <FaSimCard />
   },
   {
     value: "vpn",
     title: "VPN",
-    description: "Distribute VPN codes to users who request the codes with anonymity.",
+    description: "Distribute VPN codes to users who request them.",
     icon: <CgModem />
   },
 ]
@@ -103,6 +108,7 @@ export default function Home() {
   if (!session) {
     redirect('/login');
   }
+
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [formData, setFormData] = useState([]);
@@ -146,12 +152,12 @@ export default function Home() {
   const onError = (errors, e) => {
     console.log('errors: ', errors);
     console.log('values: ', values);
-    
+
     let newErrors = [];
 
-    for (var prop in errors) {      
+    for (var prop in errors) {
       // console.log('error prop is: ', prop);
-      if (Object.prototype.hasOwnProperty.call(errors, prop)) {        
+      if (Object.prototype.hasOwnProperty.call(errors, prop)) {
         newErrors.push(prop);
       }
     }
@@ -184,6 +190,12 @@ export default function Home() {
     // }
   };
 
+
+  // color mode
+  const { toggleColorMode } = useColorMode()
+
+  const color = useColorModeValue("maroon", "yellow")
+
   useEffect(() => {
 
   }, [formErrors, formData])
@@ -194,7 +206,7 @@ export default function Home() {
     <Box>
       <Container py={6}>
         <Flex justifyContent="space-between">
-          <ColorModeButton />
+          <ColorModeButton onClick={toggleColorMode} />
           <Button>
             Donate
           </Button>
@@ -214,10 +226,20 @@ export default function Home() {
           >
             <StepsList>
               <StepsItem index={0} title="Choose your bot type" />
-              <StepsItem index={1} title="Bot basics" />
-              <StepsItem index={2} title="Customize your bot" />
+              <StepsItem index={1} title="Customize your bot" />
+              <StepsItem index={2} title="Connect your bot" />
             </StepsList>
             <StepsContent index={0}>
+              <Text marginTop={10}>
+                Bitpart works over Signal to ensure as secure and private a connection as possible. If you don't have Signal already,{' '}
+                <Link
+                  href='https://signal.org/install'
+                  color={color}
+                  textDecoration='underline'
+                  variant='underline'
+                >get Signal</Link>
+                .
+              </Text>
               <Heading as="h2" marginTop={10} size="md">
                 What kind of bot do you want to create?
               </Heading>
@@ -269,17 +291,6 @@ export default function Home() {
               >
                 Building {botType} bot
               </Heading>
-              <BasicsForm botType={botType} />
-            </StepsContent>
-            <StepsContent index={2}>
-              <Heading
-                as="h3"
-                marginBottom={4}
-                marginTop={10}
-                size="md"
-              >
-                Building {botType} bot
-              </Heading>
               {botType == "broadcast" ? (
                 <>
                   <BroadcastForm />
@@ -307,6 +318,25 @@ export default function Home() {
                   </Text>
                 </>
               )}
+            </StepsContent>
+            <StepsContent index={2}>
+              <Heading as="h2" marginTop={10} size="md">
+                Set up Signal account
+              </Heading>
+              <Text marginTop={4}>
+                If you haven't already, go through{' '}
+                <Link
+                  href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
+                  color={color}
+                  textDecoration='underline'
+                  variant='underline'
+                >
+                  these steps
+                </Link>  to link Bitpart to your Signal account.
+              </Text>
+              <Text marginTop={4}>
+                QR code will appear here::::
+              </Text>
             </StepsContent>
             <StepsContent index={3}>
               Please double check that the following information is correct. You will not be able to update this later.

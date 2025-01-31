@@ -40,20 +40,31 @@ export const EsimForm = () => {
   return (
     <>
       <Field
+        errorText={!!errors?.botName && errors.botName.message}
+        helperText="Give your bot a name."
+        invalid={!!errors?.botName}
+        label="Bot name"
+        marginBottom={6}
+        required
+        width="320px"
+      >
+        <Input {...register('botName')} />
+      </Field>
+      <Field
         errorText={!!errors?.name && errors.name.message}
-        helperText="Name of your organization"
+        helperText="This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
-        label="Organization name"
+        label="Public name"
         required
       >
-        <Input placeholder="eSim Distribution Org" {...register('name')} />
+        <Input placeholder="eSIM distributor" {...register('name')} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe your organization for the 'About us' section."
+        helperText="Describe what people can expect when engaging with this service."
         info="description"
         invalid={!!errors?.description}
-        label="Organization description"
+        label="About"
         marginTop={4}
         required
       >
@@ -61,7 +72,7 @@ export const EsimForm = () => {
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the privacy policy for a user interacting with this bot."
+        helperText="Describe the privacy policy for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"
@@ -72,7 +83,7 @@ export const EsimForm = () => {
       </Field>
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
-        helperText="Include activation instructions for how a user can activate an e-sim."
+        helperText="Include activation instructions for how a user can activate an eSIM."
         info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
@@ -82,7 +93,7 @@ export const EsimForm = () => {
       </Field>
       <Field
         errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
-        helperText="Include helpful instructions for what a user should do if their e-sim is not working."
+        helperText="Include helpful instructions for what a user should do if their eSIM is not working."
         info="helpInstructions"
         invalid={!!errors?.helpInstructions}
         label="Help section"
@@ -91,15 +102,15 @@ export const EsimForm = () => {
         <Textarea {...register('helpInstructions')} />
       </Field>
       <Fieldset.Root
-        label="eSim locations"
+        label="eSIM locations"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            eSim locations
+            eSIM locations
           </Fieldset.Legend>
           <Fieldset.HelperText>
-            List the locations where a user can use an eSim.
+            List the locations where a user can use an eSIM.
           </Fieldset.HelperText>
         </Stack>
         {locationFields.map((f, i) => {
@@ -147,12 +158,12 @@ export const EsimForm = () => {
         </Button>
       </Fieldset.Root>
       <Fieldset.Root
-        label="eSim plans"
+        label="eSIM plans"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            eSim plans
+            eSIM plans
           </Fieldset.Legend>
           <Fieldset.HelperText>
             List the different types of plans a user can ask for.

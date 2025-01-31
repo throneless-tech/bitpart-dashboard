@@ -15,8 +15,19 @@ export const TiplineForm = () => {
   return (
     <>
       <Field
+        errorText={!!errors?.botName && errors.botName.message}
+        helperText="Give your bot a name."
+        invalid={!!errors?.botName}
+        label="Bot name"
+        marginBottom={6}
+        required
+        width="320px"
+      >
+        <Input {...register('botName')} />
+      </Field>
+      <Field
         errorText={!!errors?.name && errors.name.message}
-        helperText="Name your tipline. It can mirror the bot name, organization name, or be different."
+        helperText="Name your tipline. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
         label="Tipline name"
         required
@@ -25,7 +36,7 @@ export const TiplineForm = () => {
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the privacy policy for a user interacting with this bot."
+        helperText="Describe the privacy policy for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Privacy policy"

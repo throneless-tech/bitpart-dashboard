@@ -45,26 +45,37 @@ export const VpnForm = () => {
   return (
     <>
       <Field
+        errorText={!!errors?.botName && errors.botName.message}
+        helperText="Give your bot a name."
+        invalid={!!errors?.botName}
+        label="Bot name"
+        marginBottom={6}
+        required
+        width="320px"
+      >
+        <Input {...register('botName')} />
+      </Field>
+      <Field
         errorText={!!errors?.name && errors.name.message}
-        helperText="Name of your organization"
+        helperText="This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
-        label="Organization name"
+        label="Public name"
         required
       >
         <Input placeholder="VPN Distribution Org" {...register('name')} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe your organization for the 'About us' section."
+        helperText="Describe what your organization does and/or what to expect from the bot."
         info="description"
         invalid={!!errors?.description}
-        label="Organization description"
+        label="About"
         marginTop={4}
         required
       >
         <Textarea placeholder="Start typing..." {...register('description')} />
       </Field>
-      <Field
+      {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
@@ -84,10 +95,10 @@ export const VpnForm = () => {
           <NumberInputLabel />
           <NumberInputField />
         </NumberInputRoot>
-      </Field>
+      </Field> */}
       <Field
         errorText={!!errors?.vpnName && errors.vpnName.message}
-        helperText="Name of VPN provider"
+        helperText="Name of the VPN provider."
         invalid={!!errors?.vpnName}
         label="VPN provider name"
         marginTop={4}
@@ -97,7 +108,7 @@ export const VpnForm = () => {
       </Field>
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
-        helperText="Include instructions for how a user can activate a vpn."
+        helperText="Include instructions for how someone can activate a vpn."
         info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
