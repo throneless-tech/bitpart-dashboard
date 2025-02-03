@@ -1,5 +1,6 @@
 "use client"
 import { serverAction } from '@/app/lib/actions';
+import dynamic from 'next/dynamic';
 
 // next imports
 import Image from "next/image";
@@ -7,33 +8,29 @@ import Image from "next/image";
 // form validation imports
 import { FormProvider, useForm, useFormState } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { schema } from "../lib/forms";
+import { schema } from "../../lib/forms";
 
 // style imports
-import styles from "../page.module.css";
+import styles from "../../page.module.css";
 
 // chakra ui imports
 import {
   Box,
   Button,
   Container,
-  createListCollection,
   Flex,
   Group,
   Heading,
-  HStack,
+  Highlight,
   Icon,
-  Input,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Field } from "@/components/ui/field"
 
 // component imports
 import {
   ColorModeButton,
-  useColorMode,
   useColorModeValue,
 } from "@/components/ui/color-mode"
 import {
@@ -48,8 +45,8 @@ import {
   StepsList,
   StepsNextTrigger,
   StepsPrevTrigger,
-  StepsRoot,
 } from "@/components/ui/steps"
+const StepsRoot = dynamic(() => import('@/components/ui/steps'), { ssr: false })
 
 // form imports
 import { BasicsForm } from "@/components/forms/basics";
@@ -102,40 +99,38 @@ const frameworks = [
   },
 ]
 
-export default function Home() {
-  const session = serverAction();
+export default function Create() {
+  // const session = serverAction();
 
-  if (!session) {
-    redirect('/login');
-  }
+  // if (!session) {
+  //   redirect('/login');
+  // }
 
   const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [formData, setFormData] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
 
-  // set the path that a user takes depending on which bot type they select
-  const updateBotType = (event) => {
-    // console.log('update bot type fx: ', event.target.value);
-
-    setBotType(event.target.value)
-  };
-
   // update the step count based on prev or next
   const updateStepCount = (step) => {
     setStepCount(stepCount => stepCount += step);
   }
 
-  // form validation
-  // const { register, handleSubmit, errors, } = useForm({
-
-
   const methods = useForm({
+    defaultValues: { botType: 'broadcast' },
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 
   const values = methods.getValues();
+
+  const watchBotType = methods.watch('botType');
+
+  const botTypeFormFieldId = 'botType';
+
+  const botTypeDefault = methods.getValues(botTypeFormFieldId);
+
+  const formState = methods.formState;
 
   const validateForm = async (values, e) => {
     console.log('valid e: ', e);
@@ -148,6 +143,16 @@ export default function Home() {
     }
 
   }
+
+  // set the path that a user takes depending on which bot type they select
+  const updateBotType = (event) => {
+    // console.log('update bot type fx: ', event.target.value);
+
+    setBotType(event.target.value)
+    methods.setValue('botType', event.target.value);
+  };
+
+  const onSubmit = (data) => console.log('data: ', data)
 
   const onError = (errors, e) => {
     console.log('errors: ', errors);
@@ -177,7 +182,7 @@ export default function Home() {
         }
       }
     }
-    // console.log('new data!!', newData);
+    console.log('new data!!', newData);
 
     setFormData(newData);
 
@@ -192,21 +197,16 @@ export default function Home() {
 
 
   // color mode
-  const { toggleColorMode } = useColorMode()
+  const color = useColorModeValue("maroon", "yellow");
 
-  const color = useColorModeValue("maroon", "yellow")
-
-  useEffect(() => {
-
-  }, [formErrors, formData])
-
-  useEffect(() => { }, [botType, formData, stepCount]);
+  useEffect(() => { console.log("botType: ", watchBotType);
+   }, [botType, formData, formErrors, stepCount]);
 
   return (
     <Box>
       <Container py={6}>
         <Flex justifyContent="space-between">
-          <ColorModeButton onClick={toggleColorMode} />
+          <ColorModeButton />
           <Button>
             Donate
           </Button>
@@ -221,7 +221,9 @@ export default function Home() {
             count={4}
             step={stepCount}
             onStepChange={(e) => {
-              methods.handleSubmit(validateForm, onError)(e);
+              if (stepCount == 1) {
+                methods.handleSubmit(onSubmit, onError)(e);
+              }
             }}
           >
             <StepsList>
@@ -230,7 +232,7 @@ export default function Home() {
               <StepsItem index={2} title="Connect your bot" />
             </StepsList>
             <StepsContent index={0}>
-              <Text marginTop={10}>
+              <Text as='div' marginTop={10}>
                 Bitpart works over Signal to ensure as secure and private a connection as possible. If you don't have Signal already,{' '}
                 <Link
                   href='https://signal.org/install'
@@ -245,7 +247,7 @@ export default function Home() {
               </Heading>
               <RadioCardRoot
                 align="center"
-                defaultValue="broadcast"
+                defaultValue={botTypeDefault}
                 justify="center"
                 marginY={6}
                 maxW="4xl"
@@ -276,7 +278,7 @@ export default function Home() {
                       minWidth={300}
                       width={300}
                       value={item.value}
-                      {...methods.register('botType')}
+                      {...methods.register(botTypeFormFieldId)}
                     />
                   ))}
                 </Stack>
@@ -289,25 +291,25 @@ export default function Home() {
                 marginTop={10}
                 size="md"
               >
-                Building {botType} bot
+                Building {values.botType} bot
               </Heading>
-              {botType == "broadcast" ? (
+              {values.botType == "broadcast" ? (
                 <>
                   <BroadcastForm />
                 </>
-              ) : botType == "esim" ? (
+              ) : values.botType == "esim" ? (
                 <>
                   <EsimForm />
                 </>
-              ) : botType == "helpdesk" ? (
+              ) : values.botType == "helpdesk" ? (
                 <>
                   <HelpdeskForm />
                 </>
-              ) : botType == "tipline" ? (
+              ) : values.botType == "tipline" ? (
                 <>
                   <TiplineForm />
                 </>
-              ) : botType == "vpn" ? (
+              ) : values.botType == "vpn" ? (
                 <>
                   <VpnForm />
                 </>
@@ -317,7 +319,14 @@ export default function Home() {
                     Something went wrong. Please contact a system administrator: no bot type selected.
                   </Text>
                 </>
-              )}
+              )}              
+              <Text
+                backgroundColor="yellow.muted"
+                marginBottom={4}
+                marginTop={8}
+              >
+                  Please double check that the above information is correct. You will not be able to update this later.
+              </Text>
             </StepsContent>
             <StepsContent index={2}>
               <Heading as="h2" marginTop={10} size="md">
@@ -339,7 +348,9 @@ export default function Home() {
               </Text>
             </StepsContent>
             <StepsContent index={3}>
-              Please double check that the following information is correct. You will not be able to update this later.
+              <Text marginTop={10}>
+                Here is your new bot summary:
+              </Text>
               <Summary data={formData} errors={formErrors} />
             </StepsContent>
             <StepsCompletedContent>
@@ -357,7 +368,7 @@ export default function Home() {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  // disabled={!isValid}
+                  disabled={stepCount == 1 && !formState.isValid}
                   onClick={() => updateStepCount(1)}
                   size="sm"
                   variant="outline"

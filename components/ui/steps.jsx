@@ -54,7 +54,8 @@ export const StepsIndicator = React.forwardRef(
 )
 
 export const StepsList = ChakraSteps.List
-export const StepsRoot = ChakraSteps.Root
+const StepsRoot = ChakraSteps.Root
+export default StepsRoot
 export const StepsContent = ChakraSteps.Content
 export const StepsCompletedContent = ChakraSteps.CompletedContent
 
