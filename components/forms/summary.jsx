@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import { Alert } from "@/components/ui/alert";
 
 export const Summary = ({ data, errors }) => {
-  useEffect(() => { }, [data, errors])
+  // useEffect(() => {
+  //   console.log('data is: ', data);
+  //   console.log('errors are: ', errors);
+    
+
+  //  }, [data, errors])
 
   return (
     <>

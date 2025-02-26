@@ -95,12 +95,12 @@ export const Field = React.forwardRef(function Field(props, ref) {
                     </>
                   ) : null}
                 </DrawerBody>
-                <DrawerFooter>
+                {/* <DrawerFooter>
                   <DrawerActionTrigger asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerActionTrigger>
                   <Button>Save</Button>
-                </DrawerFooter>
+                </DrawerFooter> */}
                 <DrawerCloseTrigger />
               </DrawerContent>
             </DrawerRoot>

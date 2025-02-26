@@ -106,7 +106,7 @@ export default function Create() {
   //   redirect('/login');
   // }
 
-  const [botType, setBotType] = useState("broadcast");
+  // const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [formData, setFormData] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
@@ -124,11 +124,11 @@ export default function Create() {
 
   const values = methods.getValues();
 
+  const [botType] = methods.watch(['botType']);
+
   const watchBotType = methods.watch('botType');
 
-  const botTypeFormFieldId = 'botType';
-
-  const botTypeDefault = methods.getValues(botTypeFormFieldId);
+  const watchAll = methods.watch();
 
   const formState = methods.formState;
 
@@ -146,13 +146,26 @@ export default function Create() {
 
   // set the path that a user takes depending on which bot type they select
   const updateBotType = (event) => {
-    // console.log('update bot type fx: ', event.target.value);
-
-    setBotType(event.target.value)
     methods.setValue('botType', event.target.value);
+    methods.clearErrors();
+    methods.unregister([
+      'description',
+      'about',
+      'safetyTips',
+      'faq',
+      'privacyPolicy',
+      'activationInstructions',
+      'helpInstructions',
+      'locations',
+      'plans',
+      'referral',
+      'storageAccess',
+      'problems',
+      'vpnName',
+    ]);
   };
 
-  const onSubmit = (data) => console.log('data: ', data)
+  const onSubmit = (data) => console.log('data is being submitted...', data);
 
   const onError = (errors, e) => {
     console.log('errors: ', errors);
@@ -184,7 +197,7 @@ export default function Create() {
     }
     console.log('new data!!', newData);
 
-    setFormData(newData);
+    // setFormData(newData);
 
     // alert('Please fix the form errors before continuing on.');
 
@@ -199,8 +212,7 @@ export default function Create() {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  useEffect(() => { console.log("botType: ", watchBotType);
-   }, [botType, formData, formErrors, stepCount]);
+  useEffect(() => { }, [formData, formErrors, stepCount, watchAll]);
 
   return (
     <Box>
@@ -227,9 +239,12 @@ export default function Create() {
             }}
           >
             <StepsList>
-              <StepsItem index={0} title="Choose your bot type" />
-              <StepsItem index={1} title="Customize your bot" />
-              <StepsItem index={2} title="Connect your bot" />
+              <Stack direction={['column', 'row']}>
+                <StepsItem index={0} title="Choose your bot type" />
+                <StepsItem index={1} title="Customize your bot" />
+                <StepsItem index={2} title="Verify your data" />
+                <StepsItem index={3} title="Connect your bot" />
+              </Stack>
             </StepsList>
             <StepsContent index={0}>
               <Text as='div' marginTop={10}>
@@ -247,7 +262,7 @@ export default function Create() {
               </Heading>
               <RadioCardRoot
                 align="center"
-                defaultValue={botTypeDefault}
+                defaultValue={botType}
                 justify="center"
                 marginY={6}
                 maxW="4xl"
@@ -278,7 +293,7 @@ export default function Create() {
                       minWidth={300}
                       width={300}
                       value={item.value}
-                      {...methods.register(botTypeFormFieldId)}
+                      {...methods.register('botType')}
                     />
                   ))}
                 </Stack>
@@ -291,25 +306,26 @@ export default function Create() {
                 marginTop={10}
                 size="md"
               >
-                Building {values.botType} bot
+                Building {botType} bot
               </Heading>
-              {values.botType == "broadcast" ? (
+              <BasicsForm />
+              {botType == "broadcast" ? (
                 <>
                   <BroadcastForm />
                 </>
-              ) : values.botType == "esim" ? (
+              ) : botType == "esim" ? (
                 <>
                   <EsimForm />
                 </>
-              ) : values.botType == "helpdesk" ? (
+              ) : botType == "helpdesk" ? (
                 <>
                   <HelpdeskForm />
                 </>
-              ) : values.botType == "tipline" ? (
+              ) : botType == "tipline" ? (
                 <>
                   <TiplineForm />
                 </>
-              ) : values.botType == "vpn" ? (
+              ) : botType == "vpn" ? (
                 <>
                   <VpnForm />
                 </>
@@ -319,16 +335,25 @@ export default function Create() {
                     Something went wrong. Please contact a system administrator: no bot type selected.
                   </Text>
                 </>
-              )}              
+              )}
               <Text
                 backgroundColor="yellow.muted"
                 marginBottom={4}
                 marginTop={8}
               >
-                  Please double check that the above information is correct. You will not be able to update this later.
+                Please double check that the above information is correct. You will not be able to update this later.
               </Text>
             </StepsContent>
             <StepsContent index={2}>
+              <Text marginTop={10}>
+                Here is your new bot summary:
+              </Text>
+              <Summary data={formData} errors={formErrors} />
+              <Text marginTop={10}>
+                Does this look correct? If so, click "Submit." If not, go back and edit your data. You will not be able to update this later.
+              </Text>
+            </StepsContent>
+            <StepsContent index={3}>
               <Heading as="h2" marginTop={10} size="md">
                 Set up Signal account
               </Heading>
@@ -347,12 +372,6 @@ export default function Create() {
                 QR code will appear here::::
               </Text>
             </StepsContent>
-            <StepsContent index={3}>
-              <Text marginTop={10}>
-                Here is your new bot summary:
-              </Text>
-              <Summary data={formData} errors={formErrors} />
-            </StepsContent>
             <StepsCompletedContent>
               You have created a new bot!
             </StepsCompletedContent>
@@ -368,12 +387,12 @@ export default function Create() {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  disabled={stepCount == 1 && !formState.isValid}
+                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && dataConfirmed)}
                   onClick={() => updateStepCount(1)}
                   size="sm"
                   variant="outline"
                 >
-                  {stepCount > 2 ? "Submit" : "Next"}
+                  {stepCount == 2 ? "Submit" : "Next"}
                 </Button>
               </StepsNextTrigger>
             </Group>

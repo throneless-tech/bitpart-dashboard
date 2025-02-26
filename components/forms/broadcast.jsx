@@ -26,17 +26,6 @@ export const BroadcastForm = () => {
   return (
     <>
       <Field
-        errorText={!!errors?.botName && errors.botName.message}
-        helperText="Give your bot a name."
-        invalid={!!errors?.botName}
-        label="Bot name"
-        marginBottom={6}
-        required
-        width="320px"
-      >
-        <Input {...register('botName')} />
-      </Field>
-      <Field
         errorText={!!errors?.name && errors.name.message}
         helperText="Name your list. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
