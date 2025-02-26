@@ -27,5 +27,8 @@ CREATE TABLE "Bot" (
 -- CreateIndex
 CREATE UNIQUE INDEX "User_password_key" ON "User"("password");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Bot_phone_key" ON "Bot"("phone");
+
 -- AddForeignKey
 ALTER TABLE "Bot" ADD CONSTRAINT "Bot_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

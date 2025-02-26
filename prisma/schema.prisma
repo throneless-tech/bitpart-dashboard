@@ -17,7 +17,7 @@ model Bot {
   id        Int     @id @default(autoincrement())
   botType     String
   botName     String
-  phone       String
+  phone       String  @unique
   countryCode String
   name        String
   description String?
