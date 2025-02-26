@@ -5,16 +5,19 @@ import { useEffect, useState } from "react";
 import { Alert } from "@/components/ui/alert";
 
 export const Summary = ({ data, errors }) => {
-  // useEffect(() => {
-  //   console.log('data is: ', data);
-  //   console.log('errors are: ', errors);
-    
+  useEffect(() => {
+    console.log('data is: ', data);
+    console.log('errors are: ', errors);
 
-  //  }, [data, errors])
+    console.log(Object.keys(data).length);
+    Object.keys(data).forEach((key, index) => console.log(key))
+
+
+  }, [data, errors])
 
   return (
     <>
-      {errors && errors.length ? (
+      {Object.keys(errors).length !== 0 ? (
         <>
           <Box marginY={6}>
             <Alert status="error" title="Invalid Fields">
@@ -22,32 +25,20 @@ export const Summary = ({ data, errors }) => {
                 Your form has some errors. Please go back and fix the following fields before submitting this form:
               </Text>
               <List.Root marginTop={2} variant="plain">
-                {errors.map(error => (
-                  <List.Item key={error}>{error}</List.Item>
+                {Object.keys(errors).map(key => (
+                  <List.Item key={key}>{errors[key]}</List.Item>
                 ))}
               </List.Root>
             </Alert>
           </Box>
         </>
       ) : null}
-      {data && data.length ? (data.map(d => (
-        <Box key={d.value}>
-          {typeof d.value == "object" ? (
-            <>
-              <Text as="div" marginTop={4}>
-                <Text fontWeight="bold">{d.name}</Text>
-                <Text>{d.value.countryCode ? `+${d.value.countryCode}` : ""} {d.value.phone}</Text>
-              </Text >
-            </>
-          ) : (
-            <Text as="div" marginTop={4}>
-              <Text fontWeight="bold">{d.name}</Text>
-              <Text>{d.value}</Text>
-            </Text >
-          )}
-        </Box>
-      ))
-      ) : null}
+      {Object.keys(data).length != 0 ? Object.keys(data).map(key => (
+        <Text as="div" key={key} marginTop={4}>
+          <Text fontWeight="bold">{key}</Text>
+          <Text>{data[key]}</Text>
+        </Text >
+      )) : null}
     </>
   )
 }

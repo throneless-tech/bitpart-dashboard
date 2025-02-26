@@ -29,6 +29,7 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   ColorModeButton,
   useColorModeValue,
@@ -110,10 +111,12 @@ export default function Create() {
   const [stepCount, setStepCount] = useState(0);
   const [formData, setFormData] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
+  const [dataConfirmed, setDataConfirmed] = useState(false);
 
   // update the step count based on prev or next
   const updateStepCount = (step) => {
     setStepCount(stepCount => stepCount += step);
+    window.scrollTo(0, 0);
   }
 
   const methods = useForm({
@@ -144,7 +147,7 @@ export default function Create() {
 
   }
 
-  // set the path that a user takes depending on which bot type they select
+  // set the path that a user takes depending on which bot type they select, and unregister any previously registered but unneeded fields
   const updateBotType = (event) => {
     methods.setValue('botType', event.target.value);
     methods.clearErrors();
@@ -165,47 +168,40 @@ export default function Create() {
     ]);
   };
 
-  const onSubmit = (data) => console.log('data is being submitted...', data);
+  const onSubmit = (data) => {
+    console.log('data is being submitted...', data);
+    let newData = [];
+
+    // for (var prop in values) {
+    //   if (Object.prototype.hasOwnProperty.call(values, prop)) {
+    //     if (values[prop] && values[prop].length) {
+    //       const newProp = {
+    //         name: prop,
+    //         value: values[prop]
+    //       };
+    //       newData.push(newProp);
+    //     }
+    //   }
+    // }
+    // console.log('new data!!', newData);
+
+    // setFormData(newData);
+  }
 
   const onError = (errors, e) => {
     console.log('errors: ', errors);
     console.log('values: ', values);
 
-    let newErrors = [];
+    // let newErrors = [];
 
-    for (var prop in errors) {
-      // console.log('error prop is: ', prop);
-      if (Object.prototype.hasOwnProperty.call(errors, prop)) {
-        newErrors.push(prop);
-      }
-    }
-
-    setFormErrors(newErrors);
-
-    let newData = [];
-
-    for (var prop in values) {
-      if (Object.prototype.hasOwnProperty.call(values, prop)) {
-        if (values[prop] && values[prop].length) {
-          const newProp = {
-            name: prop,
-            value: values[prop]
-          };
-          newData.push(newProp);
-        }
-      }
-    }
-    console.log('new data!!', newData);
-
-    // setFormData(newData);
-
-    // alert('Please fix the form errors before continuing on.');
-
-    // if (e.step == 0) {
-    //   setStepCount(stepCount => stepCount += 1);
-    // } else if (stepCount > 0) {
-    //   setStepCount(stepCount => stepCount -= 1);
+    // for (var prop in errors) {
+    //   // console.log('error prop is: ', prop);
+    //   if (Object.prototype.hasOwnProperty.call(errors, prop)) {
+    //     newErrors.push(prop);
+    //   }
     // }
+
+    // setFormErrors(newErrors);
   };
 
 
@@ -233,9 +229,9 @@ export default function Create() {
             count={4}
             step={stepCount}
             onStepChange={(e) => {
-              if (stepCount == 1) {
-                methods.handleSubmit(onSubmit, onError)(e);
-              }
+              // if (stepCount == 1) {
+              //   methods.handleSubmit(onSubmit, onError)(e);
+              // }
             }}
           >
             <StepsList>
@@ -348,10 +344,18 @@ export default function Create() {
               <Text marginTop={10}>
                 Here is your new bot summary:
               </Text>
-              <Summary data={formData} errors={formErrors} />
+              <Summary data={values} errors={formState.errors} />
               <Text marginTop={10}>
-                Does this look correct? If so, click "Submit." If not, go back and edit your data. You will not be able to update this later.
+                Does this look correct? If so, confirm with the checkbox below. If not, go back and edit your data. You will not be able to update this later.
               </Text>
+              <Checkbox
+                checked={dataConfirmed}
+                onCheckedChange={(e) => setDataConfirmed(!!e.checked)}
+                marginBottom={8}
+                marginTop={2}
+              >
+                Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
+              </Checkbox>
             </StepsContent>
             <StepsContent index={3}>
               <Heading as="h2" marginTop={10} size="md">
@@ -387,7 +391,7 @@ export default function Create() {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && dataConfirmed)}
+                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed)}
                   onClick={() => updateStepCount(1)}
                   size="sm"
                   variant="outline"
