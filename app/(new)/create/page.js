@@ -193,7 +193,7 @@ export default function Create() {
           </Button>
         </Flex>
       </Container>
-      <Container marginBottom={6} maxW="4xl">
+      <Container marginBottom={6} maxW="6xl">
         <Heading as="h1" marginBottom={4} size="xl">
           Create a new bot
         </Heading>
@@ -206,9 +206,10 @@ export default function Create() {
                 methods.handleSubmit(onSubmit, onError)(e);
               }
             }}
+            variant="subtle"
           >
             <StepsList>
-              <Stack direction={['column', 'row']}>
+              <Stack direction={['column', 'column', 'row']}>
                 <StepsItem index={0} title="Choose your bot type" />
                 <StepsItem index={1} title="Customize your bot" />
                 <StepsItem index={2} title="Confirm your data" />
