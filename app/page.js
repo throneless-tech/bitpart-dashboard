@@ -10,7 +10,7 @@ import {
 
 // components
 import { ColorModeButton } from "@/components/ui/color-mode";
-// import { LoginForm } from "./ui/login";
+import { LoginForm } from "./ui/login";
 
 export default function Home() {
   return (
@@ -39,7 +39,7 @@ export default function Home() {
           <Text>
             Login
           </Text>
-          {/* <LoginForm /> */}
+          <LoginForm />
         </Box>
       </Container>
     </Box>

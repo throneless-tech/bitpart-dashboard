@@ -12,10 +12,12 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.8.0",
     "@chakra-ui/react": "^3.2.3",
     "@emotion/react": "^11.14.0",
     "@hookform/resolvers": "^3.9.1",
     "@prisma/extension-accelerate": "^1.2.2",
+    "bcryptjs": "^3.0.2",
     "jose": "^5.9.6",
     "next": "^15.1.0",
     "next-auth": "^5.0.0-beta.25",

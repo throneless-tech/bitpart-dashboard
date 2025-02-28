@@ -1,6 +1,7 @@
 import { LoginSchema } from '@/app/lib/definitions';
 import { createSession, deleteSession } from '@/app/lib/session';
 import prisma from '@/lib/prisma';
+import bcrypt from "bcryptjs";
 
 export async function login(state, formData) {
   // 1. Validate form fields
@@ -17,7 +18,7 @@ export async function login(state, formData) {
   }
 
   // 2. Prepare data for insertion into database
-  const { password } = validatedFields.data
+  const { password } = validatedFields
   // e.g. Hash the user's password before storing it
   const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -34,7 +35,7 @@ export async function login(state, formData) {
 
   const user = await prisma.user.findUnique({
     where: {
-      password: password,
+      password: hashedPassword,
     },
   })
 
@@ -44,7 +45,6 @@ export async function login(state, formData) {
     }
   } else {
     console.log(user);
-    
   }
 
   // TODO:
