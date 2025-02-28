@@ -100,6 +100,22 @@ const frameworks = [
   },
 ]
 
+const valuesToUnregister = [
+  'description',
+  'about',
+  'safetyTips',
+  'faq',
+  'privacyPolicy',
+  'activationInstructions',
+  'helpInstructions',
+  'locations',
+  'plans',
+  'referral',
+  'storageAccess',
+  'problems',
+  'vpnName',
+]
+
 export default function Create() {
   // const session = serverAction();
 
@@ -151,59 +167,16 @@ export default function Create() {
   const updateBotType = (event) => {
     methods.setValue('botType', event.target.value);
     methods.clearErrors();
-    methods.unregister([
-      'description',
-      'about',
-      'safetyTips',
-      'faq',
-      'privacyPolicy',
-      'activationInstructions',
-      'helpInstructions',
-      'locations',
-      'plans',
-      'referral',
-      'storageAccess',
-      'problems',
-      'vpnName',
-    ]);
+    methods.unregister(valuesToUnregister);
   };
 
   const onSubmit = (data) => {
     console.log('data is being submitted...', data);
-    let newData = [];
-
-    // for (var prop in values) {
-    //   if (Object.prototype.hasOwnProperty.call(values, prop)) {
-    //     if (values[prop] && values[prop].length) {
-    //       const newProp = {
-    //         name: prop,
-    //         value: values[prop]
-    //       };
-    //       newData.push(newProp);
-    //     }
-    //   }
-    // }
-    // console.log('new data!!', newData);
-
-    // setFormData(newData);
   }
 
   const onError = (errors, e) => {
-    console.log('errors: ', errors);
-    console.log('values: ', values);
-
-    // let newErrors = [];
-
-    // for (var prop in errors) {
-    //   // console.log('error prop is: ', prop);
-    //   if (Object.prototype.hasOwnProperty.call(errors, prop)) {
-    //     newErrors.push(prop);
-    //   }
-    // }
-
-    // setFormErrors(newErrors);
+    console.log('errors prevented form from submitting: ', errors);
   };
-
 
   // color mode
   const color = useColorModeValue("maroon", "yellow");
@@ -229,17 +202,18 @@ export default function Create() {
             count={4}
             step={stepCount}
             onStepChange={(e) => {
-              // if (stepCount == 1) {
-              //   methods.handleSubmit(onSubmit, onError)(e);
-              // }
+              if (stepCount == 2) {
+                methods.handleSubmit(onSubmit, onError)(e);
+              }
             }}
           >
             <StepsList>
               <Stack direction={['column', 'row']}>
                 <StepsItem index={0} title="Choose your bot type" />
                 <StepsItem index={1} title="Customize your bot" />
-                <StepsItem index={2} title="Verify your data" />
-                <StepsItem index={3} title="Connect your bot" />
+                <StepsItem index={2} title="Confirm your data" />
+                <StepsItem index={3} title="Create a captcha" />
+                <StepsItem index={4} title="Connect your bot" />
               </Stack>
             </StepsList>
             <StepsContent index={0}>
@@ -249,6 +223,7 @@ export default function Create() {
                   href='https://signal.org/install'
                   color={color}
                   textDecoration='underline'
+                  target='_blank'
                   variant='underline'
                 >get Signal</Link>
                 .
@@ -296,15 +271,18 @@ export default function Create() {
               </RadioCardRoot>
             </StepsContent>
             <StepsContent index={1}>
-              <Heading
+              {/* <Heading
                 as="h3"
                 marginBottom={4}
                 marginTop={10}
                 size="md"
               >
                 Building {botType} bot
-              </Heading>
+              </Heading> */}
               <BasicsForm />
+              <Heading as='h2' marginBottom={4} size='md'>
+                Bot specifics
+              </Heading>
               {botType == "broadcast" ? (
                 <>
                   <BroadcastForm />
@@ -358,6 +336,12 @@ export default function Create() {
               </Checkbox>
             </StepsContent>
             <StepsContent index={3}>
+              <Text>
+                This is required by signal. Sorry!
+              </Text>
+              <iframe src="https://signalcaptchas.org/challenge/generate" height="300px" width="600px" />
+            </StepsContent>
+            <StepsContent index={4}>
               <Heading as="h2" marginTop={10} size="md">
                 Set up Signal account
               </Heading>
@@ -367,21 +351,28 @@ export default function Create() {
                   href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
                   color={color}
                   textDecoration='underline'
+                  target='_blank'
                   variant='underline'
                 >
                   these steps
-                </Link>  to link Bitpart to your Signal account.
+                </Link>  to link Bitpart to your Signal account. Don't use your primary device because it'll show your name etc.....
               </Text>
               <Text marginTop={4}>
                 QR code will appear here::::
               </Text>
             </StepsContent>
             <StepsCompletedContent>
-              You have created a new bot!
+              {/* TODO update steps layout to be more clear which step you're on  */}
+              You have created a new bot! Go to your{' '}
+              <Link href='/dashboard'>
+                Dashboard
+              </Link>
+              {' '}to see all the bots you have created.
             </StepsCompletedContent>
             <Group>
               <StepsPrevTrigger asChild>
                 <Button
+                  disabled={stepCount == 3}
                   onClick={() => updateStepCount(-1)}
                   size="sm"
                   variant="outline"
@@ -391,7 +382,7 @@ export default function Create() {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed)}
+                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount == 4}
                   onClick={() => updateStepCount(1)}
                   size="sm"
                   variant="outline"

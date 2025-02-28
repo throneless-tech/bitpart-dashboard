@@ -1,11 +1,12 @@
 import { LoginSchema } from '@/app/lib/definitions';
 import { createSession, deleteSession } from '@/app/lib/session';
+import prisma from '@/lib/prisma';
 
 export async function login(state, formData) {
   // 1. Validate form fields
   const validatedFields = LoginSchema.safeParse({
     // email: formData.get('email'),
-    code: formData.get('code'),
+    password: formData.get('password'),
   })
 
   // If any form fields are invalid, return early
@@ -16,25 +17,34 @@ export async function login(state, formData) {
   }
 
   // 2. Prepare data for insertion into database
-  const { code } = validatedFields.data
+  const { password } = validatedFields.data
   // e.g. Hash the user's password before storing it
-  const hashedCode = await bcrypt.hash(code, 10)
+  const hashedPassword = await bcrypt.hash(password, 10)
 
   // 3. Insert the user into the database or call an Library API
-  const data = await db
-    .insert(users)
-    .values({
-      email,
-      code: hashedCode,
-    })
-    .returning({ id: users.id })
+  // const data = await db
+  //   .insert(users)
+  //   .values({
+  //     email,
+  //     password: hashedPassword,
+  //   })
+  //   .returning({ id: users.id })
 
-  const user = data[0]
+  // const user = data[0]
+
+  const user = await prisma.user.findUnique({
+    where: {
+      password: password,
+    },
+  })
 
   if (!user) {
     return {
       message: 'An error occurred while creating your account.',
     }
+  } else {
+    console.log(user);
+    
   }
 
   // TODO:

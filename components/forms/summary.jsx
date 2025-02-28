@@ -5,15 +5,6 @@ import { useEffect, useState } from "react";
 import { Alert } from "@/components/ui/alert";
 
 export const Summary = ({ data, errors }) => {
-  useEffect(() => {
-    console.log('data is: ', data);
-    console.log('errors are: ', errors);
-
-    console.log(Object.keys(data).length);
-    Object.keys(data).forEach((key, index) => console.log(key))
-
-
-  }, [data, errors])
 
   return (
     <>
@@ -26,7 +17,7 @@ export const Summary = ({ data, errors }) => {
               </Text>
               <List.Root marginTop={2} variant="plain">
                 {Object.keys(errors).map(key => (
-                  <List.Item key={key}>{errors[key]}</List.Item>
+                  <List.Item key={key}>{key}</List.Item>
                 ))}
               </List.Root>
             </Alert>
@@ -36,7 +27,16 @@ export const Summary = ({ data, errors }) => {
       {Object.keys(data).length != 0 ? Object.keys(data).map(key => (
         <Text as="div" key={key} marginTop={4}>
           <Text fontWeight="bold">{key}</Text>
-          <Text>{data[key]}</Text>
+          {typeof data[key] !== "string" ? data[key].map((d, ind) => (
+            <Box key={`innerdata-${ind}`}>
+              {Object.keys(d).map((k, i) => (
+                <Box key={`${k}-${i}`}>
+                  <Text fontWeight="bold">{k}</Text>
+                  <Text>{d[k]}</Text>
+                </Box>
+              ))}
+            </Box>
+          )) : <Text>{data[key]}</Text>}
         </Text >
       )) : null}
     </>

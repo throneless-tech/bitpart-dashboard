@@ -4,7 +4,9 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 // chakra imports
 import {
   Fieldset,
+  Heading,
   Input,
+  Separator,
   Stack,
 } from "@chakra-ui/react";
 
@@ -24,16 +26,14 @@ export const BasicsForm = (props) => {
 
   const { register, control, formState: { errors }, } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'contacts',
-  });
-
   return (
     <>
+      <Heading as='h2' marginBottom={4} marginTop={4} size='md'>
+        Bot basics
+      </Heading>
       <Field
         errorText={!!errors?.botName && errors.botName.message}
-        helperText="Give your bot a name."
+        helperText="Give your bot a name. (This is for you, and won't appear to your users)."
         invalid={!!errors?.botName}
         label="Bot name"
         marginBottom={6}
@@ -46,7 +46,7 @@ export const BasicsForm = (props) => {
         <Stack>
           <Fieldset.Legend>Phone number details</Fieldset.Legend>
           <Fieldset.HelperText>
-            Please provide the phone number associated with the bot's Signal account.
+            Please provide the phone number that will be associated with the bot's Signal account. The bot will be added as a secondary device on Signal and we will guide you through this process later. We recommend that you use a new phone number for Bitpart since your Signal profile information will be linked to this account.
           </Fieldset.HelperText>
         </Stack>
         <Stack marginLeft={4}>
@@ -75,6 +75,7 @@ export const BasicsForm = (props) => {
           </Field>
         </Stack>
       </Fieldset.Root>
+      <Separator marginBottom={8} marginTop={8} />
     </>
   )
 }

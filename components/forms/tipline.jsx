@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 
 // chakra imports
 import {
+  Heading,
   Input,
   Stack,
   Textarea
@@ -10,11 +11,11 @@ import {
 import { Field } from "@/components/ui/field";
 
 export const TiplineForm = () => {
-    const {
-      register,
-      formState: { errors },
-      watch,
-    } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+    watch,
+  } = useFormContext();
 
   return (
     <>
@@ -29,10 +30,10 @@ export const TiplineForm = () => {
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the privacy policy for a person interacting with this bot."
+        helperText="Describe the data privacy practices for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
-        label="Privacy policy"
+        label="Data privacy"
         marginTop={4}
         required
       >

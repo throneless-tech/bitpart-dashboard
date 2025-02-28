@@ -15,10 +15,10 @@ export function LoginForm() {
       {state?.errors?.email && <p>{state.errors.email}</p>} */}
 
       <div>
-        <label htmlFor="code">Access code</label>
-        <input id="code" name="code" type="password" />
+        <label htmlFor="password">Access code</label>
+        <input id="password" name="password" type="password" />
       </div>
-      {state?.errors?.code && <p>{state.errors.code}</p>}
+      {state?.errors?.password && <p>{state.errors.password}</p>}
 
       <button disabled={pending} type="submit">
         Sign Up
