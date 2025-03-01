@@ -1,53 +1,49 @@
-// 'use client'
-
-// import { useActionState } from 'react';
-// import { login } from '@/app/actions/auth';
-
-// export function LoginForm() {
-//   const [state, action, pending] = useActionState(signup, undefined);
-
-//   return (
-//     <form action={action}>
-//       {/* <div>
-//         <label htmlFor="email">Email</label>
-//         <input id="email" name="email" type="email" placeholder="Email" />
-//       </div>
-//       {state?.errors?.email && <p>{state.errors.email}</p>} */}
-
-//       <div>
-//         <label htmlFor="password">Access code</label>
-//         <input id="password" name="password" type="password" />
-//       </div>
-//       {state?.errors?.password && <p>{state.errors.password}</p>}
-
-//       <button disabled={pending} type="submit">
-//         Sign Up
-//       </button>
-//     </form>
-//   )
-// }
-
+import { redirect } from "next/navigation"
+import { AuthError } from "next-auth"
+import { Alert, Box, Button, Field } from "@chakra-ui/react";
+import { PasswordInput } from "@/components/ui/password-input"
 
 import { signIn } from "@/auth"
 
 export function LoginForm() {
+
   return (
     <form
       action={async (formData) => {
         "use server"
-        signIn("credentials", formData, { redirectTo: "/dashboard" }).then(res => console.log('RES!!!!!', res))
-        
+        try {
+          await signIn("credentials", formData, { redirectTo: "/dashboard" });
+        } catch (error) {
+          // if (error instanceof AuthError) {
+          //   return redirect(`/?error=${error.type}`);
+          // }
+            console.log('here................', error.type);
+          // throw error;
+          return error.type
+        } finally {
+          return (
+          <Alert.Root>
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title >Invalid credentials</Alert.Title>
+            </Alert.Content>
+          </Alert.Root>
+          )
+        }
       }}
     >
-      {/* <label>
-        Email
-        <input name="email" type="email" />
-      </label> */}
-      <label>
-        Enter your code
-        <input name="password" type="password" />
-      </label>
-      <button>Sign In</button>
+      <Box marginLeft="auto" marginRight="auto" maxW={400}>
+        <Field.Root invalid={false}>
+          <Field.Label>
+            Enter your code
+          </Field.Label>
+          <PasswordInput name="password" placeholder="your-invite-code-here" size="lg" />
+          <Field.ErrorText >Invalid code</Field.ErrorText>
+        </Field.Root>
+      </Box>
+      <Button marginTop={4} type="submit">
+        Sign in
+      </Button>
     </form>
   )
 }

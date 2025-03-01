@@ -13,9 +13,11 @@ First, install dependencies from your terminal:
 Run `npx auth secret` to create a random value for Auth.js. See [their docs](https://authjs.dev/getting-started/installation?framework=next-js) for more info.
 
 ### Attach the databse
-This project uses [Prisma](https://www.prisma.io) ORM to connect to a PostgreSQL database. You must have a Postgres database running. See the [Postgres website](https://www.postgresql.org/) for more information.
+This project uses [Prisma ORM](https://www.prisma.io/docs/orm/overview/databases/postgresql) to connect to a PostgreSQL database. You must have a Postgres database running. See the [Postgres website](https://www.postgresql.org/) for more information on starting a PostgreSQL server.
 
 Add the url to the database as your `DATABASE_URL` in your `.env` file.
+
+Run `prisma migrate dev` in development or `prisma migrate deploy` in production to apply the migrations.
 
 If you would like to seed the database, run `npx prisma db seed` in your terminal.
 

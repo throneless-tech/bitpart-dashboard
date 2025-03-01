@@ -39,7 +39,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           })
 
           if (!user) {
-            
             throw new Error("Invalid credentials.")
           }
 
@@ -50,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("EROOR: ", error.message);
           
           console.log('*********************');
-          return error.message
+          return null
         }
       },
     }),
