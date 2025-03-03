@@ -14,22 +14,11 @@ export function LoginForm() {
         try {
           await signIn("credentials", formData, { redirectTo: "/dashboard" });
         } catch (error) {
-          // if (error instanceof AuthError) {
-          //   return redirect(`/?error=${error.type}`);
-          // }
-            console.log('here................', error.type);
-          // throw error;
-          return error.type
-        } finally {
-          return (
-          <Alert.Root>
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title >Invalid credentials</Alert.Title>
-            </Alert.Content>
-          </Alert.Root>
-          )
-        }
+          if (error instanceof AuthError) {
+            return redirect(`/error?error=${error.type}`);
+          }
+          throw error;
+        } 
       }}
     >
       <Box marginLeft="auto" marginRight="auto" maxW={400}>

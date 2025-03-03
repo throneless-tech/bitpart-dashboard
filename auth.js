@@ -19,6 +19,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // email: {},
         password: {},
       },
+      pages: {
+        signIn: "/",
+        error: "/error",
+      },
       authorize: async (credentials) => {
         try {
           let user = null
@@ -45,10 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // return JSON object with the user data
           return user
         } catch (error) {
-          console.log('*********************');
-          console.log("EROOR: ", error.message);
-          
-          console.log('*********************');
+
           return null
         }
       },
