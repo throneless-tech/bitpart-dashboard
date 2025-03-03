@@ -1,34 +1,25 @@
+// base imports
+import { auth } from "@/auth"
+
 // chakra ui imports
 import {
   Box,
   Button,
   Container,
-  Flex,
   Heading,
-  Link,
-  Text
 } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/components/ui/color-mode";
+import Header from "@/app/ui/header";
 
-export default function Dashboard() {
+export default async function Dashboard() {
+
+  const session = await auth();
+  if (!session) return <div>Not authenticated</div>
 
   return (
     <Box>
-      <Container py={6}>
-        <Flex justifyContent="space-between">
-          <ColorModeButton />
-          <Flex gap={4}>
-            <Button>
-              Donate
-            </Button>
-            <Link href="/" variant='underline'>
-              Logout
-            </Link>
-          </Flex>
-        </Flex>
-      </Container>
+      <Header />
       <Container
         marginY={3}
         maxW="2xl"

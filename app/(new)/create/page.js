@@ -1,5 +1,7 @@
 "use client"
-import { serverAction } from '@/app/lib/actions';
+
+// base imports
+import { auth } from "@/auth"
 import dynamic from 'next/dynamic';
 
 // next imports
@@ -34,6 +36,7 @@ import {
   ColorModeButton,
   useColorModeValue,
 } from "@/components/ui/color-mode"
+import Header from "@/app/ui/header";
 import {
   RadioCardItem,
   RadioCardLabel,
@@ -65,7 +68,6 @@ import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { redirect } from 'next/dist/server/api-utils';
 
 const frameworks = [
   {
@@ -116,12 +118,11 @@ const valuesToUnregister = [
   'vpnName',
 ]
 
-export default function Create() {
-  // const session = serverAction();
+export default async function Create() {
 
-  // if (!session) {
-  //   redirect('/login');
-  // }
+  const session = await auth();
+  if (!session) return <div>Not authenticated</div>
+
 
   // const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
@@ -151,18 +152,6 @@ export default function Create() {
 
   const formState = methods.formState;
 
-  const validateForm = async (values, e) => {
-    console.log('valid e: ', e);
-
-    if (stepCount > 3) {
-      console.log('final step! submit data here...');
-
-    } else {
-
-    }
-
-  }
-
   // set the path that a user takes depending on which bot type they select, and unregister any previously registered but unneeded fields
   const updateBotType = (event) => {
     methods.setValue('botType', event.target.value);
@@ -185,14 +174,7 @@ export default function Create() {
 
   return (
     <Box>
-      <Container py={6}>
-        <Flex justifyContent="space-between">
-          <ColorModeButton />
-          <Button>
-            Donate
-          </Button>
-        </Flex>
-      </Container>
+      <Header />
       <Container marginBottom={6} maxW="6xl">
         <Heading as="h1" marginBottom={4} size="xl">
           Create a new bot

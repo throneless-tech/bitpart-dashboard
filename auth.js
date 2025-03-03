@@ -13,16 +13,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      credentials: {
-        username: {},
-        password: {},
-      },
-      pages: {
-        signIn: "/",
-        error: "/error",
-      },
       authorize: async (credentials) => {
         try {
           let user = null
@@ -31,8 +21,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const validatedFields = await LoginSchema.validate(credentials)
 
           // 2. Prepare data for insertion into database
-          const { password } = validatedFields
-          // e.g. Hash the user's password before storing it
+          const { username, password } = validatedFields
+          
+          // Hash the user's password before storing it
           const hashedPassword = await bcrypt.hash(password, 10)
 
           // 3. Insert the user into the database or verify if the user exists
@@ -42,14 +33,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
           })
 
-          const match = await bcrypt.compare(hashedPassword, user.password);
-
-          // return if passwords do not match
-          if (match === false) return null;
-
           if (!user) {
             throw new Error("Invalid credentials.")
           }
+
+          const isPasswordValid = bcrypt.compare(password, user.password)
+
+          if (!isPasswordValid) {
+            throw new Error('Invalid email or password.')
+          }
+
 
           // return JSON object with the user data
           return user
@@ -58,6 +51,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
       },
+      callbacks: {
+        async jwt({ token, user }) {
+          if (user) {
+            token.id = user.id
+            token.username = user.username
+          }
+          return token
+        },
+        async session({ session, token }) {
+          if (token) {
+            session.user.id = token.id
+            session.user.username = token.username
+          }
+          return session
+        },
+      },
+      credentials: {
+        username: {},
+        password: {},
+      },
+      pages: {
+        signIn: "/",
+        error: "/error",
+      },
+      session: {
+        strategy: 'jwt',
+      },
+      secret: process.env.JWT_SECRET, // optional
     }),
   ],
 })
