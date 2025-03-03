@@ -11,6 +11,7 @@ import {
   Flex,
   Link,
 } from "@chakra-ui/react";
+import { ColorModeButton } from "@/components/ui/color-mode";
 
 export default function Header () {
 
@@ -25,7 +26,7 @@ export default function Header () {
             </Button>
             <Link
               href="/"
-              onClick={() => signOut()}
+              onClick={async () => await signOut()}
               variant='underline'
             >
               Logout

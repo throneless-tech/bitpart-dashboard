@@ -1,4 +1,5 @@
 import { Provider } from "@/components/ui/provider";
+import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
 // import "./globals.css";
 
@@ -22,7 +23,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Provider>{children}</Provider>
+        <SessionProvider>
+          <Provider>{children}</Provider>
+        </SessionProvider>
       </body>
     </html>
   );

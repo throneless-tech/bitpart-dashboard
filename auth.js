@@ -11,6 +11,57 @@ import { LoginSchema } from "./app/lib/definitions"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  callbacks: {
+    // async signIn({ user, credentials }) {
+    //   console.log('*****************************');
+    //   console.log('in sign in callback...');
+
+    //   console.log('*****************************');
+
+    //   // Check if this sign in callback is being called in the credentials authentication flow.
+    //   // If so, use the next - auth adapter to create a session entry in the database
+    //   // (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
+    //   if (credentials && credentials.username && credentials.password) {
+    //     if (user) {
+    //       const sessionToken = crypto.randomUUID();
+    //       // Set expiry to 30 days
+    //       const sessionExpiry = new Date(Date.now() + 60 * 60 * 24 * 30 * 1000);
+
+    //       await PrismaAdapter(prisma).createSession({
+    //         sessionToken: sessionToken,
+    //         userId: user.id,
+    //         expires: sessionExpiry
+    //       });
+
+    //       event.cookies.set('next-auth.session-token', sessionToken, {
+    //         expires: sessionExpiry
+    //       });
+    //     }
+    //   }
+
+    //   return true;
+    // },
+    jwt({ token, user }) {
+      if (user?.username) { // User is available during sign-in
+        token.username = user.username
+      }
+      return token
+    },
+    session({ session, token, user }) {
+      session.user.username = token.username
+
+      return session
+    },
+  },
+  debug: !!process.env.AUTH_DEBUG,
+  credentials: {
+    username: {},
+    password: {},
+  },
+  pages: {
+    signIn: "/",
+    error: "/error",
+  },
   providers: [
     Credentials({
       authorize: async (credentials) => {
@@ -22,9 +73,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // 2. Prepare data for insertion into database
           const { username, password } = validatedFields
-          
-          // Hash the user's password before storing it
-          const hashedPassword = await bcrypt.hash(password, 10)
+
+          // Hash the user's password before storing it when creating a new user
+          // const hashedPassword = await bcrypt.hash(password, 10)
 
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
@@ -51,34 +102,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null
         }
       },
-      callbacks: {
-        async jwt({ token, user }) {
-          if (user) {
-            token.id = user.id
-            token.username = user.username
-          }
-          return token
-        },
-        async session({ session, token }) {
-          if (token) {
-            session.user.id = token.id
-            session.user.username = token.username
-          }
-          return session
-        },
-      },
-      credentials: {
-        username: {},
-        password: {},
-      },
-      pages: {
-        signIn: "/",
-        error: "/error",
-      },
-      session: {
-        strategy: 'jwt',
-      },
-      secret: process.env.JWT_SECRET, // optional
     }),
   ],
+  session: {
+    strategy: 'jwt',
+  },
 })

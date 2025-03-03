@@ -1,7 +1,7 @@
 "use client"
 
 // base imports
-import { auth } from "@/auth"
+import { useSession, signOut } from 'next-auth/react'
 import dynamic from 'next/dynamic';
 
 // next imports
@@ -118,9 +118,11 @@ const valuesToUnregister = [
   'vpnName',
 ]
 
-export default async function Create() {
+export default function Create() {
 
-  const session = await auth();
+  const { data: session } = useSession()
+
+  // const session = await auth();
   if (!session) return <div>Not authenticated</div>
 
 
