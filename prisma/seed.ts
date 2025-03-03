@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 async function main() {
   const alice = await prisma.user.create({
     data: {
+      username: 'alice.blue',
       password: await bcrypt.hash('a-unique-invite-code', 10),
       bots: {
         create: [
@@ -29,6 +30,7 @@ async function main() {
 
   const bob = await prisma.user.create({
     data: {
+      username: 'bob.red',
       password: await bcrypt.hash('another-unique-code', 10),
     },
   })

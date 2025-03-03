@@ -6,7 +6,6 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { signIn } from "@/auth"
 
 export function LoginForm() {
-
   return (
     <form
       action={async (formData) => {

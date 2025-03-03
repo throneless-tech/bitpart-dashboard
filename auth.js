@@ -16,7 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        // email: {},
+        username: {},
         password: {},
       },
       pages: {
@@ -38,9 +38,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
             where: {
-              password: hashedPassword,
+              username: username,
             },
           })
+
+          const match = await bcrypt.compare(hashedPassword, user.password);
+
+          // return if passwords do not match
+          if (match === false) return null;
 
           if (!user) {
             throw new Error("Invalid credentials.")
