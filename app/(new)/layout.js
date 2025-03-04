@@ -1,5 +1,9 @@
+//chakra provider
 import { Provider } from "@/components/ui/provider";
+
+// auth session provider
 import { SessionProvider } from "next-auth/react";
+
 import localFont from "next/font/local";
 // import "./globals.css";
 

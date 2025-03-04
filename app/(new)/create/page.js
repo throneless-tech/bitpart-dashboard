@@ -1,7 +1,7 @@
 "use client"
 
 // base imports
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic';
 
 // next imports

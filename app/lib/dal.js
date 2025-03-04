@@ -1,39 +1,35 @@
-import 'server-only';
+import 'server-only'
 
-import { cookies } from 'next/headers';
-import { decrypt } from '@/app/lib/session';
+import { cookies } from 'next/headers'
+import bcrypt from "bcryptjs"
 
 export const verifySession = cache(async () => {
-  const cookie = (await cookies()).get('session')?.value;
-  const session = await decrypt(cookie);
+  const cookie = (await cookies()).get('session')?.value
+  // const session = await decrypt(cookie)
+  // FIXME
+  const session = cookie
 
-  if (!session.userId) {
-    redirect('/login');
+  if (!session?.userId) {
+    redirect('/login')
   }
 
-  return { isAuth: true, userId: session.userId };
+  return { isAuth: true, userId: session.userId }
 })
 
 export const getUser = cache(async () => {
-  const session = await verifySession();
-  if (!session) return null;
+  const session = await verifySession()
+  if (!session) return null
 
   try {
-    const data = await db.query.users.findMany({
-      where: eq(users.id, session.userId),
-      // Explicitly return the columns you need rather than the whole user object
-      columns: {
-        id: true,
-        name: true,
-        email: true,
-      },
-    });
+    user = await prisma.user.findUnique({
+                where: {
+                  id: session.userId,
+                },
+              })
 
-    const user = data[0];
-
-    return user;
+    return user.username
   } catch (error) {
-    console.log('Failed to fetch user');
-    return null;
+    console.log('Failed to fetch user')
+    return null
   }
 })

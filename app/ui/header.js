@@ -1,7 +1,5 @@
-'use client'
-
 // auth imports
-import { signOut } from 'next-auth/react'
+import { signOut } from "@/auth"
 
 // chakra ui imports
 import {
@@ -24,13 +22,18 @@ export default function Header () {
             <Button>
               Donate
             </Button>
-            <Link
-              href="/"
-              onClick={async () => await signOut()}
+            <form
+              action={async () => {
+                await signOut()
+              }}
+            >
+            <Button
+              type="submit"
               variant='underline'
             >
               Logout
-            </Link>
+            </Button>
+            </form>
           </Flex>
         </Flex>
       </Container>

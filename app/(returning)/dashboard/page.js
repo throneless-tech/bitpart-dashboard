@@ -1,5 +1,7 @@
+"use client"
+
 // base imports
-import { auth } from "@/auth"
+import { useSession } from 'next-auth/react'
 
 // chakra ui imports
 import {
@@ -12,9 +14,10 @@ import {
 // components
 import Header from "@/app/ui/header";
 
-export default async function Dashboard() {
-  const session = await auth();
-  console.log('session is: ', session);
+export default function Dashboard() {
+  const { data: session } = useSession()
+
+  // const session = await auth();
   if (!session) return <div>Not authenticated</div>
 
   return (

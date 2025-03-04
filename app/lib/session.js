@@ -1,44 +1,32 @@
-import 'server-only';
-import { cookies } from 'next/headers';
-import { SignJWT, jwtVerify } from 'jose';
+import cookies from 'next/headers'
+import { db } from '@/app/lib/db'
+import bcrypt from "bcryptjs"
 
-const secretKey = process.env.SESSION_SECRET;
-const encodedKey = new TextEncoder().encode(secretKey);
+export async function createSession(id) {
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
-export async function encrypt(payload) {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('7d')
-    .sign(encodedKey)
-}
+  // 1. Create a session in the database
+  const data = await prisma.user.create({
+    data: {
+      userId: id,
+      expires,
+    },
+  })
 
-export async function decrypt(session) {
-  try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ['HS256'],
-    })
-    return payload
-  } catch (error) {
-    console.log('Failed to verify session')
-  }
-}
+  const sessionId = data.id
 
-export async function createSession(userId) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId, expiresAt });
-  const cookieStore = await cookies();
+  // 2. Encrypt the session ID
+  // const session = bcrypt.hash({ sessionId, expires }, 10)
+  // FIXME
+  const session = { sessionId, expires}
 
+  // 3. Store the session in cookies for optimistic auth checks
+  const cookieStore = await cookies()
   cookieStore.set('session', session, {
     httpOnly: true,
     secure: true,
-    expires: expiresAt,
+    expires,
     sameSite: 'lax',
     path: '/',
   })
-}
-
-export async function deleteSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete('session');
 }

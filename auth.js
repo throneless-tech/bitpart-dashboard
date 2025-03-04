@@ -2,12 +2,9 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import prisma from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 
 import { LoginSchema } from "./app/lib/definitions"
-
-// // Your own logic for dealing with plaintext password strings; be careful!
-// import { saltAndHashPassword } from "@/utils/password"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -24,28 +21,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     //   if (credentials && credentials.username && credentials.password) {
     //     if (user) {
     //       const sessionToken = crypto.randomUUID();
-    //       // Set expiry to 30 days
-    //       const sessionExpiry = new Date(Date.now() + 60 * 60 * 24 * 30 * 1000);
+    //       // Set expiry to 1 day
+    //       const sessionExpiry = new Date(Date.now() + 60 * 60 * 24 * 1000);
 
-    //       await PrismaAdapter(prisma).createSession({
+    //       const createdSession = await PrismaAdapter(prisma).createSession({
     //         sessionToken: sessionToken,
     //         userId: user.id,
-    //         expires: sessionExpiry
+    //         expires: sessionExpiry,
     //       });
 
-    //       event.cookies.set('next-auth.session-token', sessionToken, {
-    //         expires: sessionExpiry
-    //       });
+    //       if (!createdSession) return false;
     //     }
     //   }
 
     //   return true;
     // },
-    jwt({ token, user }) {
+    jwt({ token, user, account }) {
+      // if (account?.provider === "credentials") {
+      //   token.credentials = true;
+      // }
       if (user?.username) { // User is available during sign-in
         token.username = user.username
       }
       return token
+    },
+    async redirect({url, baseUrl}) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) return url
+
+      return baseUrl
     },
     session({ session, token, user }) {
       session.user.username = token.username
@@ -58,9 +65,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     username: {},
     password: {},
   },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
   pages: {
-    signIn: "/",
     error: "/error",
+    signIn: "/",
   },
   providers: [
     Credentials({
@@ -70,6 +80,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // 1. Validate form fields
           const validatedFields = await LoginSchema.validate(credentials)
+
+          // If any form fields are invalid, return early
+          if (!validatedFields.success) {
+            return {
+              errors: validatedFields.error.flatten().fieldErrors,
+            }
+          } 
 
           // 2. Prepare data for insertion into database
           const { username, password } = validatedFields
@@ -95,7 +112,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           }
 
 
-          // return JSON object with the user data
+          // return JSON object with the user data          
           return user
         } catch (error) {
 
