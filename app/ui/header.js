@@ -1,3 +1,5 @@
+"use server"
+
 // auth imports
 import { signOut } from "@/auth"
 
@@ -11,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
 
-export default function Header () {
+export default async function Header () {
 
   return (
     <Box>
@@ -24,6 +26,7 @@ export default function Header () {
             </Button>
             <form
               action={async () => {
+                "use server"
                 await signOut()
               }}
             >

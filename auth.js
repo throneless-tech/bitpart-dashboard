@@ -1,109 +1,47 @@
 import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
+import authConfig from "./auth.config"
+
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from '@/lib/prisma'
-
-import { LoginSchema } from "./app/lib/definitions"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
   adapter: PrismaAdapter(prisma),
-  providers: [
-    Credentials({
-      authorize: async (credentials) => {
-        try {
-          let user = null
-
-          // 1. Validate form fields
-          const validatedFields = await LoginSchema.validate(credentials)
-
-          console.log('============================');
-          console.log(validatedFields);
-          
-          console.log('============================');
-          
-
-          // If any form fields are invalid, return early
-          if (validatedFields.errors) {
-            return {
-              errors: validatedFields.errors.flatten().fieldErrors,
-            }
-          }
-
-          // 2. Prepare data for insertion into database
-          const { username, password } = validatedFields
-
-          // Hash the user's password before storing it when creating a new user
-          // const hashedPassword = await bcrypt.hash(password, 10)
-
-          // 3. Insert the user into the database or verify if the user exists
-          user = await prisma.user.findUnique({
-            where: {
-              username: username,
-            },
-          })
-
-          if (!user) {
-            throw new Error("Invalid credentials.")
-          }
-
-          const isPasswordValid = bcrypt.compare(password, user.password)
-
-          if (!isPasswordValid) {
-            throw new Error('Invalid email or password.')
-          }
-
-
-          // return JSON object with the user data          
-          return user
-        } catch (error) {
-          console.log('++++++++++++++++++++++++++');
-          console.log('ERROR: ', error);
-          
-          console.log('++++++++++++++++++++++++++');
-          
-
-          return null
-        }
-      },
-    }),
-  ],
   session: {
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ user, credentials }) {
-      console.log('*****************************');
-      console.log('in sign in callback...');
-      console.log("user: ", user);
-      console.log("credentials: ", credentials);
+    // async signIn({ user, credentials }) {
+    //   console.log('*****************************');
+    //   console.log('in sign in callback...');
+    //   console.log("user: ", user);
+    //   console.log("credentials: ", credentials);
       
 
-      console.log('*****************************');
+    //   console.log('*****************************');
 
-      // Check if this sign in callback is being called in the credentials authentication flow.
-      // If so, use the next - auth adapter to create a session entry in the database
-      // (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
-      // if (credentials && credentials.username && credentials.password) {
-      //   if (user) {
-      //     const sessionToken = crypto.randomUUID();
-      //     // Set expiry to 1 day
-      //     const sessionExpiry = new Date(Date.now() + 60 * 60 * 24 * 1000);
+    //   // Check if this sign in callback is being called in the credentials authentication flow.
+    //   // If so, use the next - auth adapter to create a session entry in the database
+    //   // (SignIn is called after authorize so we can safely assume the user is valid and already authenticated).
+    //   // if (credentials && credentials.username && credentials.password) {
+    //   //   if (user) {
+    //   //     const sessionToken = crypto.randomUUID();
+    //   //     // Set expiry to 1 day
+    //   //     const sessionExpiry = new Date(Date.now() + 60 * 60 * 24 * 1000);
 
-      //     const createdSession = await PrismaAdapter(prisma).createSession({
-      //       sessionToken: sessionToken,
-      //       userId: user.id,
-      //       expires: sessionExpiry,
-      //     });
+    //   //     const createdSession = await PrismaAdapter(prisma).createSession({
+    //   //       sessionToken: sessionToken,
+    //   //       userId: user.id,
+    //   //       expires: sessionExpiry,
+    //   //     });
 
-      //     if (!createdSession) return false;
-      //   }
-      // }
+    //   //     if (!createdSession) return false;
+    //   //   }
+    //   // }
 
-      // return true;
-    },
-    jwt({ token, user, account }) {
+    //   // return true;
+    // },
+    jwt({ token, trigger, user, account }) {
       if (trigger === "update") token.name = session.user.username
       // if (account?.provider === "credentials") {
       //   token.credentials = true;
@@ -141,4 +79,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/error",
     signIn: "/",
   },
+  ...authConfig,
 })
