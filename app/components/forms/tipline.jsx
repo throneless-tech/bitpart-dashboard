@@ -8,7 +8,7 @@ import {
   Stack,
   Textarea
 } from "@chakra-ui/react";
-import { Field } from "@/components/ui/field";
+import { Field } from "@/app/components/ui/field";
 
 export const TiplineForm = () => {
   const {

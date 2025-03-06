@@ -8,13 +8,13 @@ import {
   Stack,
   Textarea
 } from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Button } from "@/app/components/ui/button";
+import { Field } from "@/app/components/ui/field";
 import {
   NumberInputField,
   NumberInputLabel,
   NumberInputRoot,
-} from "@/components/ui/number-input"
+} from "@/app/components/ui/number-input"
 
 export const HelpdeskForm = () => {
   const { register, control, formState: { errors } } = useFormContext({

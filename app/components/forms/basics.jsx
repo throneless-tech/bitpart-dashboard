@@ -11,12 +11,12 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Button } from "@/app/components/ui/button";
+import { Field } from "@/app/components/ui/field";
 import {
   NativeSelectField,
   NativeSelectRoot,
-} from "@/components/ui/native-select";
+} from "@/app/components/ui/native-select";
 
 // country codes
 import { CountryCodes } from './countryCodes';

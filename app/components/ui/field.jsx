@@ -3,7 +3,7 @@ import { Field as ChakraField, IconButton, Text } from '@chakra-ui/react'
 import * as React from 'react'
 
 // components
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -15,7 +15,7 @@ import {
   DrawerRoot,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "@/app/components/ui/drawer";
 
 // icons
 import { LuInfo } from "react-icons/lu";

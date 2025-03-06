@@ -1,4 +1,3 @@
-
 // chakra ui imports
 import {
   Box,
@@ -10,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/components/ui/color-mode";
+import { ColorModeButton } from "@/app/components/ui/color-mode";
 import { LoginForm } from "./ui/login";
 
 export default function Home() {

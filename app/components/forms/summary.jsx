@@ -2,7 +2,7 @@ import { Box, List, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 // components imports
-import { Alert } from "@/components/ui/alert";
+import { Alert } from "@/app/components/ui/alert";
 
 export const Summary = ({ data, errors }) => {
 

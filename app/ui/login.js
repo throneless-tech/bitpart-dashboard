@@ -1,9 +1,12 @@
 import { redirect } from "next/navigation"
 import { AuthError } from "next-auth"
-import { Alert, Box, Button, Field, Input } from "@chakra-ui/react";
-import { PasswordInput } from "@/components/ui/password-input"
 
+// auth imports
 import { signIn } from "@/auth"
+
+// chakra ui imports
+import { Alert, Box, Button, Field, Input } from "@chakra-ui/react";
+import { PasswordInput } from "@/app/components/ui/password-input"
 
 export function LoginForm() {
   return (
@@ -11,7 +14,14 @@ export function LoginForm() {
       action={async (formData) => {
         "use server"
         try {
-          await signIn("credentials", formData,  { redirectTo: '/dashboard' } );
+          await signIn(
+            "credentials",
+            {
+              username: formData.get("username"),
+              password: formData.get("password"),
+              redirectTo: '/dashboard'
+            }
+          );
         } catch (error) {
           if (error instanceof AuthError) {
             return redirect(`/error?error=${error.type}`);

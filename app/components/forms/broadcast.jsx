@@ -8,8 +8,8 @@ import {
   Stack,
   Textarea
 } from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Button } from "@/app/components/ui/button";
+import { Field } from "@/app/components/ui/field";
 
 export const BroadcastForm = () => {
   const { register, control, formState: { errors } } = useFormContext({

@@ -1,4 +1,4 @@
-import { Provider } from "@/components/ui/provider";
+import { Provider } from "@/app/components/ui/provider";
 import localFont from "next/font/local";
 // import "./globals.css";
 

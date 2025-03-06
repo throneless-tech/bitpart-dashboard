@@ -8,15 +8,10 @@ import {
   Stack,
   Textarea
 } from "@chakra-ui/react";
-import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import {
-  NumberInputField,
-  NumberInputLabel,
-  NumberInputRoot,
-} from "@/components/ui/number-input"
+import { Button } from "@/app/components/ui/button";
+import { Field } from "@/app/components/ui/field";
 
-export const VpnForm = () => {
+export const EsimForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
       locations: [],
@@ -51,11 +46,11 @@ export const VpnForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="VPN Distribution Org" {...register('name')} />
+        <Input placeholder="eSIM distributor" {...register('name')} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe what your organization does and/or what to expect from the bot."
+        helperText="Describe what people can expect when engaging with this service."
         info="description"
         invalid={!!errors?.description}
         label="About"
@@ -64,40 +59,20 @@ export const VpnForm = () => {
       >
         <Textarea placeholder="Start typing..." {...register('description')} />
       </Field>
-      {/* <Field
-        errorText={!!errors?.storageTime && errors.storageTime.message}
-        helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
-        invalid={!!errors?.storageTime}
-        label="Storage length of time"
-        marginTop={4}
-        required
-      >
-        <NumberInputRoot
-          min={1}
-          formatOptions={{
-            style: "unit",
-            unit: "hour",
-            unitDisplay: "long",
-          }}
-          {...register('storageTime')}
-        >
-          <NumberInputLabel />
-          <NumberInputField />
-        </NumberInputRoot>
-      </Field> */}
       <Field
-        errorText={!!errors?.vpnName && errors.vpnName.message}
-        helperText="Name of the VPN provider."
-        invalid={!!errors?.vpnName}
-        label="VPN provider name"
+        errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
+        helperText="Describe the privacy policy for a person interacting with this bot."
+        info="privacyPolicy"
+        invalid={!!errors?.privacyPolicy}
+        label="Privacy policy"
         marginTop={4}
         required
       >
-        <Input {...register('vpnName')} />
+        <Textarea {...register('privacyPolicy')} />
       </Field>
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
-        helperText="Include instructions for how someone can activate a vpn."
+        helperText="Include activation instructions for how a user can activate an eSIM."
         info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
@@ -105,16 +80,26 @@ export const VpnForm = () => {
       >
         <Textarea {...register('activationInstructions')} />
       </Field>
+      <Field
+        errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
+        helperText="Include helpful instructions for what a user should do if their eSIM is not working."
+        info="helpInstructions"
+        invalid={!!errors?.helpInstructions}
+        label="Help section"
+        marginTop={4}
+      >
+        <Textarea {...register('helpInstructions')} />
+      </Field>
       <Fieldset.Root
-        label="VPN locations"
+        label="eSIM locations"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            VPN locations
+            eSIM locations
           </Fieldset.Legend>
           <Fieldset.HelperText>
-            List the locations where a user can use a VPN.
+            List the locations where a user can use an eSIM.
           </Fieldset.HelperText>
         </Stack>
         {locationFields.map((f, i) => {
@@ -162,12 +147,12 @@ export const VpnForm = () => {
         </Button>
       </Fieldset.Root>
       <Fieldset.Root
-        label="VPN plans"
+        label="eSIM plans"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            VPN plans
+            eSIM plans
           </Fieldset.Legend>
           <Fieldset.HelperText>
             List the different types of plans a user can ask for.
