@@ -13,12 +13,6 @@ export default {
         try {
           let user = null
 
-          console.log('=============================');
-          console.log(credentials);
-          
-          console.log('=============================');
-          
-
           // 1. Validate form fields
           const validatedFields = await LoginSchema.validate(credentials)
 
@@ -54,9 +48,7 @@ export default {
 
           // return JSON object with the user data          
           return user
-        } catch (error) {
-          console.log('ERROR IS::: ', error);
-          
+        } catch (error) {          
           return null
         }
       },
