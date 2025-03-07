@@ -8,6 +8,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
   adapter: PrismaAdapter(prisma),
   session: {
+    maxAge: 60 * 60,
     strategy: 'jwt',
   },
   callbacks: {
