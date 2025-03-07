@@ -26,7 +26,7 @@ export default async function Header () {
               action={async () => {
                 "use server"
                 try {
-                  await signOut();
+                  await signOut({redirectTo: '/?message=SignOutSuccess'});
                 } catch (error) {
                   throw error;
                 }
