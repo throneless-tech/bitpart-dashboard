@@ -17,14 +17,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // if (account?.provider === "credentials") {
       //   token.credentials = true;
       // }
-      // if (user?.username) { // User is available during sign-in
-        // token.name = user.username
-      // }
-      if (user) {
-        console.log('USER::::::::::::: ', user);
-        
+      if (user) { // User is available during sign-in
+        token.name = user.username
         token.bots = user.bots
       }
+
       return token
     },
     session({ session, token }) {

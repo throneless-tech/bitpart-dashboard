@@ -2,12 +2,13 @@
 
 // base imports
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from "react";
 
 // next imports
 import Image from "next/image";
 
 // form validation imports
-import { FormProvider, useForm, useFormState } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from "../lib/forms";
 
@@ -62,7 +63,6 @@ import { FaSimCard } from "react-icons/fa";
 import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
-import { useEffect, useState } from "react";
 
 const frameworks = [
   {

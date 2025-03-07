@@ -31,6 +31,9 @@ export default {
 
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
+            include: {
+              bots: true,
+            },
             where: {
               username: username,
             },
@@ -46,9 +49,13 @@ export default {
             throw new Error('Invalid email or password.')
           }
 
+          console.log('user is: ', user);
+          
+
           // return JSON object with the user data          
           return user
-        } catch (error) {          
+        } catch (error) {
+          console.error("ERROR: ", error);
           return null
         }
       },

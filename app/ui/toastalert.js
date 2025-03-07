@@ -19,8 +19,6 @@ export const ToastAlert = () => {
 
   useEffect(() => {
     if (show) {
-      console.log('here..............');
-      
       toaster.create({
         duration: 5000,
         title: "You have successfully logged out",
