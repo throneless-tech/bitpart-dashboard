@@ -73,3 +73,8 @@ model Bot {
   authorId  String
   author    User    @relation(fields: [authorId], references: [id])
 }
+
+model InviteCode {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+}

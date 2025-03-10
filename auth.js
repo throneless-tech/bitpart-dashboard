@@ -31,6 +31,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session
     },
+    async signIn({ profile }) {
+      
+    }
   },
   credentials: {
     username: {},
@@ -41,7 +44,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     error: "/error",
-    signIn: "/",
+    newUser: "/signup",
+    signIn: "/login",
   },
   ...authConfig,
 })

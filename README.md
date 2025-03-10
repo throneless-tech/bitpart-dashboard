@@ -43,6 +43,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## TODO Connecting to Bitpart server
 
-Fix your `.env` file TKTKTKTK
+Fix your `.env` file TKTKTKTK -- one dash per bitpart instance
 
 ## TODO Deployment

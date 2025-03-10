@@ -5,10 +5,10 @@ import { AuthError } from "next-auth"
 import { signIn } from "@/auth"
 
 // chakra ui imports
-import { Alert, Box, Button, Field, Input } from "@chakra-ui/react";
+import { Box, Button, Field } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/components/ui/password-input"
 
-export function LoginForm() {
+export function InviteForm() {
   return (
     <form
       action={async (formData) => {
@@ -17,9 +17,8 @@ export function LoginForm() {
           await signIn(
             "credentials",
             {
-              username: formData.get("username"),
-              password: formData.get("password"),
-              redirectTo: '/dashboard'
+              code: formData.get("code"),
+              redirectTo: '/signup'
             }
           );
         } catch (error) {
@@ -31,26 +30,16 @@ export function LoginForm() {
       }}
     >
       <Box marginLeft="auto" marginRight="auto" maxW={400}>
-        <Field.Root required>
-          <Field.Label>
-            Username
-          </Field.Label>
-          <Input name="username" placeholder="username.here" size="lg" />
-        </Field.Root>
         <Field.Root marginTop={4} required>
           <Field.Label>
             Code
           </Field.Label>
-          <PasswordInput name="password" placeholder="invite-code-here" size="lg" />
+          <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
         </Field.Root>
-        <Button
-          marginTop={8}
-          type="submit"
-          width={120}
-        >
-          Sign in
-        </Button>
       </Box>
+      <Button marginTop={4} type="submit">
+        Get started
+      </Button>
     </form>
   )
 }

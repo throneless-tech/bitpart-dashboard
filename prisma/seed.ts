@@ -6,7 +6,7 @@ async function main() {
   const alice = await prisma.user.create({
     data: {
       username: 'alice.blue',
-      password: await bcrypt.hash('a-unique-invite-code', 10),
+      password: await bcrypt.hash('AVeryGoodStrongPassword', 10),
       bots: {
         create: [
           {
@@ -31,7 +31,7 @@ async function main() {
   const bob = await prisma.user.create({
     data: {
       username: 'bob.red',
-      password: await bcrypt.hash('another-unique-code', 10),
+      password: await bcrypt.hash('AnotherGoodStrongPassword', 10),
     },
   })
   
@@ -51,6 +51,14 @@ async function main() {
       provider: 'credentials',
       providerAccountId: bob.id
     }
+  })
+
+  const inviteCodes = await prisma.inviteCode.createMany({
+    data: [
+      { code: 'a-unique-invite-code' },
+      { code: 'another-unique-code' }, // Duplicate unique key!
+    ],
+    skipDuplicates: true,
   })
 }
 main()

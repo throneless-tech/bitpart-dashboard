@@ -5,12 +5,14 @@ import {
   Container,
   Flex,
   Heading,
+  HStack,
+  Link,
   Text
 } from "@chakra-ui/react";
 
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";
-import { LoginForm } from "./ui/login";
+import { InviteForm } from "./ui/enterInvite";
 import { ToastAlert } from "./ui/toastalert";
 
 export default function Home() {
@@ -21,9 +23,14 @@ export default function Home() {
       <Container py={6}>
         <Flex justifyContent="space-between">
           <ColorModeButton />
-          <Button>
-            Donate
-          </Button>
+          <HStack gap={8}>
+            <Link href="/login" variant="underline">
+            Login
+            </Link>
+            <Button>
+              Donate
+            </Button>
+          </HStack>
         </Flex>
       </Container>
       <Container marginBottom={6} maxW="2xl">
@@ -40,9 +47,9 @@ export default function Home() {
         </Text>
         <Box marginTop={4} textAlign='center'>
           <Text marginBottom={8}>
-            Ready to get started? Login now:
+            Ready to get started? Enter your invite code below:
           </Text>
-          <LoginForm />
+          <InviteForm />
         </Box>
       </Container>
     </Box>
