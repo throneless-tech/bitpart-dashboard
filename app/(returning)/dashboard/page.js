@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 
 // components
-import BotCard from "@/app/components/botCard";
 import Header from "@/app/ui/header";
+import BotsList from "@/app/components/botsList";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -33,27 +33,7 @@ export default async function Dashboard() {
           Dashboard
         </Heading>
         <Box>
-          {session.user.bots ? (
-            <>
-              <Heading as='h2' size="xl">
-                My bots
-              </Heading>
-              <Stack
-                direction={["column", "column", "row"]}
-                gap={[4, 4, 8]}
-                marginTop={4}
-              >
-              {session.user.bots.map((bot, index) => (
-                <BotCard key={`${bot.botType}-${index}`} bot={bot} />
-              ))}
-              </Stack>
-            </>
-          ) : (
-            <Text>You do not have any bots. Click below to create one.</Text>
-          )}
-          <Button marginTop={10} as='a' href='/create'>
-            Create a new bot
-          </Button>
+          <BotsList userId={session.id} />
         </Box>
       </Container>
     </Box>

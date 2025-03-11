@@ -18,22 +18,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       //   token.credentials = true;
       // }
       if (user) { // User is available during sign-in
+        token.id = user.id
         token.name = user.username
-        token.bots = user.bots
       }
 
       return token
     },
     session({ session, token }) {
+      if (token?.id) session.id = token.id
       if (token?.name) session.name = token.name
-
-      session.user.bots = token.bots
 
       return session
     },
-    async signIn({ profile }) {
+    // async signIn({ profile }) {
       
-    }
+    // }
   },
   credentials: {
     username: {},

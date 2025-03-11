@@ -12,11 +12,11 @@ import Header from "@/app/ui/header";
 export default async function Create() {
   const session = await auth();
   if (!session) return <div>Not authenticated</div>
-
+  
   return (
     <Box>
       <Header />
-      <CreateBotFlow />
+      <CreateBotFlow userId={session.id} />
     </Box>
   );
 }

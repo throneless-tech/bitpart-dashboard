@@ -58,20 +58,21 @@ model VerificationToken {
 }
 
 model Bot {
-  id          Int     @id @default(autoincrement())
-  botType     String
-  botName     String
-  phone       String  @unique
-  countryCode String
-  name        String
-  description String?
-  about       String?
-  safetyTips  String?
+  id            Int     @id @default(autoincrement())
+  botType       String
+  botName       String
+  phone         String  @unique
+  countryCode   String
+  name          String
+  description   String?
+  about         String?
+  safetyTips    String?
+  privacyPolicy String?
 
   content   String?
   published Boolean @default(false)
-  authorId  String
-  author    User    @relation(fields: [authorId], references: [id])
+  creatorId  String
+  creator    User    @relation(fields: [creatorId], references: [id])
 }
 
 model InviteCode {

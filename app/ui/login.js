@@ -39,9 +39,9 @@ export function LoginForm() {
         </Field.Root>
         <Field.Root marginTop={4} required>
           <Field.Label>
-            Code
+            Password
           </Field.Label>
-          <PasswordInput name="password" placeholder="invite-code-here" size="lg" />
+          <PasswordInput name="password" placeholder="AVeryGoodPassword" size="lg" />
         </Field.Root>
         <Button
           marginTop={8}

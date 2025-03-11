@@ -2,10 +2,8 @@
 
 // base imports
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from "react";
-
-// next imports
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { prisma } from '@/lib/prisma';
 
 // form validation imports
 import { FormProvider, useForm } from 'react-hook-form';
@@ -64,6 +62,9 @@ import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
+// actions
+import { createBot } from '../actions/createBot';
+
 const frameworks = [
   {
     value: "broadcast",
@@ -113,11 +114,19 @@ const valuesToUnregister = [
   'vpnName',
 ]
 
-export default function CreateBotFlow() {
+const IFrame = (props) => {
+  const { height, ref, src, width } = props;
+  console.log(props);
+  
+  return (
+  <iframe src={src} height={height} width={width} />
+)
+};
+
+export default function CreateBotFlow({ userId }) {
+  const [createdBot, setCreatedBot] = useState(null);
   // const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
-  const [formData, setFormData] = useState([]);
-  const [formErrors, setFormErrors] = useState([]);
   const [dataConfirmed, setDataConfirmed] = useState(false);
 
   // update the step count based on prev or next
@@ -136,8 +145,6 @@ export default function CreateBotFlow() {
 
   const [botType] = methods.watch(['botType']);
 
-  const watchBotType = methods.watch('botType');
-
   const watchAll = methods.watch();
 
   const formState = methods.formState;
@@ -149,8 +156,9 @@ export default function CreateBotFlow() {
     methods.unregister(valuesToUnregister);
   };
 
-  const onSubmit = (data) => {
-    console.log('data is being submitted...', data);
+  const onSubmit = async (data) => {
+    const bot = await createBot(data, userId);
+    setCreatedBot(bot);
   }
 
   const onError = (errors, e) => {
@@ -160,7 +168,24 @@ export default function CreateBotFlow() {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  useEffect(() => { }, [formData, formErrors, stepCount, watchAll]);
+  // signal captcha
+  const ref = useRef(null);
+  const [captchaContainer, setCaptchaContainer] = useState(null)
+  const handleCaptchaClick = (e) => {
+    console.log('ref: ', ref.current);
+    console.log("e: ", e);
+    
+    
+  }
+
+  useEffect(() => {
+    const iframeItem = ref.current;
+    const captcha = iframeItem.contentWindow.document.getElementById("captcha");
+
+    console.log(captcha);
+  }, [])
+
+  useEffect(() => { }, [captchaContainer, createdBot, stepCount, watchAll]);
 
   return (
     <Container marginBottom={6} maxW="6xl">
@@ -306,11 +331,16 @@ export default function CreateBotFlow() {
               Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
             </Checkbox>
           </StepsContent>
-          <StepsContent index={3}>
+          <StepsContent index={0}>
             <Text>
               This is required by signal. Sorry!
             </Text>
-            <iframe src="https://signalcaptchas.org/challenge/generate" height="300px" width="600px" />
+            <iframe
+              ref={ref}
+              src="https://signalcaptchas.org/challenge/generate"
+              height="400px"
+              width="400px"
+            />
           </StepsContent>
           <StepsContent index={4}>
             <Heading as="h2" marginTop={10} size="md">

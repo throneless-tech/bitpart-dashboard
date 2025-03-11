@@ -10,6 +10,10 @@ import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
+// actions
+import { deleteBot } from "../actions/deleteBot";
+import { getUserBots } from "../actions/getUserBots";
+
 const botTypes =
 {
   broadcast: <TbBuildingBroadcastTower />,
@@ -20,7 +24,7 @@ const botTypes =
 };
 
 export default function BotCard(props) {
-  const { bot } = props;
+  const { bot, userId } = props;
 
   if (!bot) return null;
 
@@ -35,7 +39,18 @@ export default function BotCard(props) {
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {/* <Button variant="outline">View</Button> */}
-        <Button>Delete</Button>
+        <form action={async () => {
+          try {
+            alert("Are you sure you want to delete this bot? This action cannot be undone.")
+            await deleteBot(bot.id);
+            getUserBots(userId);
+          } catch (error) {
+            console.log('error: ', error);
+          }
+          
+        }}>
+          <Button type="submit">Delete</Button>
+        </form>
       </Card.Footer>
     </Card.Root>
   )

@@ -17,7 +17,12 @@ export default async function Header () {
     <Box>
       <Container py={6}>
         <Flex justifyContent="space-between">
-          <ColorModeButton />
+          <Flex gap={4}>
+            <ColorModeButton />
+            <Link href="/dashboard">
+              Home
+            </Link>
+          </Flex>
           <Flex gap={4}>
             <Button>
               Donate

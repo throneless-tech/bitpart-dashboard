@@ -5,7 +5,7 @@ start:
     goto submit_question_step
   }
 
-  say "Hi. You have been invited to the distribution list [LIST NAME].
+  say "Hi. You have found the distribution list [LIST NAME].
     \nYou can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
     \nYou can disagree, and your contact number will be deleted automatically from the list."
   say "Agree - I want to be added to the distribution list and consent to receiving messages.

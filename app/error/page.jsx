@@ -38,7 +38,7 @@ export default function AuthErrorPage() {
               <Box as="span" marginTop="2px">
                 <FaArrowLeftLong />
               </Box>
-              <Link href="/" variant="underline">
+              <Link href="/login" variant="underline">
                 Return to login
               </Link>
             </HStack>
