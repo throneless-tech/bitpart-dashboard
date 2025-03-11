@@ -171,18 +171,17 @@ export default function CreateBotFlow({ userId }) {
   // signal captcha
   const ref = useRef(null);
   const [captchaContainer, setCaptchaContainer] = useState(null)
-  const handleCaptchaClick = (e) => {
+  const handleCaptchaContainer = (e) => {
     console.log('ref: ', ref.current);
     console.log("e: ", e);
     
+    const captcha = ref.current?.contentWindow?.document?.getElementById("captcha");
+    console.log(captcha);
     
   }
 
   useEffect(() => {
-    const iframeItem = ref.current;
-    const captcha = iframeItem.contentWindow.document.getElementById("captcha");
 
-    console.log(captcha);
   }, [])
 
   useEffect(() => { }, [captchaContainer, createdBot, stepCount, watchAll]);
@@ -331,16 +330,17 @@ export default function CreateBotFlow({ userId }) {
               Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
             </Checkbox>
           </StepsContent>
-          <StepsContent index={0}>
+          <StepsContent index={3}>
             <Text>
-              This is required by signal. Sorry!
+              Now head to{' '}
+              <Link href='https://signalcaptchas.org/challenge/generate' variant='underline'>
+                signalcaptchas.org
+              </Link>{' '}
+              to generate a captcha. TKTKTKTKTKKTKTK FIXME
             </Text>
-            <iframe
-              ref={ref}
-              src="https://signalcaptchas.org/challenge/generate"
-              height="400px"
-              width="400px"
-            />
+            <Text>
+              This is required by Signal. Sorry!
+            </Text>
           </StepsContent>
           <StepsContent index={4}>
             <Heading as="h2" marginTop={10} size="md">
