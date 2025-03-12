@@ -29,7 +29,7 @@ export default function BotCard(props) {
   if (!bot) return null;
 
   return (
-    <Card.Root>
+    <Card.Root width={300}>
       <Card.Body gap="2">
         {botTypes[bot.botType]}
         <Card.Title mt="2">{bot.botName}</Card.Title>

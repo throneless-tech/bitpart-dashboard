@@ -13,7 +13,6 @@ import {
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";
 import { InviteForm } from "./ui/enterInvite";
-import Sockets from "./components/sockets";
 import { ToastAlert } from "./ui/toastalert";
 
 export default function Home() {
@@ -52,9 +51,6 @@ export default function Home() {
           </Text>
           <InviteForm />
         </Box>
-      </Container>
-      <Container marginTop={12}>
-        <Sockets />
       </Container>
     </Box>
   )

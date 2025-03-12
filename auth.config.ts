@@ -31,9 +31,6 @@ export default {
 
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
-            include: {
-              bots: true,
-            },
             where: {
               username: username,
             },

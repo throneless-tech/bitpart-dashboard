@@ -60,10 +60,10 @@ export default function BotsList({ userId }) {
         )}
         <Button
           as='a'
-          disabled={bots.length > 3}
+          disabled={bots && bots.length > 3}
           href='/create'
           onClick={(e) => {
-            if (bots.length > 3) {
+            if (bots && bots.length > 3) {
               e.preventDefault();
             }
           }}

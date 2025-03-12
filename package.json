@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:noWS": "next dev",
-    "dev": "node server.js",
+    "dev": "next dev",
     "build": "next build",
-    "start:noWS": "next start",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "lint": "next lint"
   },
   "prisma": {
@@ -28,9 +26,8 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.5.0",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
     "websocket": "^1.0.35",
+    "ws": "^8.18.1",
     "yup": "^1.5.0"
   },
   "devDependencies": {
