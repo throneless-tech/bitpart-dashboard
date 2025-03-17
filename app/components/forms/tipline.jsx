@@ -33,7 +33,7 @@ export const TiplineForm = () => {
         helperText="Describe the data privacy practices for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
-        label="Data privacy"
+        label="Data rights"
         marginTop={4}
         required
       >

@@ -8,15 +8,14 @@ generator client {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  username    String    @unique
-  password    String    @unique
-  adminPhones String[]
-  accounts    Account[]
-  sessions    Session[]
-  bots        Bot[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String    @id @default(cuid())
+  username  String    @unique
+  password  String    @unique
+  accounts  Account[]
+  sessions  Session[]
+  bots      Bot[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Account {
@@ -59,14 +58,15 @@ model VerificationToken {
 }
 
 model Bot {
-  id                     Int     @id @default(autoincrement())
+  id                     Int      @id @default(autoincrement())
   botType                String
   botName                String
-  phone                  String  @unique
+  phone                  String   @unique
   countryCode            String
   name                   String
   description            String?
   about                  String?
+  adminPhones            String[]
   safetyTips             String?
   privacyPolicy          String?
   faq                    Json[]
@@ -79,7 +79,7 @@ model Bot {
   problems               Json[]
   vpnName                String?
   creatorId              String
-  creator                User    @relation(fields: [creatorId], references: [id])
+  creator                User     @relation(fields: [creatorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

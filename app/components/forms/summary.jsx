@@ -1,5 +1,4 @@
 import { Box, List, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 
 // components imports
 import { Alert } from "@/app/components/ui/alert";
@@ -26,17 +25,30 @@ export const Summary = ({ data, errors }) => {
       ) : null}
       {Object.keys(data).length != 0 ? Object.keys(data).map(key => (
         <Text as="div" key={key} marginTop={4}>
-          <Text fontWeight="bold">{key}</Text>
+          <Text fontWeight="bold">
+            {
+              key === "botType" ? "Bot type"
+                : key === "botName" ? "Bot name"
+                : key === "privacyPolicy" ? "Privacy policy"
+                : key === "safetyTips" ? "Safety tips"
+                : key === "activationInstructions" ? "Activation instructions"
+                : key === "helpInstructions" ? "Help instructions"
+                : key === "storageAccess" ? "Storage access"
+                : key === "vpnName" ? "VPN name"
+                : key === "countryCode" ? ""
+                : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+            }
+            </Text>
           {typeof data[key] !== "string" ? data[key].map((d, ind) => (
             <Box key={`innerdata-${ind}`}>
               {Object.keys(d).map((k, i) => (
                 <Box key={`${k}-${i}`}>
-                  <Text fontWeight="bold">{k}</Text>
+                  <Text fontWeight="bold">{`${k.charAt(0).toUpperCase()}${k.slice(1)}`}</Text>
                   <Text>{d[k]}</Text>
                 </Box>
               ))}
             </Box>
-          )) : <Text>{data[key]}</Text>}
+          )) : <Text>{key === "phone" ? `+${data["countryCode"]} ${data[key]}` : key === "countryCode" ? "" : data[key]}</Text>}
         </Text >
       )) : null}
     </>

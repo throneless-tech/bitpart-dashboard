@@ -21,6 +21,7 @@ import {
   Highlight,
   Icon,
   Link,
+  List,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -117,10 +118,10 @@ const valuesToUnregister = [
 const IFrame = (props) => {
   const { height, ref, src, width } = props;
   console.log(props);
-  
+
   return (
-  <iframe src={src} height={height} width={width} />
-)
+    <iframe src={src} height={height} width={width} />
+  )
 };
 
 export default function CreateBotFlow({ userId }) {
@@ -174,10 +175,10 @@ export default function CreateBotFlow({ userId }) {
   const handleCaptchaContainer = (e) => {
     console.log('ref: ', ref.current);
     console.log("e: ", e);
-    
+
     const captcha = ref.current?.contentWindow?.document?.getElementById("captcha");
     console.log(captcha);
-    
+
   }
 
   useEffect(() => {
@@ -222,6 +223,11 @@ export default function CreateBotFlow({ userId }) {
                 variant='underline'
               >get Signal</Link>
               .
+            </Text>
+            <Text marginTop={8}>
+              <Highlight styles={{ px: "0.5", bg: "yellow.muted" }} query="We recommend setting up a separate Signal account for your bot.">
+                Remember that using primary device will show your name and you'll receive all the bot messages. We recommend setting up a separate Signal account for your bot.
+              </Highlight>
             </Text>
             <Heading as="h2" marginTop={10} size="md">
               What kind of bot do you want to create?
@@ -331,23 +337,39 @@ export default function CreateBotFlow({ userId }) {
             </Checkbox>
           </StepsContent>
           <StepsContent index={3}>
-            <Text>
-              Now head to{' '}
-              <Link href='https://signalcaptchas.org/challenge/generate' variant='underline'>
-                signalcaptchas.org
-              </Link>{' '}
-              to generate a captcha. TKTKTKTKTKKTKTK FIXME
-            </Text>
-            <Text>
-              This is required by Signal. Sorry!
-            </Text>
+            <Box marginY={8}>
+              <Text>
+                In order to set up your Bitpart bot via Signal, please go to{' '}
+                <Link color={color} href='https://signalcaptchas.org/challenge/generate' target='_blank' variant='underline'>
+                  signalcaptchas.org
+                </Link>{' '}
+                to generate a captcha. Follow instructions but when it says "Open Signal"  right click, copy and past the link back on this page.
+              </Text>
+              <Text marginTop={4}>
+                This is required by Signal. Sorry!
+              </Text>
+            </Box>
           </StepsContent>
           <StepsContent index={4}>
             <Heading as="h2" marginTop={10} size="md">
-              Set up Signal account
+              Connect Bitpart to Signal
             </Heading>
             <Text marginTop={4}>
-              If you haven't already, go through{' '}
+              QR code will appear here::::
+            </Text>
+            <List.Root>
+              <List.Item>
+                On your phone, open Signal and navigate to Signal Settings profile_avatar.png {'>'} Linked devices.
+              </List.Item>
+              <List.Item>
+                Tap the Android + with blue circle (Android) or Link New Device (iOS)
+              </List.Item>
+              <List.Item>
+                Use your phone to scan the QR code.
+              </List.Item>
+            </List.Root>
+            <Text marginTop={4}>
+              You can find more information or troubleshoot by following{' '}
               <Link
                 href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
                 color={color}
@@ -355,11 +377,8 @@ export default function CreateBotFlow({ userId }) {
                 target='_blank'
                 variant='underline'
               >
-                these steps
-              </Link>  to link Bitpart to your Signal account. Don't use your primary device because it'll show your name etc.....
-            </Text>
-            <Text marginTop={4}>
-              QR code will appear here::::
+                this link
+              </Link>.
             </Text>
           </StepsContent>
           <StepsCompletedContent>
