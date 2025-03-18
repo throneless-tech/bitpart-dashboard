@@ -49,7 +49,18 @@ export const HelpdeskForm = () => {
       >
         <Input {...register('referral')} />
       </Field>
-      {/* <Field
+      <Field
+        errorText={!!errors?.description && errors.description.message}
+        helperText="Describe the helpdesk, such as who you help and how you help them."
+        info="description"
+        invalid={!!errors?.description}
+        label="About"
+        marginTop={4}
+        required
+      >
+        <Textarea {...register('description')} />
+      </Field>
+      <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
@@ -70,7 +81,7 @@ export const HelpdeskForm = () => {
           <NumberInputLabel />
           <NumberInputField />
         </NumberInputRoot>
-      </Field> */}
+      </Field>
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
         helperText="Who will have access to the information stored."

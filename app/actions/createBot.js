@@ -68,7 +68,26 @@ export const createBot = async (data, userId) => {
             csml = csml.replace(`[${field}]`, questions);
             csml = csml.replace(`[${field}.length]`, (length + 1));
             csml = csml.replace(`[${field}.answers]`, answers);
+          } else if (field === "problems") {
+            let problems = "";
+            let solutions = "";
+
+            data[field].map((f, i) => {
+              problems = problems + `\\n${i + 1}) ${f.problem}`
+
+              solutions = solutions + `
+              ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
+                say "${f.solution}"
+                goto check_if_solved_step
+              }
+              `
+            })
+
+            csml = csml.replace(`[${field}]`, problems);
+            csml = csml.replace(`[${field}.length]`, (length + 1));
+            csml = csml.replace(`[${field}.solutions]`, solutions);
           }
+
         } else {
           csml = csml.replace(`[${field}]`, data[field]);
         }

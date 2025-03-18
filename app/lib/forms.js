@@ -11,7 +11,7 @@ export const schema = yup.object({
   countryCode: yup.string().required('Country code is required '),
   name: yup.string().required("Name is required"),
   description: yup.string().when("botType", {
-    is: "broadcast" || "esim" || "vpn",
+    is: "broadcast" || "helpdesk" || "esim" || "vpn",
     then: () => yup.string().required("Description is required"),
   }),
   about: yup.string().when("botType", {
@@ -70,10 +70,10 @@ export const schema = yup.object({
     is: "helpdesk",
     then: () => yup.string().required("A referral person or place is required"),
   }),
-  // storageTime: yup.number("Enter a number").when("botType", {
-  //   is: "helpdesk" || "vpn",
-  //   then: () => yup.number("Enter a number").required("Enter a length of time, in hours."),
-  // }),
+  storageTime: yup.number("Enter a number").when("botType", {
+    is: "helpdesk" || "vpn",
+    then: () => yup.number("Enter a number").required("Enter a length of time, in hours."),
+  }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",
     then: () => yup.string().optional(),

@@ -1,19 +1,24 @@
 start:
   // TODO: conversation is triggered by a message from a user who says they have a tip
   // TODO Bitpart interprets incoming language. Response is in the same language
-  say "Thank you for contacting [MEDIA NAME].
+  say 'Thank you for contacting [name].
     \nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
-    \nFor more information at any time, including how to delete your data, reply with 'Privacy policy'."
-  say "Even though this is a secure tipline, please do NOT share highly sensitive information here.
-    \nPlease share your tip with us."
+    \nFor more information at any time, including how to delete your data, send a message with the words "My data"'
+  say "Even though this is a secure tipline, please do not share highly sensitive information here.
+  \nPlease share your tip with us."
   hold
 
-  if (event.to_lowercase() == "privacy policy") {
+  if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
-  } else { goto assign_tag_step }
+  } else { 
+    remember tip = event  
+    
+    goto assign_tag_step
+  }
 
 privacy_policy_step:
-  // TODO: need privacy policy text and next steps
+  say "[privacyPolicy]"
+  // TODO: need next steps
 
 assign_tag_step:
   // TODO bitpart interprets information and assigns a category/tag (tags have been preset by media org) or does not.
@@ -27,8 +32,10 @@ assign_tag_step:
     goto contact_method_step
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
-    // TODO do we accept another message after this?
-  } else if (event.to_lowercase() == "privacy policy") {
+
+    // TODO timeout after 24 hours?
+    goto end
+  } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else {
     say "Sorry, our system didn't understand what you meant. Please try again."
@@ -41,18 +48,12 @@ contact_method_step:
     \n2) Signal text message
     \n3) Phone call
     \n4) Any
-    \n5) None, don't contact me"\
+    \n5) None, don't contact me"
   hold
 
   remember contact_preference = event
 
-  if (event == 1) {
-    // TODO Bitpart records preferred contact method preference
-    say "Thank you. Your preference is noted."
-  } else if (event == 2) {
-    // TODO Bitpart records preferred contact method preference
-    say "Thank you. Your preference is noted."
-  } else if (event == 3) {
+  if (event == 1 || event == 2 || event == 3) {
     // TODO Bitpart records preferred contact method preference
     say "Thank you. Your preference is noted."
   } else if (event == 4) {
@@ -64,7 +65,7 @@ contact_method_step:
   } else {
     say "Sorry, I did not get that. Please choose a number from the list."
     goto contact_method_step
-  } else if (event.to_lowercase() == "privacy policy") {
+  } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else {
     say "Sorry, I did not get that."
@@ -85,6 +86,11 @@ confirm_contact_method_step:
     // TODO do we accept another message after this?
   } else if (event.to_lowercase() == "back") {
     goto contact_method_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else {
+    say "Sorry, I did not get that."
+    goto confirm_contact_method_step
   }
 
   goto end
