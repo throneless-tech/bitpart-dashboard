@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 import {
   NativeSelectField,
@@ -21,10 +20,9 @@ import {
 // country codes
 import { CountryCodes } from './countryCodes';
 
-export const BasicsForm = (props) => {
-  const { botType } = props;
+export const BasicsForm = () => {
 
-  const { register, control, formState: { errors }, } = useFormContext();
+  const { register, formState: { errors }, } = useFormContext();
 
   return (
     <>

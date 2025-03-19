@@ -115,7 +115,7 @@ export const EsimForm = () => {
             >
               <Field
                 invalid={!!errors?.locations}
-                errorText={errors.locations?.place}
+                errorText={errors.locations?.place && errors.locations?.place.message}
               >
                 <Input
                   placeholder='Enter a location'

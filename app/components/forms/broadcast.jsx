@@ -10,15 +10,36 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
+import {
+  NativeSelectField,
+  NativeSelectRoot,
+} from "@/app/components/ui/native-select";
+
+// country codes
+import { CountryCodes } from './countryCodes';
 
 export const BroadcastForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
+      adminPhones: [],
       faq: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: adminPhoneFields,
+    append: adminPhoneAppend,
+    remove: adminPhoneRemove,
+  } = useFieldArray({
+    control,
+    name: 'adminPhones',
+  });
+
+  const {
+    fields: faqFields,
+    append: faqAppend,
+    remove: faqRemove,
+  } = useFieldArray({
     control,
     name: 'faq',
   });
@@ -34,6 +55,78 @@ export const BroadcastForm = () => {
       >
         <Input placeholder="Broadcast list" {...register('name')} />
       </Field>
+      <Fieldset.Root
+        label="Admin phone numbers"
+        marginTop={4}
+      >
+        <Stack>
+          <Fieldset.Legend>
+            Admin phone numbers
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            Please enter the phone numbers for all of the administrators of the list who will be sending messages.
+          </Fieldset.HelperText>
+        </Stack>
+      {adminPhoneFields.map((f, i) => {
+        return (
+          <Stack
+            alignItems={'center'}
+            direction={['column', 'row']}
+            justifyContent="flex-start"
+            key={f.id}
+            marginBottom={4}
+            spacing={20}
+            width='100%'
+          >
+            <Stack direction={['column', 'column', 'row']} width='100%'>
+              <Field
+                label="Country code"
+                marginBottom={2}
+                required
+                width={320}
+              >
+                <NativeSelectRoot>
+                  <NativeSelectField {...register(`adminPhones.${i}.code`)}>
+                    <CountryCodes />
+                  </NativeSelectField>
+                </NativeSelectRoot>
+              </Field>
+              <Field
+                errorText={!!errors?.adminPhones?.number && errors?.adminPhones?.number.message}
+                invalid={!!errors?.adminPhones}
+                label="Phone number"
+                marginBottom={4}
+                required
+                width="320px"
+              >
+                <Input {...register(`adminPhones.${i}.number`)} />
+              </Field>
+            </Stack>
+            {i >= 0 &&
+              <Button
+                onClick={() => adminPhoneRemove(i)}
+                height={6}
+                width={1}
+              >
+                X
+              </Button>
+            }
+          </Stack>
+        );
+      })}
+        <Button
+          onClick={() =>
+            adminPhoneAppend({
+              code: '',
+              phone: '',
+            })
+          }
+          variant="subtle"
+          width={40}
+        >
+          Add admin phone
+        </Button>
+      </Fieldset.Root>
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."
@@ -67,7 +160,7 @@ export const BroadcastForm = () => {
             If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
-        {fields.map((f, i) => {
+        {faqFields.map((f, i) => {
           return (
             <Stack
               alignItems={'center'}
@@ -100,7 +193,7 @@ export const BroadcastForm = () => {
               </Stack>
               {i >= 0 &&
                 <Button
-                  onClick={() => remove(i)}
+                  onClick={() => faqRemove(i)}
                   height={6}
                   width={1}
                 >
@@ -112,7 +205,7 @@ export const BroadcastForm = () => {
         })}
         <Button
           onClick={() =>
-            append({
+            faqAppend({
               question: '',
               answer: '',
             })

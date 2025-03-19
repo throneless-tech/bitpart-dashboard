@@ -22,6 +22,16 @@ export const schema = yup.object({
     is: "broadcast",
     then: () => yup.string().optional(),
   }),
+  adminPhones: yup.array().when("botType", {
+    is: "broadcast",
+    then: () => yup.array()
+      .of(
+        yup.object({
+          code: yup.string().required("Country code number is required"),
+          number: yup.string().required("Admin phone number is required"),
+        })
+      )
+  }),
   faq: yup.array().when("botType", {
     is: "broadcast" || "vpn",
     then: () => yup.array()

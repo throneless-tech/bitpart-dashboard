@@ -29,16 +29,17 @@ export const Summary = ({ data, errors }) => {
             {
               key === "botType" ? "Bot type"
                 : key === "botName" ? "Bot name"
-                : key === "privacyPolicy" ? "Privacy policy"
-                : key === "safetyTips" ? "Safety tips"
-                : key === "activationInstructions" ? "Activation instructions"
-                : key === "helpInstructions" ? "Help instructions"
-                : key === "storageAccess" ? "Storage access"
-                : key === "vpnName" ? "VPN name"
-                : key === "countryCode" ? ""
-                : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+                  : key === "adminPhones" ? "Admin phones"
+                    : key === "privacyPolicy" ? "Privacy policy"
+                      : key === "safetyTips" ? "Safety tips"
+                        : key === "activationInstructions" ? "Activation instructions"
+                          : key === "helpInstructions" ? "Help instructions"
+                            : key === "storageAccess" ? "Storage access"
+                              : key === "vpnName" ? "VPN name"
+                                : key === "countryCode" ? ""
+                                  : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
             }
-            </Text>
+          </Text>
           {typeof data[key] !== "string" ? data[key].map((d, ind) => (
             <Box key={`innerdata-${ind}`}>
               {Object.keys(d).map((k, i) => (
