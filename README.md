@@ -14,6 +14,13 @@ First, install dependencies from your terminal:
  
 Run `npx auth secret` to create a random value for Auth.js. See [their docs](https://authjs.dev/getting-started/installation?framework=next-js) for more info.
 
+Add the following to your `.env.local` file:
+
+```
+NEXTAUTH_SECRET="thisisarandomsecret0123456789="
+SESSION_SECRET="thisisanotherrandomsecret0123456789="
+```
+
 ### Attach the databse
 This project uses [Prisma ORM](https://www.prisma.io/docs/orm/overview/databases/postgresql) to connect to a PostgreSQL database. You must have a Postgres database running. See the [Postgres website](https://www.postgresql.org/) for more information on starting a PostgreSQL server.
 
@@ -43,6 +50,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## TODO Connecting to Bitpart server
 
-Fix your `.env` file TKTKTKTK -- one dash per bitpart instance
+Add to your `.env` file the following:
+
+```
+BITPART_SERVER_URL=127.0.0.1
+BITPART_SERVER_PORT=5000
+BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
+```
+
 
 ## TODO Deployment

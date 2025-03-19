@@ -1,39 +1,36 @@
 start:
-  remember count = 0
-
-  if (count >= 3) {
-    goto submit_question_step
+  if (event.client.user_id == [adminPhones]) {
+    shout event
   }
+  else  
+    remember count = 0
 
-  say "Hi. You have found the distribution list [name].
-    \nYou can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
-    \nYou can disagree, and your contact number will be deleted automatically from the list."
-  say "Agree - I want to be added to the distribution list and consent to receiving messages.
-    \nDisagree - please remove me from the list
-    \n Reply with 'agree' or 'disagree'"
-  hold
+    if (count >= 3) {
+      goto submit_question_step
+    }
 
-  if (event.to_lowercase() == "agree") {
-    goto consent_agree_step
-  } else if (event.to_lowercase() == "disagree") {
-    goto consent_disagree_step
-  } else if (event.to_lowercase() == "menu") {
-    goto menu_step
-  } else {
-    say "Sorry, I do not understand."
-    set count += 1
-    goto start
-  }
+    say "Hi. You have found the distribution list [name].\nYou can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.\nYou can disagree, and your contact number will be deleted automatically from the list."
+    say "Agree - I want to be added to the distribution list and consent to receiving messages.\nDisagree - please remove me from the list\n Reply with 'agree' or 'disagree'"
+    hold
+
+    if (event.to_lowercase() == "agree") {
+      goto consent_agree_step
+    } else if (event.to_lowercase() == "disagree") {
+      goto consent_disagree_step
+    } else if (event.to_lowercase() == "menu") {
+      goto menu_step
+    } 
+    else
+      say "Sorry, I do not understand."
+      do count += 1
+      goto start
 
 consent_disagree_step:
   if (count >= 3) {
     goto submit_question_step
   }
 
-  say "You have asked that you be removed from the list and all your data be deleted from the system.
-    \nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
-    \nReply with 'Delete' to confirm.
-    \nReply with 'Go back' to go back to the beginning."
+  say "You have asked that you be removed from the list and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -42,11 +39,11 @@ consent_disagree_step:
     goto question_consent_step
   } else if (event.to_lowercase() == "menu") {
     goto menu_step
-  } else {
-    say "Sorry, I did not get that."
-    set count += 1
-    goto consent_disagree_step
   }
+  else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto consent_disagree_step
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
@@ -54,8 +51,7 @@ confirm_delete_step:
   goto end
 
 consent_agree_step:
-  say "Confirmed, we've added you to the list.
-    \nWelcome!"
+  say "Confirmed, we've added you to the list.\nWelcome!"
   goto menu_step
 
 menu_step:
@@ -63,17 +59,11 @@ menu_step:
     goto submit_question_step
   }
 
-  say "**Menu**
-    \n1) About this channel
-    \n2) Safety tips
-    \n3) Frequently asked questions (FAQs)
-    \nYou have the right to be forgotten. At any time, send 'Delete my data' to stop receiving messages and be removed from this list.
-    \nSend 'menu' at any time to come back to this menu."  
+  say "**Menu**\n1) About this channel\n2) Safety tips\n3) Frequently asked questions (FAQs)\nYou have the right to be forgotten. At any time, send 'Delete my data' to stop receiving messages and be removed from this list.\nSend 'menu' at any time to come back to this menu."  
   hold
 
   if (event == 1) {
-    say "This is a way to receive messages from X, about Y, without being in a group (which can potentially compromise everyone in the group).
-    \n[description]"
+    say "This is a way to receive messages from X, about Y, without being in a group (which can potentially compromise everyone in the group).\n[description]"
   } else if (event == 2) {
       say "**Safety tips**
         \n[safetyTips]"
@@ -83,19 +73,18 @@ menu_step:
     goto menu_step
   } else if (event.to_lowercase() == "delete my data") {
     goto consent_disagree_step
-  } else {
-    say "Sorry, I did not get that."
-    set count += 1
-    goto menu_step
   }
+  else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto menu_step
 
 faq_step:
   if (count >= 3) {
     goto submit_question_step
   }
 
-  say "Here are some frequently answered questions. Does your question fall under one of these?
-    \n[faq]"
+  say "Here are some frequently answered questions. Does your question fall under one of these?\n[faq]"
     // \n[faq.length]) Other"
   hold
 
@@ -105,12 +94,11 @@ faq_step:
     goto menu_step
   } else if (event.to_lowercase() == "delete my data") {
     goto consent_disagree_step
-  } else {
+  } 
+  else
     say "Sorry, I did not get that."
-  }
 
-  say "Reply with 'FAQ' to see the list of questions.
-    \nReply with 'Menu' to return home."
+  say "Reply with 'FAQ' to see the list of questions.\nReply with 'Menu' to return home."
   hold
 
   if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
@@ -119,28 +107,26 @@ faq_step:
     goto menu_step
   } else if (event.to_lowercase() == "delete my data") {
     goto consent_disagree_step
-  } else {
+  } 
+  else
     say "Sorry, I did not get that."
-    set count += 1
+    do count += 1
     if (count >= 3) {
       goto submit_question_step
-    } else {
+    } 
+    else
       goto faq_step
-    }
-  }
 
 check_if_solved_step:
   if (count >= 3) {
     goto submit_question_step
   }
 
-  say "Did that solve your problem?
-    \nReply Yes or No."
+  say "Did that solve your problem?\nReply Yes or No."
   hold
 
   if (event.to_lowercase() == "yes") {
-    say "Reply with 'FAQ' to see the list of questions.
-      \nReply with 'Menu' to return home."
+    say "Reply with 'FAQ' to see the list of questions.\nReply with 'Menu' to return home."
     hold
 
     if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
@@ -149,18 +135,18 @@ check_if_solved_step:
       goto menu_step
     } else if (event.to_lowercase() == "delete my data") {
       goto consent_disagree_step
-    } else {
+    } 
+    else
       say "Sorry, I did not get that."
-      set count += 1
+      do count += 1
       goto check_if_solved_step
-    }
   } else if (event.to_lowercase() == "no") {
     goto submit_question_step
-  } else {
+  } 
+  else
     say "Sorry, I did not get that."
-    set count += 1
+    do count += 1
     goto check_if_solved_step
-  }
 
 submit_question_step:
   // TODO bitpart flags conversation to list owner

@@ -29,9 +29,6 @@ const schema = [
 
 export const createBot = async (data, userId) => {
   try {
-
-    // console.log('data is: ', data);
-
     let txtFile = `./csml/${data.botType}.txt`;
     let csml = "";
     let formattedCsml = "";
@@ -51,10 +48,22 @@ export const createBot = async (data, userId) => {
       
       // format admin phone numbers
       if (field === "adminPhones") {
-        let phone = data.countryCode + data.phone;
-        phone = phone.replace(/^(\+)|\D/g, "$1");
-        phone = `+${phone}`;
-        phones.push(phone);
+        let adminPhoneOptions = "";
+
+        data[field].map((p, i) => {
+          let phone = p.code + p.number;
+          phone = phone.replace(/^(\+)|\D/g, "$1");
+          phone = `+${phone}`;
+          phones.push(phone);
+
+          if (i === 0) {
+            adminPhoneOptions += `"${phone}"`
+          } else {
+            adminPhoneOptions += ` || event.client.user_id == "${phone}"`
+          }
+        })
+        
+        csml = csml.replace(`[${field}]`, adminPhoneOptions)
       }
 
       // fill in csml template with data
@@ -78,8 +87,6 @@ export const createBot = async (data, userId) => {
               }
               `
             })
-
-            // console.log('questions: ', questions);
 
             csml = csml.replace(`[${field}]`, questions);
             csml = csml.replace(`[${field}.length]`, (length + 1));
@@ -110,7 +117,7 @@ export const createBot = async (data, userId) => {
         let regex = /"/g;
         let quot = String.raw`\"`;
         formattedCsml = csml.replaceAll(regex, quot);
-        formattedCsml = `"${formattedCsml}"`;
+        // formattedCsml = `"${formattedCsml}"`;
       }
     })
 
@@ -128,23 +135,17 @@ export const createBot = async (data, userId) => {
     phone = phone.replace(/^(\+)|\D/g, "$1");
     phone = `+${phone}`;
 
+    console.log('++++++++++++++++++++++++++++++');
+    console.log(formattedCsml);
+    
+    console.log('++++++++++++++++++++++++++++++');
+    
     // send info to bitpart server via websockets
     const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
       headers: {
         Authorization: process.env.BITPART_SERVER_TOKEN
       }
     });
-
-    // const authenticate = request => {
-    //   const { token } = parse(request.url, true).query
-    //   // TODO: Actually authenticate token
-
-    //   console.log('TOKEN IS: ', token);
-      
-    //   if (token === process.env.BITPART_SERVER_TOKEN) {
-    //     return true
-    //   }
-    // }
 
     const json = {
       "message_type": "CreateBot",
@@ -159,40 +160,20 @@ export const createBot = async (data, userId) => {
             "commands": []
           }
         ],
-        "defaultFlow": "Default",
+        "default_flow": "Default",
       }
     }
 
-    ws.on('connection', function connection(ws, request, client) {
+    const jsonString = JSON.stringify(json);
 
-      ws.on('error', console.error);
+    ws.on('error', console.error);
 
-      ws.on('open', function open() {
-        ws.send(json);
-      });
+    ws.on('open', function open() {
+      ws.send(jsonString);
+    });
 
-      ws.on('close', function close() {
-        console.log('disconnected');
-      });
-      
-      // authenticate(request, function next(err, client) {
-
-      //   console.log('*******************************');
-      //   console.log(err);
-      //   console.log(client);
-      //   console.log('*******************************');
-        
-      //   if (err || !client) {
-      //     socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-      //     socket.destroy();
-      //     return;
-      //   }
-
-
-      //   ws.handleUpgrade(request, socket, head, function done(ws) {
-      //     ws.emit('connection', ws, request, client);
-      //   });
-      // });
+    ws.on('close', function close() {
+      console.log('disconnected');
     });
 
     // const bot = await prisma.bot.create({
