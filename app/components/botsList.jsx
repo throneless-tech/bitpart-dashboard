@@ -47,6 +47,7 @@ export default function BotsList({ userId }) {
             </Heading>
             <Stack
               direction={["column", "column", "row"]}
+              wrap={"wrap"}
               gap={[4, 4, 8]}
               marginTop={4}
             >

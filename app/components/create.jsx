@@ -15,13 +15,14 @@ import {
   Box,
   Button,
   Container,
-  Flex,
   Group,
   Heading,
   Highlight,
   Icon,
+  Input,
   Link,
   List,
+  QrCode,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -32,6 +33,7 @@ import {
   ColorModeButton,
   useColorModeValue,
 } from "@/app/components/ui/color-mode"
+import { Field } from "@/app/components/ui/field";
 import {
   RadioCardItem,
   RadioCardLabel,
@@ -363,16 +365,28 @@ export default function CreateBotFlow({ userId }) {
               <Text marginTop={4}>
                 This is required by Signal. Sorry!
               </Text>
+              <Field
+                // errorText={!!errors?.name && errors.name.message}
+                helperText="Enter the Signal captcha url here"
+                // invalid={!!errors?.name}
+                label="Signal captcha confirmation"
+                marginTop={8}
+                required
+              >
+                <Input placeholder='signalcaptcha://' />
+              </Field>
             </Box>
           </StepsContent>
           <StepsContent index={4}>
-            <Heading as="h2" marginTop={10} size="md">
+            <Heading as="h2" marginBottom={4} marginTop={10} size="md">
               Connect Bitpart to Signal
             </Heading>
-            <Text marginTop={4}>
-              QR code will appear here::::
-            </Text>
-            <List.Root>
+            <QrCode.Root value="https://signal.org">
+              <QrCode.Frame>
+                <QrCode.Pattern />
+              </QrCode.Frame>
+            </QrCode.Root>
+            <List.Root marginLeft={4} marginTop={4}>
               <List.Item>
                 On your phone, open Signal and navigate to Signal Settings profile_avatar.png {'>'} Linked devices.
               </List.Item>
