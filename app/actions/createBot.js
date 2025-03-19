@@ -121,11 +121,33 @@ export const createBot = async (data, userId) => {
     //   }
     // })
 
+    // format bot phone
+    let phone = data.countryCode + data.phone;
+    phone = phone.replace(/^(\+)|\D/g, "$1");
+    phone = `+${phone}`;
+
+    // send info to bitpart server via websockets
     const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
 
+    const json = {
+      "message_type": "CreateBot",
+      "data": {
+        "id": phone,
+        "name": data.botName,
+        "flows": [
+          {
+            "id": "Default",
+            "name": "Default",
+            "content": formattedCsml,
+            "commands": []
+          }
+        ],
+        "defaultFlow": "Default",
+      }
+    }
+
     ws.on('connection', function connection(ws, request, client) {
-      console.log('we are now connected....');
-      
+
       ws.on('error', console.error);
 
       authenticate(request, function next(err, client) {
@@ -142,12 +164,6 @@ export const createBot = async (data, userId) => {
         });
       });
     });
-    
-    // format bot phone
-    let phone = data.countryCode + data.phone;
-    phone = phone.replace(/^(\+)|\D/g, "$1");
-    phone = `+${phone}`;
-
 
     // const bot = await prisma.bot.create({
     //   data: {

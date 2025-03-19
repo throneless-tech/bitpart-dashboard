@@ -388,7 +388,7 @@ export default function CreateBotFlow({ userId }) {
             </QrCode.Root>
             <List.Root marginLeft={4} marginTop={4}>
               <List.Item>
-                On your phone, open Signal and navigate to Signal Settings profile_avatar.png {'>'} Linked devices.
+                On your phone, open Signal and navigate to Signal Settings {'>'} Linked devices.
               </List.Item>
               <List.Item>
                 Tap the Android + with blue circle (Android) or Link New Device (iOS)
