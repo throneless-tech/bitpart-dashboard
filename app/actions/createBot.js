@@ -176,24 +176,24 @@ export const createBot = async (data, userId) => {
       console.log('disconnected');
     });
 
-    // const bot = await prisma.bot.create({
-    //   data: {
-    //     creatorId: userId,
-    //     countryCode: data.countryCode,
-    //     phone: phone,
-    //     adminPhones: {
-    //       set: phones
-    //     },
-    //     botType: data.botType,
-    //     botName: data.botName,
-    //     name: data.name,
-    //     description: data.description ? data.description : null,
-    //     safetyTips: data.safetyTips ? data.safetyTips : null,
-    //     faq: data.faq ? data.faq : null,
-    //   }
-    // });
+    const bot = await prisma.bot.create({
+      data: {
+        creatorId: userId,
+        countryCode: data.countryCode,
+        phone: phone,
+        adminPhones: {
+          set: phones
+        },
+        botType: data.botType,
+        botName: data.botName,
+        name: data.name,
+        description: data.description ? data.description : null,
+        safetyTips: data.safetyTips ? data.safetyTips : null,
+        faq: data.faq ? data.faq : null,
+      }
+    });
 
-    // return bot;
+    return bot;
   } catch (e) {
     console.log(e);
   }
