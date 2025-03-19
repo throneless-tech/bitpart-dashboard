@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react";
+// base imports
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useTransition } from 'react';
 
 // chakra ui imports
 import {
@@ -12,30 +14,50 @@ import {
 } from "@chakra-ui/react";
 
 // actions
+import { deleteBot } from "../actions/deleteBot";
 import { getUserBots } from "../actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/components/botCard";
 
 export default function BotsList({ userId }) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  async function handleDelete(id) {
+    setIsFetching(true);
+    try {
+      alert("Are you sure you want to delete this bot? This action cannot be undone.")
+      await deleteBot(id);
+      setIsFetching(false);
+    } catch (error) {
+      console.log('error: ', error);
+    }
+
+    startTransition(() => {
+      // Refresh the current route and fetch new data from the server without
+      // losing client-side browser or React state.
+      router.refresh();
+    });
+  }
 
   useEffect(() => {
     if (userId) {
       async function fetchBots() {
         const fetchedBots = await getUserBots(userId);
         setBots(fetchedBots);
-        setLoading(false);
+        setIsFetching(false);
       }
 
       fetchBots();
     }
   }, [])
 
-  useEffect(() => { }, [bots, loading])
+  useEffect(() => { }, [bots, isFetching])
 
-  if (loading) {
+  if (isFetching) {
     return <Spinner size="lg" />
   } else {
     return (
@@ -52,7 +74,12 @@ export default function BotsList({ userId }) {
               marginTop={4}
             >
               {bots && bots.length && bots.map((bot, index) => (
-                <BotCard key={`${bot.botType}-${index}`} bot={bot} userId={userId} />
+                <BotCard
+                  key={`${bot.botType}-${index}`}
+                  bot={bot}
+                  handleDelete={handleDelete}
+                  userId={userId}
+                />
               ))}
             </Stack>
           </>

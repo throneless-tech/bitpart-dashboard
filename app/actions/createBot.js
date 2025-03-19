@@ -1,4 +1,6 @@
 "use server"
+
+// base imports
 import fs from 'node:fs/promises';
 import { prisma } from '@/lib/prisma';
 import WebSocket from 'ws';
@@ -127,7 +129,22 @@ export const createBot = async (data, userId) => {
     phone = `+${phone}`;
 
     // send info to bitpart server via websockets
-    const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
+    const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
+      headers: {
+        Authorization: process.env.BITPART_SERVER_TOKEN
+      }
+    });
+
+    // const authenticate = request => {
+    //   const { token } = parse(request.url, true).query
+    //   // TODO: Actually authenticate token
+
+    //   console.log('TOKEN IS: ', token);
+      
+    //   if (token === process.env.BITPART_SERVER_TOKEN) {
+    //     return true
+    //   }
+    // }
 
     const json = {
       "message_type": "CreateBot",
@@ -150,19 +167,32 @@ export const createBot = async (data, userId) => {
 
       ws.on('error', console.error);
 
-      authenticate(request, function next(err, client) {
-        if (err || !client) {
-          socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-          socket.destroy();
-          return;
-        }
-
-        socket.removeListener('error', onSocketError);
-
-        wss.handleUpgrade(request, socket, head, function done(ws) {
-          wss.emit('connection', ws, request, client);
-        });
+      ws.on('open', function open() {
+        ws.send(json);
       });
+
+      ws.on('close', function close() {
+        console.log('disconnected');
+      });
+      
+      // authenticate(request, function next(err, client) {
+
+      //   console.log('*******************************');
+      //   console.log(err);
+      //   console.log(client);
+      //   console.log('*******************************');
+        
+      //   if (err || !client) {
+      //     socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+      //     socket.destroy();
+      //     return;
+      //   }
+
+
+      //   ws.handleUpgrade(request, socket, head, function done(ws) {
+      //     ws.emit('connection', ws, request, client);
+      //   });
+      // });
     });
 
     // const bot = await prisma.bot.create({

@@ -202,7 +202,7 @@ export default function CreateBotFlow({ userId }) {
     // };
   }, []);
 
-  useEffect(() => { console.log(formState.isValid, formState.errors); }, [captchaContainer, createdBot, stepCount, watchAll]);
+  useEffect(() => { }, [captchaContainer, createdBot, stepCount, watchAll]);
 
   return (
     <Container marginBottom={6} maxW="6xl">
@@ -360,7 +360,7 @@ export default function CreateBotFlow({ userId }) {
                 <Link color={color} href='https://signalcaptchas.org/challenge/generate' target='_blank' variant='underline'>
                   signalcaptchas.org
                 </Link>{' '}
-                to generate a captcha. Follow instructions but when it says "Open Signal"  right click, copy and past the link back on this page.
+                to generate a captcha. Follow instructions but when it says "Open Signal"  right click, copy and paste the link back on this page.
               </Text>
               <Text marginTop={4}>
                 This is required by Signal. Sorry!

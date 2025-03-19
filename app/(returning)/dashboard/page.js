@@ -18,8 +18,6 @@ import BotsList from "@/app/components/botsList";
 export default async function Dashboard() {
   const session = await auth();
 
-  console.log('session: ', session);
-
   if (!session) return <div>Not authenticated</div>
 
   return (
