@@ -220,7 +220,7 @@ export const CountryCodes = () => (
     <option value="46">Sweden +46</option>
     <option value="41">Switzerland +41</option>
     <option value="963">Syrian Arab Republic +963</option>
-    <option value="886">Taiwan, Province of China +886</option>
+    <option value="886">Taiwan +886</option>
     <option value="992">Tajikistan +992</option>
     <option value="255">Tanzania, United Republic of +255</option>
     <option value="66">Thailand +66</option>
