@@ -211,7 +211,7 @@ export default function CreateBotFlow({ userId }) {
       </Heading>
       <FormProvider {...methods}>
         <StepsRoot
-          count={4}
+          count={5}
           step={stepCount}
           onStepChange={(e) => {
             if (stepCount == 2) {
@@ -411,12 +411,13 @@ export default function CreateBotFlow({ userId }) {
             </Text>
           </StepsContent>
           <StepsCompletedContent>
-            {/* TODO update steps layout to be more clear which step you're on  */}
-            You have created a new bot! Go to your{' '}
-            <Link href='/dashboard'>
-              Dashboard
-            </Link>
-            {' '}to see all the bots you have created.
+            <Box marginY={12}>
+              You have created a new bot! Go to your{' '}
+              <Link color={color} href='/dashboard' variant="underline">
+                Dashboard
+              </Link>
+              {' '}to see all the bots you have created.
+            </Box>
           </StepsCompletedContent>
           <Group>
             <StepsPrevTrigger asChild>
@@ -431,12 +432,12 @@ export default function CreateBotFlow({ userId }) {
             </StepsPrevTrigger>
             <StepsNextTrigger asChild>
               <Button
-                disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount == 4}
+                disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 4}
                 onClick={() => updateStepCount(1)}
                 size="sm"
                 variant="outline"
               >
-                {stepCount == 2 ? "Submit" : "Next"}
+                {stepCount == 2 ? "Submit" : stepCount >= 4 ? "Finished" : "Next"}
               </Button>
             </StepsNextTrigger>
           </Group>
