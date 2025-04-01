@@ -5,7 +5,13 @@ import { AuthError } from "next-auth"
 import { signIn } from "@/auth"
 
 // chakra ui imports
-import { Alert, Box, Button, Field, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Field,
+  Input,
+  Spinner
+} from "@chakra-ui/react";
 import { PasswordInput } from "@/app/components/ui/password-input"
 
 export function LoginForm() {
@@ -44,6 +50,7 @@ export function LoginForm() {
           <PasswordInput name="password" placeholder="AVeryGoodPassword" size="lg" />
         </Field.Root>
         <Button
+          id="submit"
           marginTop={8}
           type="submit"
           width={120}

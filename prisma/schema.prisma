@@ -86,6 +86,7 @@ model Bot {
 }
 
 model InviteCode {
-  id   Int    @id @default(autoincrement())
-  code String @unique
+  id   Int     @id @default(autoincrement())
+  code String  @unique
+  used Boolean @default(false)
 }

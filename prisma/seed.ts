@@ -56,7 +56,7 @@ async function main() {
   const inviteCodes = await prisma.inviteCode.createMany({
     data: [
       { code: 'a-unique-invite-code' },
-      { code: 'another-unique-code' }, // Duplicate unique key!
+      { code: 'another-unique-code' },
     ],
     skipDuplicates: true,
   })
