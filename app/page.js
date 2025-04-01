@@ -13,13 +13,13 @@ import {
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";
 import { InviteForm } from "./ui/enterInvite";
-import { ToastAlert } from "./ui/toastalert";
+import { ToastSignOut } from "./ui/toastalert";
 
 export default function Home() {
 
   return (
     <Box>
-      <ToastAlert />
+      <ToastSignOut />
       <Container py={6}>
         <Flex justifyContent="space-between">
           <ColorModeButton />

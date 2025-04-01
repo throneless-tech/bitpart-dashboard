@@ -19,6 +19,7 @@ import {
 import { PasswordInput } from "@/app/components/ui/password-input";
 
 // components imports
+import { ToastSignUp } from "./toastalert";
 import { useColorModeValue } from "@/app/components/ui/color-mode";
 
 const initialState = {
@@ -39,6 +40,7 @@ export function LoginForm() {
       action={formAction}
     >
       <Box marginLeft="auto" marginRight="auto" maxW={400}>
+        <ToastSignUp />
         <Field.Root required>
           <Field.Label>
             Username

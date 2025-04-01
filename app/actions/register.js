@@ -55,7 +55,7 @@ export const register = async (prevState, formData) => {
       }
     });
 
-    redirectPath = '/login';
+    redirectPath = '/login?message=SignUpSuccess';
 
   } catch (e) {
     console.log(e);

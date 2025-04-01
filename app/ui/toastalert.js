@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // chakra ui imports
 import { toaster, Toaster } from "@/components/ui/toaster"
 
-export const ToastAlert = () => {
+export const ToastSignOut = () => {
   const params = useSearchParams();
   const [show, setShow] = useState(false);
 
@@ -20,8 +20,36 @@ export const ToastAlert = () => {
   useEffect(() => {
     if (show) {
       toaster.create({
-        duration: 5000,
+        duration: 10000,
         title: "You have successfully logged out",
+        type: "success",
+      })
+    }
+  }, [show])
+
+  return (
+    <>
+      <Toaster toaster={toaster} />
+    </>
+
+  )
+}
+
+export const ToastSignUp = () => {
+  const params = useSearchParams();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (params.get("message") === "SignUpSuccess") {
+      setShow(true);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (show) {
+      toaster.create({
+        duration: 10000,
+        title: "Account created successfully. Please login.",
         type: "success",
       })
     }
