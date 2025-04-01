@@ -3,7 +3,6 @@
 // base imports
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState } from "react";
-import { prisma } from '@/lib/prisma';
 
 // form validation imports
 import { FormProvider, useForm } from 'react-hook-form';
@@ -28,17 +27,14 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { Checkbox } from "@/app/components/ui/checkbox"
-import {
-  ColorModeButton,
-  useColorModeValue,
-} from "@/app/components/ui/color-mode"
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { useColorModeValue } from "@/app/components/ui/color-mode";
 import { Field } from "@/app/components/ui/field";
 import {
   RadioCardItem,
   RadioCardLabel,
   RadioCardRoot,
-} from "@/app/components/ui/radio-card"
+} from "@/app/components/ui/radio-card";
 import {
   StepsCompletedContent,
   StepsContent,
@@ -46,7 +42,7 @@ import {
   StepsList,
   StepsNextTrigger,
   StepsPrevTrigger,
-} from "@/app/components/ui/steps"
+} from "@/app/components/ui/steps";
 const StepsRoot = dynamic(() => import('@/app/components/ui/steps'), { ssr: false })
 
 // form imports

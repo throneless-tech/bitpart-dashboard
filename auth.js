@@ -4,7 +4,7 @@ import authConfig from "./auth.config"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from '@/lib/prisma'
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
   adapter: PrismaAdapter(prisma),
   session: {

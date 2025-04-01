@@ -1,8 +1,10 @@
-import { redirect } from "next/navigation"
-import { AuthError } from "next-auth"
+"use client"
 
-// auth imports
-import { signIn } from "@/auth"
+// react imports
+import { useActionState, useEffect } from 'react';
+
+// actions imports
+import { login } from "@/app/actions/login"
 
 // chakra ui imports
 import {
@@ -10,31 +12,31 @@ import {
   Button,
   Field,
   Input,
-  Spinner
+  Link,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
-import { PasswordInput } from "@/app/components/ui/password-input"
+import { PasswordInput } from "@/app/components/ui/password-input";
+
+// components imports
+import { useColorModeValue } from "@/app/components/ui/color-mode";
+
+const initialState = {
+  error: '',
+}
 
 export function LoginForm() {
+  const [state, formAction, pending] = useActionState(login, initialState);
+
+  useEffect(() => { }, [state]);
+  
+  // color mode
+  const color = useColorModeValue("maroon", "yellow");
+
+
   return (
     <form
-      action={async (formData) => {
-        "use server"
-        try {
-          await signIn(
-            "credentials",
-            {
-              username: formData.get("username"),
-              password: formData.get("password"),
-              redirectTo: '/dashboard'
-            }
-          );
-        } catch (error) {
-          if (error instanceof AuthError) {
-            return redirect(`/error?error=${error.type}`);
-          }
-          throw error;
-        }
-      }}
+      action={formAction}
     >
       <Box marginLeft="auto" marginRight="auto" maxW={400}>
         <Field.Root required>
@@ -50,6 +52,7 @@ export function LoginForm() {
           <PasswordInput name="password" placeholder="AVeryGoodPassword" size="lg" />
         </Field.Root>
         <Button
+          disabled={pending}
           id="submit"
           marginTop={8}
           type="submit"
@@ -57,6 +60,17 @@ export function LoginForm() {
         >
           Sign in
         </Button>
+        {pending ? (<Spinner />) : null}
+        <Text marginTop={8}>
+          Don't have an account? Create one with an invite code{' '}
+          <Link
+            color={color}
+            href='/'
+            variant="underline"
+          >
+            here
+          </Link>.
+        </Text>
       </Box>
     </form>
   )

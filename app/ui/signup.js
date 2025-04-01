@@ -7,7 +7,12 @@ import { useActionState, useEffect } from 'react';
 import { register } from "@/app/actions/register"
 
 // chakra ui imports
-import { Container, Button, Field, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Field,
+  Input,
+} from "@chakra-ui/react";
 import { PasswordInput } from "@/app/components/ui/password-input"
 
 const initialState = {
@@ -33,19 +38,22 @@ export function SignupForm() {
             <Field.ErrorText>{state.error.username}</Field.ErrorText>
           ) : null}
         </Field.Root>
-        <Field.Root marginTop={4} required>
+        <Field.Root invalid={state?.error?.password} marginTop={4} required>
           <Field.Label>
             Choose a password
           </Field.Label>
           <PasswordInput name="password" placeholder="AVeryGoodPassword" size="lg" />
+          {state?.error?.password ? (
+            <Field.ErrorText>{state.error.password}</Field.ErrorText>
+          ) : null}
         </Field.Root>
-        <Field.Root invalid={state?.error?.password} marginTop={4} required>
+        <Field.Root invalid={state?.error?.passwordConfirm} marginTop={4} required>
           <Field.Label>
             Confirm password
           </Field.Label>
           <PasswordInput name="passwordConfirm" placeholder="AVeryGoodPassword" size="lg" />
-          {state?.error?.password ? (
-            <Field.ErrorText>{state.error.password}</Field.ErrorText>
+          {state?.error?.passwordConfirm ? (
+            <Field.ErrorText>{state.error.passwordConfirm}</Field.ErrorText>
           ) : null}
         </Field.Root>
         <Button

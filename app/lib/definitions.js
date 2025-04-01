@@ -2,7 +2,5 @@ import { object, string } from 'yup';
 
 export const LoginSchema = object({
   username: string().required("Enter your username"),
-  password: string().required("Enter your invite code")
+  password: string().min(8, 'Password must contain at least 8 characters').required("Enter your password")
 });
-
-// TODO call on Bitpart to find the code and login user
