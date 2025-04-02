@@ -418,7 +418,7 @@ export default function CreateBotFlow({ userId }) {
           <Group>
             <StepsPrevTrigger asChild>
               <Button
-                disabled={stepCount == 3}
+                disabled={stepCount == 0 || stepCount == 3}
                 onClick={() => updateStepCount(-1)}
                 size="sm"
                 variant="outline"

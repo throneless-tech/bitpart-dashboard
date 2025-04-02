@@ -3,9 +3,9 @@ start:
 
   // TODO: conversation is triggered by a message from a user who says they need a vpn code
   // TODO Bitpart interprets incoming language. Response is in the same language
-  say "Thank you for contacting [ORG NAME]. We do [info about the org]. We're using a secure automated messaging system so you can get quicker responses.
-    \nYour phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after [X days].
-    \nWe offer VPN codes from [VPN provider name] which works [locations where it's applicable]."
+  say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
+    \nYour phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after [storageTime].
+    \nWe offer VPN codes from [vpnName] which works in [locations]."
   
   say "How many codes do you need? Please enter the amount:"
   hold
@@ -36,8 +36,8 @@ share_codes_step:
   // TODO get the codes from bitpart
   say "Here is the list of VPN codes:"
   // TODO parse the bitpart data to list the codes
-  say "Here are instructions on how to activate the VPN codes."
-  // TODO need instructions for VPN code activation
+  say "Here are instructions on how to activate the VPN codes.
+    \n\n[activationInstructions]"
   say "If you need further support please type 'FAQ'
     \nOtherwise, please send us a message next time you need VPN codes."
   hold

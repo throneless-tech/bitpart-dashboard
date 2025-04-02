@@ -158,6 +158,7 @@ export const EsimForm = () => {
             List the different types of plans a user can ask for.
           </Fieldset.HelperText>
         </Stack>
+        {/* FIXME do we need to remove this? */}
         {planFields.map((f, i) => {
           return (
             <Stack

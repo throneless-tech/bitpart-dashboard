@@ -73,12 +73,42 @@ export const createBot = async (data, userId) => {
         if (typeof data[field] == "object") {
           length = data[field].length;
 
-          if (field === "faq") {
+          // handle location fields differently for esim and vpn
+          if (data.botType === "esim") {
+            if (field === "locations") { // fields specific to esim locations
+              let places = "";
+
+              data[field].map((f, i) => {
+                places = places + `\\n${i + 1}) ${f.place}`;
+              })
+
+              csml = csml.replace(`[${field}]`, places);
+              csml = csml.replace(`[${field}.length]`, (length + 1));
+              csml = csml.replace(`[${field}.answers]`, answers);
+            } 
+          } else if (data.botType === "vpn") {
+            if (field === "locations") { // fields specific to vpn locations
+              let places = "";
+
+              data[field].map((f, i) => {
+                if (i === data[field].length - 1) {
+                  places = places + `${f.place}`;
+                }
+                places = places + `${f.place}, `;
+              })
+
+              csml = csml.replace(`[${field}]`, places);
+              csml = csml.replace(`[${field}.length]`, (length + 1));
+              csml = csml.replace(`[${field}.answers]`, answers);
+            } 
+          }
+
+          if (field === "faq") { // fields specific to FAQ
             let questions = "";
             let answers = "";
 
             data[field].map((f, i) => {
-              questions = questions + `\\n${i + 1}) ${f.question}`
+              questions = questions + `\\n${i + 1}) ${f.question}`;
 
               answers = answers + `
               ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
@@ -91,7 +121,7 @@ export const createBot = async (data, userId) => {
             csml = csml.replace(`[${field}]`, questions);
             csml = csml.replace(`[${field}.length]`, (length + 1));
             csml = csml.replace(`[${field}.answers]`, answers);
-          } else if (field === "problems") {
+          } else if (field === "problems") { // fields specific to problem and solutions
             let problems = "";
             let solutions = "";
 
@@ -135,11 +165,6 @@ export const createBot = async (data, userId) => {
     phone = phone.replace(/^(\+)|\D/g, "$1");
     phone = `+${phone}`;
 
-    console.log('++++++++++++++++++++++++++++++');
-    console.log(formattedCsml);
-    
-    console.log('++++++++++++++++++++++++++++++');
-    
     // send info to bitpart server via websockets
     const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
       headers: {

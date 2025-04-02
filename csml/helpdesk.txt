@@ -3,8 +3,8 @@ start:
 
   // TODO: accept input from user asking a question
   // TODO Bitpart interprets incoming language. Response is in the same language
-  say "Thank you for contacting [name]. We help [description] . We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
-    \nIf you are in immediate physical danger [referral]"
+  say "Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
+    \nIf you are in immediate physical danger contact [referral]"
   // TODO: user research needed about if we want bitpart to accept voice notes
   say "Our helpdesk will ask you to select the problem you're experiencing.
     \nYour answers will be stored on our system for [storageTime] and visible to [storageAccess]. We will not ask you for personal information.
@@ -70,7 +70,7 @@ report_step:
 
 check_if_solved_step:
   if (count >= 3) {
-    goto submit_question_step
+    goto human_support_step
   }
 
   say "Did that solve your problem?
@@ -83,7 +83,7 @@ check_if_solved_step:
     // TODO do we want to loop around again?
     goto end
   } else if (event.to_lowercase() == "no") {
-    goto submit_question_step
+    goto human_support_step
   } else {
     say "Sorry, I did not get that."
     set count += 1
@@ -92,6 +92,6 @@ check_if_solved_step:
 
 human_support_step:
   // TODO: Bitpart determines urgency/priority based on criteria specified by org.
-  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days."
+  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO set time?
   // TODO: is there anything else we want to do/collect before closing out?
   goto end

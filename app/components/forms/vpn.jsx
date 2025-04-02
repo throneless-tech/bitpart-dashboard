@@ -64,6 +64,7 @@ export const VpnForm = () => {
       >
         <Textarea placeholder="Start typing..." {...register('description')} />
       </Field>
+      {/* FIXME do we need these? */}
       {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
@@ -216,6 +217,7 @@ export const VpnForm = () => {
             </Stack>
           );
         })}
+        {/* FIXME do we need FAQ and limits on # of codes requested? */}
         <Button
           onClick={() =>
             planAppend({

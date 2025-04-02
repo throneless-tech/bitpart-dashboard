@@ -56,6 +56,7 @@ contact_method_step:
   if (event == 1 || event == 2 || event == 3) {
     // TODO Bitpart records preferred contact method preference
     say "Thank you. Your preference is noted."
+    //TODO is their number already recorded or do we need to record it now?
   } else if (event == 4) {
     // TODO Bitpart records preferred contact method preference
     goto confirm_contact_method_step
