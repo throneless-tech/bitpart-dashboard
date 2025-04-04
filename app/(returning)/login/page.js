@@ -1,6 +1,6 @@
 // chakra ui imports
 import { Box, Container, Flex, Heading, Link } from "@chakra-ui/react";
-import { LoginForm } from "../../ui/login";
+import { LoginForm } from "../../components/login";
 
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";

@@ -3,7 +3,7 @@ import { Box, Container, Flex, Heading, Link, Text } from "@chakra-ui/react";
 
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";
-import { SignupForm } from "@/app/ui/signup";
+import { SignupForm } from "@/app/components/signup";
 
 export default function Singup() {
   return (

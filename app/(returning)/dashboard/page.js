@@ -12,13 +12,14 @@ import {
 } from "@chakra-ui/react";
 
 // components
-import Header from "@/app/ui/header";
+import Header from "@/app/components/header";
 import BotsList from "@/app/components/botsList";
+import NotAuthenticated from "@/app/components/notAuthenticated";
 
 export default async function Dashboard() {
   const session = await auth();
 
-  if (!session) return <div>Not authenticated</div>
+  if (!session) return <NotAuthenticated />
 
   return (
     <Box>

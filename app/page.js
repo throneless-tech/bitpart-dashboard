@@ -1,7 +1,10 @@
+"use client"
+
 // chakra ui imports
 import {
   Box,
   Button,
+  ClientOnly,
   Container,
   Flex,
   Heading,
@@ -11,11 +14,13 @@ import {
 } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/app/components/ui/color-mode";
-import { InviteForm } from "./ui/enterInvite";
-import { ToastSignOut } from "./ui/toastalert";
+import { ColorModeButton, useColorModeValue } from "@/app/components/ui/color-mode";
+import { InviteForm } from "./components/enterInvite";
+import { ToastSignOut } from "./components/toastalert";
 
 export default function Home() {
+  // color mode
+  const color = useColorModeValue("maroon", "yellow");
 
   return (
     <Box>
@@ -24,9 +29,11 @@ export default function Home() {
         <Flex justifyContent="space-between">
           <ColorModeButton />
           <HStack gap={8}>
-            <Link href="/login" variant="underline">
-            Login
-            </Link>
+            <ClientOnly>
+              <Link color={color} href="/login" variant="underline">
+                Login
+              </Link>
+            </ClientOnly>
             <Button>
               Donate
             </Button>
@@ -43,7 +50,7 @@ export default function Home() {
           Welcome to Bitpart.
         </Heading>
         <Text marginTop={4}>
-          Bitpart is... they used to say that if Man was meant to fly, he'd have wings. But he did fly. He discovered he had to. Leave bigotry in your quarters; there's no room for it on the bridge. To all mankind -- may we never find space so vast, planets so cold, heart and mind so empty that we cannot fill them with love and warmth. You know the greatest danger facing us is ourselves, and irrational fear of the unknown. There is no such thing as the unknown. 
+          Bitpart is... they used to say that if Man was meant to fly, he'd have wings. But he did fly. He discovered he had to. Leave bigotry in your quarters; there's no room for it on the bridge. To all mankind -- may we never find space so vast, planets so cold, heart and mind so empty that we cannot fill them with love and warmth. You know the greatest danger facing us is ourselves, and irrational fear of the unknown. There is no such thing as the unknown.
         </Text>
         <Box marginTop={4} textAlign='center'>
           <Text marginBottom={8}>
