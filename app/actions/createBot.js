@@ -29,6 +29,7 @@ const schema = [
 
 export const createBot = async (data, userId) => {
   try {
+    // TODO use CSML instead of TXT '-template'
     let txtFile = `./csml/${data.botType}.txt`;
     let csml = "";
     let formattedCsml = "";

@@ -207,7 +207,7 @@ export default function CreateBotFlow({ userId }) {
       </Heading>
       <FormProvider {...methods}>
         <StepsRoot
-          count={5}
+          count={4}
           step={stepCount}
           onStepChange={(e) => {
             if (stepCount == 2) {
@@ -221,8 +221,7 @@ export default function CreateBotFlow({ userId }) {
               <StepsItem index={0} title="Choose your bot type" />
               <StepsItem index={1} title="Customize your bot" />
               <StepsItem index={2} title="Confirm your data" />
-              <StepsItem index={3} title="Create a captcha" />
-              <StepsItem index={4} title="Connect your bot" />
+              <StepsItem index={3} title="Connect your bot" />
             </Stack>
           </StepsList>
           <StepsContent index={0}>
@@ -350,30 +349,6 @@ export default function CreateBotFlow({ userId }) {
             </Checkbox>
           </StepsContent>
           <StepsContent index={3}>
-            <Box marginY={8}>
-              <Text>
-                In order to set up your Bitpart bot via Signal, please go to{' '}
-                <Link color={color} href='https://signalcaptchas.org/challenge/generate' target='_blank' variant='underline'>
-                  signalcaptchas.org
-                </Link>{' '}
-                to generate a captcha. Follow instructions but when it says "Open Signal"  right click, copy and paste the link back on this page.
-              </Text>
-              <Text marginTop={4}>
-                This is required by Signal. Sorry!
-              </Text>
-              <Field
-                // errorText={!!errors?.name && errors.name.message}
-                helperText="Enter the Signal captcha url here"
-                // invalid={!!errors?.name}
-                label="Signal captcha confirmation"
-                marginTop={8}
-                required
-              >
-                <Input placeholder='signalcaptcha://' />
-              </Field>
-            </Box>
-          </StepsContent>
-          <StepsContent index={4}>
             <Heading as="h2" marginBottom={4} marginTop={10} size="md">
               Connect Bitpart to Signal
             </Heading>

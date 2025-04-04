@@ -1,9 +1,9 @@
 start:
   remember count = 0
-  // TODO: conversation is triggered by a message from a user who says they need an esim
+  // conversation is triggered by a message from a user who says they need an esim
   // TODO Bitpart interprets incoming language. Response is in the same language
-  // TODO check if the user has contacted this line before
-  do user = true // FIXME based on above todo
+  // TODO check if the user has contacted this line before?
+  do user = true // FIXME SACHA based on above todo
 
   say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
   \nWe use an automated messaging system so you can get quicker responses, but you can always reach a human."
@@ -25,16 +25,18 @@ menu_step:
     \n\nEnter the number"
   hold
 
-  // TODO do we need a "top up" option for existing eSIMs?
-
   if (event == 1) {
     goto get_esim_1_step
   } else if (event == 2) {
     goto help_step
   } else if (event == 3) {
-    // FIXME
+    // TODO Sacha: will we cut this out for initial launch?
   } else if (event == 4) {
-    // FIXME
+    say "[privacyPolicy]"
+    // TODO SACHA: deadend?
+  } else if (event == 5) {
+    say "[description]"
+    // TODO SACHA: deadend?
   }
 
 get_esim_1_step:
@@ -76,6 +78,8 @@ get_esim_2_step:
 
   remember locations = event
 
+  // TODO external app call to EMS to notify of locations
+
   goto get_esim_3_step
 
 get_esim_3_step:
@@ -90,7 +94,7 @@ get_esim_3_step:
     \n\nIf you can't get it to work, reply with 'Help'"
   hold
 
-  // TODO send unique code
+  // TODO external app call to EMS for an esim code from 1 network
 
   if (event.to_lowercase() == "help") {
     goto help_step
@@ -166,6 +170,8 @@ human_support_step:
 
   remember problem = event
   // TODO flag relevant data to bitpart
+
+  whisper [adminPhones] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}" // TODO admin phones array
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 

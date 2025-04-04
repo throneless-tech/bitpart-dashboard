@@ -1,7 +1,6 @@
 start:
   remember count = 0
 
-  // TODO: accept input from user asking a question
   // TODO Bitpart interprets incoming language. Response is in the same language
   say "Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
     \nIf you are in immediate physical danger contact [referral]"
@@ -30,10 +29,11 @@ start:
 
 privacy_policy_step:
   say "[privacyPolicy]"
-  // TODO: need next steps
+  // TODO: SACHA: need next steps -- return to menu?
 
 incomplete_step:
-  // TODO: bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
+  // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
+  whisper [adminPhones] "Bitpart did not understand this user: {{event.client.user_id}}" // TODO add admin phones array
   goto end
 
 report_step:
@@ -80,7 +80,7 @@ check_if_solved_step:
   if (event.to_lowercase() == "yes") {
     say "Great!"
     
-    // TODO do we want to loop around again?
+    // TODO SACHA: do we want to loop around again?
     goto end
   } else if (event.to_lowercase() == "no") {
     goto human_support_step
@@ -91,7 +91,9 @@ check_if_solved_step:
   }
 
 human_support_step:
-  // TODO: Bitpart determines urgency/priority based on criteria specified by org.
-  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO set time?
-  // TODO: is there anything else we want to do/collect before closing out?
+  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO SACHA set time? or "ASAP"
+
+  // bitpart flags problem to admin
+  whisper [adminPhones] problem // TODO add admin array
+  
   goto end

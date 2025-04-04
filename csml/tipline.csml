@@ -1,5 +1,5 @@
 start:
-  // TODO: conversation is triggered by a message from a user who says they have a tip
+  // conversation is triggered by a message from a user who says they have a tip
   // TODO Bitpart interprets incoming language. Response is in the same language
   say 'Thank you for contacting [name].
     \nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
@@ -13,16 +13,14 @@ start:
   } else { 
     remember tip = event  
     
-    goto assign_tag_step
+    goto tip_reply_step
   }
 
 privacy_policy_step:
   say "[privacyPolicy]"
-  // TODO: need next steps
+  // TODO SACHA: need next steps
 
-assign_tag_step:
-  // TODO bitpart interprets information and assigns a category/tag (tags have been preset by media org) or does not.
-  // TODO depending on tag, Bitpart forwards message to relevant editor
+tip_reply_step:
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
     \nWe may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
   hold
@@ -33,13 +31,14 @@ assign_tag_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    // TODO timeout after 24 hours?
+    whisper [adminPhones] "A user sent the following anonymous tip: {{tip}}. They did not wish to be contacted." // TODO admin phones array
+
     goto end
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else {
     say "Sorry, our system didn't understand what you meant. Please try again."
-    goto assign_tag_step
+    goto tip_reply_step
   }
 
 contact_method_step:
@@ -53,8 +52,9 @@ contact_method_step:
 
   remember contact_preference = event
 
+  // FIXME Bitpart records preferred contact method preference
   if (event == 1 || event == 2 || event == 3) {
-    // TODO Bitpart records preferred contact method preference
+    whisper [adminPhones] "" // TODO admin phones array
     say "Thank you. Your preference is noted."
     //TODO is their number already recorded or do we need to record it now?
   } else if (event == 4) {
