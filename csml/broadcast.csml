@@ -155,7 +155,7 @@ submit_question_step:
   hold
 
   // bitpart flags conversation to list owner
-  whisper [adminPhones] event // TODO admin phones array
+  whisper [adminPhones.array] event
 
   say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 

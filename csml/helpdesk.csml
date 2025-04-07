@@ -1,3 +1,6 @@
+// This is a template. It will not work before being processed by the system
+
+
 start:
   remember count = 0
 
@@ -33,7 +36,7 @@ privacy_policy_step:
 
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
-  whisper [adminPhones] "Bitpart did not understand this user: {{event.client.user_id}}" // TODO add admin phones array
+  whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}"
   goto end
 
 report_step:
@@ -94,6 +97,6 @@ human_support_step:
   say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO SACHA set time? or "ASAP"
 
   // bitpart flags problem to admin
-  whisper [adminPhones] problem // TODO add admin array
+  whisper [adminPhones.array] problem
   
   goto end

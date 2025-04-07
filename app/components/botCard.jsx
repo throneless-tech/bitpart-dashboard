@@ -20,7 +20,7 @@ const botTypes =
 };
 
 export default function BotCard(props) {
-  const { bot, handleDelete, userId } = props;
+  const { bot, handleDelete } = props;
 
   if (!bot) return null;
 

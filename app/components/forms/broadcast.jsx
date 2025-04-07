@@ -10,13 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
-import {
-  NativeSelectField,
-  NativeSelectRoot,
-} from "@/app/components/ui/native-select";
-
-// country codes
-import { CountryCodes } from './countryCodes';
 
 export const BroadcastForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
@@ -24,15 +17,6 @@ export const BroadcastForm = () => {
       adminPhones: [],
       faq: [],
     },
-  });
-
-  const {
-    fields: adminPhoneFields,
-    append: adminPhoneAppend,
-    remove: adminPhoneRemove,
-  } = useFieldArray({
-    control,
-    name: 'adminPhones',
   });
 
   const {
@@ -55,78 +39,6 @@ export const BroadcastForm = () => {
       >
         <Input placeholder="Broadcast list" {...register('name')} />
       </Field>
-      <Fieldset.Root
-        label="Admin phone numbers"
-        marginTop={4}
-      >
-        <Stack>
-          <Fieldset.Legend>
-            Admin phone numbers
-          </Fieldset.Legend>
-          <Fieldset.HelperText>
-            Please enter the phone numbers for all of the administrators of the list who will be sending messages.
-          </Fieldset.HelperText>
-        </Stack>
-      {adminPhoneFields.map((f, i) => {
-        return (
-          <Stack
-            alignItems={'center'}
-            direction={['column', 'row']}
-            justifyContent="flex-start"
-            key={f.id}
-            marginBottom={4}
-            spacing={20}
-            width='100%'
-          >
-            <Stack direction={['column', 'column', 'row']} width='100%'>
-              <Field
-                label="Country code"
-                marginBottom={2}
-                required
-                width={320}
-              >
-                <NativeSelectRoot>
-                  <NativeSelectField {...register(`adminPhones.${i}.code`)}>
-                    <CountryCodes />
-                  </NativeSelectField>
-                </NativeSelectRoot>
-              </Field>
-              <Field
-                errorText={!!errors?.adminPhones?.number && errors?.adminPhones?.number.message}
-                invalid={!!errors?.adminPhones}
-                label="Phone number"
-                marginBottom={4}
-                required
-                width="320px"
-              >
-                <Input {...register(`adminPhones.${i}.number`)} />
-              </Field>
-            </Stack>
-            {i >= 0 &&
-              <Button
-                onClick={() => adminPhoneRemove(i)}
-                height={6}
-                width={1}
-              >
-                X
-              </Button>
-            }
-          </Stack>
-        );
-      })}
-        <Button
-          onClick={() =>
-            adminPhoneAppend({
-              code: '',
-              phone: '',
-            })
-          }
-          variant="subtle"
-          width={40}
-        >
-          Add admin phone
-        </Button>
-      </Fieldset.Root>
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."

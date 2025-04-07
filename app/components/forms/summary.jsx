@@ -30,7 +30,7 @@ export const Summary = ({ data, errors }) => {
               key === "botType" ? "Bot type"
                 : key === "botName" ? "Bot name"
                   : key === "adminPhones" ? "Admin phones"
-                    : key === "privacyPolicy" ? "Privacy policy"
+                    : key === "privacyPolicy" ? "Data rights"
                       : key === "safetyTips" ? "Safety tips"
                         : key === "activationInstructions" ? "Activation instructions"
                           : key === "helpInstructions" ? "Help instructions"

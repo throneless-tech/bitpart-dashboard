@@ -1,3 +1,6 @@
+// This is a template. It will not work before being processed by the system
+
+
 start:
   // conversation is triggered by a message from a user who says they have a tip
   // TODO Bitpart interprets incoming language. Response is in the same language
@@ -31,7 +34,7 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper [adminPhones] "A user sent the following anonymous tip: {{tip}}. They did not wish to be contacted." // TODO admin phones array
+    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}. They did not wish to be contacted."
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -54,7 +57,7 @@ contact_method_step:
 
   // FIXME Bitpart records preferred contact method preference
   if (event == 1 || event == 2 || event == 3) {
-    whisper [adminPhones] "" // TODO admin phones array
+    whisper [adminPhones.array] ""
     say "Thank you. Your preference is noted."
     //TODO is their number already recorded or do we need to record it now?
   } else if (event == 4) {

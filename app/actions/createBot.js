@@ -29,13 +29,12 @@ const schema = [
 
 export const createBot = async (data, userId) => {
   try {
-    // TODO use CSML instead of TXT '-template'
-    let txtFile = `./csml/${data.botType}.txt`;
+    let file = `./csml/${data.botType}.csml`;
     let csml = "";
     let formattedCsml = "";
     let phones = [];
 
-    const template = await fs.readFile(txtFile, 'utf8', (err, data) => {
+    const template = await fs.readFile(file, 'utf8', (err, data) => {
       if (err) {
         console.error(err);
         return;
@@ -65,6 +64,7 @@ export const createBot = async (data, userId) => {
         })
         
         csml = csml.replace(`[${field}]`, adminPhoneOptions)
+        csml = csml.replace(`[${field}.array]`, phones); // TODO need correct parsing
       }
 
       // fill in csml template with data
@@ -85,7 +85,6 @@ export const createBot = async (data, userId) => {
 
               csml = csml.replace(`[${field}]`, places);
               csml = csml.replace(`[${field}.length]`, (length + 1));
-              csml = csml.replace(`[${field}.answers]`, answers);
             } 
           } else if (data.botType === "vpn") {
             if (field === "locations") { // fields specific to vpn locations
@@ -100,7 +99,6 @@ export const createBot = async (data, userId) => {
 
               csml = csml.replace(`[${field}]`, places);
               csml = csml.replace(`[${field}.length]`, (length + 1));
-              csml = csml.replace(`[${field}.answers]`, answers);
             } 
           }
 
@@ -204,18 +202,14 @@ export const createBot = async (data, userId) => {
 
     const bot = await prisma.bot.create({
       data: {
+        ...data,
         creatorId: userId,
         countryCode: data.countryCode,
         phone: phone,
-        adminPhones: {
-          set: phones
-        },
+        adminPhones: phones,
         botType: data.botType,
         botName: data.botName,
         name: data.name,
-        description: data.description ? data.description : null,
-        safetyTips: data.safetyTips ? data.safetyTips : null,
-        faq: data.faq ? data.faq : null,
       }
     });
 

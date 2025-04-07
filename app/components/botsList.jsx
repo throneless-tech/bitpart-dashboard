@@ -1,8 +1,7 @@
 "use client"
 
 // base imports
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 
 // chakra ui imports
 import {
@@ -21,36 +20,29 @@ import { getUserBots } from "../actions/getUserBots";
 import BotCard from "@/app/components/botCard";
 
 export default function BotsList({ userId }) {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
+
+  async function fetchBots() {
+    const fetchedBots = await getUserBots(userId);
+    setBots(fetchedBots);
+    setIsFetching(false);
+  }
 
   async function handleDelete(id) {
     setIsFetching(true);
     try {
       alert("Are you sure you want to delete this bot? This action cannot be undone.")
       await deleteBot(id);
+      await fetchBots();
       setIsFetching(false);
     } catch (error) {
       console.log('error: ', error);
     }
-
-    startTransition(() => {
-      // Refresh the current route and fetch new data from the server without
-      // losing client-side browser or React state.
-      router.refresh();
-    });
   }
 
   useEffect(() => {
     if (userId) {
-      async function fetchBots() {
-        const fetchedBots = await getUserBots(userId);
-        setBots(fetchedBots);
-        setIsFetching(false);
-      }
-
       fetchBots();
     }
   }, [])

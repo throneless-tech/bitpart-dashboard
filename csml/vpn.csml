@@ -1,3 +1,5 @@
+// This is a template. It will not work before being processed by the system
+
 start:
   remember count = 0
 
@@ -71,7 +73,7 @@ help_step:
   // send request to admin
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up [X] working days)." // TODO Sacha: # of days or ASAP?
 
-  whisper [adminPhones] "A user has asked for help with VPN codes: {{event.client.user_id}}" // TODO admin phones array
+  whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}"
 
   goto end
 

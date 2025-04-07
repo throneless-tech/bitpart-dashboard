@@ -393,7 +393,7 @@ export default function CreateBotFlow({ userId }) {
           <Group>
             <StepsPrevTrigger asChild>
               <Button
-                disabled={stepCount == 0 || stepCount == 3}
+                // disabled={stepCount == 0 || stepCount == 3}
                 onClick={() => updateStepCount(-1)}
                 size="sm"
                 variant="outline"
@@ -403,7 +403,7 @@ export default function CreateBotFlow({ userId }) {
             </StepsPrevTrigger>
             <StepsNextTrigger asChild>
               <Button
-                disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 4}
+                disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 3}
                 onClick={() => updateStepCount(1)}
                 size="sm"
                 variant="outline"

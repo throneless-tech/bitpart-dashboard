@@ -1,3 +1,6 @@
+// This is a template. It will not work before being processed by the system
+
+
 start:
   remember count = 0
   // conversation is triggered by a message from a user who says they need an esim
@@ -171,7 +174,7 @@ human_support_step:
   remember problem = event
   // TODO flag relevant data to bitpart
 
-  whisper [adminPhones] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}" // TODO admin phones array
+  whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 
