@@ -63,6 +63,10 @@ import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
 import { createBot } from '../actions/createBot';
+import { getUserBots } from "../actions/getUserBots";
+
+// constants
+import { MAX_BOTS } from '../constants';
 
 const frameworks = [
   {
@@ -114,20 +118,25 @@ const valuesToUnregister = [
   'vpnName',
 ]
 
-const IFrame = (props) => {
-  const { height, ref, src, width } = props;
-  console.log(props);
-
-  return (
-    <iframe src={src} height={height} width={width} />
-  )
-};
-
 export default function CreateBotFlow({ userId }) {
+  const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
   // const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [dataConfirmed, setDataConfirmed] = useState(false);
+
+  // ensure user has not maxed out the number of bots they can create
+  useEffect(() => {
+    async function fetchBots() {
+      const fetchedBots = await getUserBots(userId);
+      if (fetchedBots.length >= MAX_BOTS) {
+        setNotAllowed(true);
+      }
+    }
+    fetchBots();
+  }, [])
+
+  useEffect(() => { }, [notAllowed])
 
   // update the step count based on prev or next
   const updateStepCount = (step) => {
@@ -157,12 +166,23 @@ export default function CreateBotFlow({ userId }) {
   };
 
   const onSubmit = async (data) => {
-    const bot = await createBot(data, userId);
-    setCreatedBot(bot);
+    try {
+      const bot = await createBot(data, userId);
+
+      console.log('bot is: ', bot);
+
+
+      setCreatedBot(bot);
+    } catch (error) {
+      setStepCount(stepCount => stepCount -= 1);
+      alert(error);
+    }
+
   }
 
   const onError = (errors, e) => {
     console.log('errors prevented form from submitting: ', errors);
+    alert('The following errors prevented form from submitting: ', errors);
   };
 
   // color mode
@@ -180,111 +200,109 @@ export default function CreateBotFlow({ userId }) {
 
   }
 
-  // web sockets
-  useEffect(() => {
-    // const ws = new WebSocket(`ws://${process.env.NEXT_PUBLIC_BITPART_SERVER_URL}:${process.env.NEXT_PUBLIC_BITPART_SERVER_PORT}/ws`);
-    // ws.onopen = () => {
-    //   console.log('Connected to WebSocket');
-    //   ws.send('Hello, WebSocket!');
-    // };
-    // ws.onmessage = (event) => {
-    //   console.log('Message received:', event.data);
-    // };
-    // ws.onclose = () => {
-    //   console.log('WebSocket connection closed');
-    // };
-    // return () => {
-    //   ws.close();
-    // };
-  }, []);
-
   useEffect(() => { }, [captchaContainer, createdBot, stepCount, watchAll]);
 
-  return (
-    <Container marginBottom={6} maxW="6xl">
-      <Heading as="h1" marginBottom={4} size="xl">
-        Create a new bot
-      </Heading>
-      <FormProvider {...methods}>
-        <StepsRoot
-          count={4}
-          step={stepCount}
-          onStepChange={(e) => {
-            if (stepCount == 2) {
-              methods.handleSubmit(onSubmit, onError)(e);
-            }
-          }}
-          variant="subtle"
-        >
-          <StepsList>
-            <Stack direction={['column', 'column', 'row']}>
-              <StepsItem index={0} title="Choose your bot type" />
-              <StepsItem index={1} title="Customize your bot" />
-              <StepsItem index={2} title="Confirm your data" />
-              <StepsItem index={3} title="Connect your bot" />
-            </Stack>
-          </StepsList>
-          <StepsContent index={0}>
-            <Text as='div' marginTop={10}>
-              Bitpart works over Signal to ensure as secure and private a connection as possible. If you don't have Signal already,{' '}
-              <Link
-                href='https://signal.org/install'
-                color={color}
-                textDecoration='underline'
-                target='_blank'
-                variant='underline'
-              >get Signal</Link>
-              .
-            </Text>
-            <Text marginTop={8}>
-              <Highlight styles={{ px: "0.5", bg: "yellow.muted" }} query="We recommend setting up a separate Signal account for your bot.">
-                Remember that using primary device will show your name and you'll receive all the bot messages. We recommend setting up a separate Signal account for your bot.
-              </Highlight>
-            </Text>
-            <Heading as="h2" marginTop={10} size="md">
-              What kind of bot do you want to create?
-            </Heading>
-            <RadioCardRoot
-              align="center"
-              defaultValue={botType}
-              justify="center"
-              marginY={6}
-              maxW="4xl"
-              onChange={updateBotType}
-              orientation="vertical"
-            >
-              <RadioCardLabel>Choose your bot type:</RadioCardLabel>
-              <Stack
-                align="stretch"
-                direction={["column", "row"]}
-                flexWrap="wrap"
-                gap={4}
-                justifyContent="center"
-                marginTop={3}
-              >
-                {frameworks.map((item) => (
-                  <RadioCardItem
-                    label={item.title}
-                    description={item.description}
-                    icon={
-                      <Icon fontSize="2xl" color="fg.subtle">
-                        {item.icon}
-                      </Icon>
-                    }
-                    indicator={false}
-                    key={item.value}
-                    maxWidth={300}
-                    minWidth={300}
-                    width={300}
-                    value={item.value}
-                    {...methods.register('botType')}
-                  />
-                ))}
+
+  if (notAllowed) {
+    return (
+      <Box>
+        <Container marginTop={8} maxWidth="lg">
+          <Text>
+            You have reached the limit on how many bots a user may create. Please{' '}
+            <Link color={color} href='/dashboard' variant="underline">
+              return home
+            </Link>
+            {' '}and delete a bot if you would like to create a new one.
+          </Text>
+        </Container>
+      </Box>
+    )
+  } else {
+    return (
+      <Container marginBottom={6} maxW="6xl">
+        <Heading as="h1" marginBottom={4} size="xl">
+          Create a new bot
+        </Heading>
+        <FormProvider {...methods}>
+          <StepsRoot
+            count={4}
+            step={stepCount}
+            onStepChange={(e) => {
+              if (stepCount == 2) {
+                methods.handleSubmit(onSubmit, onError)(e);
+              }
+            }}
+            variant="subtle"
+          >
+            <StepsList>
+              <Stack direction={['column', 'column', 'row']}>
+                <StepsItem index={0} title="Choose your bot type" />
+                <StepsItem index={1} title="Customize your bot" />
+                <StepsItem index={2} title="Confirm your data" />
+                <StepsItem index={3} title="Connect your bot" />
               </Stack>
-            </RadioCardRoot>
-          </StepsContent>
-          <StepsContent index={1}>
-            {/* <Heading
+            </StepsList>
+            <StepsContent index={0}>
+              <Text as='div' marginTop={10}>
+                Bitpart works over Signal to ensure as secure and private a connection as possible. If you don't have Signal already,{' '}
+                <Link
+                  href='https://signal.org/install'
+                  color={color}
+                  textDecoration='underline'
+                  target='_blank'
+                  variant='underline'
+                >get Signal</Link>
+                .
+              </Text>
+              <Text marginTop={8}>
+                <Highlight styles={{ px: "0.5", bg: "yellow.muted" }} query="We recommend setting up a separate Signal account for your bot.">
+                  Remember that using primary device will show your name and you'll receive all the bot messages. We recommend setting up a separate Signal account for your bot.
+                </Highlight>
+              </Text>
+              <Heading as="h2" marginTop={10} size="md">
+                What kind of bot do you want to create?
+              </Heading>
+              <RadioCardRoot
+                align="center"
+                defaultValue={botType}
+                justify="center"
+                marginY={6}
+                maxW="4xl"
+                onChange={updateBotType}
+                orientation="vertical"
+              >
+                <RadioCardLabel>Choose your bot type:</RadioCardLabel>
+                <Stack
+                  align="stretch"
+                  direction={["column", "row"]}
+                  flexWrap="wrap"
+                  gap={4}
+                  justifyContent="center"
+                  marginTop={3}
+                >
+                  {frameworks.map((item) => (
+                    <RadioCardItem
+                      label={item.title}
+                      description={item.description}
+                      icon={
+                        <Icon fontSize="2xl" color="fg.subtle">
+                          {item.icon}
+                        </Icon>
+                      }
+                      indicator={false}
+                      key={item.value}
+                      maxWidth={300}
+                      minWidth={300}
+                      width={300}
+                      value={item.value}
+                      {...methods.register('botType')}
+                    />
+                  ))}
+                </Stack>
+              </RadioCardRoot>
+            </StepsContent>
+            <StepsContent index={1}>
+              {/* <Heading
                 as="h3"
                 marginBottom={4}
                 marginTop={10}
@@ -292,128 +310,130 @@ export default function CreateBotFlow({ userId }) {
               >
                 Building {botType} bot
               </Heading> */}
-            <BasicsForm />
-            <Heading as='h2' marginBottom={4} size='md'>
-              Bot specifics
-            </Heading>
-            {botType == "broadcast" ? (
-              <>
-                <BroadcastForm />
-              </>
-            ) : botType == "esim" ? (
-              <>
-                <EsimForm />
-              </>
-            ) : botType == "helpdesk" ? (
-              <>
-                <HelpdeskForm />
-              </>
-            ) : botType == "tipline" ? (
-              <>
-                <TiplineForm />
-              </>
-            ) : botType == "vpn" ? (
-              <>
-                <VpnForm />
-              </>
-            ) : (
-              <>
-                <Text>
-                  Something went wrong. Please contact a system administrator: no bot type selected.
-                </Text>
-              </>
-            )}
-            <Text
-              backgroundColor="yellow.muted"
-              marginBottom={4}
-              marginTop={8}
-            >
-              Please double check that the above information is correct. You will not be able to update this later.
-            </Text>
-          </StepsContent>
-          <StepsContent index={2}>
-            <Text marginTop={10}>
-              Here is your new bot summary:
-            </Text>
-            <Summary data={values} errors={formState.errors} />
-            <Text marginTop={10}>
-              Does this look correct? If so, confirm with the checkbox below. If not, go back and edit your data. You will not be able to update this later.
-            </Text>
-            <Checkbox
-              checked={dataConfirmed}
-              onCheckedChange={(e) => setDataConfirmed(!!e.checked)}
-              marginBottom={8}
-              marginTop={2}
-            >
-              Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
-            </Checkbox>
-          </StepsContent>
-          <StepsContent index={3}>
-            <Heading as="h2" marginBottom={4} marginTop={10} size="md">
-              Connect Bitpart to Signal
-            </Heading>
-            <QrCode.Root value="https://signal.org">
-              <QrCode.Frame>
-                <QrCode.Pattern />
-              </QrCode.Frame>
-            </QrCode.Root>
-            <List.Root marginLeft={4} marginTop={4}>
-              <List.Item>
-                On your phone, open Signal and navigate to Signal Settings {'>'} Linked devices.
-              </List.Item>
-              <List.Item>
-                Tap the Android + with blue circle (Android) or Link New Device (iOS)
-              </List.Item>
-              <List.Item>
-                Use your phone to scan the QR code.
-              </List.Item>
-            </List.Root>
-            <Text marginTop={4}>
-              You can find more information or troubleshoot by following{' '}
-              <Link
-                href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
-                color={color}
-                textDecoration='underline'
-                target='_blank'
-                variant='underline'
+              <BasicsForm />
+              <Heading as='h2' marginBottom={4} size='md'>
+                Bot specifics
+              </Heading>
+              {botType == "broadcast" ? (
+                <>
+                  <BroadcastForm />
+                </>
+              ) : botType == "esim" ? (
+                <>
+                  <EsimForm />
+                </>
+              ) : botType == "helpdesk" ? (
+                <>
+                  <HelpdeskForm />
+                </>
+              ) : botType == "tipline" ? (
+                <>
+                  <TiplineForm />
+                </>
+              ) : botType == "vpn" ? (
+                <>
+                  <VpnForm />
+                </>
+              ) : (
+                <>
+                  <Text>
+                    Something went wrong. Please contact a system administrator: no bot type selected.
+                  </Text>
+                </>
+              )}
+              <Text
+                backgroundColor="yellow.muted"
+                marginBottom={4}
+                marginTop={8}
               >
-                this link
-              </Link>.
-            </Text>
-          </StepsContent>
-          <StepsCompletedContent>
-            <Box marginY={12}>
-              You have created a new bot! Go to your{' '}
-              <Link color={color} href='/dashboard' variant="underline">
-                Dashboard
-              </Link>
-              {' '}to see all the bots you have created.
-            </Box>
-          </StepsCompletedContent>
-          <Group>
-            <StepsPrevTrigger asChild>
-              <Button
-                // disabled={stepCount == 0 || stepCount == 3}
-                onClick={() => updateStepCount(-1)}
-                size="sm"
-                variant="outline"
+                Please double check that the above information is correct. You will not be able to update this later.
+              </Text>
+            </StepsContent>
+            <StepsContent index={2}>
+              <Text marginTop={10}>
+                Here is your new bot summary:
+              </Text>
+              <Summary data={values} errors={formState.errors} />
+              <Text marginTop={10}>
+                Does this look correct? If so, confirm with the checkbox below. If not, go back and edit your data. You will not be able to update this later.
+              </Text>
+              <Checkbox
+                checked={dataConfirmed}
+                onCheckedChange={(e) => setDataConfirmed(!!e.checked)}
+                marginBottom={8}
+                marginTop={2}
               >
-                Prev
-              </Button>
-            </StepsPrevTrigger>
-            <StepsNextTrigger asChild>
-              <Button
-                disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 3}
-                onClick={() => updateStepCount(1)}
-                size="sm"
-                variant="outline"
-              >
-                {stepCount == 2 ? "Submit" : stepCount >= 4 ? "Finished" : "Next"}
-              </Button>
-            </StepsNextTrigger>
-          </Group>
-        </StepsRoot>
-      </FormProvider>
-    </Container>
-  )
+                Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
+              </Checkbox>
+            </StepsContent>
+            <StepsContent index={3}>
+              <Heading as="h2" marginBottom={4} marginTop={10} size="md">
+                Connect Bitpart to Signal
+              </Heading>
+              <QrCode.Root value="https://signal.org">
+                <QrCode.Frame>
+                  <QrCode.Pattern />
+                </QrCode.Frame>
+              </QrCode.Root>
+              <List.Root marginLeft={4} marginTop={4}>
+                <List.Item>
+                  On your phone, open Signal and navigate to Signal Settings {'>'} Linked devices.
+                </List.Item>
+                <List.Item>
+                  Tap the Android + with blue circle (Android) or Link New Device (iOS)
+                </List.Item>
+                <List.Item>
+                  Use your phone to scan the QR code.
+                </List.Item>
+              </List.Root>
+              <Text marginTop={4}>
+                You can find more information or troubleshoot by following{' '}
+                <Link
+                  href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
+                  color={color}
+                  textDecoration='underline'
+                  target='_blank'
+                  variant='underline'
+                >
+                  this link
+                </Link>.
+              </Text>
+            </StepsContent>
+            <StepsCompletedContent>
+              <Box marginY={12}>
+                You have created a new bot! Go to your{' '}
+                <Link color={color} href='/dashboard' variant="underline">
+                  Dashboard
+                </Link>
+                {' '}to see all the bots you have created.
+              </Box>
+            </StepsCompletedContent>
+            <Group>
+              <StepsPrevTrigger asChild>
+                <Button
+                  // disabled={stepCount == 0 || stepCount == 3}
+                  onClick={() => updateStepCount(-1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  Prev
+                </Button>
+              </StepsPrevTrigger>
+              <StepsNextTrigger asChild>
+                <Button
+                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 3}
+                  onClick={() => updateStepCount(1)}
+                  size="sm"
+                  variant="outline"
+                >
+                  {stepCount == 2 ? "Submit" : stepCount >= 4 ? "Finished" : "Next"}
+                </Button>
+              </StepsNextTrigger>
+            </Group>
+          </StepsRoot>
+        </FormProvider>
+      </Container>
+    )
+  }
+
 }

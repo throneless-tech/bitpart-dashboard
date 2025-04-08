@@ -20,7 +20,7 @@ request_step:
   }
 
   if (event.is_number()) {
-    // TODO: pull data from bitpart as to what the limit for codes is
+    // TODO SACHA: pull data from bitpart as to what the limit for codes is?
     if (event <= 20) {
       goto share_codes_step
     } else {
@@ -44,13 +44,15 @@ share_codes_step:
     \nOtherwise, please send us a message next time you need VPN codes."
   hold
 
-  // TODO figure out how to timeout wait for reply
+  // TODO figure out how to timeout wait for reply OR update response list to end convo
 
   if (event.to_lowercase() == 'faq') {
     goto faq_step
   } else {
     goto i_dont_understand_step
   }
+
+  goto end
 
 over_limit_step:
   say "I'm sorry, your request is higher than the available limit of codes.
@@ -77,6 +79,8 @@ help_step:
 
   goto end
 
+  // TODO SACHA: say something to close out convo?
+
 i_dont_understand_step:
   say "Sorry, this is an automated system, your request wasn't understood.
     \nIf you want to see commonly asked questions, reply with 'FAQ'
@@ -98,22 +102,12 @@ faq_step:
 
   say "FAQs
     \nHere are some frequently asked questions:
-    \n1) What is a VPN and how does it work?
-    \n2) Why is my VPN not working?
-    \n3) Other
-    \nEnter the number of the question you have."
+    \n[faq]"
   hold
 
-  if (event == 1) {
-    // TODO fill in FAQ answer
-  } else if (event == 2) {
-    // TODO fill in FAQ answer
-  } else if (event == 3) {
-    // TODO what does other do?
-  } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
-    goto faq_step
-  } else if (event.to_lowercase() == 'help' ) {
+  [faq.answers]
+
+  if (event.to_lowercase() == 'help' ) {
     goto help_step
   } else {
     say "Sorry, I did not get that."
@@ -139,8 +133,13 @@ other_faq_step:
   say "We've understood that you have a question not covered by the FAQs. Please type your question:"
   hold
 
-  remember question = event
+  do question = event
 
-  // TODO send question to bitpart, who can later update FAQ depending on questions asked (prioritized by frequency)
+  //send question to bitpart, who can later update FAQ depending on questions asked
+  whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}"
+  
+  // TODO SACHA: I took this langauge from broadcast list -- does it make sense as an end?
+  say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 
-  goto help_step
+  say "This is an unmonitored line that cannot receive messages. We will contact you again the next time an admin broadcasts a message."
+  goto end

@@ -58,7 +58,7 @@ get_esim_1_step:
     goto get_esim_2_step
   } else if (event.to_lowercase() == "no") {
     say "Sorry, an eSIM won't work for your device."
-    // TODO do we want to add a follow up from admin?
+    // TODO SACHA do we want to add a follow up from admin?
     goto end
   } else {
     set count += 1
@@ -172,7 +172,7 @@ human_support_step:
   hold
 
   remember problem = event
-  // TODO flag relevant data to bitpart
+  // flag relevant data to bitpart
 
   whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
 

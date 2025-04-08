@@ -19,6 +19,9 @@ import { getUserBots } from "../actions/getUserBots";
 // components imports
 import BotCard from "@/app/components/botCard";
 
+// constants
+import { MAX_BOTS } from '../constants';
+
 export default function BotsList({ userId }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
@@ -91,6 +94,11 @@ export default function BotsList({ userId }) {
         >
           Create a new bot
         </Button>
+        {bots && bots.length >= MAX_BOTS ? (
+          <Text fontSize="sm" marginTop={2} style={{fontStyle: "italic"}} >
+            You have reached the limit on how many bots a user may create. Please delete a bot if you would like to create a new one.
+          </Text>
+        ) : null}
       </>
     )
   }

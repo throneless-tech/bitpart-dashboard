@@ -92,7 +92,7 @@ faq_step:
 
   [faq.answers]
 
-  else if (event.to_lowercase() == "menu") {
+  if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "delete my data") {
     goto consent_disagree_step
@@ -154,8 +154,10 @@ submit_question_step:
   say "We've understood that you have a question not covered by the FAQs. Please ask your question?"
   hold
 
+  remember problem = event
+
   // bitpart flags conversation to list owner
-  whisper [adminPhones.array] event
+  whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
 
   say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 

@@ -4,6 +4,7 @@
 import fs from 'node:fs/promises';
 import { prisma } from '@/lib/prisma';
 import WebSocket from 'ws';
+import { json } from 'node:stream/consumers';
 
 const schema = [
   'botType',
@@ -45,7 +46,7 @@ export const createBot = async (data, userId) => {
     csml = template;
 
     schema.map(field => {
-      
+
       // format admin phone numbers
       if (field === "adminPhones") {
         let adminPhoneOptions = "";
@@ -62,7 +63,7 @@ export const createBot = async (data, userId) => {
             adminPhoneOptions += ` || event.client.user_id == "${phone}"`
           }
         })
-        
+
         csml = csml.replace(`[${field}]`, adminPhoneOptions)
         csml = csml.replace(`[${field}.array]`, phones); // TODO need correct parsing
       }
@@ -85,7 +86,7 @@ export const createBot = async (data, userId) => {
 
               csml = csml.replace(`[${field}]`, places);
               csml = csml.replace(`[${field}.length]`, (length + 1));
-            } 
+            }
           } else if (data.botType === "vpn") {
             if (field === "locations") { // fields specific to vpn locations
               let places = "";
@@ -99,7 +100,7 @@ export const createBot = async (data, userId) => {
 
               csml = csml.replace(`[${field}]`, places);
               csml = csml.replace(`[${field}.length]`, (length + 1));
-            } 
+            }
           }
 
           if (field === "faq") { // fields specific to FAQ
@@ -138,7 +139,7 @@ export const createBot = async (data, userId) => {
             csml = csml.replace(`[${field}]`, problems);
             csml = csml.replace(`[${field}.length]`, (length + 1));
             csml = csml.replace(`[${field}.solutions]`, solutions);
-          } 
+          }
         } else {
           csml = csml.replace(`[${field}]`, data[field]);
         }
@@ -192,13 +193,25 @@ export const createBot = async (data, userId) => {
 
     ws.on('error', console.error);
 
+    ws.on('message', function message(data) {
+      console.log(`Message received from ws: ${data}`);
+      const json = JSON.parse(data)
+
+      resolve(json);
+    });
+
     ws.on('open', function open() {
+      console.log("Opening ws connection...");
+
       ws.send(jsonString);
+      // TODO close ws from here? Bitpart error...
     });
 
     ws.on('close', function close() {
-      console.log('disconnected');
+      console.log('ws is disconnected.');
     });
+
+    // throw new Error('An error occurred while trying to create this bot. Contact an admin for support.');
 
     const bot = await prisma.bot.create({
       data: {
@@ -214,7 +227,9 @@ export const createBot = async (data, userId) => {
     });
 
     return bot;
+
   } catch (e) {
     console.log(e);
+    throw new Error(e.message)
   }
 }

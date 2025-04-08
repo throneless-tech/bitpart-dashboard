@@ -34,7 +34,7 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}. They did not wish to be contacted."
+    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}. \n\nThey did not wish to be contacted."
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -53,28 +53,34 @@ contact_method_step:
     \n5) None, don't contact me"
   hold
 
-  remember contact_preference = event
-
-  // FIXME Bitpart records preferred contact method preference
-  if (event == 1 || event == 2 || event == 3) {
-    whisper [adminPhones.array] ""
-    say "Thank you. Your preference is noted."
-    //TODO is their number already recorded or do we need to record it now?
-  } else if (event == 4) {
-    // TODO Bitpart records preferred contact method preference
+  if (event == 1) {
+    remember contact_preference = "Signal call"
+    goto record_number_step    
+  } else if (event == 2) {
+    remember contact_preference = "Signal text message"
+    goto record_number_step    
+  } else if (event == 3) {
+    remember contact_preference = "Phone call"
+    goto record_number_step    
+  } else if (event == 4 || event == 5) {
     goto confirm_contact_method_step
-  } else if (event == 5) {
-    // TODO Bitpart records preferred contact method preference
-    goto confirm_contact_method_step
-  } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
-    goto contact_method_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, I did not get that. Please choose a number from the list."
     goto contact_method_step
+    // TODO SACHA do we want a catchal for un-interpretable messages, like the other flows have?
   }
+
+record_number_step:
+  say "Thank you. Your preference is noted. Please share your preferred phone number."
+  hold
+
+  remember contact_number = event
+
+  whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+
+  // TODO SACHA anything happen next?
 
 confirm_contact_method_step:
   say "Reply 'yes' to confirm we can use any method to contact you.
@@ -83,11 +89,14 @@ confirm_contact_method_step:
   hold
 
   if (event.to_lowercase() == "yes") {
-    // TODO Bitpart records preferred contact method preference
     say "Thank you. Your preference is noted."
+
+    whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+
+    // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
-    // TODO do we accept another message after this?
+    goto end
   } else if (event.to_lowercase() == "back") {
     goto contact_method_step
   } else if (event.to_lowercase() == "my data") {
