@@ -49,7 +49,7 @@ consent_disagree_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  delete
+  // delete // FIXME UNCOMMENT FOR PROD
   goto end
 
 consent_agree_step:
@@ -157,7 +157,8 @@ submit_question_step:
   remember problem = event
 
   // bitpart flags conversation to list owner
-  whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
+  // FIXME UNCOMMENT FOR PROD
+  // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
 
   say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 

@@ -3,30 +3,9 @@
 // base imports
 import fs from 'node:fs/promises';
 import { prisma } from '@/lib/prisma';
-import WebSocket from 'ws';
-import { json } from 'node:stream/consumers';
+// import WebSocket from 'ws';
 
-const schema = [
-  'botType',
-  'botName',
-  'phone',
-  'countryCode',
-  'adminPhones',
-  'name',
-  'description',
-  'about',
-  'safetyTips',
-  'faq',
-  'privacyPolicy',
-  'activationInstructions',
-  'helpInstructions',
-  'locations',
-  'plans',
-  'referral',
-  'storageAccess',
-  'problems',
-  'vpnName'
-]
+
 
 export const createBot = async (data, userId) => {
   try {
@@ -165,71 +144,114 @@ export const createBot = async (data, userId) => {
     phone = phone.replace(/^(\+)|\D/g, "$1");
     phone = `+${phone}`;
 
-    // send info to bitpart server via websockets
-    const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
-      headers: {
-        Authorization: process.env.BITPART_SERVER_TOKEN
-      }
-    });
+    let channel_id = "";
 
-    const json = {
-      "message_type": "CreateBot",
+    // send info to bitpart server via websockets
+    // const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
+    //   headers: {
+    //     Authorization: process.env.BITPART_SERVER_TOKEN
+    //   }
+    // });
+
+    // const jsonCreateBot = {
+    //   "message_type": "CreateBot",
+    //   "data": {
+    //     "id": phone,
+    //     "name": data.botName,
+    //     "flows": [
+    //       {
+    //         "id": "Default",
+    //         "name": "Default",
+    //         "content": formattedCsml,
+    //         "commands": []
+    //       }
+    //     ],
+    //     "default_flow": "Default",
+    //   }
+    // }
+
+    const jsonCreateChannel = {
+      "message_type": "CreateChannel",
       "data": {
-        "id": phone,
-        "name": data.botName,
-        "flows": [
-          {
-            "id": "Default",
-            "name": "Default",
-            "content": formattedCsml,
-            "commands": []
-          }
-        ],
-        "default_flow": "Default",
+        "id": "signal",
+        "bot_id": phone,
       }
     }
 
-    const jsonString = JSON.stringify(json);
-
-    ws.on('error', console.error);
-
-    ws.on('message', function message(data) {
-      console.log(`Message received from ws: ${data}`);
-      const json = JSON.parse(data)
-
-      resolve(json);
-    });
-
-    ws.on('open', function open() {
-      console.log("Opening ws connection...");
-
-      ws.send(jsonString);
-      // TODO close ws from here? Bitpart error...
-    });
-
-    ws.on('close', function close() {
-      console.log('ws is disconnected.');
-    });
-
-    // throw new Error('An error occurred while trying to create this bot. Contact an admin for support.');
-
-    const bot = await prisma.bot.create({
-      data: {
-        ...data,
-        creatorId: userId,
-        countryCode: data.countryCode,
-        phone: phone,
-        adminPhones: phones,
-        botType: data.botType,
-        botName: data.botName,
-        name: data.name,
+    const jsonLinkChannel = {
+      "message_type": "LinkChannel",
+      "data": {
+        "id": channel_id,
+        "device_name": "bitpart",
       }
-    });
+    }
 
-    return bot;
+    const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
+    const jsonStringCreateChannel = JSON.stringify(jsonCreateChannel);
 
-  } catch (e) {
-    console.log(e);
-    throw new Error(e.message)
+    // function bitpartErrorHandler(json) {
+    //   console.log('BITPART RESPONSE:', json.data.response);
+
+    //   if (json.message_type == "Error") {
+    //     console.log('ERROR here...............');
+    //     ws.close(); // FIXME Bitpart errors on connection close
+    //     return true;
+    //   } else {
+    //     console.log('JSON IS: ', json);
+    //     return false;
+    //   }
+    // }
+
+    // ws.on('error', console.error);
+
+    // let isError = false;
+
+    // ws.on('message', function message(data) {
+    //   // console.log(`Message received from ws: ${data}`);
+    //   const json = JSON.parse(data);
+
+    //   isError = bitpartErrorHandler(json);
+
+    //   console.log('isError inside try: ', isError);
+
+
+    //   if (isError) return { error: { message: 'An error occurred while trying to create this bot. Contact an admin for support.' } };
+
+    //   return json;
+    // });
+
+    // console.log('isError OUTSIDE try: ', isError);
+    
+    
+
+    // ws.on('open', function open() {
+    //   console.log("Opening ws connection...");
+
+    //   ws.send(jsonStringCreateBot);
+    //   ws.send(jsonStringCreateChannel);
+    // });
+
+    // ws.on('close', function close() {
+    //   ws.isAlive = false;
+    //   console.log('ws is disconnected.');
+    // });
+
+    // const bot = await prisma.bot.create({
+    //   data: {
+    //     ...data,
+    //     creatorId: userId,
+    //     countryCode: data.countryCode,
+    //     phone: phone,
+    //     adminPhones: phones,
+    //     botType: data.botType,
+    //     botName: data.botName,
+    //     name: data.name,
+    //   }
+    // });
+
+    // return bot;
+
+  } catch (error) {
+    return { error: { message: error.message } };
   }
 }

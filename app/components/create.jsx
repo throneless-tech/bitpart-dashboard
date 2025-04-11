@@ -2,7 +2,8 @@
 
 // base imports
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from "react";
+import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
 
 // form validation imports
 import { FormProvider, useForm } from 'react-hook-form';
@@ -29,7 +30,6 @@ import {
 // component imports
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { useColorModeValue } from "@/app/components/ui/color-mode";
-import { Field } from "@/app/components/ui/field";
 import {
   RadioCardItem,
   RadioCardLabel,
@@ -62,11 +62,12 @@ import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
-import { createBot } from '../actions/createBot';
-import { getUserBots } from "../actions/getUserBots";
+import { createBot } from '@/app/actions/createBot';
+import { formatCreateBotData, formatCsml } from '@/app/actions/formatBot';
+import { getUserBots } from "@/app/actions/getUserBots";
 
 // constants
-import { MAX_BOTS } from '../constants';
+import { MAX_BOTS } from '@/app/constants';
 
 const frameworks = [
   {
@@ -121,7 +122,6 @@ const valuesToUnregister = [
 export default function CreateBotFlow({ userId }) {
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
-  // const [botType, setBotType] = useState("broadcast");
   const [stepCount, setStepCount] = useState(0);
   const [dataConfirmed, setDataConfirmed] = useState(false);
 
@@ -167,14 +167,42 @@ export default function CreateBotFlow({ userId }) {
 
   const onSubmit = async (data) => {
     try {
-      const bot = await createBot(data, userId);
+      const csml = await formatCsml(data);
+      const createBotJsonString = await formatCreateBotData(data, csml);
 
-      console.log('bot is: ', bot);
+      console.log('**************************');
+      
+      console.log(process.env.NEXT_PUBLIC_BITPART_SERVER_URL);
+      
+
+      const socket = io(`ws://${process.env.NEXT_PUBLIC_BITPART_SERVER_URL}:${process.env.NEXT_PUBLIC_BITPART_SERVER_PORT}/ws`, {
+        extraHeaders: {
+          Authorization: process.env.NEXT_PUBLIC_BITPART_SERVER_TOKEN,
+        }
+      });
+
+      socket.on("connect", () => {
+        console.log('socket id: ', socket.id);
+      });
+
+      socket.on("disconnect", () => {
+        console.log('socket id: ', socket.id); // undefined
+      });
+
+      socket.emit("createBot", createBotJsonString, (response) => {
+        console.log('response is: ', response);
+      });
+
+      // const bot = await createBot(data, userId);
+
+      // console.log('bot is: ', bot);
 
 
-      setCreatedBot(bot);
+      // setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
+      console.log(error);
+      
       alert(error);
     }
 
@@ -188,20 +216,7 @@ export default function CreateBotFlow({ userId }) {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  // signal captcha
-  const ref = useRef(null);
-  const [captchaContainer, setCaptchaContainer] = useState(null)
-  const handleCaptchaContainer = (e) => {
-    console.log('ref: ', ref.current);
-    console.log("e: ", e);
-
-    const captcha = ref.current?.contentWindow?.document?.getElementById("captcha");
-    console.log(captcha);
-
-  }
-
-  useEffect(() => { }, [captchaContainer, createdBot, stepCount, watchAll]);
-
+  useEffect(() => { }, [createdBot, stepCount, watchAll]);
 
   if (notAllowed) {
     return (
