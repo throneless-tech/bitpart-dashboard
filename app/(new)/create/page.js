@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { Box } from "@chakra-ui/react";
 
 // component imports
-import CreateBotFlow from '@/app/components/create';
+import CreateBotFlow from "@/app/components/create";
 import Header from "@/app/components/header";
 import NotAuthenticated from "@/app/components/notAuthenticated";
 

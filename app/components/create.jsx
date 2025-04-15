@@ -2,7 +2,6 @@
 
 // base imports
 import dynamic from 'next/dynamic';
-import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
 // form validation imports
@@ -62,9 +61,13 @@ import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
-import { createBot } from '@/app/actions/createBot';
+import { createBotBitpart, createBotPrisma, createChannelBitPart, linkChannelBitpart } from '@/app/actions/createBot';
 import { formatCreateBotData, formatCsml } from '@/app/actions/formatBot';
 import { getUserBots } from "@/app/actions/getUserBots";
+
+// hooks
+import { useMessaging } from "@/app/hooks/useMessages"
+import { useWebSocket } from '@/app/hooks/useWebSocket';
 
 // constants
 import { MAX_BOTS } from '@/app/constants';
@@ -124,6 +127,7 @@ export default function CreateBotFlow({ userId }) {
   const [createdBot, setCreatedBot] = useState(null);
   const [stepCount, setStepCount] = useState(0);
   const [dataConfirmed, setDataConfirmed] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
@@ -165,49 +169,62 @@ export default function CreateBotFlow({ userId }) {
     methods.unregister(valuesToUnregister);
   };
 
+  // submit bot creation for bitpart server and prisma db
   const onSubmit = async (data) => {
+    setIsFetching(true);
+
     try {
-      const csml = await formatCsml(data);
-      const createBotJsonString = await formatCreateBotData(data, csml);
+      const botBitpart = await createBotBitpart(data);
 
-      console.log('**************************');
+      console.log(botBitpart);
       
-      console.log(process.env.NEXT_PUBLIC_BITPART_SERVER_URL);
-      
+      // const botJson = await JSON.parse(botBitpart);
 
-      const socket = io(`ws://${process.env.NEXT_PUBLIC_BITPART_SERVER_URL}:${process.env.NEXT_PUBLIC_BITPART_SERVER_PORT}/ws`, {
-        extraHeaders: {
-          Authorization: process.env.NEXT_PUBLIC_BITPART_SERVER_TOKEN,
-        }
-      });
+      if (botBitpart?.error) {
+        // setStepCount(stepCount => stepCount -= 1);
 
-      socket.on("connect", () => {
-        console.log('socket id: ', socket.id);
-      });
+        // alert(botBitpart.error);
+        throw new Error(botBitpart.error);
+      }
 
-      socket.on("disconnect", () => {
-        console.log('socket id: ', socket.id); // undefined
-      });
+      const channelBitpartCreate = await createChannelBitPart(data.phone, data.countryCode)
 
-      socket.emit("createBot", createBotJsonString, (response) => {
-        console.log('response is: ', response);
-      });
+      if (channelBitpartCreate?.error) {
+        // setStepCount(stepCount => stepCount -= 1);
 
-      // const bot = await createBot(data, userId);
+        // alert(botBitpart.error);
+        throw new Error(channelBitpartCreate.error);
+      }
 
+      const channelBitpartLink = await linkChannelBitpart(channelBitpartCreate.response.channel_id)
+
+      if (channelBitpartLink?.error) {
+        // setStepCount(stepCount => stepCount -= 1);
+
+        // alert(channelBitpartLink.error);
+        throw new Error(channelBitpartLink.error);
+
+      }
+
+      const bot = await createBotPrisma(data, userId);
+
+      // console.log('bitpart bot is: ', botBitpart);
+      // console.log('bitpart channel is: ', channelBitpart);
       // console.log('bot is: ', bot);
 
-
-      // setCreatedBot(bot);
+      setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
       
       alert(error);
+    } finally {
+      setIsFetching(false);
     }
 
   }
 
+  // handle form submission errors
   const onError = (errors, e) => {
     console.log('errors prevented form from submitting: ', errors);
     alert('The following errors prevented form from submitting: ', errors);
@@ -216,7 +233,7 @@ export default function CreateBotFlow({ userId }) {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  useEffect(() => { }, [createdBot, stepCount, watchAll]);
+  useEffect(() => { }, [createdBot, isFetching, stepCount, watchAll]);
 
   if (notAllowed) {
     return (
@@ -437,7 +454,11 @@ export default function CreateBotFlow({ userId }) {
               <StepsNextTrigger asChild>
                 <Button
                   disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 3}
-                  onClick={() => updateStepCount(1)}
+                  onClick={() => {
+                    if (!isFetching) {
+                      updateStepCount(1);
+                    }
+                  }}
                   size="sm"
                   variant="outline"
                 >

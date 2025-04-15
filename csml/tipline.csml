@@ -4,11 +4,8 @@
 start:
   // conversation is triggered by a message from a user who says they have a tip
   // TODO Bitpart interprets incoming language. Response is in the same language
-  say 'Thank you for contacting [name].
-    \nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
-    \nFor more information at any time, including how to delete your data, send a message with the words "My data"'
-  say "Even though this is a secure tipline, please do not share highly sensitive information here.
-  \nPlease share your tip with us."
+  say "Thank you for contacting [name].\nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.\nFor more information at any time, including how to delete your data, send a message with the words 'My data'"
+  say "Even though this is a secure tipline, please do not share highly sensitive information here.\nPlease share your tip with us."
   hold
 
   if (event.to_lowercase() == "my data") {
@@ -24,8 +21,7 @@ privacy_policy_step:
   // TODO SACHA: need next steps
 
 tip_reply_step:
-  say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
-    \nWe may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
+  say "Thank you. Our team will look into your tip and assess its suitability for our outlet.\nWe may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
   hold
 
   if (event.to_lowercase() == "yes") {
@@ -34,7 +30,7 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}. \n\nThey did not wish to be contacted."
+    // whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted." // FIXME UNCOMMMENT FOR PROD
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -45,12 +41,7 @@ tip_reply_step:
   }
 
 contact_method_step:
-  say "Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
-    \n1) Signal call
-    \n2) Signal text message
-    \n3) Phone call
-    \n4) Any
-    \n5) None, don't contact me"
+  say "Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.\n1) Signal call\n2) Signal text message\n3) Phone call\n4) Any\n5) None, don't contact me"
   hold
 
   if (event == 1) {
@@ -78,20 +69,18 @@ record_number_step:
 
   remember contact_number = event
 
-  whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+  // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
 
   // TODO SACHA anything happen next?
 
 confirm_contact_method_step:
-  say "Reply 'yes' to confirm we can use any method to contact you.
-    \nReply 'back' to go to the previous menu of options
-    \nReply 'no' if you prefer to not be contacted."
+  say "Reply 'yes' to confirm we can use any method to contact you.\nReply 'back' to go to the previous menu of options\nReply 'no' if you prefer to not be contacted."
   hold
 
   if (event.to_lowercase() == "yes") {
     say "Thank you. Your preference is noted."
 
-    whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+    // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
 
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {

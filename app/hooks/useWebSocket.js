@@ -1,29 +1,20 @@
-import { useEffect, useState } from 'react';
+'use client';
 
-const useWebSocket = (url) => {
-  const [messages, setMessages] = useState([]);
-  const [ws, setWs] = useState(null);
+import { useEffect, useRef, useState } from 'react';
+
+export function useWebSocket(url) {
+  const ref = useRef(null);
+  const target = useRef(url);
+  const [, update] = useState(0);
 
   useEffect(() => {
-    const socket = new WebSocket(url);
-    setWs(socket);
+    if (ref.current) return;
+    const socket = new WebSocket(target.current());
+    ref.current = socket;
+    update((p) => p + 1);
 
-    socket.onmessage = (event) => {
-      setMessages((prevMessages) => [...prevMessages, event.data]);
-    };
+    return () => socket.close();
+  }, []);
 
-    return () => {
-      socket.close();
-    };
-  }, [url]);
-
-  const sendMessage = (message) => {
-    if (ws) {
-      ws.send(message);
-    }
-  };
-
-  return { messages, sendMessage };
-};
-
-export default useWebSocket;
+  return ref.current;
+}

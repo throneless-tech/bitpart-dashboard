@@ -93,10 +93,10 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the privacy policy for a person interacting with this bot."
+        helperText="Describe the data rights for a person interacting with this bot."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
-        label="Privacy policy"
+        label="Data rights"
         marginTop={4}
         required
       >
