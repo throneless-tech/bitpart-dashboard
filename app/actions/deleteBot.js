@@ -1,7 +1,7 @@
 "use server"
 import { prisma } from '@/lib/prisma';
 
-export const deleteBot = async (botId) => {
+export const deleteBot = async (botId, botPhone) => {
   // send info to bitpart server via websockets
   const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
     headers: {
@@ -14,7 +14,7 @@ export const deleteBot = async (botId) => {
   const jsonDeleteBot = {
     "message_type": "Delete",
     "data": {
-      "id": botId,
+      "id": botPhone,
     }
   }
 

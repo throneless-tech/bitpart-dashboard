@@ -32,11 +32,11 @@ export default function BotsList({ userId }) {
     setIsFetching(false);
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id, phone) {
     setIsFetching(true);
     try {
       alert("Are you sure you want to delete this bot? This action cannot be undone.")
-      await deleteBot(id);
+      await deleteBot(id, phone);
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
