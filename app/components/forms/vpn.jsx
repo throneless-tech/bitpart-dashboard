@@ -16,6 +16,9 @@ import {
   NumberInputRoot,
 } from "@/app/components/ui/number-input"
 
+// components
+import { FileUploader } from "@/app/components/fileUpload";
+
 export const VpnForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
@@ -106,7 +109,7 @@ export const VpnForm = () => {
       >
         <Textarea {...register('activationInstructions')} />
       </Field>
-      <Fieldset.Root
+      {/* <Fieldset.Root
         label="VPN locations"
         marginTop={4}
       >
@@ -161,8 +164,8 @@ export const VpnForm = () => {
         >
           Add location
         </Button>
-      </Fieldset.Root>
-      <Fieldset.Root
+      </Fieldset.Root> */}
+      {/* <Fieldset.Root
         label="VPN plans"
         marginTop={4}
       >
@@ -217,7 +220,6 @@ export const VpnForm = () => {
             </Stack>
           );
         })}
-        {/* FIXME do we need FAQ and limits on # of codes requested? */}
         <Button
           onClick={() =>
             planAppend({
@@ -229,6 +231,18 @@ export const VpnForm = () => {
         >
           Add plan info
         </Button>
+      </Fieldset.Root> */}
+      {/* FIXME do we need FAQ and limits on # of codes requested? */}
+      <Fieldset.Root marginTop={6}>
+        <Stack>
+          <Fieldset.Legend>Upload VPN codes</Fieldset.Legend>
+          <Fieldset.HelperText>
+            Please provide a CSV file of your VPN codes for use. Note that the list should only include the provider and the code. You may download the following template, save and export as a .csv, and upload it here.
+          </Fieldset.HelperText>
+        </Stack>
+        <Fieldset.Content>
+          <FileUploader />
+        </Fieldset.Content>
       </Fieldset.Root>
     </>
   )

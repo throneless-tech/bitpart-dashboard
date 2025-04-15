@@ -11,6 +11,9 @@ import {
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 
+// components
+import { FileUploader } from "@/app/components/fileUpload";
+
 export const EsimForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
@@ -90,7 +93,7 @@ export const EsimForm = () => {
       >
         <Textarea {...register('helpInstructions')} />
       </Field>
-      <Fieldset.Root
+      {/* <Fieldset.Root
         label="eSIM locations"
         marginTop={4}
       >
@@ -145,8 +148,8 @@ export const EsimForm = () => {
         >
           Add location
         </Button>
-      </Fieldset.Root>
-      <Fieldset.Root
+      </Fieldset.Root> */}
+      {/* <Fieldset.Root
         label="eSIM plans"
         marginTop={4}
       >
@@ -158,7 +161,6 @@ export const EsimForm = () => {
             List the different types of plans a user can ask for.
           </Fieldset.HelperText>
         </Stack>
-        {/* FIXME do we need to remove this? */}
         {planFields.map((f, i) => {
           return (
             <Stack
@@ -213,6 +215,17 @@ export const EsimForm = () => {
         >
           Add plan info
         </Button>
+      </Fieldset.Root> */}
+      <Fieldset.Root marginTop={6}>
+        <Stack>
+          <Fieldset.Legend>Upload VPN codes</Fieldset.Legend>
+          <Fieldset.HelperText>
+            Please provide a CSV file of your VPN codes for use. Note that the list should only include the provider and the code. You may download the following template, save and export as a .csv, and upload it here.
+          </Fieldset.HelperText>
+        </Stack>
+        <Fieldset.Content>
+          <FileUploader />
+        </Fieldset.Content>
       </Fieldset.Root>
     </>
   )

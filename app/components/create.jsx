@@ -18,7 +18,6 @@ import {
   Heading,
   Highlight,
   Icon,
-  Input,
   Link,
   List,
   QrCode,
@@ -62,12 +61,7 @@ import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
 import { createBotBitpart, createBotPrisma, createChannelBitPart, linkChannelBitpart } from '@/app/actions/createBot';
-import { formatCreateBotData, formatCsml } from '@/app/actions/formatBot';
 import { getUserBots } from "@/app/actions/getUserBots";
-
-// hooks
-import { useMessaging } from "@/app/hooks/useMessages"
-import { useWebSocket } from '@/app/hooks/useWebSocket';
 
 // constants
 import { MAX_BOTS } from '@/app/constants';

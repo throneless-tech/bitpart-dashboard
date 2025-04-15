@@ -53,6 +53,7 @@ export const createBotBitpart = async (data) => {
   let csml = "";
   let formattedCsml = "";
   let phones = [];
+  
   // format bot phone
   let phone = await formatPhone(data.phone, data.countryCode);
 
@@ -85,7 +86,7 @@ export const createBotBitpart = async (data) => {
       })
 
       csml = csml.replace(`[${field}]`, adminPhoneOptions)
-      csml = csml.replace(`[${field}.array]`, phones); // TODO need correct parsing
+      csml = csml.replace(`[${field}.array]`, phones); 
     }
 
     // fill in csml template with data
@@ -187,7 +188,6 @@ export const createBotBitpart = async (data) => {
       "default_flow": "Default",
     }
   }
-
 
   const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
 

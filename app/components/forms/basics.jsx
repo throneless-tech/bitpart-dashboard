@@ -150,7 +150,7 @@ export const BasicsForm = () => {
                 onClick={() =>
                   adminPhoneAppend({
                     code: '',
-                    phone: '',
+                    number: '',
                   })
                 }
                 variant="subtle"
