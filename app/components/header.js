@@ -1,3 +1,6 @@
+// base imports
+import React from "react";
+
 // auth imports
 import { signOut } from "@/auth"
 

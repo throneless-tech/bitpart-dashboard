@@ -1,5 +1,8 @@
+// base imports
+import React from "react";
+
 // chakra ui imports
-import { Box, Container, Flex, Heading, Link, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";

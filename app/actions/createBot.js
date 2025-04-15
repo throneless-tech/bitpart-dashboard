@@ -271,6 +271,13 @@ export const createChannelBitPart = async (countryCode, phone) => {
 }
 
 export const linkChannelBitpart = async (channelId) => {
+  // send info to bitpart server via websockets
+  const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
+    headers: {
+      Authorization: process.env.BITPART_SERVER_TOKEN
+    }
+  });
+
   const jsonLinkChannel = {
     "message_type": "LinkChannel",
     "data": {
@@ -320,7 +327,7 @@ export const createBotPrisma = async (data, userId) => {
   let phones = [];
 
   // format admin phone numbers
-  data.adminPhones.map(async (p, i) => {
+  data.adminPhones.map(async (p) => {
     let phone = await formatPhone(p.code + p.number);
     phone = phone.replace(/^(\+)|\D/g, "$1");
     phone = `+${phone}`;

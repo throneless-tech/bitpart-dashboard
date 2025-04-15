@@ -1,13 +1,13 @@
 "use client"
 
 // react imports
-import { useActionState, useEffect } from 'react';
+import React, { useActionState, useEffect } from 'react';
 
 // actions imports
 import { validateCode } from "../actions/validateCode";
 
 // chakra ui imports
-import { Box, Button, Field, Text } from "@chakra-ui/react";
+import { Box, Button, Field } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/components/ui/password-input"
 
 const initialState = {

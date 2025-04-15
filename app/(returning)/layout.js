@@ -1,3 +1,6 @@
+// base imports
+import React from "react";
+
 //chakra provider
 import { Provider } from "@/app/components/ui/provider";
 

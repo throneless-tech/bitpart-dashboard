@@ -1,5 +1,8 @@
 "use client"
 
+// base imports
+import React from "react";
+
 // chakra ui imports
 import {
   Box,

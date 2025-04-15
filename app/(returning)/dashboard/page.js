@@ -1,14 +1,12 @@
 // base imports
+import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports
 import {
   Box,
-  Button,
   Container,
   Heading,
-  Stack,
-  Text,
 } from "@chakra-ui/react";
 
 // components

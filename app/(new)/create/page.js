@@ -1,4 +1,5 @@
 // base imports
+import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports

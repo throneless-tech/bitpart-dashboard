@@ -1,5 +1,8 @@
+// base imports
+import React from "react";
+
 // chakra ui imports
-import { Box, Container, Flex, Heading, Link } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading } from "@chakra-ui/react";
 import { LoginForm } from "../../components/login";
 
 // components
