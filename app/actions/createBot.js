@@ -200,7 +200,6 @@ export const createBotBitpart = async (data) => {
     console.log("Opening ws connection...");
 
     ws.send(jsonStringCreateBot);
-    // ws.send(jsonStringCreateChannel);
   });
 
   ws.on('close', function close() {
