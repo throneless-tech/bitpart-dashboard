@@ -171,7 +171,7 @@ export default function CreateBotFlow({ userId }) {
       const botBitpart = await createBotBitpart(data);
 
       console.log(botBitpart);
-      
+
       // const botJson = await JSON.parse(botBitpart);
 
       if (botBitpart?.error) {
@@ -210,7 +210,7 @@ export default function CreateBotFlow({ userId }) {
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
-      
+
       alert(error);
     } finally {
       setIsFetching(false);
@@ -270,19 +270,22 @@ export default function CreateBotFlow({ userId }) {
             </StepsList>
             <StepsContent index={0}>
               <Text as='div' marginTop={10}>
-                Bitpart works over Signal to ensure as secure and private a connection as possible. If you don't have Signal already,{' '}
+                Bitpart is designed to work using Signal, a platform that offers the highest standard of security and privacy among free and publicly available messaging platforms available today.
+              </Text>
+              <Text marginTop={8}>
+                (Don’t have Signal? Get it {' '}
                 <Link
                   href='https://signal.org/install'
                   color={color}
                   textDecoration='underline'
                   target='_blank'
                   variant='underline'
-                >get Signal</Link>
-                .
+                >here</Link>
+                .)
               </Text>
               <Text marginTop={8}>
                 <Highlight styles={{ px: "0.5", bg: "yellow.muted" }} query="We recommend setting up a separate Signal account for your bot.">
-                  Remember that using primary device will show your name and you'll receive all the bot messages. We recommend setting up a separate Signal account for your bot.
+                  Remember, if you use your personal Signal account, the recipients of your messages will see your name. You will also receive all the bot messages. We recommend setting up a separate Signal account for your Bitpart bot.
                 </Highlight>
               </Text>
               <Heading as="h2" marginTop={10} size="md">

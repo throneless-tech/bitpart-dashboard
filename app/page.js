@@ -13,6 +13,7 @@ import {
   Heading,
   HStack,
   Link,
+  List,
   Text
 } from "@chakra-ui/react";
 
@@ -53,13 +54,59 @@ export default function Home() {
           Welcome to Bitpart.
         </Heading>
         <Text marginTop={4}>
-          Bitpart is... they used to say that if Man was meant to fly, he'd have wings. But he did fly. He discovered he had to. Leave bigotry in your quarters; there's no room for it on the bridge. To all mankind -- may we never find space so vast, planets so cold, heart and mind so empty that we cannot fill them with love and warmth. You know the greatest danger facing us is ourselves, and irrational fear of the unknown. There is no such thing as the unknown.
+          Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance.
         </Text>
-        <Box marginTop={4} textAlign='center'>
+        <Text marginTop={2}>
+          It enables you to send secure, automated messages to a particular constituency over Signal by creating your own bot. The bot can operate within five different communication formats, depending on your needs, all while protecting the privacy of both the senders and recipients of messages.
+        </Text>
+        <Text marginTop={2}>
+          These formats include:
+        </Text>
+        <List.Root marginLeft={8}>
+          <List.Item>
+            <Text as="span" fontWeight="bold">
+              Broadcasting:{' '}
+            </Text>
+            send alerts and other information to many recipients at once
+          </List.Item>
+          <List.Item>
+            <Text as="span" fontWeight="bold">
+              Tipline:{' '}
+            </Text>
+            set up a channel to receive tips from anonymous senders
+          </List.Item>
+          <List.Item>
+            <Text as="span" fontWeight="bold">
+              Helpdesk: {' '}
+            </Text>
+            set up a channel to receive questions and respond to them
+          </List.Item>
+          <List.Item>
+            <Text as="span" fontWeight="bold">
+              eSim distribution: {' '}
+            </Text>
+            distribute eSims to members of your constituency
+          </List.Item>
+          <List.Item>
+            <Text as="span" fontWeight="bold">
+              VPN distribution: {' '}
+            </Text>
+            distribute VPN codes to members of your constituency
+          </List.Item>
+        </List.Root>
+        <Box marginTop={8} textAlign='center'>
           <Text marginBottom={8}>
             Ready to get started? Enter your invite code below:
           </Text>
           <InviteForm />
+          <Text marginTop={8} fontStyle="italic" textStyle="sm">
+            Contact us if you have questions or need a code:{' '}
+            <ClientOnly>
+              <Link color={color} href="mailto:contact@bitp.art">
+                contact [at] bitp.art
+              </Link>
+            </ClientOnly>
+          </Text>
         </Box>
       </Container>
     </Box>
