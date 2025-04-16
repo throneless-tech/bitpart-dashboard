@@ -2,6 +2,7 @@
 
 
 start:
+  remember tip = ""
   // conversation is triggered by a message from a user who says they have a tip
   // TODO Bitpart interprets incoming language. Response is in the same language
   say "Thank you for contacting [name].\nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.\nFor more information at any time, including how to delete your data, send a message with the words 'My data'"
@@ -11,14 +12,47 @@ start:
   if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else { 
-    remember tip = event  
+    do tip = event  
     
     goto tip_reply_step
   }
 
 privacy_policy_step:
   say "[privacyPolicy]"
-  // TODO SACHA: need next steps
+  say "Reply with 'Agree' and continue to the main menu\nReply with 'Delete' to delete your data."
+  hold
+
+  // Agree and return to menu, disagree and delete data
+  if (event.to_lowercase() == "agree") {
+    say "Even though this is a secure tipline, please do not share highly sensitive information here.\nPlease share your tip with us."
+    hold
+
+    do tip = event  
+    
+    goto tip_reply_step
+
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else
+    say "Sorry, I did not get that."
+    goto privacy_policy_step
+
+delete_data_step:
+  say "You have asked that all your data be deleted from the system.\nOnce this happens, you will no longer receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the data rights."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto privacy_policy_step
+  } else
+    say "Sorry, I did not get that."
+    goto delete_data_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  // delete // FIXME UNCOMMENT FOR PROD
+  goto end
 
 tip_reply_step:
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.\nWe may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
@@ -60,7 +94,6 @@ contact_method_step:
   } else {
     say "Sorry, I did not get that. Please choose a number from the list."
     goto contact_method_step
-    // TODO SACHA do we want a catchal for un-interpretable messages, like the other flows have?
   }
 
 record_number_step:
@@ -69,9 +102,10 @@ record_number_step:
 
   remember contact_number = event
 
+  say "Thanks, we will send your information to our team. Please message us again if you have another tip."
   // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
 
-  // TODO SACHA anything happen next?
+  goto end
 
 confirm_contact_method_step:
   say "Reply 'yes' to confirm we can use any method to contact you.\nReply 'back' to go to the previous menu of options\nReply 'no' if you prefer to not be contacted."

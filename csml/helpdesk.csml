@@ -18,9 +18,9 @@ start:
   if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else if (event.to_lowercase() == "agree") {
-    goto report_step
+    goto menu_step
   } else if (event.to_lowercase() == "end") {
-    goto end
+    goto delete_data_step
   } else if (event.match_regex("[Human|human|person|Person|Talk|talk]")) {
     // TODO: is there a better way to check if the user wants to talk to a real person?
     say "Ok. A member of our helpdesk team will follow up as soon as they can."
@@ -31,15 +31,53 @@ start:
   }
 
 privacy_policy_step:
+  if (count >= 3) {
+    goto human_support_step
+  }
   say "[privacyPolicy]"
-  // TODO: SACHA: need next steps -- return to menu?
+  say "Reply with 'Agree' and continue to the main menu\nReply with 'Delete' to delete your data."
+  hold
+
+  // Agree and return to menu, disagree and delete data
+  if (event.to_lowercase() == "agree") {
+    goto menu_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto privacy_policy_step
+
+delete_data_step:
+  if (count >= 3) {
+    goto human_support_step
+  }
+
+  say "You have asked that all your data be deleted from the system.\nOnce this happens, you will no longer receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the menu."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto question_consent_step
+  } else if (event.to_lowercase() == "menu") {
+    goto menu_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_data_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  // delete // FIXME UNCOMMENT FOR PROD
+  goto end
 
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
-  whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}"
+  // whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
   goto end
 
-report_step:
+menu_step:
   if (count >= 3) {
     say "Sorry, I did not get that."
     goto human_support_step
@@ -63,12 +101,10 @@ report_step:
     goto menu_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
-  } else if (event.to_lowercase() == "delete my data") {
-    goto consent_disagree_step
   } else {
-    set count += 1
+    do count += 1
     say "Sorry, our system didn't understand what you meant. Please select the most appropriate option:"
-    goto report_step
+    goto menu_step
   }
 
 check_if_solved_step:
@@ -81,22 +117,44 @@ check_if_solved_step:
   hold
 
   if (event.to_lowercase() == "yes") {
-    say "Great!"
-    
-    // TODO SACHA: do we want to loop around again?
-    goto end
+    goto menu_options_step
   } else if (event.to_lowercase() == "no") {
     goto human_support_step
   } else {
     say "Sorry, I did not get that."
-    set count += 1
+    do count += 1
+    goto check_if_solved_step
+  }
+
+menu_options_step:
+  if (count >= 3) {
+    say "Sorry, I did not get that."
+    goto human_support_step
+  }
+  
+  say "Glad that helped.\nReply with 'Menu' to return to the main menu and ask further questions. Reply with 'Delete' to delete your data from our system.Reply with 'End' to end this conversation.\nRemember that if this is a sensitive conversation you can delete the conversation from the Signal app."
+  hold 
+
+  if (event.to_lowercase() == "menu") {
+    goto menu_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    
+    goto end
+  } else {
+    say "Sorry, I did not get that."
+    do count += 1
     goto check_if_solved_step
   }
 
 human_support_step:
-  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO SACHA set time? or "ASAP"
+  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO update via admin user settings
 
   // bitpart flags problem to admin
-  whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
+  // whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
   
   goto end

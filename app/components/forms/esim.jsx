@@ -148,8 +148,8 @@ export const EsimForm = () => {
         >
           Add location
         </Button>
-      </Fieldset.Root> */}
-      {/* <Fieldset.Root
+      </Fieldset.Root>
+      <Fieldset.Root
         label="eSIM plans"
         marginTop={4}
       >
@@ -218,9 +218,9 @@ export const EsimForm = () => {
       </Fieldset.Root> */}
       <Fieldset.Root marginTop={6}>
         <Stack>
-          <Fieldset.Legend>Upload VPN codes</Fieldset.Legend>
+          <Fieldset.Legend>Upload eSIM codes</Fieldset.Legend>
           <Fieldset.HelperText>
-            Please provide a CSV file of your VPN codes for use. Note that the list should only include the provider and the code. You may download the following template, save and export as a .csv, and upload it here.
+            Please provide a CSV file of your eSIM codes for use. Note that the list should only include the mobile network and the code. You may download the following template, save and export as a .csv, and upload it here.
           </Fieldset.HelperText>
         </Stack>
         <Fieldset.Content>

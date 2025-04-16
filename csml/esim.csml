@@ -5,8 +5,7 @@ start:
   remember count = 0
   // conversation is triggered by a message from a user who says they need an esim
   // TODO Bitpart interprets incoming language. Response is in the same language
-  // TODO check if the user has contacted this line before?
-  do user = true // FIXME SACHA based on above todo
+  // TODO check if the user has contacted this line before
 
   say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
   \nWe use an automated messaging system so you can get quicker responses, but you can always reach a human."
@@ -18,13 +17,13 @@ menu_step:
     goto human_support_step
   }
 
+  // TODO remove option 3
   say "Menu
     \nWhat would you like to do?
     \n1) Get an eSIM for myself
     \n2) Get help with my eSIM
-    \n3) Get eSIMs for my community
-    \n4) My data rights
-    \n5) About us
+    \n3) My data rights
+    \n4) About us
     \n\nEnter the number"
   hold
 
@@ -33,13 +32,40 @@ menu_step:
   } else if (event == 2) {
     goto help_step
   } else if (event == 3) {
-    // TODO Sacha: will we cut this out for initial launch?
-  } else if (event == 4) {
     say "[privacyPolicy]"
-    // TODO SACHA: deadend?
-  } else if (event == 5) {
+    
+    goto menu_options_step
+  } else if (event == 4) {
     say "[description]"
-    // TODO SACHA: deadend?
+
+    goto menu_options_step
+  }
+
+menu_options_step:
+  if (count >= 3) {
+    say "Sorry, I did not get that."
+    goto human_support_step
+  }
+  
+  say "What would you like to do now?\nReply with 'main menu' to go back to the main menu. Reply with 'Help' to go back to the help menu.\nReply with ' Talk to a human' to get more support.Reply with 'End' to end this chat for today."
+  hold 
+
+  if (event.to_lowercase() == "main menu") {
+    goto menu_step
+  } else if (event.to_lowercase() == "help") {
+    goto help_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    
+    goto end
+  } else {
+    say "Sorry, I did not get that."
+    do count += 1
+    goto check_if_solved_step
   }
 
 get_esim_1_step:
@@ -57,11 +83,23 @@ get_esim_1_step:
   if (event.to_lowercase() == "yes") {
     goto get_esim_2_step
   } else if (event.to_lowercase() == "no") {
-    say "Sorry, an eSIM won't work for your device."
-    // TODO SACHA do we want to add a follow up from admin?
-    goto end
+    say "Sorry, an eSIM won't work for your device.\nWould you like to flag this to our team? Reply with 'yes' if so, or 'no' to end this conversation."
+    hold
+
+    if (event.to_lowercase() == "yes") {
+      goto human_support_step
+    } else if (event.to_lowercase() == "no") {
+      say "Please contact us again if you need us."
+      goto end
+    } else {
+      say "Sorry, I did not get that."
+      do count += 1
+      goto get_esim_1_step
+    }
+
   } else {
-    set count += 1
+    say "Sorry, I did not get that."
+    do count += 1
     goto get_esim_1_step
   }
 
@@ -73,7 +111,7 @@ get_esim_2_step:
   say "Step 2:
     \nWhich networks are available where you are?
     \nTo find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
-    \n\nWhich of the following networks do you see?
+    \n\nWhich of the following mobile networks do you see?
     \n[locations]
     \n\nList all networks available separated by a comma  e.g. :
 1,2,5"
@@ -81,7 +119,7 @@ get_esim_2_step:
 
   remember locations = event
 
-  // TODO external app call to EMS to notify of locations
+  // TODO external app call to EMS to notify of locations; handle no locations match
 
   goto get_esim_3_step
 
@@ -102,9 +140,11 @@ get_esim_3_step:
   if (event.to_lowercase() == "help") {
     goto help_step
   } else {
-    set count += 1
-    goto menu_step
+    do count += 1
+    goto get_esim_3_step
   }
+
+  goto menu_options_step
 
 help_step:
   if (count >= 3) {
@@ -141,7 +181,7 @@ help_step:
     goto human_support_step
   } else { 
     say "Sorry, I did not get that."
-    set count += 1
+    do count += 1
     goto help_step
   }
 
@@ -162,100 +202,20 @@ follow_up_step:
       goto end
     } else {
       say "Sorry, I did not get that."
-      set count += 1
+      do count += 1
       goto help_step
     }
 
 human_support_step:
   say "We've understood that you have a question not covered in the Help section.
-    \nPlease share what you need help with."
+    \nPlease share what you need help with and a member of our team will get back to you."
   hold
 
   remember problem = event
-  // flag relevant data to bitpart
 
-  whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
+  // flag relevant data to bitpart
+  // whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD 
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 
   goto end
-
-/*******************************************************/
-/* unused steps */
-
-first_time_user_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
-  
-  say "Do you currently have an e-sim? Reply with yes or no."
-  hold
-
-  if (event.to_lowercase() == "yes") {
-    goto esim_number_step
-  } else if (event.to_lowercase() == "no") {
-
-  } else {
-    say "Sorry, I did not get that."
-    set count += 1
-    goto first_time_user_step
-  }
-
-esim_number_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
-  
-  say "What's your e-sim number?
-    \n[Instructions on how to find it]
-    \nWe'll save this number in our system, so you can top up now and send reminders to top up in the future. You can delete this at any time from your profile.
-    \nEnter your e-sim number or reply with 'none' if you do not know it."
-  hold
-
-  //TODO what is the regex for an e-sim number?
-
-  if (event.to_lowercase() == "FIXME esim number") {
-    say "Thank you!"
-    goto menu_step
-  } else if (event.to_lowercase() == "none") {
-    goto get_esim_1_step
-  } else {
-    say "Sorry, I did not get that."
-    set count += 1
-    goto esim_number_step
-  }
-
-  refill_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
-
-  say "Can you please confirm that this is your e-sim number? Reply with yes or no.
-    \n[e-sim number]
-    \n[Instructions on how ﻿to find it]"
-  hold
-
-  if (event.to_lowercase() == "yes") {
-    goto refill_amounts_step
-  } else if (event.to_lowercase() == "no") {
-    goto esim_number_step
-  } else {
-    set count += 1
-    goto refill_step
-  }
-  
-refill_amounts_step:
-  say "We currently have the following top-up options available:
-    \n1) 1 week / 3GB
-    \n2) month / 10GB
-    \nPlease reply with the number of your desired top-up validity"
-  
-  if (event == 1 || event == 3) {
-    // TODO refill e-sim with desired amount
-  } else if (event == 2 || event == 10) {
-    // TODO refill e-sim with desired amount
-  }
-
-  say "Your e-sim has been topped up."
-
-  // TODO how to follow up based on how much data/time is left?
