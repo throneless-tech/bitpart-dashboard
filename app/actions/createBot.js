@@ -9,24 +9,27 @@ import WebSocket from 'ws';
 import { formatPhone } from './formatBot';
 
 const schema = [
+  'about',
+  'activationInstructions',
+  'adminPhones',
   'botType',
   'botName',
-  'phone',
   'countryCode',
-  'adminPhones',
-  'name',
+  'csv',
   'description',
-  'about',
-  'safetyTips',
   'faq',
-  'privacyPolicy',
-  'activationInstructions',
   'helpInstructions',
   'locations',
+  'maxCodes',
+  'name',
+  'phone',
   'plans',
-  'referral',
-  'storageAccess',
   'problems',
+  'privacyPolicy',
+  'referral',
+  'responseTime',
+  'safetyTips',
+  'storageAccess',
   'vpnName'
 ]
 

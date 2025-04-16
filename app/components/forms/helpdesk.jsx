@@ -61,6 +61,17 @@ export const HelpdeskForm = () => {
         <Textarea {...register('description')} />
       </Field>
       <Field
+        errorText={!!errors?.responseTime && errors.responseTime.message}
+        helperText="How long your users can expect to have to wait for a reply, eg., '24 hours' or '2 days' or '1 week'."
+        invalid={!!errors?.responseTime}
+        label="Response time"
+        marginTop={4}
+        required
+      >
+        <Input {...register('responseTime')} maxW={280} />
+      </Field>
+      {/* FIXME remove storage time and access? */}
+      <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}

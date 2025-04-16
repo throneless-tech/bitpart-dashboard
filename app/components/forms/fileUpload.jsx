@@ -8,10 +8,13 @@ import {
 // icons
 import { LuUpload } from "react-icons/lu"
 
-export const FileUploader = () => {
+export const FileUploader = (props) => {
+  const { register } = props;
+  console.log(props);
+  
   return (
     <FileUpload.Root accept={["text/csv"]}>
-      <FileUpload.HiddenInput />
+      <FileUpload.HiddenInput {...register} />
       <FileUpload.Dropzone>
         <Icon size="md" color="fg.muted">
           <LuUpload />

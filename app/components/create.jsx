@@ -100,19 +100,22 @@ const frameworks = [
 ]
 
 const valuesToUnregister = [
-  'description',
   'about',
-  'adminPhones',
-  'safetyTips',
-  'faq',
-  'privacyPolicy',
   'activationInstructions',
+  'adminPhones',
+  'csv',
+  'description',
+  'faq',
   'helpInstructions',
   'locations',
+  'maxCodes',
   'plans',
-  'referral',
-  'storageAccess',
+  'privacyPolicy',
   'problems',
+  'referral',
+  'responseTime',
+  'safetyTips',
+  'storageAccess',
   'vpnName',
 ]
 

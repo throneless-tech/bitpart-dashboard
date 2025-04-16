@@ -152,7 +152,7 @@ menu_options_step:
   }
 
 human_support_step:
-  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [TIME depending on urgency] 2 working days." // TODO update via admin user settings
+  say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [responseTime]." // TODO update via admin user settings
 
   // bitpart flags problem to admin
   // whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD

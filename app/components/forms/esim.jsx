@@ -12,7 +12,7 @@ import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 
 // components
-import { FileUploader } from "@/app/components/fileUpload";
+import { FileUploader } from "@/app/components/forms/fileUpload";
 
 export const EsimForm = () => {
   const { register, control, formState: { errors } } = useFormContext({

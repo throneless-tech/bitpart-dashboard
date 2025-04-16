@@ -17,7 +17,7 @@ import {
 } from "@/app/components/ui/number-input"
 
 // components
-import { FileUploader } from "@/app/components/fileUpload";
+import { FileUploader } from "@/app/components/forms/fileUpload";
 
 export const VpnForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
@@ -34,15 +34,6 @@ export const VpnForm = () => {
   } = useFieldArray({
     control,
     name: 'locations',
-  });
-
-  const {
-    fields: planFields,
-    append: planAppend,
-    remove: planRemove,
-  } = useFieldArray({
-    control,
-    name: 'plans',
   });
 
   return (
@@ -67,7 +58,36 @@ export const VpnForm = () => {
       >
         <Textarea placeholder="Start typing..." {...register('description')} />
       </Field>
-      {/* FIXME do we need these? */}
+      <Field
+        errorText={!!errors?.maxCodes && errors.maxCodes.message}
+        helperText="What is the maximum number of codes a user can request at a time?"
+        invalid={!!errors?.maxCodes}
+        label="Max downloads"
+        marginTop={4}
+        required
+      >
+        <NumberInputRoot
+          min={1}
+          formatOptions={{
+            maximumFractionDigits: 0,
+          }}
+          {...register('maxCodes')}
+        >
+          <NumberInputLabel />
+          <NumberInputField />
+        </NumberInputRoot>
+      </Field>
+      <Field
+        errorText={!!errors?.responseTime && errors.responseTime.message}
+        helperText="How long your users can expect to have to wait for a reply, eg., '24 hours' or '2 days' or '1 week'."
+        invalid={!!errors?.responseTime}
+        label="Response time"
+        marginTop={4}
+        required
+      >
+        <Input {...register('responseTime')} maxW={280} />
+      </Field>
+      {/* FIXME do we need storage time? */}
       {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
@@ -89,7 +109,7 @@ export const VpnForm = () => {
           <NumberInputField />
         </NumberInputRoot>
       </Field> */}
-      <Field
+      {/* <Field
         errorText={!!errors?.vpnName && errors.vpnName.message}
         helperText="Name of the VPN provider."
         invalid={!!errors?.vpnName}
@@ -98,7 +118,7 @@ export const VpnForm = () => {
         required
       >
         <Input {...register('vpnName')} />
-      </Field>
+      </Field> */}
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
         helperText="Include instructions for how someone can activate a vpn."
@@ -109,129 +129,6 @@ export const VpnForm = () => {
       >
         <Textarea {...register('activationInstructions')} />
       </Field>
-      {/* <Fieldset.Root
-        label="VPN locations"
-        marginTop={4}
-      >
-        <Stack>
-          <Fieldset.Legend>
-            VPN locations
-          </Fieldset.Legend>
-          <Fieldset.HelperText>
-            List the locations where a user can use a VPN.
-          </Fieldset.HelperText>
-        </Stack>
-        {locationFields.map((f, i) => {
-          return (
-            <Stack
-              alignItems={'center'}
-              direction={['column', 'row']}
-              justifyContent="flex-start"
-              key={f.id}
-              marginBottom={4}
-              spacing={20}
-              width='100%'
-            >
-              <Field
-                invalid={!!errors?.locations}
-                errorText={errors.locations?.place}
-              >
-                <Input
-                  placeholder='Enter a location'
-                  {...register(`locations.${i}.place`)}
-                />
-              </Field>
-              {i >= 0 &&
-                <Button
-                  onClick={() => locationRemove(i)}
-                  height={6}
-                  width={1}
-                >
-                  X
-                </Button>
-              }
-            </Stack>
-          );
-        })}
-        <Button
-          onClick={() =>
-            locationAppend({
-              place: ''
-            })
-          }
-          variant="subtle"
-          width={40}
-        >
-          Add location
-        </Button>
-      </Fieldset.Root> */}
-      {/* <Fieldset.Root
-        label="VPN plans"
-        marginTop={4}
-      >
-        <Stack>
-          <Fieldset.Legend>
-            VPN plans
-          </Fieldset.Legend>
-          <Fieldset.HelperText>
-            List the different types of plans a user can ask for.
-          </Fieldset.HelperText>
-        </Stack>
-        {planFields.map((f, i) => {
-          return (
-            <Stack
-              alignItems={'center'}
-              direction={['column', 'row']}
-              justifyContent="flex-start"
-              key={f.id}
-              marginBottom={4}
-              spacing={20}
-              width='100%'
-            >
-              <Stack width='100%'>
-                <Field
-                  invalid={!!errors?.plans}
-                  errorText={errors.plans?.amount}
-                >
-                  <Input
-                    placeholder="Amount of data"
-                    {...register(`plans.${i}.amount`)}
-                  />
-                </Field>
-                <Field
-                  invalid={!!errors?.plans}
-                  errorText={errors.plans?.length}
-                >
-                  <Input
-                    placeholder="Length of time"
-                    {...register(`faq.${i}.length`)}
-                  />
-                </Field>
-              </Stack>
-              {i >= 0 &&
-                <Button
-                  onClick={() => planRemove(i)}
-                  height={6}
-                  width={1}
-                >
-                  X
-                </Button>
-              }
-            </Stack>
-          );
-        })}
-        <Button
-          onClick={() =>
-            planAppend({
-              place: ''
-            })
-          }
-          variant="subtle"
-          width={40}
-        >
-          Add plan info
-        </Button>
-      </Fieldset.Root> */}
       {/* FIXME do we need FAQ and limits on # of codes requested? */}
       <Fieldset.Root marginTop={6}>
         <Stack>
@@ -241,7 +138,12 @@ export const VpnForm = () => {
           </Fieldset.HelperText>
         </Stack>
         <Fieldset.Content>
-          <FileUploader />
+          <Field
+            invalid={!!errors?.csv}
+            errorText={!!errors?.csv && errors.csv.message}
+          >
+            <FileUploader register={register('csv')} />
+          </Field>
         </Fieldset.Content>
       </Fieldset.Root>
     </>

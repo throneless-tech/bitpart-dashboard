@@ -5,6 +5,9 @@ import { Alert } from "@/app/components/ui/alert";
 
 export const Summary = ({ data, errors }) => {
 
+  console.log('data is: ', data);
+  
+
   return (
     <>
       {Object.keys(errors).length !== 0 ? (
@@ -35,12 +38,14 @@ export const Summary = ({ data, errors }) => {
                         : key === "activationInstructions" ? "Activation instructions"
                           : key === "helpInstructions" ? "Help instructions"
                             : key === "storageAccess" ? "Storage access"
-                              : key === "vpnName" ? "VPN name"
-                                : key === "countryCode" ? ""
-                                  : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+                              : key === "responseTime" ? "Response time"
+                                : key === "maxCodes" ? "Maximum number of codes"
+                                  : key === "vpnName" ? "VPN name"
+                                    : key === "countryCode" ? ""
+                                      : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
             }
           </Text>
-          {typeof data[key] !== "string" ? data[key].map((d, ind) => (
+          {(!!data[key] && typeof data[key] !== "string") ? data[key].map((d, ind) => (
             <Box key={`innerdata-${ind}`}>
               {Object.keys(d).map((k, i) => (
                 <Box key={`${k}-${i}`}>
