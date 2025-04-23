@@ -45,7 +45,7 @@ export const BasicsForm = () => {
       </Heading>
       <Field
         errorText={!!errors?.botName && errors.botName.message}
-        helperText="Give your bot a name. (This is for you, and won't appear to your users)."
+        helperText="Give your bot a name. (This is for you, and won't appear to your users. Note that special characters are not allowed.)"
         invalid={!!errors?.botName}
         label="Bot name"
         marginBottom={6}
@@ -65,7 +65,6 @@ export const BasicsForm = () => {
           <Field
             label="Country code"
             marginBottom={2}
-            required
             width={320}
           >
             <NativeSelectRoot>
@@ -80,7 +79,6 @@ export const BasicsForm = () => {
             invalid={!!errors?.phone}
             label="Phone number"
             marginBottom={4}
-            required
             width="320px"
           >
             <Input {...register('phone')} />
@@ -114,7 +112,6 @@ export const BasicsForm = () => {
                     <Field
                       label="Country code"
                       marginBottom={2}
-                      required
                       width={320}
                     >
                       <NativeSelectRoot>
@@ -128,7 +125,6 @@ export const BasicsForm = () => {
                       invalid={!!errors?.adminPhones}
                       label="Phone number"
                       marginBottom={4}
-                      required
                       width="320px"
                     >
                       <Input {...register(`adminPhones.${i}.number`)} />

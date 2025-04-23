@@ -1,184 +1,82 @@
 "use server"
 
 // base imports
-import fs from 'node:fs/promises';
 import { prisma } from '@/lib/prisma';
 import WebSocket from 'ws';
 
 // actions
-import { formatPhone } from './formatBot';
+import { formatBotName, formatCsml, formatPhone } from './formatBot';
 
-const schema = [
-  'about',
-  'activationInstructions',
-  'adminPhones',
-  'botType',
-  'botName',
-  'countryCode',
-  'csv',
-  'description',
-  'faq',
-  'helpInstructions',
-  'locations',
-  'maxCodes',
-  'name',
-  'phone',
-  'plans',
-  'problems',
-  'privacyPolicy',
-  'referral',
-  'responseTime',
-  'safetyTips',
-  'storageAccess',
-  'vpnName'
-]
+// inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
+class WSConnection {
+
+  _socket = null;
+  _readyPromise = null;
+
+  constructor(url) {
+    this.url = url;
+  }
+
+  start(json) {
+    this._socket = new WebSocket(this.url, {
+      headers: {
+        Authorization: process.env.BITPART_SERVER_TOKEN
+      }
+    });
+    this._socket.on('open', () => { this._connected(json); });
+    return new Promise((resolve, reject) => {
+      this._readyPromise = { resolve, reject };
+    });
+  }
+
+  sendMessage(json) {
+    return new Promise((resolve, reject) => {
+      this._socket.send(json);
+      this._socket.on('message', (data) => {
+        if (data.message_type === "Error") {
+          reject(data);
+        } else {
+          const parsed = JSON.parse(data);
+          resolve(parsed);
+        }
+      });
+    });
+  } 
+
+  _connected(data) {
+    const response = data ? JSON.parse(data) : null;
+
+    if (null !== this._readyPromise) {
+      if (this._socket.readyState !== this._socket.OPEN) {
+        this._readyPromise.reject(response.errorMessage);
+      } else {
+        this._readyPromise.resolve();
+      }
+      this._readyPromise = null;
+    }
+  }
+}
 
 async function bitpartErrorHandler(json) {
-  console.log('BITPART RESPONSE:', json.data.response);
-
   if (json.message_type == "Error") {
-    return true;
+    return { error: "An error occurred. Contact and administrator for help." };
   } else {
-    return false;
+    return { message: 'Bitpart bot created successfully.' };
   }
 }
 
 // create the bot on the bitpart server
-export const createBotBitpart = async (data) => {  
-  // send info to bitpart server via websockets
-  const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
-    headers: {
-      Authorization: process.env.BITPART_SERVER_TOKEN
-    }
-  });
+export const createBotBitpart = async (data) => {
+  // format bot name
+  const formattedBotName = await formatBotName(data.botName);
 
-  let file = `./csml/${data.botType}.csml`;
-  let csml = "";
-  let formattedCsml = "";
-  let phones = [];
-  
-  // format bot phone
-  let phone = await formatPhone(data.phone, data.countryCode);
-
-  const template = await fs.readFile(file, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    return data;
-  });
-
-  csml = template;
-
-  schema.map(field => {
-    // format admin phone numbers
-    if (field === "adminPhones") {
-      let adminPhoneOptions = "";
-
-      data[field].map(async (p, i) => {
-        let phone = await formatPhone(p.code + p.number);
-        phone = phone.replace(/^(\+)|\D/g, "$1");
-        phone = `+${phone}`;
-        phones.push(phone);
-
-        if (i === 0) {
-          adminPhoneOptions += `"${phone}"`
-        } else {
-          adminPhoneOptions += ` || event.client.user_id == "${phone}"`
-        }
-      })
-
-      csml = csml.replace(`[${field}]`, adminPhoneOptions)
-      csml = csml.replace(`[${field}.array]`, phones); 
-    }
-
-    // fill in csml template with data
-    if (csml.includes(`[${field}]`)) {
-      let length = 0;
-
-      if (typeof data[field] == "object") {
-        length = data[field].length;
-
-        // handle location fields differently for esim and vpn
-        if (data.botType === "esim") {
-          if (field === "locations") { // fields specific to esim locations
-            let places = "";
-
-            data[field].map((f, i) => {
-              places = places + `\\n${i + 1}) ${f.place}`;
-            })
-
-            csml = csml.replace(`[${field}]`, places);
-            csml = csml.replace(`[${field}.length]`, (length + 1));
-          }
-        } else if (data.botType === "vpn") {
-          if (field === "locations") { // fields specific to vpn locations
-            let places = "";
-
-            data[field].map((f, i) => {
-              if (i === data[field].length - 1) {
-                places = places + `${f.place}`;
-              }
-              places = places + `${f.place}, `;
-            })
-
-            csml = csml.replace(`[${field}]`, places);
-            csml = csml.replace(`[${field}.length]`, (length + 1));
-          }
-        }
-
-        if (field === "faq") { // fields specific to FAQ
-          let questions = "";
-          let answers = "";
-
-          data[field].map((f, i) => {
-            questions = questions + `\\n${i + 1}) ${f.question}`;
-
-            answers = answers + `
-              ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
-                say "${f.answer}"
-                goto check_if_solved_step
-              }
-              `
-          })
-
-          csml = csml.replace(`[${field}]`, questions);
-          csml = csml.replace(`[${field}.length]`, (length + 1));
-          csml = csml.replace(`[${field}.answers]`, answers);
-        } else if (field === "problems") { // fields specific to problem and solutions
-          let problems = "";
-          let solutions = "";
-
-          data[field].map((f, i) => {
-            problems = problems + `\\n${i + 1}) ${f.problem}`
-
-            solutions = solutions + `
-              ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
-                say "${f.solution}"
-                goto check_if_solved_step
-              }
-              `
-          })
-
-          csml = csml.replace(`[${field}]`, problems);
-          csml = csml.replace(`[${field}.length]`, (length + 1));
-          csml = csml.replace(`[${field}.solutions]`, solutions);
-        }
-      } else {
-        csml = csml.replace(`[${field}]`, data[field]);
-      }
-
-      let regex = /"/g;
-      let quot = String.raw`\"`;
-      formattedCsml = csml.replaceAll(regex, quot);
-      // formattedCsml = `"${formattedCsml}"`;
-    }
-  })
+  // format csml
+  const formattedCsml = await formatCsml(data);
 
   const jsonCreateBot = {
     "message_type": "CreateBot",
     "data": {
-      "id": phone,
+      "id": formattedBotName,
       "name": data.botName,
       "flows": [
         {
@@ -194,33 +92,20 @@ export const createBotBitpart = async (data) => {
 
   const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
 
-  let isError = false;
   let json;
 
-  ws.on('error', console.error);
+  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
+  const response = ws.start()
+    .then(async () => {
+      const response = await ws.sendMessage(jsonStringCreateBot, (data) => { console.log('data is: ', data); });
 
-  ws.on('open', function open() {
-    console.log("Opening ws connection...");
+      json = response;
+      return response;
+    })
+    // .then(res => console.log('res now is:', res))
+    .catch(err => { throw new Error(err.message) });
 
-    ws.send(jsonStringCreateBot);
-  });
-
-  ws.on('close', function close() {
-    ws.isAlive = false;
-    console.log('ws is disconnected.');
-  });
-
-  ws.on('message', async function message(data) {
-    // console.log(`Message received from ws: ${data}`);
-    json = await JSON.parse(data);
-
-    isError = await bitpartErrorHandler(json);
-    ws.close(); // FIXME Bitpart errors on connection close
-  });
-
-  if (isError) return { error: 'An error occurred while trying to create this bot. Contact an admin for support.' }
-
-  return {message: 'Bitpart bot created successfully.'};
+  return response;
 }
 
 export const createChannelBitPart = async (countryCode, phone) => {

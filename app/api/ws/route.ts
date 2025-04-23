@@ -10,6 +10,9 @@ export function GET() {
   headers.set('Upgrade', 'websocket');
   headers.set('Authorization', process.env.BITPART_SERVER_TOKEN)
 
+  console.log('IN GET.........');
+  
+
   return new Response('Upgrade Required', { status: 426, headers });
 }
 
@@ -32,11 +35,24 @@ export async function SOCKET(
 
   console.log('Client authenticated successfully!');
 
-  const botBitpart = await createBotBitpart(request);
+  client.on('message', (message) => {
+    console.log('message is: ', message);
+  });
 
-  if (botBitpart) await linkChannelBitpart(botBitpart.channel_id);
+  client.send(
+    JSON.stringify({
+      author: 'System',
+      content: `Welcome to the chat!`,
+    }),
+  );
 
-  const bot = await createBotPrisma(request);
+  // const botBitpart = await createBotBitpart(request);
 
-  return bot;
+  // console.log(botBitpart);
+  
+  // if (botBitpart) await linkChannelBitpart(botBitpart.channel_id);
+
+  // const bot = await createBotPrisma(request);
+
+  // return bot;
 }

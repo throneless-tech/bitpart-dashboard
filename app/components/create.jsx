@@ -61,6 +61,7 @@ import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
 import { createBotBitpart, createBotPrisma, createChannelBitPart, linkChannelBitpart } from '@/app/actions/createBot';
+import { emsCall } from '@/app/actions/ems';
 import { getUserBots } from "@/app/actions/getUserBots";
 
 // constants
@@ -169,13 +170,13 @@ export default function CreateBotFlow({ userId }) {
   // submit bot creation for bitpart server and prisma db
   const onSubmit = async (data) => {
     setIsFetching(true);
-
+    
     try {
       const botBitpart = await createBotBitpart(data);
-
+      
+      // const json = await JSON.parse(data);
       console.log(botBitpart);
-
-      // const botJson = await JSON.parse(botBitpart);
+      
 
       if (botBitpart?.error) {
         // setStepCount(stepCount => stepCount -= 1);
@@ -184,32 +185,36 @@ export default function CreateBotFlow({ userId }) {
         throw new Error(botBitpart.error);
       }
 
-      const channelBitpartCreate = await createChannelBitPart(data.phone, data.countryCode)
+      // if (data.botType === "esim" || data.botType === "vpn") {
+      //   const emsData = await emsCall(botBitpart.data.bot_id, data.csv);
+      // }
 
-      if (channelBitpartCreate?.error) {
-        // setStepCount(stepCount => stepCount -= 1);
+      // const channelBitpartCreate = await createChannelBitPart(data.phone, data.countryCode)
 
-        // alert(botBitpart.error);
-        throw new Error(channelBitpartCreate.error);
-      }
+      // if (channelBitpartCreate?.error) {
+      //   // setStepCount(stepCount => stepCount -= 1);
 
-      const channelBitpartLink = await linkChannelBitpart(channelBitpartCreate.response.channel_id)
+      //   // alert(botBitpart.error);
+      //   throw new Error(channelBitpartCreate.error);
+      // }
 
-      if (channelBitpartLink?.error) {
-        // setStepCount(stepCount => stepCount -= 1);
+      // const channelBitpartLink = await linkChannelBitpart(channelBitpartCreate.response.channel_id)
 
-        // alert(channelBitpartLink.error);
-        throw new Error(channelBitpartLink.error);
+      // if (channelBitpartLink?.error) {
+      //   // setStepCount(stepCount => stepCount -= 1);
 
-      }
+      //   // alert(channelBitpartLink.error);
+      //   throw new Error(channelBitpartLink.error);
 
-      const bot = await createBotPrisma(data, userId);
+      // }
+
+      // const bot = await createBotPrisma(data, userId);
 
       // console.log('bitpart bot is: ', botBitpart);
       // console.log('bitpart channel is: ', channelBitpart);
       // console.log('bot is: ', bot);
 
-      setCreatedBot(bot);
+      // setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);

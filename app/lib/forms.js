@@ -6,8 +6,8 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 export const schema = yup.object({
   botType: yup.string().required('Choose a bot type'),
   botName: yup.string().required('Bot name is required'),
-  phone: yup.string().required().matches(phoneRegExp, 'Phone number is not valid'),
-  countryCode: yup.string().required('Country code is required '),
+  phone: yup.string().matches(phoneRegExp, 'Phone number is not valid').optional(),
+  countryCode: yup.string(),
   name: yup.string().required("Name is required"),
   description: yup.string().when("botType", {
     is: "broadcast" || "helpdesk" || "esim" || "vpn",
@@ -26,8 +26,8 @@ export const schema = yup.object({
     then: () => yup.array()
       .of(
         yup.object({
-          code: yup.string().required("Country code number is required"),
-          number: yup.string().required("Admin phone number is required"),
+          code: yup.string(),
+          number: yup.string(),
         })
       )
   }),

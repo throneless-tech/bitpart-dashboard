@@ -224,7 +224,7 @@ export const EsimForm = () => {
           </Fieldset.HelperText>
         </Stack>
         <Fieldset.Content>
-          <FileUploader />
+          <FileUploader register={register('csv')} />
         </Fieldset.Content>
       </Fieldset.Root>
     </>

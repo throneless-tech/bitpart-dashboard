@@ -4,26 +4,36 @@
 import fs from 'node:fs/promises';
 
 const schema = [
+  'about',
+  'activationInstructions',
+  'adminPhones',
   'botType',
   'botName',
-  'phone',
   'countryCode',
-  'adminPhones',
-  'name',
+  'csv',
   'description',
-  'about',
-  'safetyTips',
   'faq',
-  'privacyPolicy',
-  'activationInstructions',
   'helpInstructions',
   'locations',
+  'maxCodes',
+  'name',
+  'phone',
   'plans',
-  'referral',
-  'storageAccess',
   'problems',
+  'privacyPolicy',
+  'referral',
+  'responseTime',
+  'safetyTips',
+  'storageAccess',
   'vpnName'
 ]
+
+// format the name of the bot for bitpart bot id
+export const formatBotName = async (botName) => {
+  let formattedBotName = botName.replace(/\s/g, '_');
+
+  return formattedBotName;
+}
 
 // format the csml string for bitpart
 export const formatCsml = async (data) => {

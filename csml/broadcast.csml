@@ -1,7 +1,7 @@
 // This is a template. It will not work before being processed by the system
 
 start:
-  if (event.client.user_id == [adminPhones]) {
+  if (event.client.user_id == [adminPhones]) {// FIXME base 58 string of letters and numbers, not case sensitive, string CONTAINING passphrase
     shout event
   }
   else  

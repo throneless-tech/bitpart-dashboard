@@ -62,7 +62,7 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.responseTime && errors.responseTime.message}
-        helperText="How long your users can expect to have to wait for a reply, eg., '24 hours' or '2 days' or '1 week'."
+        helperText={`How long your users can expect to have to wait for a reply, eg., "24 hours" or "2 days" or "1 week."`}
         invalid={!!errors?.responseTime}
         label="Response time"
         marginTop={4}
@@ -71,7 +71,7 @@ export const HelpdeskForm = () => {
         <Input {...register('responseTime')} maxW={280} />
       </Field>
       {/* FIXME remove storage time and access? */}
-      <Field
+      {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
@@ -101,7 +101,7 @@ export const HelpdeskForm = () => {
         marginTop={4}
       >
         <Input {...register('storageAccess')} />
-      </Field>
+      </Field> */}
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the data rights for a person interacting with this bot."

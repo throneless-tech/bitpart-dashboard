@@ -60,8 +60,8 @@ model VerificationToken {
 model Bot {
   id                     Int      @id @default(autoincrement())
   botType                String
-  botName                String
-  phone                  String   @unique
+  botName                String   @unique
+  phone                  String?  @unique
   countryCode            String
   name                   String
   description            String?
@@ -73,8 +73,10 @@ model Bot {
   activationInstructions String?
   helpInstructions       String?
   locations              Json[]
+  maxCodes               Int?
   plans                  Json[]
   referral               String?
+  responseTime           String?
   storageAccess          String?
   storageTime            Int?
   problems               Json[]
