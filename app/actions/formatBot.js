@@ -6,7 +6,7 @@ import fs from 'node:fs/promises';
 const schema = [
   'about',
   'activationInstructions',
-  'adminPhones',
+  // 'adminPhones',
   'botType',
   'botName',
   'countryCode',
@@ -28,6 +28,21 @@ const schema = [
   'vpnName'
 ]
 
+export const createPasscode = async () => {
+  let result = '';
+  const length = 8;
+  const characters = 'ABCDEFGHJKMNPQRSTUVWXYZ123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+
+  return result;
+}
+
+
 // format the name of the bot for bitpart bot id
 export const formatBotName = async (botName) => {
   let formattedBotName = botName.replace(/\s/g, '_');
@@ -36,7 +51,7 @@ export const formatBotName = async (botName) => {
 }
 
 // format the csml string for bitpart
-export const formatCsml = async (data) => {
+export const formatCsml = async (data, passcode) => {
   let file = `./csml/${data.botType}.csml`;
   let csml = "";
   let formattedCsml = "";
@@ -150,6 +165,8 @@ export const formatCsml = async (data) => {
       } else {
         csml = csml.replace(`[${field}]`, data[field]);
       }
+
+      csml = csml.replace(`[passcode]`, passcode)
 
       let regex = /"/g;
       let quot = String.raw`\"`;

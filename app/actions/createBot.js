@@ -66,12 +66,12 @@ async function bitpartErrorHandler(json) {
 }
 
 // create the bot on the bitpart server
-export const createBotBitpart = async (data) => {
+export const createBotBitpart = async (data, passcode) => {
   // format bot name
   const formattedBotName = await formatBotName(data.botName);
 
   // format csml
-  const formattedCsml = await formatCsml(data);
+  const formattedCsml = await formatCsml(data, passcode);
 
   const jsonCreateBot = {
     "message_type": "CreateBot",
@@ -92,14 +92,11 @@ export const createBotBitpart = async (data) => {
 
   const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
 
-  let json;
-
   const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
   const response = ws.start()
     .then(async () => {
-      const response = await ws.sendMessage(jsonStringCreateBot, (data) => { console.log('data is: ', data); });
+      const response = await ws.sendMessage(jsonStringCreateBot);
 
-      json = response;
       return response;
     })
     // .then(res => console.log('res now is:', res))
@@ -108,64 +105,33 @@ export const createBotBitpart = async (data) => {
   return response;
 }
 
-export const createChannelBitPart = async (countryCode, phone) => {
-  const formattedPhone = await formatPhone(phone, countryCode);
-
+export const createChannelBitPart = async (botName) => {
   const jsonCreateChannel = {
     "message_type": "CreateChannel",
     "data": {
       "id": "signal",
-      "bot_id": formattedPhone,
+      "bot_id": botName,
     }
   }
 
   const jsonStringCreateChannel = JSON.stringify(jsonCreateChannel);
 
-  let isError = false;
-  let json;
-
   // send info to bitpart server via websockets
-  const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
-    headers: {
-      Authorization: process.env.BITPART_SERVER_TOKEN
-    }
-  });
+  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
+  const response = ws.start()
+    .then(async () => {
+      const response = await ws.sendMessage(jsonStringCreateChannel);
 
-  ws.on('error', console.error);
+      return response;
+    })
+    // .then(res => console.log('res now is:', res))
+    .catch(err => { throw new Error(err.message) });
 
-  ws.on('open', function open() {
-    console.log("Opening ws connection...");
-
-    ws.send(jsonStringCreateChannel);
-  });
-
-  ws.on('close', function close() {
-    ws.isAlive = false;
-    console.log('ws is disconnected.');
-  });
-
-  ws.on('message', async function message(data) {
-    // console.log(`Message received from ws: ${data}`);
-    json = await JSON.parse(data);
-
-    isError = await bitpartErrorHandler(json);
-    ws.close(); // FIXME Bitpart errors on connection close
-  });
-
-  if (isError) return { error: 'An error occurred while trying to create the channel for this bot. Contact an admin for support.' }
-
-  return { message: 'Bitpart channel created successfully.' };
-
+  return response;
 }
 
 export const linkChannelBitpart = async (channelId) => {
-  // send info to bitpart server via websockets
-  const ws = new WebSocket(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`, {
-    headers: {
-      Authorization: process.env.BITPART_SERVER_TOKEN
-    }
-  });
-
+  
   const jsonLinkChannel = {
     "message_type": "LinkChannel",
     "data": {
@@ -176,51 +142,37 @@ export const linkChannelBitpart = async (channelId) => {
 
   const jsonStringLinkChannel = JSON.stringify(jsonLinkChannel);
 
-  let isError = false;
-  let json;
 
-  ws.on('error', console.error);
+  // send info to bitpart server via websockets
+  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
+  const response = ws.start()
+    .then(async () => {
+      const response = await ws.sendMessage(jsonStringLinkChannel);
 
-  ws.on('message', function message(data) {
-    // console.log(`Message received from ws: ${data}`);
-    json = JSON.parse(data);
+      return response;
+    })
+    // .then(res => console.log('res now is:', res))
+    .catch(err => { throw new Error(err.message) });
 
-    isError = bitpartErrorHandler(json);
-    ws.close(); // FIXME Bitpart errors on connection close
-  });
-
-  ws.on('open', function open() {
-    console.log("Opening ws connection...");
-
-    ws.send(jsonStringLinkChannel);
-  });
-
-  ws.on('close', function close() {
-    ws.isAlive = false;
-    console.log('ws is disconnected.');
-  });
-
-  if (isError) return { error: 'An error occurred while trying to link the channel for the bot. Contact an admin for support.' }
-
-  return { message: 'Bitpart channel linked successfully.' };
+  return response;
 }
 
 // create the bot in the prisma db
-export const createBotPrisma = async (data, userId) => {
+export const createBotPrisma = async (data, userId, passcode) => {
 
   // format bot phone
   let phone = await formatPhone(data.phone, data.countryCode);
 
-  // admin phones array
-  let phones = [];
+  // // admin phones array
+  // let phones = [];
 
-  // format admin phone numbers
-  data.adminPhones.map(async (p) => {
-    let phone = await formatPhone(p.code + p.number);
-    phone = phone.replace(/^(\+)|\D/g, "$1");
-    phone = `+${phone}`;
-    phones.push(phone);
-  })
+  // // format admin phone numbers
+  // data.adminPhones.map(async (p) => {
+  //   let phone = await formatPhone(p.code + p.number);
+  //   phone = phone.replace(/^(\+)|\D/g, "$1");
+  //   phone = `+${phone}`;
+  //   phones.push(phone);
+  // })
 
   try {
     const bot = await prisma.bot.create({
@@ -229,7 +181,8 @@ export const createBotPrisma = async (data, userId) => {
         creatorId: userId,
         countryCode: data.countryCode,
         phone: phone,
-        adminPhones: phones,
+        // adminPhones: phones,
+        passcode: passcode,
         botType: data.botType,
         botName: data.botName,
         name: data.name,

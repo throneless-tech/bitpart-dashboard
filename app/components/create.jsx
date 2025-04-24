@@ -61,6 +61,7 @@ import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
 import { createBotBitpart, createBotPrisma, createChannelBitPart, linkChannelBitpart } from '@/app/actions/createBot';
+import { createPasscode } from '@/app/actions/formatBot';
 import { emsCall } from '@/app/actions/ems';
 import { getUserBots } from "@/app/actions/getUserBots";
 
@@ -103,7 +104,7 @@ const frameworks = [
 const valuesToUnregister = [
   'about',
   'activationInstructions',
-  'adminPhones',
+  // 'adminPhones',
   'csv',
   'description',
   'faq',
@@ -126,6 +127,8 @@ export default function CreateBotFlow({ userId }) {
   const [stepCount, setStepCount] = useState(0);
   const [dataConfirmed, setDataConfirmed] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [botPasscode, setBotPasscode] = useState('');
+  const [qrLink, setQRLink] = useState('');
 
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
@@ -170,26 +173,25 @@ export default function CreateBotFlow({ userId }) {
   // submit bot creation for bitpart server and prisma db
   const onSubmit = async (data) => {
     setIsFetching(true);
-    
+    let passcode = await createPasscode();
+    setBotPasscode(passcode);
+
     try {
-      const botBitpart = await createBotBitpart(data);
-      
-      // const json = await JSON.parse(data);
-      console.log(botBitpart);
-      
+      const botBitpart = await createBotBitpart(data, passcode);
 
       if (botBitpart?.error) {
-        // setStepCount(stepCount => stepCount -= 1);
+        setStepCount(stepCount => stepCount -= 1);
 
-        // alert(botBitpart.error);
+        alert(botBitpart.error);
         throw new Error(botBitpart.error);
       }
 
+      // FIXME uncomment and set up
       // if (data.botType === "esim" || data.botType === "vpn") {
       //   const emsData = await emsCall(botBitpart.data.bot_id, data.csv);
       // }
 
-      // const channelBitpartCreate = await createChannelBitPart(data.phone, data.countryCode)
+      // const channelBitpartCreate = await createChannelBitPart(data.botName)
 
       // if (channelBitpartCreate?.error) {
       //   // setStepCount(stepCount => stepCount -= 1);
@@ -208,13 +210,15 @@ export default function CreateBotFlow({ userId }) {
 
       // }
 
-      // const bot = await createBotPrisma(data, userId);
+      // setQRLink(channelBitpartLink.response.channel);
+
+      const bot = await createBotPrisma(data, userId, passcode);
 
       // console.log('bitpart bot is: ', botBitpart);
       // console.log('bitpart channel is: ', channelBitpart);
       // console.log('bot is: ', bot);
 
-      // setCreatedBot(bot);
+      setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
@@ -407,7 +411,15 @@ export default function CreateBotFlow({ userId }) {
               <Heading as="h2" marginBottom={4} marginTop={10} size="md">
                 Connect Bitpart to Signal
               </Heading>
-              <QrCode.Root value="https://signal.org">
+              <Text as="div" marginY={8}>
+                <Text as="span">
+                  Your bot passcode is{' '}
+                </Text>
+                <Text as="span" fontSize="xl">
+                  {botPasscode}
+                </Text>
+              </Text>
+              <QrCode.Root value={qrLink}>
                 <QrCode.Frame>
                   <QrCode.Pattern />
                 </QrCode.Frame>

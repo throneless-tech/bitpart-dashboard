@@ -23,20 +23,22 @@ import { CountryCodes } from './countryCodes';
 
 export const BasicsForm = () => {
 
-  const { register, control, formState: { errors }, } = useFormContext({
-    defaultValues: {
-      adminPhones: [],
-    },
-  });
+  const { register, control, formState: { errors }, } = useFormContext();
 
-  const {
-    fields: adminPhoneFields,
-    append: adminPhoneAppend,
-    remove: adminPhoneRemove,
-  } = useFieldArray({
-    control,
-    name: 'adminPhones',
-  });
+  // const { register, control, formState: { errors }, } = useFormContext({
+  //   defaultValues: {
+  //     adminPhones: [],
+  //   },
+  // });
+
+  // const {
+  //   fields: adminPhoneFields,
+  //   append: adminPhoneAppend,
+  //   remove: adminPhoneRemove,
+  // } = useFieldArray({
+  //   control,
+  //   name: 'adminPhones',
+  // });
 
   return (
     <>
@@ -85,76 +87,76 @@ export const BasicsForm = () => {
           </Field>
         </Stack>
       </Fieldset.Root>
-      <Fieldset.Root
-              label="Admin phone numbers"
-              marginTop={4}
+      {/* <Fieldset.Root
+        label="Admin phone numbers"
+        marginTop={4}
+      >
+        <Stack>
+          <Fieldset.Legend>
+            Admin phone numbers
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            Please enter the phone numbers for all of the administrators of the list, who may be messaging users.
+          </Fieldset.HelperText>
+        </Stack>
+        {adminPhoneFields.map((f, i) => {
+          return (
+            <Stack
+              alignItems={'center'}
+              direction={['column', 'row']}
+              justifyContent="flex-start"
+              key={f.id}
+              marginBottom={4}
+              spacing={20}
+              width='100%'
             >
-              <Stack>
-                <Fieldset.Legend>
-                  Admin phone numbers
-                </Fieldset.Legend>
-                <Fieldset.HelperText>
-                  Please enter the phone numbers for all of the administrators of the list, who may be messaging users.
-                </Fieldset.HelperText>
-              </Stack>
-            {adminPhoneFields.map((f, i) => {
-              return (
-                <Stack
-                  alignItems={'center'}
-                  direction={['column', 'row']}
-                  justifyContent="flex-start"
-                  key={f.id}
-                  marginBottom={4}
-                  spacing={20}
-                  width='100%'
+              <Stack direction={['column', 'column', 'row']} width='100%'>
+                <Field
+                  label="Country code"
+                  marginBottom={2}
+                  width={320}
                 >
-                  <Stack direction={['column', 'column', 'row']} width='100%'>
-                    <Field
-                      label="Country code"
-                      marginBottom={2}
-                      width={320}
-                    >
-                      <NativeSelectRoot>
-                        <NativeSelectField {...register(`adminPhones.${i}.code`)}>
-                          <CountryCodes />
-                        </NativeSelectField>
-                      </NativeSelectRoot>
-                    </Field>
-                    <Field
-                      errorText={!!errors?.adminPhones?.number && errors?.adminPhones?.number.message}
-                      invalid={!!errors?.adminPhones}
-                      label="Phone number"
-                      marginBottom={4}
-                      width="320px"
-                    >
-                      <Input {...register(`adminPhones.${i}.number`)} />
-                    </Field>
-                  </Stack>
-                  {i > 0 &&
-                    <Button
-                      onClick={() => adminPhoneRemove(i)}
-                      height={6}
-                      width={1}
-                    >
-                      X
-                    </Button>
-                  }
-                </Stack>
-              );
-            })}
-              <Button
-                onClick={() =>
-                  adminPhoneAppend({
-                    code: '',
-                    number: '',
-                  })
-                }
-                variant="subtle"
-                width={40}
-              >
-                Add admin phone
-              </Button>
-            </Fieldset.Root>
+                  <NativeSelectRoot>
+                    <NativeSelectField {...register(`adminPhones.${i}.code`)}>
+                      <CountryCodes />
+                    </NativeSelectField>
+                  </NativeSelectRoot>
+                </Field>
+                <Field
+                  errorText={!!errors?.adminPhones?.number && errors?.adminPhones?.number.message}
+                  invalid={!!errors?.adminPhones}
+                  label="Phone number"
+                  marginBottom={4}
+                  width="320px"
+                >
+                  <Input {...register(`adminPhones.${i}.number`)} />
+                </Field>
+              </Stack>
+              {i > 0 &&
+                <Button
+                  onClick={() => adminPhoneRemove(i)}
+                  height={6}
+                  width={1}
+                >
+                  X
+                </Button>
+              }
+            </Stack>
+          );
+        })}
+        <Button
+          onClick={() =>
+            adminPhoneAppend({
+              code: '',
+              number: '',
+            })
+          }
+          variant="subtle"
+          width={40}
+        >
+          Add admin phone
+        </Button>
+      </Fieldset.Root> */}
       <Separator marginBottom={8} marginTop={8} />
     </>
   )

@@ -67,6 +67,7 @@ model Bot {
   description            String?
   about                  String?
   adminPhones            String[]
+  passcode               String
   safetyTips             String?
   privacyPolicy          String?
   faq                    Json[]

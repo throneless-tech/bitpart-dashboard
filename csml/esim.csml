@@ -2,15 +2,40 @@
 
 
 start:
-  remember count = 0
-  // conversation is triggered by a message from a user who says they need an esim
-  // TODO Bitpart interprets incoming language. Response is in the same language
-  // TODO check if the user has contacted this line before
+  if (event.contains([passcode])) {
+    goto $admin_interface_step@$shared
+  }
+  else 
+    remember count = 0
+    // conversation is triggered by a message from a user who says they need an esim
+    // TODO Bitpart interprets incoming language. Response is in the same language
+    // TODO check if the user has contacted this line before
 
-  say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
-  \nWe use an automated messaging system so you can get quicker responses, but you can always reach a human."
+    say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
+    \nWe use an automated messaging system so you can get quicker responses, but you can always reach a human."
 
-  goto menu_step
+    goto menu_step
+
+admin_interface_step:
+  say "What would you like to do? Enter a number:\n\n
+  1) Receive messages
+  2) Exit this conversation"
+  hold
+
+  if (event == 1) {
+    
+    // TODO JOSH: how does the admin ask for the messages left for them?
+
+    goto admin_interface_step
+  } else if (event == 2) {
+    say "I am now closing this conversation. Please send the passcode again if you need me."
+
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please select an option from the list."
+
+    goto admin_interface_step
+  }
 
 menu_step:
   if (count >= 3) {

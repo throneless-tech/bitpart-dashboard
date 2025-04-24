@@ -21,16 +21,16 @@ export const schema = yup.object({
     is: "broadcast",
     then: () => yup.string().optional(),
   }),
-  adminPhones: yup.array().when("botType", {
-    is: "broadcast" || "tipline" || "helpdesk" || "esim" || "vpn",
-    then: () => yup.array()
-      .of(
-        yup.object({
-          code: yup.string(),
-          number: yup.string(),
-        })
-      )
-  }),
+  // adminPhones: yup.array().when("botType", {
+  //   is: "broadcast" || "tipline" || "helpdesk" || "esim" || "vpn",
+  //   then: () => yup.array()
+  //     .of(
+  //       yup.object({
+  //         code: yup.string(),
+  //         number: yup.string(),
+  //       })
+  //     )
+  // }),
   faq: yup.array().when("botType", {
     is: "broadcast" || "vpn",
     then: () => yup.array()

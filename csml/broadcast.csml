@@ -1,8 +1,8 @@
 // This is a template. It will not work before being processed by the system
 
 start:
-  if (event.client.user_id == [adminPhones]) {// FIXME base 58 string of letters and numbers, not case sensitive, string CONTAINING passphrase
-    shout event
+  if (event.contains([passcode])) {
+    goto admin_interface_step
   }
   else  
     remember count = 0
@@ -26,6 +26,29 @@ start:
       say "Sorry, I do not understand."
       do count += 1
       goto start
+
+admin_interface_step:
+  say "What would you like to do? Enter a number:\n\n
+  1) Broadcast a message
+  2) Exit this conversation"
+  hold
+
+  if (event == 1) {
+    say "Please send me your message now."
+    hold
+
+    shout event
+
+    goto admin_interface_step
+  } else if (event == 2) {
+    say "I am now closing this conversation. Please send the passcode again if you need me."
+
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please select an option from the list."
+
+    goto admin_interface_step
+  }
 
 consent_disagree_step:
   if (count >= 3) {

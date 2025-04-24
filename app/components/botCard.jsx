@@ -1,7 +1,17 @@
 "use client"
 
+import { useState } from "react";
+
 // chakra ui imports
-import { Button, Card } from "@chakra-ui/react";
+import {
+  Button,
+  Card,
+  Stack,
+  Switch,
+  Text
+} from "@chakra-ui/react";
+
+// components imports
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -21,6 +31,7 @@ const botTypes =
 
 export default function BotCard(props) {
   const { bot, handleDelete } = props;
+  const [checked, setChecked] = useState(false);
 
   if (!bot) return null;
 
@@ -30,7 +41,31 @@ export default function BotCard(props) {
         {botTypes[bot.botType]}
         <Card.Title mt="2">{bot.botName}</Card.Title>
         <Card.Description>
-          {bot.phone}
+          <Text>
+            {bot.phone}
+          </Text>
+          <Stack
+            alignItems="flex-start"
+            direction="row"
+            marginTop={2}
+          >
+            <Text>
+              View passcode{' '}
+            </Text>
+            <Switch.Root
+              checked={checked}
+              onCheckedChange={(e) => setChecked(e.checked)}
+            >
+              <Switch.HiddenInput />
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+              <Switch.Label />
+            </Switch.Root>
+          </Stack>
+          <Text>
+            {checked ? bot.passcode : "●●●●●●●●"}
+          </Text>
         </Card.Description>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
