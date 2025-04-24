@@ -3,7 +3,7 @@
 
 start:
   if (event.contains([passcode])) {
-    goto $admin_interface_step@$shared
+    goto admin_interface_step
   }
   else 
     remember count = 0
@@ -18,8 +18,9 @@ start:
 
 admin_interface_step:
   say "What would you like to do? Enter a number:\n\n
-  1) Receive messages
-  2) Exit this conversation"
+  1) Receive messages\n
+  2) Stop receiving messages\n
+  3) Exit this conversation" // FIXME are you sure?
   hold
 
   if (event == 1) {
@@ -29,6 +30,8 @@ admin_interface_step:
     goto admin_interface_step
   } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
+
+    // delete // FIXME UNCOMMENT FOR PROD
 
     goto end
   } else {
@@ -86,6 +89,8 @@ menu_options_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
+    // delete // FIXME UNCOMMENT FOR PROD
+
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -115,6 +120,9 @@ get_esim_1_step:
       goto human_support_step
     } else if (event.to_lowercase() == "no") {
       say "Please contact us again if you need us."
+      
+      // delete // FIXME UNCOMMENT FOR PROD
+
       goto end
     } else {
       say "Sorry, I did not get that."
@@ -224,6 +232,8 @@ follow_up_step:
     } else if (event.to_lowercase() == "end") {
       say "Thanks for using this service, we hope your eSIM helps."
       
+      // delete // FIXME UNCOMMENT FOR PROD
+
       goto end
     } else {
       say "Sorry, I did not get that."
@@ -242,5 +252,7 @@ human_support_step:
   // whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD 
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+
+  // delete // FIXME UNCOMMENT FOR PROD
 
   goto end

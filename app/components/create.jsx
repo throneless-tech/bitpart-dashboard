@@ -278,6 +278,7 @@ export default function CreateBotFlow({ userId }) {
                 <StepsItem index={1} title="Customize your bot" />
                 <StepsItem index={2} title="Confirm your data" />
                 <StepsItem index={3} title="Connect your bot" />
+                <StepsItem index={4} title="Use your bot" />
               </Stack>
             </StepsList>
             <StepsContent index={0}>
@@ -411,14 +412,6 @@ export default function CreateBotFlow({ userId }) {
               <Heading as="h2" marginBottom={4} marginTop={10} size="md">
                 Connect Bitpart to Signal
               </Heading>
-              <Text as="div" marginY={8}>
-                <Text as="span">
-                  Your bot passcode is{' '}
-                </Text>
-                <Text as="span" fontSize="xl">
-                  {botPasscode}
-                </Text>
-              </Text>
               <QrCode.Root value={qrLink}>
                 <QrCode.Frame>
                   <QrCode.Pattern />
@@ -449,13 +442,24 @@ export default function CreateBotFlow({ userId }) {
               </Text>
             </StepsContent>
             <StepsCompletedContent>
-              <Box marginY={12}>
-                You have created a new bot! Go to your{' '}
+              <Box marginTop={12}>
+                You have created a new bot!
+              </Box>
+              <Text as="div" marginY={4}>
+                <Text as="span">
+                  Your bot passcode is{' '}
+                </Text>
+                <Text as="span" fontSize="xl">
+                  {botPasscode}
+                </Text>
+              </Text>
+              <Text>
+                Go to your{' '}
                 <Link color={color} href='/dashboard' variant="underline">
                   Dashboard
                 </Link>
                 {' '}to see all the bots you have created.
-              </Box>
+              </Text>
             </StepsCompletedContent>
             <Group>
               <StepsPrevTrigger asChild>

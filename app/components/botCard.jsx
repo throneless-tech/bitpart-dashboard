@@ -4,14 +4,17 @@ import { useState } from "react";
 
 // chakra ui imports
 import {
+  Box,
   Button,
   Card,
+  ClientOnly,
   Stack,
   Switch,
   Text
 } from "@chakra-ui/react";
 
 // components imports
+import { useColorModeValue } from "@/app/components/ui/color-mode";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -35,15 +38,21 @@ export default function BotCard(props) {
 
   if (!bot) return null;
 
+  // color mode
+  const color = useColorModeValue("gray.600", "gray.400");
+
   return (
     <Card.Root width={300}>
       <Card.Body gap="2">
         {botTypes[bot.botType]}
         <Card.Title mt="2">{bot.botName}</Card.Title>
-        <Card.Description>
-          <Text>
-            {bot.phone}
-          </Text>
+        <ClientOnly>
+        <Box color={color}>
+          {bot.phone ? (
+              <Text>
+                {bot.phone}
+              </Text>
+          ) : null}
           <Stack
             alignItems="flex-start"
             direction="row"
@@ -66,7 +75,8 @@ export default function BotCard(props) {
           <Text>
             {checked ? bot.passcode : "●●●●●●●●"}
           </Text>
-        </Card.Description>
+        </Box>
+        </ClientOnly>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {/* <Button variant="outline">View</Button> */}

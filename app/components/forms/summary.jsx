@@ -53,12 +53,12 @@ export const Summary = ({ data, errors }) => {
               ))}
             </Box>
           )) : key === "csv" ? 
-          (Array.from(data[key]).map(f => 
-            <Box key={`csv-${f.path}`}>
-            {f.path}
+          (Array.from(data[key]).map((f, i)=> 
+            <Box key={`csv-${i}`}>
+            (Uploaded)
             </Box>
           )) 
-          : <Text>{key === "phone" ? `+${data["countryCode"]} ${data[key]}` : key === "countryCode" ? "" : data[key]}</Text>}
+          : <Text>{key === "phone" && data[key].length ? `+${data["countryCode"]} ${data[key]}` : key === "countryCode" ? "" : data[key]}</Text>}
         </Text >
       )) : null}
     </>

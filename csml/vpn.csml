@@ -66,9 +66,11 @@ over_limit_step:
 
 human_support_step:
   // send request to admin
-  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up [X] working days)." // TODO Sacha: # of days or ASAP?
+  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
 
   // whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+
+  // delete // FIXME UNCOMMENT FOR PROD
 
   goto end
 
@@ -120,6 +122,7 @@ help_step:
     goto help_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
+  // delete // FIXME UNCOMMENT FOR PROD
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -135,5 +138,7 @@ other_help_step:
   //send question to bitpart, who can later update help section depending on questions asked
   // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
   
-  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up [responseTime])."
+  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
+
+  // delete // FIXME UNCOMMENT FOR PROD
   goto end

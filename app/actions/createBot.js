@@ -57,14 +57,6 @@ class WSConnection {
   }
 }
 
-async function bitpartErrorHandler(json) {
-  if (json.message_type == "Error") {
-    return { error: "An error occurred. Contact and administrator for help." };
-  } else {
-    return { message: 'Bitpart bot created successfully.' };
-  }
-}
-
 // create the bot on the bitpart server
 export const createBotBitpart = async (data, passcode) => {
   // format bot name
@@ -161,7 +153,11 @@ export const linkChannelBitpart = async (channelId) => {
 export const createBotPrisma = async (data, userId, passcode) => {
 
   // format bot phone
-  let phone = await formatPhone(data.phone, data.countryCode);
+  let phone = "";
+
+  if (data.phone.length > 0) {
+    phone = await formatPhone(data.phone, data.countryCode);
+  }
 
   // // admin phones array
   // let phones = [];

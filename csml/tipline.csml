@@ -105,6 +105,8 @@ record_number_step:
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
   // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
 
+  // delete // FIXME UNCOMMENT FOR PROD
+
   goto end
 
 confirm_contact_method_step:
@@ -119,6 +121,7 @@ confirm_contact_method_step:
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
+    // delete // FIXME UNCOMMENT FOR PROD
     goto end
   } else if (event.to_lowercase() == "back") {
     goto contact_method_step
@@ -128,5 +131,7 @@ confirm_contact_method_step:
     say "Sorry, I did not get that."
     goto confirm_contact_method_step
   }
+
+  // delete // FIXME UNCOMMENT FOR PROD
 
   goto end

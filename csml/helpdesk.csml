@@ -75,6 +75,9 @@ confirm_delete_step:
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
   // whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+  
+  // delete // FIXME UNCOMMENT FOR PROD
+  
   goto end
 
 menu_step:
@@ -144,6 +147,8 @@ menu_options_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
+    // delete // FIXME UNCOMMENT FOR PROD
+    
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -157,4 +162,6 @@ human_support_step:
   // bitpart flags problem to admin
   // whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
   
+  // delete // FIXME UNCOMMENT FOR PROD
+
   goto end
