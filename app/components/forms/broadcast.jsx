@@ -41,14 +41,17 @@ export const BroadcastForm = () => {
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe the list, such as who manages it, how often you expect to send messages, and why messages will be sent."
+        helperText="Offer a short description of why you set up this broadcast channel, who manages it, and why messages will be sent."
         info="description"
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
         required
       >
-        <Textarea {...register('description')} />
+        <Textarea
+          defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME> who runs this group." 
+          {...register('description')}
+        />
       </Field>
       <Field
         errorText={!!errors?.safetyTips && errors.safetyTips.message}

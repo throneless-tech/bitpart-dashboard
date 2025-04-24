@@ -6,21 +6,19 @@ import React from "react";
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Container,
-  Flex,
   Heading,
-  HStack,
   Link,
   List,
   Text
 } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton, useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/components/ui/color-mode";
 import { InviteForm } from "./components/enterInvite";
 import { ToastSignOut } from "./components/toastalert";
+import Header from "./components/headerOuter";
 
 export default function Home() {
   // color mode
@@ -30,19 +28,7 @@ export default function Home() {
     <Box>
       <ToastSignOut />
       <Container py={6}>
-        <Flex justifyContent="space-between">
-          <ColorModeButton />
-          <HStack gap={8}>
-            <ClientOnly>
-              <Link color={color} href="/login" variant="underline">
-                Login
-              </Link>
-            </ClientOnly>
-            <Button>
-              Donate
-            </Button>
-          </HStack>
-        </Flex>
+        <Header />
       </Container>
       <Container marginBottom={6} maxW="2xl">
         <Heading

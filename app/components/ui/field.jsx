@@ -1,9 +1,15 @@
 "use client"
-import { Field as ChakraField, IconButton, Text } from '@chakra-ui/react'
 import * as React from 'react'
 
+// chakra imports
+import {
+  Field as ChakraField,
+  IconButton,
+  List,
+  Text
+} from '@chakra-ui/react'
+
 // components
-import { Button } from "@/app/components/ui/button";
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -16,6 +22,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/app/components/ui/drawer";
+import PrivacyPolicyText from "@/app/components/drawer/privacyPolicy"
 
 // icons
 import { LuInfo } from "react-icons/lu";
@@ -33,7 +40,11 @@ export const Field = React.forwardRef(function Field(props, ref) {
           {label}
           <ChakraField.RequiredIndicator fallback={optionalText} />
           {info ? (
-            <DrawerRoot open={open} onOpenChange={(e) => setOpen(e.open)}>
+            <DrawerRoot
+              open={open}
+              onOpenChange={(e) => setOpen(e.open)}
+              size="md"
+            >
               <DrawerBackdrop />
               <DrawerTrigger asChild>
                 <IconButton aria-label="See info and examples" variant="ghost">
@@ -50,7 +61,7 @@ export const Field = React.forwardRef(function Field(props, ref) {
                       <Text>
                         This is where we will offer an example of what a description may look like and include.
                       </Text>
-                      <Text marginTop={2}>
+                      <Text marginTop={4}>
                         It's not safe out here. It's wondrous, with treasures to satiate desires both subtle and gross; but it's not for the timid. When dreams become more important than reality, you give up travel, building, creating; you even forget how to repair the machines left behind by your ancestors. You just sit living and reliving other lives left behind in the thought records. It's hard to believe that something which is neither seen nor felt can do so much harm. To Boldly Go Where No Man Has Gone Before... …Warp speed.
                       </Text>
                     </>
@@ -64,14 +75,7 @@ export const Field = React.forwardRef(function Field(props, ref) {
                       </Text>
                     </>
                   ) : info == "privacyPolicy" ? (
-                    <>
-                      <Text>
-                        This is where we will offer a description and an example of what a privacy policy may look like and include.
-                      </Text>
-                      <Text marginTop={2}>
-                        When dreams become more important than reality, you give up travel, building, creating; you even forget how to repair the machines left behind by your ancestors. You just sit living and reliving other lives left behind in the thought records. In critical moments, men sometimes see exactly what they wish to see. Our species can only survive if we have obstacles to overcome. You remove those obstacles. Without them to strengthen us, we will weaken and die.
-                      </Text>
-                    </>
+                    <PrivacyPolicyText />
                   ) : info == "activationInstructions" ? (
                     <>
                       <Text>

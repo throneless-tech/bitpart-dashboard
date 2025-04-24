@@ -90,13 +90,13 @@ const frameworks = [
   {
     value: "esim",
     title: "eSIM",
-    description: "Distribute eSIMs to users who request codes.",
+    description: "Distribute eSIMs to people who request codes.",
     icon: <FaSimCard />
   },
   {
     value: "vpn",
     title: "VPN",
-    description: "Distribute VPN codes to users who request them.",
+    description: "Distribute VPN codes to people who request them.",
     icon: <CgModem />
   },
 ]
@@ -281,7 +281,12 @@ export default function CreateBotFlow({ userId }) {
                 <StepsItem index={4} title="Use your bot" />
               </Stack>
             </StepsList>
-            <StepsContent index={0}>
+            <StepsContent
+              index={0}
+              marginLeft="auto"
+              marginRight="auto"
+              maxW={"2xl"}
+            >
               <Text as='div' marginTop={10}>
                 Bitpart is designed to work using Signal, a platform that offers the highest standard of security and privacy among free and publicly available messaging platforms available today.
               </Text>
@@ -343,7 +348,12 @@ export default function CreateBotFlow({ userId }) {
                 </Stack>
               </RadioCardRoot>
             </StepsContent>
-            <StepsContent index={1}>
+            <StepsContent
+              index={1}
+              marginLeft="auto"
+              marginRight="auto"
+              maxW={"2xl"}
+            >
               {/* <Heading
                 as="h3"
                 marginBottom={4}
@@ -391,7 +401,12 @@ export default function CreateBotFlow({ userId }) {
                 Please double check that the above information is correct. You will not be able to update this later.
               </Text>
             </StepsContent>
-            <StepsContent index={2}>
+            <StepsContent
+              index={2}
+              marginLeft="auto"
+              marginRight="auto"
+              maxW={"2xl"}
+            >
               <Text marginTop={10}>
                 Here is your new bot summary:
               </Text>
@@ -408,7 +423,12 @@ export default function CreateBotFlow({ userId }) {
                 Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
               </Checkbox>
             </StepsContent>
-            <StepsContent index={3}>
+            <StepsContent
+              index={3}
+              marginLeft="auto"
+              marginRight="auto"
+              maxW={"2xl"}
+            >
               <Heading as="h2" marginBottom={4} marginTop={10} size="md">
                 Connect Bitpart to Signal
               </Heading>
@@ -441,7 +461,12 @@ export default function CreateBotFlow({ userId }) {
                 </Link>.
               </Text>
             </StepsContent>
-            <StepsCompletedContent>
+            <StepsCompletedContent
+              index={0}
+              marginLeft="auto"
+              marginRight="auto"
+              maxW={"2xl"}
+            >
               <Box marginTop={12}>
                 You have created a new bot!
               </Box>
