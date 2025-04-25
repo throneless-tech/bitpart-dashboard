@@ -111,7 +111,7 @@ const valuesToUnregister = [
   'helpInstructions',
   'locations',
   'maxCodes',
-  'plans',
+  // 'plans',
   'privacyPolicy',
   'problems',
   'referral',
@@ -177,19 +177,23 @@ export default function CreateBotFlow({ userId }) {
     setBotPasscode(passcode);
 
     try {
-      const botBitpart = await createBotBitpart(data, passcode);
+      // const botBitpart = await createBotBitpart(data, passcode);
 
-      if (botBitpart?.error) {
-        setStepCount(stepCount => stepCount -= 1);
+      // if (botBitpart?.error) {
+      //   setStepCount(stepCount => stepCount -= 1);
 
-        alert(botBitpart.error);
-        throw new Error(botBitpart.error);
-      }
+      //   alert(botBitpart.error);
+      //   throw new Error(botBitpart.error);
+      // }
 
       // FIXME uncomment and set up
-      // if (data.botType === "esim" || data.botType === "vpn") {
-      //   const emsData = await emsCall(botBitpart.data.bot_id, data.csv);
-      // }
+      let emsData;
+      if (data.botType === "esim" || data.botType === "vpn") {
+        emsData = await emsCall('test', data.csv);
+      }
+
+      console.log('ems data is: ', emsData);
+      
 
       // const channelBitpartCreate = await createChannelBitPart(data.botName)
 
@@ -212,13 +216,13 @@ export default function CreateBotFlow({ userId }) {
 
       // setQRLink(channelBitpartLink.response.channel);
 
-      const bot = await createBotPrisma(data, userId, passcode);
+      // const bot = await createBotPrisma(data, userId, passcode);
 
       // console.log('bitpart bot is: ', botBitpart);
       // console.log('bitpart channel is: ', channelBitpart);
       // console.log('bot is: ', bot);
 
-      setCreatedBot(bot);
+      // setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
@@ -467,23 +471,53 @@ export default function CreateBotFlow({ userId }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Box marginTop={12}>
-                You have created a new bot!
-              </Box>
-              <Text as="div" marginY={4}>
-                <Text as="span">
-                  Your bot passcode is{' '}
+              <Text marginTop={12}>
+                Your broadcast channel has now been created!
+              </Text>
+              <Text fontWeight={700} marginTop={4}>
+                How can I send out messages?
                 </Text>
+              <Text marginTop={4}>
+                For the system to recognise you as the person sending broadcast messages (and not as someone joining the broadcast channel) please send a message on Signal to your channel{' '} {createdBot && createdBot.phone ? createdBot.phone : ""} with the passcode.
+              </Text>
+              <Text marginTop={4}>
+                Your passcode is{' '}
                 <Text as="span" fontSize="xl">
                   {botPasscode}
                 </Text>
               </Text>
-              <Text>
-                Go to your{' '}
+              <Text marginTop={4}>
+                You only need to send it once. Bitpart will recognise you going forwards. Any message you then send to your channel will be forwarded on to everyone who has 'signed up' to the channel.
+              </Text>
+              <Text marginTop={4}>
+                If you want to change or remove a number in future, sending "Delete" will erase the conversation and thus Bitpart's memory of you as someone who is able to send broadcast messages.
+              </Text>
+              <Text marginTop={4}>
+                More than one person can send broadcast messages. If another number also sends the passcode over Signal to your channel, they will be able to send out broadcast messages too.
+              </Text>
+              <Text marginTop={4}>
+                Keep your passcode secure. Remember -- this passcode gives someone access to send messages to the entire channel.
+              </Text>
+              <Text fontWeight={700} marginTop={4}>
+                What should I do now?
+              </Text>
+              <List.Root as="ol" marginLeft={4} marginTop={2}>
+                <List.Item>
+                  Message your bot with the passcode to establish you as a broadcaster.
+                </List.Item>
+                <List.Item>
+                  Test your channel by using a different number to send a Signal message to your channel.
+                </List.Item>
+                <List.Item>
+                  Share your channel widely with your target audience. 
+                </List.Item>
+              </List.Root>
+              <Text marginTop={4}>
+                Go {' '}
                 <Link color={color} href='/dashboard' variant="underline">
-                  Dashboard
+                  home
                 </Link>
-                {' '}to see all the bots you have created.
+                {' '}to see your bots and create a new one. You will be able to find the passcode again there. 
               </Text>
             </StepsCompletedContent>
             <Group>

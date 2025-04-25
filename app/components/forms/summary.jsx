@@ -39,6 +39,7 @@ export const Summary = ({ data, errors }) => {
                                 : key === "maxCodes" ? "Maximum number of codes per user"
                                   : key === "vpnName" ? "VPN name"
                                     : key === "csv" ? "List of codes"
+                                      : key === "locations" ? "Network/Provider"
                                     : key === "countryCode" ? ""
                                       : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
             }
@@ -47,7 +48,7 @@ export const Summary = ({ data, errors }) => {
             <Box key={`innerdata-${ind}`}>
               {Object.keys(d).map((k, i) => (
                 <Box key={`${k}-${i}`}>
-                  <Text fontWeight="bold">{`${k.charAt(0).toUpperCase()}${k.slice(1)}`}</Text>
+                  {/* <Text fontWeight="bold">{`${k.charAt(0).toUpperCase()}${k.slice(1)}`}</Text> */}
                   <Text>{d[k]}</Text>
                 </Box>
               ))}

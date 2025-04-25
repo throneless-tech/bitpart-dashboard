@@ -23,7 +23,7 @@ export const VpnForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
       locations: [],
-      plans: [],
+      // plans: [],
     },
   });
 
@@ -128,6 +128,62 @@ export const VpnForm = () => {
       >
         <Textarea autoresize {...register('activationInstructions')} />
       </Field>
+      <Fieldset.Root
+        label="VPN locations"
+        marginTop={4}
+      >
+        <Stack>
+          <Fieldset.Legend>
+            VPN providers
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            List the providers who are sharing VPN codes.
+          </Fieldset.HelperText>
+        </Stack>
+        {locationFields.map((f, i) => {
+          return (
+            <Stack
+              alignItems={'center'}
+              direction={['column', 'row']}
+              justifyContent="flex-start"
+              key={f.id}
+              marginBottom={4}
+              spacing={20}
+              width='100%'
+            >
+              <Field
+                invalid={!!errors?.locations}
+                errorText={errors.locations?.place && errors.locations?.place.message}
+              >
+                <Input
+                  placeholder='Enter a location'
+                  {...register(`locations.${i}.place`)}
+                />
+              </Field>
+              {i >= 0 &&
+                <Button
+                  onClick={() => locationRemove(i)}
+                  height={6}
+                  width={1}
+                >
+                  X
+                </Button>
+              }
+            </Stack>
+          );
+        })}
+        <Button
+          onClick={() =>
+            locationAppend({
+              place: ''
+            })
+          }
+          variant="subtle"
+          width={40}
+        >
+          Add provider
+        </Button>
+      </Fieldset.Root>
       {/* FIXME do we need FAQ and limits on # of codes requested? */}
       <Fieldset.Root marginTop={6}>
         <Stack>

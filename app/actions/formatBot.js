@@ -18,7 +18,7 @@ const schema = [
   'maxCodes',
   'name',
   'phone',
-  'plans',
+  // 'plans',
   'problems',
   'privacyPolicy',
   'referral',

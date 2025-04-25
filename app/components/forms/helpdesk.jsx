@@ -105,6 +105,7 @@ export const HelpdeskForm = () => {
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the data rights for a person interacting with this bot."
         invalid={!!errors?.privacyPolicy}
+        info="privacyPolicy"
         label="Data rights"
         marginTop={4}
         required

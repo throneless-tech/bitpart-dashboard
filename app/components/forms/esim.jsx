@@ -18,7 +18,7 @@ export const EsimForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
       locations: [],
-      plans: [],
+      // plans: [],
     },
   });
 
@@ -31,14 +31,14 @@ export const EsimForm = () => {
     name: 'locations',
   });
 
-  const {
-    fields: planFields,
-    append: planAppend,
-    remove: planRemove,
-  } = useFieldArray({
-    control,
-    name: 'plans',
-  });
+  // const {
+  //   fields: planFields,
+  //   append: planAppend,
+  //   remove: planRemove,
+  // } = useFieldArray({
+  //   control,
+  //   name: 'plans',
+  // });
 
   return (
     <>
@@ -95,16 +95,16 @@ export const EsimForm = () => {
       >
         <Textarea autoresize {...register('helpInstructions')} />
       </Field>
-      {/* <Fieldset.Root
-        label="eSIM locations"
+      <Fieldset.Root
+        label="eSIM networks"
         marginTop={4}
       >
         <Stack>
           <Fieldset.Legend>
-            eSIM locations
+            eSIM networks
           </Fieldset.Legend>
           <Fieldset.HelperText>
-            List the locations where a user can use an eSIM.
+            List the networks where a user can use an eSIM.
           </Fieldset.HelperText>
         </Stack>
         {locationFields.map((f, i) => {
@@ -148,10 +148,10 @@ export const EsimForm = () => {
           variant="subtle"
           width={40}
         >
-          Add location
+          Add network
         </Button>
       </Fieldset.Root>
-      <Fieldset.Root
+      {/* <Fieldset.Root
         label="eSIM plans"
         marginTop={4}
       >

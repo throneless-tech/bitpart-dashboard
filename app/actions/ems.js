@@ -31,6 +31,7 @@ const sendToEMS = async (botId, json) => {
       console.log(res);
 
     })
+    .catch(err => {throw new Error(err.message)})
 }
 
 export const emsCall = async (botId, fileList) => {
@@ -65,4 +66,5 @@ export const emsCall = async (botId, fileList) => {
 
   console.log('json is: ', json);
 
+  return json
 }
