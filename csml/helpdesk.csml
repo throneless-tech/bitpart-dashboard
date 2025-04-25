@@ -2,33 +2,88 @@
 
 
 start:
-  remember count = 0
+  // if bitpart receives passcode, set admin
+  if (event.contains([passcode])) {
+    // set _whisperable var in memory
+    remember _whisperable = true
 
-  // TODO Bitpart interprets incoming language. Response is in the same language
-  say "Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
-    \nIf you are in immediate physical danger contact [referral]"
-  // TODO: user research needed about if we want bitpart to accept voice notes
-  say "Our helpdesk will ask you to select the problem you're experiencing.
-    \nYour answers will be stored on our system for [storageTime] and visible to [storageAccess]. We will not ask you for personal information.
-    \nFor more information at any time, including how to delete your data, you can reply with 'My data'.
-    \nTo continue, reply with 'Agree'.
-    \nTo disagree and end the conversation, reply with 'End'."
+    say "Welcome, you are now set up as a user who can receive helpdesk messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    hold
+
+    if (event.to_lowercase() == "help") {
+      goto admin_interface_step
+    }
+  }
+  // if _whisperable is set, user is already an admin
+  if (event._whisperable == true) {
+    goto admin_interface_step
+  }
+  else 
+    remember count = 0
+
+    // TODO Bitpart interprets incoming language. Response is in the same language
+    say "Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
+      \nIf you are in immediate physical danger contact [referral]"
+    // TODO: user research needed about if we want bitpart to accept voice notes
+    say "Our helpdesk will ask you to select the problem you're experiencing.
+      \nYour answers will be stored on our system for [storageTime] and visible to [storageAccess]. We will not ask you for personal information.
+      \nFor more information at any time, including how to delete your data, you can reply with 'My data'.
+      \nTo continue, reply with 'Agree'.
+      \nTo disagree and end the conversation, reply with 'End'."
+    hold
+
+    if (event.to_lowercase() == "my data") {
+      goto privacy_policy_step
+    } else if (event.to_lowercase() == "agree") {
+      goto menu_step
+    } else if (event.to_lowercase() == "end") {
+      goto delete_data_step
+    } else if (event.match_regex("[Human|human|person|Person|Talk|talk]")) {
+      // TODO: is there a better way to check if the user wants to talk to a real person?
+      say "Ok. A member of our helpdesk team will follow up as soon as they can."
+      goto incomplete_step
+    } else {
+      say "Sorry,  our system didn't understand what you meant. A member of our helpdesk team will be in touch with you as soon as possible."
+      goto incomplete_step
+    }
+
+admin_interface_step:
+  say "What would you like to do? Enter a number:\n\n
+  1) Exit this conversation\n
+  2) Delete my data"
   hold
 
-  if (event.to_lowercase() == "my data") {
-    goto privacy_policy_step
-  } else if (event.to_lowercase() == "agree") {
-    goto menu_step
-  } else if (event.to_lowercase() == "end") {
-    goto delete_data_step
-  } else if (event.match_regex("[Human|human|person|Person|Talk|talk]")) {
-    // TODO: is there a better way to check if the user wants to talk to a real person?
-    say "Ok. A member of our helpdesk team will follow up as soon as they can."
-    goto incomplete_step
+  if (event == 1) {
+    say "I am now closing this conversation. Please send the passcode again if you need me."
+
+    goto end
+  } else if (event == 2) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
   } else {
-    say "Sorry,  our system didn't understand what you meant. A member of our helpdesk team will be in touch with you as soon as possible."
-    goto incomplete_step
+    say "Sorry, I did not get that. Please select an option from the list."
+
+    goto admin_interface_step
   }
+
+delete_me_confirm_step:
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto admin_interface_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_me_confirm_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  // delete // FIXME UNCOMMENT FOR PROD
+  goto end
 
 privacy_policy_step:
   if (count >= 3) {

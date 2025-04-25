@@ -2,10 +2,23 @@
 
 
 start:
+  // if bitpart receives passcode, set admin
   if (event.contains([passcode])) {
+    // set _whisperable var in memory
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    hold
+
+    if (event.to_lowercase() == "help") {
+      goto admin_interface_step
+    }
+  }
+  // if _whisperable is set, user is already an admin
+  if (event._whisperable == true) {
     goto admin_interface_step
   }
-  else 
+  else
     remember count = 0
     // conversation is triggered by a message from a user who says they need an esim
     // TODO Bitpart interprets incoming language. Response is in the same language
@@ -19,8 +32,8 @@ start:
 admin_interface_step:
   say "What would you like to do? Enter a number:\n\n
   1) Receive messages\n
-  2) Stop receiving messages\n
-  3) Exit this conversation" // FIXME are you sure?
+  2) Exit this conversation\n
+  3) Delete my data"
   hold
 
   if (event == 1) {
@@ -31,14 +44,34 @@ admin_interface_step:
   } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
 
-    // delete // FIXME UNCOMMENT FOR PROD
-
     goto end
+  } else if (event == 3) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
   } else {
     say "Sorry, I did not get that. Please select an option from the list."
 
     goto admin_interface_step
   }
+
+delete_me_confirm_step:
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto admin_interface_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_me_confirm_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  // delete // FIXME UNCOMMENT FOR PROD
+  goto end
 
 menu_step:
   if (count >= 3) {
@@ -89,8 +122,6 @@ menu_options_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
-    // delete // FIXME UNCOMMENT FOR PROD
-
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -121,8 +152,6 @@ get_esim_1_step:
     } else if (event.to_lowercase() == "no") {
       say "Please contact us again if you need us."
       
-      // delete // FIXME UNCOMMENT FOR PROD
-
       goto end
     } else {
       say "Sorry, I did not get that."
@@ -232,8 +261,6 @@ follow_up_step:
     } else if (event.to_lowercase() == "end") {
       say "Thanks for using this service, we hope your eSIM helps."
       
-      // delete // FIXME UNCOMMENT FOR PROD
-
       goto end
     } else {
       say "Sorry, I did not get that."
@@ -252,7 +279,5 @@ human_support_step:
   // whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD 
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
-
-  // delete // FIXME UNCOMMENT FOR PROD
 
   goto end

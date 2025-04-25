@@ -1,18 +1,79 @@
 // This is a template. It will not work before being processed by the system
 
 start:
-  remember count = 0
+// if bitpart receives passcode, set admin
+  if (event.contains([passcode])) {
+    // set _whisperable var in memory
+    remember _whisperable = true
 
-  // conversation is triggered by a message from a user who says they need a vpn code
-  // TODO Bitpart interprets incoming language. Response is in the same language
-  say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
-    \nYour phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation.
-    \nWe offer VPN codes from [vpnName] which works in [locations]."
-  // TODO 
-  say "How many codes do you need? (Note that admin approval is needed for a request higher than [maxCodes] and will take longer.) Please enter the amount:"
+    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    hold
+
+    if (event.to_lowercase() == "help") {
+      goto admin_interface_step
+    }
+  }
+  // if _whisperable is set, user is already an admin
+  if (event._whisperable == true) {
+    goto admin_interface_step
+  }
+  else
+    remember count = 0
+
+    // conversation is triggered by a message from a user who says they need a vpn code
+    // TODO Bitpart interprets incoming language. Response is in the same language
+    say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
+      \nYour phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation.
+      \nWe offer VPN codes from [vpnName] which works in [locations]."
+    // TODO 
+    say "How many codes do you need? (Note that admin approval is needed for a request higher than [maxCodes] and will take longer.) Please enter the amount:"
+    hold
+
+    goto request_step
+
+admin_interface_step:
+  say "What would you like to do? Enter a number:\n\n
+  1) Receive messages\n
+  2) Exit this conversation\n
+  3) Delete my data"
   hold
 
-  goto request_step
+  if (event == 1) {
+    
+    // TODO JOSH: how does the admin ask for the messages left for them?
+
+    goto admin_interface_step
+  } else if (event == 2) {
+    say "I am now closing this conversation. Please send the passcode again if you need me."
+
+    goto end
+  } else if (event == 3) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
+  } else {
+    say "Sorry, I did not get that. Please select an option from the list."
+
+    goto admin_interface_step
+  }
+
+delete_me_confirm_step:
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto admin_interface_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_me_confirm_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  // delete // FIXME UNCOMMENT FOR PROD
+  goto end
 
 request_step:
   if (count >= 3) {

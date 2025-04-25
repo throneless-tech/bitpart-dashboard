@@ -1,7 +1,17 @@
 // This is a template. It will not work before being processed by the system
 
 start:
+  // if bitpart receives passcode, set admin
   if (event.contains([passcode])) {
+    // set _whisperable var in memory
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a user who can send broadcast messages."
+    
+    goto admin_interface_step
+  }
+  // if _whisperable is set, user is already an admin
+  if (event._whisperable == true) {
     goto admin_interface_step
   }
   else  
@@ -30,7 +40,8 @@ start:
 admin_interface_step:
   say "What would you like to do? Enter a number:\n\n
   1) Broadcast a message
-  2) Exit this conversation"
+  2) Exit this conversation
+  3) Delete my data" // FIXME update
   hold
 
   if (event == 1) {
@@ -39,18 +50,33 @@ admin_interface_step:
 
     shout event
 
+    say "Your message has been sent."
+
     goto admin_interface_step
   } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
   
-    // delete // FIXME UNCOMMENT FOR PROD
-
     goto end
+  } else if (event == 3) {
+    goto delete_me_confirm_step
   } else {
     say "Sorry, I did not get that. Please select an option from the list."
 
     goto admin_interface_step
   }
+
+delete_me_confirm_step:
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto admin_interface_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_me_confirm_step
 
 consent_disagree_step:
   if (count >= 3) {
@@ -189,6 +215,4 @@ submit_question_step:
 
   say "This is an unmonitored line that cannot receive messages. We will contact you again the next time an admin broadcasts a message."
 
-  // delete // FIXME UNCOMMENT FOR PROD
-
-  goto end
+  // goto end // we are not ending the conversation, uncomment if that changes
