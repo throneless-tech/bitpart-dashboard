@@ -1,5 +1,6 @@
 // base imports
 import React from "react";
+import { auth } from "@/auth";
 
 // auth imports
 import { signOut } from "@/auth"
@@ -14,7 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { ColorModeButton } from "@/app/components/ui/color-mode";
 
-export default async function Header () {
+export default async function Header() {
+  const session = await auth();
 
   return (
     <Box>
@@ -30,23 +32,29 @@ export default async function Header () {
             <Button>
               Donate
             </Button>
-            <form
-              action={async () => {
-                "use server"
-                try {
-                  await signOut({redirectTo: '/?message=SignOutSuccess'});
-                } catch (error) {
-                  throw error;
-                }
-              }}
-            >
-            <Button
-              type="submit"
-              variant='underline'
-            >
-              Logout
-            </Button>
-            </form>
+            {session ? (
+              <form
+                action={async () => {
+                  "use server"
+                  try {
+                    await signOut({ redirectTo: '/?message=SignOutSuccess' });
+                  } catch (error) {
+                    throw error;
+                  }
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant='underline'
+                >
+                  Logout
+                </Button>
+              </form>
+            ) : (
+              <Link color={color} href="/login" variant="underline">
+                Login
+              </Link>
+            )}
           </Flex>
         </Flex>
       </Container>

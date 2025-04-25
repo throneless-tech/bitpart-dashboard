@@ -37,7 +37,11 @@ export const TiplineForm = () => {
         marginTop={4}
         required
       >
-        <Textarea {...register('privacyPolicy')} />
+        <Textarea
+          autoresize
+          defaultValue={`This tipline does not ask you for any personal data except for a phone number after you share your tip. You can choose to opt out by selecting option 5.\n\nThe tips you share is recorded & stored <WHERE?>\n\nPersonal data attached to your tip is any information that is visible on your Signal profile (e.g. your profile nam, your phone number or username if visible).\n\nWe delete tips every <TIMEFRAME?>\n\nIf you would like your data deleted from our systems, please contact <ADD CONTACT METHOD>`}
+          {...register('privacyPolicy')}
+        />
       </Field>
     </>
   )

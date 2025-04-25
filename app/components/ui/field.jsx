@@ -23,6 +23,7 @@ import {
   DrawerTrigger,
 } from "@/app/components/ui/drawer";
 import PrivacyPolicyText from "@/app/components/drawer/privacyPolicy"
+import SafetyTipsText from "@/app/components/drawer/safetyTips"
 
 // icons
 import { LuInfo } from "react-icons/lu";
@@ -56,24 +57,8 @@ export const Field = React.forwardRef(function Field(props, ref) {
                   <DrawerTitle>Help</DrawerTitle>
                 </DrawerHeader>
                 <DrawerBody>
-                  {info == "description" ? (
-                    <>
-                      <Text>
-                        This is where we will offer an example of what a description may look like and include.
-                      </Text>
-                      <Text marginTop={4}>
-                        It's not safe out here. It's wondrous, with treasures to satiate desires both subtle and gross; but it's not for the timid. When dreams become more important than reality, you give up travel, building, creating; you even forget how to repair the machines left behind by your ancestors. You just sit living and reliving other lives left behind in the thought records. It's hard to believe that something which is neither seen nor felt can do so much harm. To Boldly Go Where No Man Has Gone Before... …Warp speed.
-                      </Text>
-                    </>
-                  ) : info == "safetyTips" ? (
-                    <>
-                      <Text>
-                        This is where we will offer a description and an example of what a safety tips may look like and include.
-                      </Text>
-                      <Text marginTop={2}>
-                        Madness has no purpose. Or reason. But it may have a goal. Improve a mechanical device and you may double productivity. But improve man, you gain a thousandfold. Instruments register only through things they're designed to register. Space still contains infinite unknowns.
-                      </Text>
-                    </>
+                  {info == "safetyTips" ? (
+                    <SafetyTipsText />
                   ) : info == "privacyPolicy" ? (
                     <PrivacyPolicyText />
                   ) : info == "activationInstructions" ? (

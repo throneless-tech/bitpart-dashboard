@@ -42,13 +42,13 @@ export const BroadcastForm = () => {
       <Field
         errorText={!!errors?.description && errors.description.message}
         helperText="Offer a short description of why you set up this broadcast channel, who manages it, and why messages will be sent."
-        info="description"
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
         required
       >
         <Textarea
+          autoresize
           defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME> who runs this group." 
           {...register('description')}
         />
@@ -61,7 +61,7 @@ export const BroadcastForm = () => {
         label="Safety tips"
         marginTop={4}
       >
-        <Textarea {...register('safetyTips')} />
+        <Textarea autoresize {...register('safetyTips')} />
       </Field>
       <Fieldset.Root
         label="FAQs"

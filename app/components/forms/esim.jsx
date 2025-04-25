@@ -53,14 +53,13 @@ export const EsimForm = () => {
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe what people can expect when engaging with this service."
-        info="description"
+        helperText="Enter one sentence about what you do, or what this chatbot offers and to whom."
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
         required
       >
-        <Textarea placeholder="Start typing..." {...register('description')} />
+        <Textarea autoresize placeholder="Start typing..." {...register('description')} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
@@ -71,17 +70,20 @@ export const EsimForm = () => {
         marginTop={4}
         required
       >
-        <Textarea {...register('privacyPolicy')} />
+        <Textarea
+          autoresize
+          defaultValue={`The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`}
+          {...register('privacyPolicy')}
+        />
       </Field>
       <Field
         errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
-        helperText="Include activation instructions for how a user can activate an eSIM."
-        info="activationInstructions"
+        helperText="Please add instructions for the steps people should take in order to activate their eSIM. The eSIM provider may have instructions you can copy and paste here. If the text is long you could link to a web page, but remember that people in low connectivity settings may be more able to receive a message on Signal than open a web page."
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea {...register('activationInstructions')} />
+        <Textarea autoresize {...register('activationInstructions')} />
       </Field>
       <Field
         errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
@@ -91,7 +93,7 @@ export const EsimForm = () => {
         label="Help section"
         marginTop={4}
       >
-        <Textarea {...register('helpInstructions')} />
+        <Textarea autoresize {...register('helpInstructions')} />
       </Field>
       {/* <Fieldset.Root
         label="eSIM locations"

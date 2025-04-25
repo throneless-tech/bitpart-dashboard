@@ -51,14 +51,13 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Describe the helpdesk, such as who you help and how you help them."
-        info="description"
+        helperText="Enter one sentence about who you are and what this helpline offers. This information will be shared in the first message, after the name of the helpdesk. "
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
         required
       >
-        <Textarea {...register('description')} />
+        <Textarea autoresize {...register('description')} />
       </Field>
       <Field
         errorText={!!errors?.responseTime && errors.responseTime.message}
@@ -105,13 +104,15 @@ export const HelpdeskForm = () => {
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Describe the data rights for a person interacting with this bot."
-        info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Data rights"
         marginTop={4}
         required
       >
-        <Textarea {...register('privacyPolicy')} />
+        <Textarea
+          autoresize
+          defaultValue={`The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`}
+          {...register('privacyPolicy')}/>
       </Field>
       <Fieldset.Root
         label="Problem areas"
@@ -151,6 +152,7 @@ export const HelpdeskForm = () => {
                   errorText={errors.problems?.solution}
                 >
                   <Textarea
+                    autoresize
                     placeholder="Steps to solve"
                     {...register(`problems.${i}.solution`)}
                   />

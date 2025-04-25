@@ -3,6 +3,7 @@ import * as React from 'react'
 
 // chakra imports
 import {
+  Link,
   List,
   Text
 } from '@chakra-ui/react'
@@ -28,7 +29,7 @@ export default function PrivacyPolicyText() {
       <Text marginTop={4}>
         Bitpart automatically includes a message called "My data rights" that anyone using your bot will be able to navigate. This message contains 2 sections: space for your data policy, and information about Bitpart's Privacy policy:
       </Text>
-      <List.Root as="ol">
+      <List.Root as="ol" marginBottom={8}>
         <List.Item>
           <Text marginTop={4}>
             <Text as="span" fontWeight={700}>
@@ -117,10 +118,16 @@ export default function PrivacyPolicyText() {
               Bitpart seeks to minimize the amount of personal information that is collected from you and works to promptly delete that data once it is no longer required. For instance, after you finish a conversation we will delete your data from our system.
             </List.Item>
             <List.Item>
-              For our full terms of use and privacy policy, see here [ADD LINK]
+              For our full terms of use and privacy policy, see{' '}
+              <Link href="/tos-and-privacy" variant="underline">
+              here
+              </Link>.
             </List.Item>
             <List.Item>
-              Contact us on contact@bitp.art with any questions
+              Contact us at{' '}
+              <Link href='mailto:contact@bitp.art' variant="underline">
+                contact@bitp.art
+              </Link> {' '} with any questions
             </List.Item>
           </List.Root>
         </List.Item>
