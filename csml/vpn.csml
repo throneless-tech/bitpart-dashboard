@@ -81,6 +81,7 @@ request_step:
   }
 
   if (event <= [maxCodes]) {
+    remember codesNumber = event
     goto share_codes_step
   } else if (event > [maxCodes]) {
     goto over_limit_step
@@ -91,9 +92,11 @@ request_step:
   }
 
 share_codes_step:
-  // TODO get the codes from bitpart with external function call to EMS
-  say "Here is the list of VPN codes:"
-  // TODO parse the bitpart data to list the codes
+  // get the codes from bitpart with external function call to EMS
+
+  do codes = fn("ems", method_id="VpnData", quantity=codesNumber )
+  say "Here is the list of VPN codes:\n{{codes}}"
+  // TODO parse the bitpart data to list the codes if needed
   say "Here are instructions on how to activate the VPN codes.
     \n\n[activationInstructions]"
   say "If you need further support please type 'Help'
@@ -130,8 +133,6 @@ human_support_step:
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
 
   // whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
-
-  // delete // FIXME UNCOMMENT FOR PROD
 
   goto end
 
@@ -183,7 +184,6 @@ help_step:
     goto help_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
-  // delete // FIXME UNCOMMENT FOR PROD
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -201,5 +201,4 @@ other_help_step:
   
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
 
-  // delete // FIXME UNCOMMENT FOR PROD
   goto end

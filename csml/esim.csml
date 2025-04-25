@@ -181,7 +181,8 @@ get_esim_2_step:
 
   remember locations = event
 
-  // TODO external app call to EMS to notify of locations; handle no locations match
+  // external app call to EMS to notify of locations; handle no locations match
+  remember providers = fn("ems", GetProviders)
 
   goto get_esim_3_step
 
@@ -198,6 +199,7 @@ get_esim_3_step:
   hold
 
   // TODO external app call to EMS for an esim code from 1 network
+  do esim = fn("ems", method_id = "EsimData", provider=providers[0])
 
   if (event.to_lowercase() == "help") {
     goto help_step
