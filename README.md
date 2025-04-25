@@ -53,9 +53,19 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Add to your `.env` file the following:
 
 ```
+AUTH_DEBUG=true
+
 BITPART_SERVER_URL=127.0.0.1
 BITPART_SERVER_PORT=5000
 BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
+
+DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
+
+EMS_PORT=3005
+EMS_ESIM_ENDPOINT="esim_codes_endpoint"
+EMS_VPN_ENDPOINT="vpn_tokens_endpoint"
+
+JWT_SECRET="ANOTHERLONGSECRETHERE="
 ```
 
 
