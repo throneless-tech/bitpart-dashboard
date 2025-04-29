@@ -108,7 +108,7 @@ share_codes_step:
 
   // TODO figure out how to timeout wait for reply OR update response list to end convo
 
-  if (event.to_lowercase() == 'help') {
+  if (event.to_lowercase() == "help") {
     goto help_step
   } else {
     goto i_dont_understand_step
@@ -135,21 +135,24 @@ human_support_step:
   // send request to admin
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
 
-  // whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}" // FIXME uncomment for prod
-
+  whisper "A user has asked for help with VPN codes: {{event.client.user_id}}"
   goto end
 
   // TODO SACHA: say something to close out convo?
 
 i_dont_understand_step:
+  // say "Sorry, this is an automated system, your request wasn't understood.
+  //   \nIf you want to see commonly asked questions, reply with 'Help'
+  //   \nIf you want to contact the team directly, reply with 'Human'"
+
+  // removing FAQ step from this flow for now
   say "Sorry, this is an automated system, your request wasn't understood.
-    \nIf you want to see commonly asked questions, reply with 'Help'
     \nIf you want to contact the team directly, reply with 'Human'"
   hold
 
-  if (event.to_lowercase() == 'help') {
+  if (event.to_lowercase() == "help") {
     goto help_step
-  } else if (event.to_lowercase() == 'human' ) {
+  } else if (event.to_lowercase() == "human" ) {
     goto human_support_step
   } else {
     goto i_dont_understand_step
@@ -167,7 +170,7 @@ help_step:
 
   [faq.answers]
 
-  if (event.to_lowercase() == 'help' ) {
+  if (event.to_lowercase() == "help" ) {
     goto human_support_step
   } else {
     say "Sorry, I did not get that."
@@ -182,7 +185,7 @@ help_step:
   hold
 
   if (event.to_lowercase() == "other") {
-    other_help_step
+    goto other_help_step
   } else if (event.to_lowercase() == "help") {
     goto help_step
   } else if (event.to_lowercase() == "end") {
@@ -200,7 +203,7 @@ other_help_step:
   do question = event
 
   //send question to bitpart, who can later update help section depending on questions asked
-  // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}" // FIXME uncomment for prod
+  whisper "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}"
   
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
 

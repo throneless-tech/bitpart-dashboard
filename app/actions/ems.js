@@ -1,9 +1,18 @@
 import Papa from 'papaparse';
 
 const sendToEMS = async (botId, botType, json) => {
-  const data = {
-    "bot_id": botId,
-    "codes": json
+  let data = {};
+
+  if (botType === "esim") {
+    data = {
+      "bot_id": botId,
+      "codes": json
+    }
+  } else if (botType === "vpn") {
+    data = {
+      "bot_id": botId,
+      "tokens": json
+    }
   }
 
   const endpoint = botType === "esim" ? process.env.NEXT_PUBLIC_ESIM_ENDPOINT : botType === "vpn" ? process.env.NEXT_PUBLIC_VPN_ENDPOINT : "";

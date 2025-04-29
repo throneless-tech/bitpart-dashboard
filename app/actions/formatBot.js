@@ -130,19 +130,30 @@ export const formatCsml = async (data, passcode) => {
           let answers = "";
 
           data[field].map((f, i) => {
-            questions = questions + `\\n${i + 1}) ${f.question}`;
+            if (f.question.length) {
+              questions = questions + `\\n${i + 1}) ${f.question}`;
+            }
 
-            answers = answers + `
+            if (f.answer.length) {
+              answers = answers + `
               ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
                 say "${f.answer}"
                 goto check_if_solved_step
               }
               `
+            }
           })
 
+          if (answers.length) {
+            csml = csml.replace(`[${field}.length]`, (length + 1));
+            csml = csml.replace(`[${field}.answers]`, answers);
+          } else {
+            questions = "Apologies, no FAQ have been entered for this bot."
+            csml = csml.replace("[faq.answers]", "")
+          }
+
           csml = csml.replace(`[${field}]`, questions);
-          csml = csml.replace(`[${field}.length]`, (length + 1));
-          csml = csml.replace(`[${field}.answers]`, answers);
+
         } else if (field === "problems") { // fields specific to problem and solutions
           let problems = "";
           let solutions = "";

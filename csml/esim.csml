@@ -281,7 +281,7 @@ human_support_step:
   remember problem = event
 
   // flag relevant data to bitpart
-  // whisper [adminPhones.array] "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"  // FIXME uncomment for prod
+  whisper "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 

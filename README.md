@@ -61,11 +61,14 @@ BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
 
 DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
 
-EMS_PORT=3005
-EMS_ESIM_ENDPOINT="esim_codes_endpoint"
-EMS_VPN_ENDPOINT="vpn_tokens_endpoint"
+EMS_ENDPOINT="/ems"
 
 JWT_SECRET="ANOTHERLONGSECRETHERE="
+
+NEXT_PUBLIC_SERVER_URL=127.0.0.1
+NEXT_PUBLIC_EMS_PORT=3005
+NEXT_PUBLIC_ESIM_ENDPOINT="esim_endpoint"
+NEXT_PUBLIC_VPN_ENDPOINT="vpn_endpoint"
 ```
 
 

@@ -30,6 +30,7 @@ export const VpnForm = () => {
 
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
+      faq: [],
       locations: [],
       // plans: [],
     },
@@ -42,6 +43,15 @@ export const VpnForm = () => {
   } = useFieldArray({
     control,
     name: 'locations',
+  });
+
+  const {
+    fields: faqFields,
+    append: faqAppend,
+    remove: faqRemove,
+  } = useFieldArray({
+    control,
+    name: 'faq',
   });
 
   return (
@@ -193,6 +203,74 @@ export const VpnForm = () => {
           Add provider
         </Button>
       </Fieldset.Root> */}
+      <Fieldset.Root
+        label="FAQs"
+        marginTop={4}
+      >
+        <Stack>
+          <Fieldset.Legend>
+            FAQs
+          </Fieldset.Legend>
+          <Fieldset.HelperText>
+            If you need FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user.
+          </Fieldset.HelperText>
+        </Stack>
+        {faqFields.map((f, i) => {
+          return (
+            <Stack
+              alignItems={'center'}
+              direction={['column', 'row']}
+              justifyContent="flex-start"
+              key={f.id}
+              marginBottom={4}
+              spacing={20}
+              width='100%'
+            >
+              <Stack width='100%'>
+                <Field
+                  invalid={!!errors?.faq}
+                  errorText={errors.faq?.question}
+                >
+                  <Input
+                    placeholder="Question"
+                    {...register(`faq.${i}.question`)}
+                  />
+                </Field>
+                <Field
+                  invalid={!!errors?.faq}
+                  errorText={errors.faq?.answer}
+                >
+                  <Input
+                    placeholder="Answer"
+                    {...register(`faq.${i}.answer`)}
+                  />
+                </Field>
+              </Stack>
+              {i >= 0 &&
+                <Button
+                  onClick={() => faqRemove(i)}
+                  height={6}
+                  width={1}
+                >
+                  X
+                </Button>
+              }
+            </Stack>
+          );
+        })}
+        <Button
+          onClick={() =>
+            faqAppend({
+              question: '',
+              answer: '',
+            })
+          }
+          variant="subtle"
+          width={40}
+        >
+          Add FAQ
+        </Button>
+      </Fieldset.Root>
       <Fieldset.Root marginTop={6}>
         <Stack>
           <Fieldset.Legend>Upload VPN codes</Fieldset.Legend>

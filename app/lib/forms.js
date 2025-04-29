@@ -98,6 +98,10 @@ export const schema = yup.object({
       )
       .optional(),
   }),
+  maxCodes: yup.number().when("botType", {
+    is: "vpn",
+    then: () => yup.number().optional(),
+  })
   // vpnName: yup.string().when("botType", {
   //   is: "vpn",
   //   then: () => yup.string().required('Name of the VPN service is required'),

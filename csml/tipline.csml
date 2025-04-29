@@ -123,7 +123,7 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted."
+    whisper "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted."
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -162,7 +162,8 @@ record_number_step:
   remember contact_number = event
 
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
-  whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+  
+  whisper "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
 
   goto end
 
@@ -173,7 +174,7 @@ confirm_contact_method_step:
   if (event.to_lowercase() == "yes") {
     say "Thank you. Your preference is noted."
 
-    whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+    whisper "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
 
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {

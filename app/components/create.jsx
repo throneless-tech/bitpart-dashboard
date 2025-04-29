@@ -196,9 +196,9 @@ export default function CreateBotFlow({ userId }) {
 
       setQRLink(channelBitpartLink.data.response);
 
-      const bot = await createBotPrisma(data, userId, passcode);
+      // const bot = await createBotPrisma(data, userId, passcode);
 
-      setCreatedBot(bot);
+      // setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
@@ -498,7 +498,7 @@ export default function CreateBotFlow({ userId }) {
             <Group>
               <StepsPrevTrigger asChild>
                 <Button
-                  disabled={stepCount == 0 || stepCount == 3}
+                  // disabled={stepCount == 0 || stepCount == 3}
                   onClick={() => updateStepCount(-1)}
                   size="sm"
                   variant="outline"

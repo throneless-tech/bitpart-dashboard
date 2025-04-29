@@ -132,7 +132,7 @@ confirm_delete_step:
 
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
-  whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}"
+  whisper "Bitpart did not understand this user: {{event.client.user_id}}"
   
   delete
   
@@ -218,7 +218,7 @@ human_support_step:
   say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [responseTime]." // TODO update via admin user settings
 
   // bitpart flags problem to admin
-  whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
+  whisper "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
   
   delete
 

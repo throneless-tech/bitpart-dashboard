@@ -14,7 +14,7 @@ import { Field } from "@/app/components/ui/field";
 export const BroadcastForm = () => {
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
-      adminPhones: [],
+      // adminPhones: [],
       faq: [],
     },
   });
