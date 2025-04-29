@@ -1,3 +1,4 @@
-﻿Network,ICCID,SMDP address,Activation code
+﻿provider,code,iccid,smdp_addr
+Ideal eSIM Provider,activation-code,ICCID number,test.fakenetwork.biz
 ,,,
 

@@ -177,61 +177,36 @@ export default function CreateBotFlow({ userId }) {
     setBotPasscode(passcode);
 
     try {
-      // const botBitpart = await createBotBitpart(data, passcode);
+      const botBitpart = await createBotBitpart(data, passcode);
 
-      // if (botBitpart?.error) {
-      //   setStepCount(stepCount => stepCount -= 1);
-
-      //   alert(botBitpart.error);
-      //   throw new Error(botBitpart.error);
-      // }
-
-      // FIXME uncomment and set up
-      let emsData;
-      if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = await emsCall('test', data.csv);
+      if (botBitpart?.message_type === "Error") {
+        throw new Error(botBitpart.data.response);
       }
 
-      console.log('ems data is: ', emsData);
-      
+      let emsData;
+      if (data.botType === "esim" || data.botType === "vpn") {
+        emsData = emsCall('test', data.botType, data.csv);
+      }
 
-      // const channelBitpartCreate = await createChannelBitPart(data.botName)
+      const channelBitpartLink = await linkChannelBitpart(botBitpart.data.response.bot.id)
 
-      // if (channelBitpartCreate?.error) {
-      //   // setStepCount(stepCount => stepCount -= 1);
+      if (channelBitpartLink?.message_type === "Error") {
+        throw new Error(channelBitpartLink.data.response);
+      }
 
-      //   // alert(botBitpart.error);
-      //   throw new Error(channelBitpartCreate.error);
-      // }
+      setQRLink(channelBitpartLink.data.response);
 
-      // const channelBitpartLink = await linkChannelBitpart(channelBitpartCreate.response.channel_id)
+      const bot = await createBotPrisma(data, userId, passcode);
 
-      // if (channelBitpartLink?.error) {
-      //   // setStepCount(stepCount => stepCount -= 1);
-
-      //   // alert(channelBitpartLink.error);
-      //   throw new Error(channelBitpartLink.error);
-
-      // }
-
-      // setQRLink(channelBitpartLink.response.channel);
-
-      // const bot = await createBotPrisma(data, userId, passcode);
-
-      // console.log('bitpart bot is: ', botBitpart);
-      // console.log('bitpart channel is: ', channelBitpart);
-      // console.log('bot is: ', bot);
-
-      // setCreatedBot(bot);
+      setCreatedBot(bot);
     } catch (error) {
       setStepCount(stepCount => stepCount -= 1);
       console.log(error);
 
-      alert(error);
+      alert("A server error occurred while trying to create this bot. Please contact an admin for assistance.");
     } finally {
       setIsFetching(false);
     }
-
   }
 
   // handle form submission errors
@@ -270,7 +245,7 @@ export default function CreateBotFlow({ userId }) {
             count={4}
             step={stepCount}
             onStepChange={(e) => {
-              if (stepCount == 2) {
+              if (stepCount === 2) {
                 methods.handleSubmit(onSubmit, onError)(e);
               }
             }}
@@ -523,7 +498,7 @@ export default function CreateBotFlow({ userId }) {
             <Group>
               <StepsPrevTrigger asChild>
                 <Button
-                  // disabled={stepCount == 0 || stepCount == 3}
+                  disabled={stepCount == 0 || stepCount == 3}
                   onClick={() => updateStepCount(-1)}
                   size="sm"
                   variant="outline"

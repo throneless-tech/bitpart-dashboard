@@ -2,7 +2,10 @@
 
 start:
 // if bitpart receives passcode, set admin
-  if (event.contains([passcode])) {
+  do passcode = event
+  do passcode.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
@@ -72,7 +75,7 @@ delete_me_confirm_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   goto end
 
 request_step:
@@ -93,9 +96,9 @@ request_step:
 
 share_codes_step:
   // get the codes from bitpart with external function call to EMS
-
-  do codes = fn("ems", method_id="VpnData", quantity=codesNumber )
+  do codes = App("ems", method_id="VpnData", quantity=codesNumber )
   say "Here is the list of VPN codes:\n{{codes}}"
+
   // TODO parse the bitpart data to list the codes if needed
   say "Here are instructions on how to activate the VPN codes.
     \n\n[activationInstructions]"
@@ -132,7 +135,7 @@ human_support_step:
   // send request to admin
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
 
-  // whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+  // whisper [adminPhones.array] "A user has asked for help with VPN codes: {{event.client.user_id}}" // FIXME uncomment for prod
 
   goto end
 
@@ -197,7 +200,7 @@ other_help_step:
   do question = event
 
   //send question to bitpart, who can later update help section depending on questions asked
-  // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+  // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}" // FIXME uncomment for prod
   
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
 

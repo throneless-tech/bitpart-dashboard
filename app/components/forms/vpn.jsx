@@ -5,6 +5,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import {
   Fieldset,
   Input,
+  Link,
   Stack,
   Textarea
 } from "@chakra-ui/react";
@@ -18,8 +19,15 @@ import {
 
 // components
 import { FileUploader } from "@/app/components/forms/fileUpload";
+import { useColorModeValue } from "@/app/components/ui/color-mode";
+
+// icons
+import { FiDownload } from "react-icons/fi";
 
 export const VpnForm = () => {
+  // color mode
+  const color = useColorModeValue("maroon", "yellow");
+
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
       locations: [],
@@ -128,7 +136,8 @@ export const VpnForm = () => {
       >
         <Textarea autoresize {...register('activationInstructions')} />
       </Field>
-      <Fieldset.Root
+      {/* We are currently parsing providers from csv; removing the following field */}
+      {/* <Fieldset.Root
         label="VPN locations"
         marginTop={4}
       >
@@ -183,14 +192,17 @@ export const VpnForm = () => {
         >
           Add provider
         </Button>
-      </Fieldset.Root>
-      {/* FIXME do we need FAQ and limits on # of codes requested? */}
+      </Fieldset.Root> */}
       <Fieldset.Root marginTop={6}>
         <Stack>
           <Fieldset.Legend>Upload VPN codes</Fieldset.Legend>
           <Fieldset.HelperText>
             Please provide a CSV file of your VPN codes for use. Note that the list should only include the provider and the code. You may download the following template, save and export as a .csv, and upload it here.
           </Fieldset.HelperText>
+          <Link color={color} href='/vpn-template.csv' fontSize="sm">
+            Download template
+            <FiDownload />
+          </Link>
         </Stack>
         <Fieldset.Content>
           <Field

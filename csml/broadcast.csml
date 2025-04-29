@@ -2,7 +2,10 @@
 
 start:
   // if bitpart receives passcode, set admin
-  if (event.contains([passcode])) {
+  do passcode = event
+  do passcode.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
@@ -39,9 +42,9 @@ start:
 
 admin_interface_step:
   say "What would you like to do? Enter a number:\n\n
-  1) Broadcast a message
-  2) Exit this conversation
-  3) Delete my data" // FIXME update
+  1) Broadcast a message\n
+  2) Exit this conversation\n
+  3) Delete my data"
   hold
 
   if (event == 1) {
@@ -55,7 +58,6 @@ admin_interface_step:
     goto admin_interface_step
   } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
-  
     goto end
   } else if (event == 3) {
     goto delete_me_confirm_step
@@ -100,7 +102,7 @@ consent_disagree_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   goto end
 
 consent_agree_step:
@@ -208,8 +210,7 @@ submit_question_step:
   remember problem = event
 
   // bitpart flags conversation to list owner
-  // FIXME UNCOMMENT FOR PROD
-  // whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
+  whisper [adminPhones.array] "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
 
   say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 

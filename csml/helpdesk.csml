@@ -3,7 +3,10 @@
 
 start:
   // if bitpart receives passcode, set admin
-  if (event.contains([passcode])) {
+  do passcode = event
+  do passcode.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
@@ -82,7 +85,7 @@ delete_me_confirm_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   goto end
 
 privacy_policy_step:
@@ -124,14 +127,14 @@ delete_data_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   goto end
 
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
-  // whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+  whisper [adminPhones.array] "Bitpart did not understand this user: {{event.client.user_id}}"
   
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   
   goto end
 
@@ -202,7 +205,7 @@ menu_options_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
-    // delete // FIXME UNCOMMENT FOR PROD
+    delete
     
     goto end
   } else {
@@ -215,8 +218,8 @@ human_support_step:
   say "A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [responseTime]." // TODO update via admin user settings
 
   // bitpart flags problem to admin
-  // whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}" // FIXME UNCOMMENT FOR PROD
+  whisper [adminPhones.array] "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
   
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
 
   goto end

@@ -3,7 +3,10 @@
 
 start:
 // if bitpart receives passcode, set admin
-  if (event.contains([passcode])) {
+  do passcode = event
+  do passcode.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
@@ -73,11 +76,6 @@ delete_me_confirm_step:
     do count += 1
     goto delete_me_confirm_step
 
-confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
-  goto end
-  
 privacy_policy_step:
   say "[privacyPolicy]"
   say "Reply with 'Agree' and continue to the main menu\nReply with 'Delete' to delete your data."
@@ -112,7 +110,7 @@ delete_data_step:
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
   goto end
 
 tip_reply_step:
@@ -125,7 +123,7 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    // whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted." // FIXME UNCOMMMENT FOR PROD
+    whisper [adminPhones.array] "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted."
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -164,9 +162,7 @@ record_number_step:
   remember contact_number = event
 
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
-  // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
-
-  // delete // FIXME UNCOMMENT FOR PROD
+  whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
 
   goto end
 
@@ -177,12 +173,12 @@ confirm_contact_method_step:
   if (event.to_lowercase() == "yes") {
     say "Thank you. Your preference is noted."
 
-    // whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}" // FIXME UNCOMMENT FOR PROD
+    whisper [adminPhones.array] "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
 
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
-    // delete // FIXME UNCOMMENT FOR PROD
+    delete
     goto end
   } else if (event.to_lowercase() == "back") {
     goto contact_method_step
@@ -193,6 +189,6 @@ confirm_contact_method_step:
     goto confirm_contact_method_step
   }
 
-  // delete // FIXME UNCOMMENT FOR PROD
+  delete
 
   goto end

@@ -70,6 +70,7 @@ export const createBotBitpart = async (data, passcode) => {
     "data": {
       "id": formattedBotName,
       "name": data.botName,
+      "apps_endpoint": process.env.EMS_ENDPOINT,
       "flows": [
         {
           "id": "Default",
@@ -97,37 +98,13 @@ export const createBotBitpart = async (data, passcode) => {
   return response;
 }
 
-export const createChannelBitPart = async (botName) => {
-  const jsonCreateChannel = {
-    "message_type": "CreateChannel",
-    "data": {
-      "id": "signal",
-      "bot_id": botName,
-    }
-  }
-
-  const jsonStringCreateChannel = JSON.stringify(jsonCreateChannel);
-
-  // send info to bitpart server via websockets
-  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
-  const response = ws.start()
-    .then(async () => {
-      const response = await ws.sendMessage(jsonStringCreateChannel);
-
-      return response;
-    })
-    // .then(res => console.log('res now is:', res))
-    .catch(err => { throw new Error(err.message) });
-
-  return response;
-}
-
-export const linkChannelBitpart = async (channelId) => {
+export const linkChannelBitpart = async (botId) => {
   
   const jsonLinkChannel = {
     "message_type": "LinkChannel",
     "data": {
-      "id": channelId,
+      "id": "signal",
+      "bot_id": botId,
       "device_name": "bitpart",
     }
   }
@@ -171,6 +148,8 @@ export const createBotPrisma = async (data, userId, passcode) => {
   // })
 
   try {
+    delete data.csv; // we are not saving the codes here
+
     const bot = await prisma.bot.create({
       data: {
         ...data,

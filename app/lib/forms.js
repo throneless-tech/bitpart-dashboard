@@ -32,7 +32,7 @@ export const schema = yup.object({
   //     )
   // }),
   faq: yup.array().when("botType", {
-    is: "broadcast" || "vpn",
+    is: "broadcast",
     then: () => yup.array()
       .of(
         yup.object({
@@ -98,8 +98,8 @@ export const schema = yup.object({
       )
       .optional(),
   }),
-  vpnName: yup.string().when("botType", {
-    is: "vpn",
-    then: () => yup.string().required('Name of the VPN service is required'),
-  }),
+  // vpnName: yup.string().when("botType", {
+  //   is: "vpn",
+  //   then: () => yup.string().required('Name of the VPN service is required'),
+  // }),
 });

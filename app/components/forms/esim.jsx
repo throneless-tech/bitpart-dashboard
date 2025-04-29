@@ -4,7 +4,9 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 // chakra imports
 import {
   Fieldset,
+  HStack,
   Input,
+  Link,
   Stack,
   Textarea
 } from "@chakra-ui/react";
@@ -13,23 +15,30 @@ import { Field } from "@/app/components/ui/field";
 
 // components
 import { FileUploader } from "@/app/components/forms/fileUpload";
+import { useColorModeValue } from "@/app/components/ui/color-mode";
+
+// icons
+import { FiDownload } from "react-icons/fi";
 
 export const EsimForm = () => {
+  // color mode
+  const color = useColorModeValue("maroon", "yellow");
+
   const { register, control, formState: { errors } } = useFormContext({
     defaultValues: {
-      locations: [],
+      // locations: [],
       // plans: [],
     },
   });
 
-  const {
-    fields: locationFields,
-    append: locationAppend,
-    remove: locationRemove,
-  } = useFieldArray({
-    control,
-    name: 'locations',
-  });
+  // const {
+  //   fields: locationFields,
+  //   append: locationAppend,
+  //   remove: locationRemove,
+  // } = useFieldArray({
+  //   control,
+  //   name: 'locations',
+  // });
 
   // const {
   //   fields: planFields,
@@ -95,7 +104,7 @@ export const EsimForm = () => {
       >
         <Textarea autoresize {...register('helpInstructions')} />
       </Field>
-      <Fieldset.Root
+      {/* <Fieldset.Root
         label="eSIM networks"
         marginTop={4}
       >
@@ -150,7 +159,7 @@ export const EsimForm = () => {
         >
           Add network
         </Button>
-      </Fieldset.Root>
+      </Fieldset.Root> */}
       {/* <Fieldset.Root
         label="eSIM plans"
         marginTop={4}
@@ -224,6 +233,10 @@ export const EsimForm = () => {
           <Fieldset.HelperText>
             Please provide a CSV file of your eSIM codes for use. Note that the list should only include the mobile network and the code. You may download the following template, save and export as a .csv, and upload it here.
           </Fieldset.HelperText>
+          <Link color={color} href='/esim-template.csv' fontSize="sm">
+            Download template
+            <FiDownload />
+          </Link>
         </Stack>
         <Fieldset.Content>
           <FileUploader register={register('csv')} />
