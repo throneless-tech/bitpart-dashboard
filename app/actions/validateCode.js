@@ -37,7 +37,7 @@ export const validateCode = async (prevState, formData) => {
     console.log(e);
   } finally {
     if (redirectPath) {
-      return redirect(redirectPath);
+      return redirect(redirectPath); // eslint-disable-line no-unsafe-finally
     }
   }
 };

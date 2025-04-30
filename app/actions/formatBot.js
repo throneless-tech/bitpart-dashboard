@@ -44,17 +44,17 @@ export const createPasscode = async () => {
 
 // format the name of the bot for bitpart bot id
 export const formatBotName = async (botName) => {
-  let formattedBotName = botName.replace(/\s/g, "_");
+  const formattedBotName = botName.replace(/\s/g, "_");
 
   return formattedBotName;
 };
 
 // format the csml string for bitpart
 export const formatCsml = async (data, passcode) => {
-  let file = `./csml/${data.botType}.csml`;
+  const file = `./csml/${data.botType}.csml`;
   let csml = "";
   let formattedCsml = "";
-  let phones = [];
+  const phones = [];
 
   const template = await fs.readFile(file, "utf8", (err, data) => {
     if (err) {
@@ -184,8 +184,8 @@ export const formatCsml = async (data, passcode) => {
 
       csml = csml.replace(`[passcode]`, passcode);
 
-      let regex = /"/g;
-      let quot = String.raw`\"`;
+      const regex = /"/g;
+      const quot = String.raw`\"`;
       formattedCsml = csml.replaceAll(regex, quot);
       // formattedCsml = `"${formattedCsml}"`;
     }

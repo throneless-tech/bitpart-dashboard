@@ -21,7 +21,7 @@ function _optionalChain(ops) {
   }
   return value;
 }
-("");
+(""); // eslint-disable-line @typescript-eslint/no-unused-expressions
 
 import {
   Toaster as ChakraToaster,

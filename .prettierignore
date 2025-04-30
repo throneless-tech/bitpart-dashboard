@@ -1,6 +1,5 @@
 # Ignore artifacts:
 .husky
-build
+.next
 csml
-coverage
 prisma

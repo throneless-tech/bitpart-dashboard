@@ -26,11 +26,13 @@ export default async function Header() {
               <form
                 action={async () => {
                   "use server";
+                  /* eslint-disable no-useless-catch */
                   try {
                     await signOut({ redirectTo: "/?message=SignOutSuccess" });
                   } catch (error) {
                     throw error;
                   }
+                  /* eslint-enable no-useless-catch */
                 }}
               >
                 <Button type="submit" variant="underline">

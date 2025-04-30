@@ -181,7 +181,7 @@ export default function CreateBotFlow({ userId }) {
   // submit bot creation for bitpart server and prisma db
   const onSubmit = async (data) => {
     setIsFetching(true);
-    let passcode = await createPasscode();
+    const passcode = await createPasscode();
     setBotPasscode(passcode);
 
     try {
