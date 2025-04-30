@@ -1,0 +1,6 @@
+# Ignore artifacts:
+.husky
+build
+csml
+coverage
+prisma

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -40,6 +41,8 @@
     "eslint-config-next": "15.0.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "husky": "^9.1.7",
+    "prettier": "3.5.3",
     "prisma": "^6.4.1",
     "tsx": "^4.19.3"
   },
