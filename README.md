@@ -28,9 +28,15 @@ Add the url to the database as your `DATABASE_URL` in your `.env` file.
 
 Run `prisma migrate dev` in development or `prisma migrate deploy` in production to apply the migrations.
 
-If you would like to seed the database, run `npx prisma db seed` in your terminal.
+### Seed the database with invite codes
 
-Run `npx prisma studio` to view the database info at [http://localhost:5555](http://localhost:5555).
+Users may only sign up for a Bitpart dashboard account with an invite code. **An invite code may only be used once per user, so do not plan to use the same invite codes for multiple users.** To create 100 random invite codes, run `node create-codes.mjs` from the root directory. This will create a file called `codes.json` that will contain your randomized invite codes to add to the database.
+
+Navigate to the `prisma/seed.ts` file. Here, you will see where you can enter the invite codes you've created. Replace the example codes with your unique invite codes.
+
+Finally, to seed the database, run `npx prisma db seed` in your terminal.
+
+You can also run `npx prisma studio` to view the database info at [http://localhost:5555](http://localhost:5555).
 
 ### Run Next
 
@@ -48,7 +54,9 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## TODO Connecting to Bitpart server
+## Connecting to Bitpart server
+
+For the dashboard to fully function, you will also need to run [bitpart](https://github.com/throneless-tech/bitpart) and [bitpart-ems](https://github.com/throneless-tech/bitpart-ems). Follow the links for instructions on how to run both.
 
 Add to your `.env` file the following:
 
@@ -71,5 +79,6 @@ NEXT_PUBLIC_ESIM_ENDPOINT="esim_endpoint"
 NEXT_PUBLIC_VPN_ENDPOINT="vpn_endpoint"
 ```
 
+## Deployment
 
-## TODO Deployment
+## TODO Container
