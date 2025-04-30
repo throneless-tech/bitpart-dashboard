@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ import {
   ClientOnly,
   Stack,
   Switch,
-  Text
+  Text,
 } from "@chakra-ui/react";
 
 // components imports
@@ -23,8 +23,7 @@ import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
-const botTypes =
-{
+const botTypes = {
   broadcast: <TbBuildingBroadcastTower />,
   tipline: <LuLightbulb />,
   helpdesk: <IoHelpBuoySharp />,
@@ -47,35 +46,23 @@ export default function BotCard(props) {
         {botTypes[bot.botType]}
         <Card.Title mt="2">{bot.botName}</Card.Title>
         <ClientOnly>
-        <Box color={color}>
-          {bot.phone ? (
-              <Text>
-                {bot.phone}
-              </Text>
-          ) : null}
-          <Stack
-            alignItems="flex-start"
-            direction="row"
-            marginTop={2}
-          >
-            <Text>
-              View passcode{' '}
-            </Text>
-            <Switch.Root
-              checked={checked}
-              onCheckedChange={(e) => setChecked(e.checked)}
-            >
-              <Switch.HiddenInput />
-              <Switch.Control>
-                <Switch.Thumb />
-              </Switch.Control>
-              <Switch.Label />
-            </Switch.Root>
-          </Stack>
-          <Text>
-            {checked ? bot.passcode : "●●●●●●●●"}
-          </Text>
-        </Box>
+          <Box color={color}>
+            {bot.phone ? <Text>{bot.phone}</Text> : null}
+            <Stack alignItems="flex-start" direction="row" marginTop={2}>
+              <Text>View passcode </Text>
+              <Switch.Root
+                checked={checked}
+                onCheckedChange={(e) => setChecked(e.checked)}
+              >
+                <Switch.HiddenInput />
+                <Switch.Control>
+                  <Switch.Thumb />
+                </Switch.Control>
+                <Switch.Label />
+              </Switch.Root>
+            </Stack>
+            <Text>{checked ? bot.passcode : "●●●●●●●●"}</Text>
+          </Box>
         </ClientOnly>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
@@ -85,5 +72,5 @@ export default function BotCard(props) {
         </form>
       </Card.Footer>
     </Card.Root>
-  )
+  );
 }

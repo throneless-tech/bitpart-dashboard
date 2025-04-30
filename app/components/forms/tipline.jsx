@@ -1,13 +1,8 @@
 // base imports
-import { useFormContext } from 'react-hook-form';
+import { useFormContext } from "react-hook-form";
 
 // chakra imports
-import {
-  Heading,
-  Input,
-  Stack,
-  Textarea
-} from "@chakra-ui/react";
+import { Heading, Input, Stack, Textarea } from "@chakra-ui/react";
 import { Field } from "@/app/components/ui/field";
 
 export const TiplineForm = () => {
@@ -26,7 +21,7 @@ export const TiplineForm = () => {
         label="Tipline name"
         required
       >
-        <Input {...register('name')} />
+        <Input {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
@@ -40,9 +35,9 @@ export const TiplineForm = () => {
         <Textarea
           autoresize
           defaultValue={`This tipline does not ask you for any personal data except for a phone number after you share your tip. You can choose to opt out by selecting option 5.\n\nThe tips you share is recorded & stored <WHERE?>\n\nPersonal data attached to your tip is any information that is visible on your Signal profile (e.g. your profile nam, your phone number or username if visible).\n\nWe delete tips every <TIMEFRAME?>\n\nIf you would like your data deleted from our systems, please contact <ADD CONTACT METHOD>`}
-          {...register('privacyPolicy')}
+          {...register("privacyPolicy")}
         />
       </Field>
     </>
-  )
-}
+  );
+};

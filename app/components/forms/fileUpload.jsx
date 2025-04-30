@@ -1,16 +1,12 @@
 // chakra imports
-import {
-  Box,
-  FileUpload,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, FileUpload, Icon } from "@chakra-ui/react";
 
 // icons
-import { LuUpload } from "react-icons/lu"
+import { LuUpload } from "react-icons/lu";
 
 export const FileUploader = (props) => {
   const { register } = props;
-  
+
   return (
     <FileUpload.Root accept={["text/csv"]} maxFiles={1}>
       <FileUpload.HiddenInput {...register} />
@@ -39,5 +35,5 @@ export const FileUploader = (props) => {
         </FileUpload.Context>
       </FileUpload.ItemGroup>
     </FileUpload.Root>
-  )
-}
+  );
+};

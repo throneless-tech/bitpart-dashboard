@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 // base imports
-import { useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // chakra ui imports
-import { toaster, Toaster } from "@/app/components/ui/toaster"
+import { toaster, Toaster } from "@/app/components/ui/toaster";
 
 export const ToastSignOut = () => {
   const params = useSearchParams();
@@ -15,7 +15,7 @@ export const ToastSignOut = () => {
     if (params.get("message") === "SignOutSuccess") {
       setShow(true);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (show) {
@@ -23,17 +23,16 @@ export const ToastSignOut = () => {
         duration: 10000,
         title: "You have successfully logged out",
         type: "success",
-      })
+      });
     }
-  }, [show])
+  }, [show]);
 
   return (
     <>
       <Toaster toaster={toaster} />
     </>
-
-  )
-}
+  );
+};
 
 export const ToastSignUp = () => {
   const params = useSearchParams();
@@ -43,7 +42,7 @@ export const ToastSignUp = () => {
     if (params.get("message") === "SignUpSuccess") {
       setShow(true);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (show) {
@@ -51,14 +50,13 @@ export const ToastSignUp = () => {
         duration: 10000,
         title: "Account created successfully. Please login.",
         type: "success",
-      })
+      });
     }
-  }, [show])
+  }, [show]);
 
   return (
     <>
       <Toaster toaster={toaster} />
     </>
-
-  )
-}
+  );
+};

@@ -10,7 +10,5 @@
       "jsx": true
     }
   },
-  "plugins": [
-    "react"
-  ]
+  "plugins": ["react"]
 }

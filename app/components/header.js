@@ -3,16 +3,10 @@ import React from "react";
 import { auth } from "@/auth";
 
 // auth imports
-import { signOut } from "@/auth"
+import { signOut } from "@/auth";
 
 // chakra ui imports
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Flex, Link } from "@chakra-ui/react";
 import { ColorModeButton } from "@/app/components/ui/color-mode";
 
 export default async function Header() {
@@ -24,29 +18,22 @@ export default async function Header() {
         <Flex justifyContent="space-between">
           <Flex gap={4}>
             <ColorModeButton />
-            <Link href="/dashboard">
-              Home
-            </Link>
+            <Link href="/dashboard">Home</Link>
           </Flex>
           <Flex gap={4}>
-            <Button>
-              Donate
-            </Button>
+            <Button>Donate</Button>
             {session ? (
               <form
                 action={async () => {
-                  "use server"
+                  "use server";
                   try {
-                    await signOut({ redirectTo: '/?message=SignOutSuccess' });
+                    await signOut({ redirectTo: "/?message=SignOutSuccess" });
                   } catch (error) {
                     throw error;
                   }
                 }}
               >
-                <Button
-                  type="submit"
-                  variant='underline'
-                >
+                <Button type="submit" variant="underline">
                   Logout
                 </Button>
               </form>
@@ -59,5 +46,5 @@ export default async function Header() {
         </Flex>
       </Container>
     </Box>
-  )
+  );
 }

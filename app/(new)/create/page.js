@@ -10,12 +10,11 @@ import CreateBotFlow from "@/app/components/create";
 import Header from "@/app/components/header";
 import NotAuthenticated from "@/app/components/notAuthenticated";
 
-
 export default async function Create() {
   const session = await auth();
-  
-  if (!session) return <NotAuthenticated />
-  
+
+  if (!session) return <NotAuthenticated />;
+
   return (
     <Box>
       <Header />

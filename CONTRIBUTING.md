@@ -162,6 +162,7 @@ All code must pass the `cargo fmt` and `cargo clippy` lints as configured in the
 ### Commit Messages
 
 All commit messages must adhere to the [Conventional Commits](https://www.conventionalcommits.org) standard in order to be accepted.
+
 <!-- TODO
 
 -->

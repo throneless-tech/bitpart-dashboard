@@ -21,10 +21,12 @@ export default function Singup() {
       </Container>
       <Container py={6} maxW="lg">
         <Text marginBottom={12}>
-          Choose a unique username and password, and store this somewhere safe. Since we do not collect your email, we will not be able to send you a password reset if you forget your credentials.
+          Choose a unique username and password, and store this somewhere safe.
+          Since we do not collect your email, we will not be able to send you a
+          password reset if you forget your credentials.
         </Text>
         <SignupForm />
       </Container>
     </Box>
-  )
+  );
 }

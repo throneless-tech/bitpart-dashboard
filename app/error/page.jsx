@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 // base imports
-import { useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation";
 
 // chakra ui imports
 import {
@@ -11,26 +11,24 @@ import {
   Heading,
   HStack,
   Link,
-  Text
-} from "@chakra-ui/react"
+  Text,
+} from "@chakra-ui/react";
 
 // icons
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 export default function AuthErrorPage() {
-  const search = useSearchParams()
-  const error = search.get("error")
+  const search = useSearchParams();
+  const error = search.get("error");
 
   return (
     <Box className="flex h-screen w-full flex-col items-center justify-center">
-      <Container marginY={12} maxWidth='lg'>
-        <Heading as="h1">
-          Something went wrong
-        </Heading>
+      <Container marginY={12} maxWidth="lg">
+        <Heading as="h1">Something went wrong</Heading>
         <Box>
           <Text marginTop={6}>
-            There was a problem when trying to authenticate. Please contact us if this
-            error persists. Unique error code:{" "}
+            There was a problem when trying to authenticate. Please contact us
+            if this error persists. Unique error code:{" "}
             <Code className="rounded-sm bg-slate-100 p-1 text-xs">{error}</Code>
           </Text>
           <Text as="div" marginTop={2}>
@@ -46,5 +44,5 @@ export default function AuthErrorPage() {
         </Box>
       </Container>
     </Box>
-  )
+  );
 }

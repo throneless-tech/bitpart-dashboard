@@ -1,16 +1,10 @@
-"use client"
+"use client";
 
 // base imports
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // chakra ui imports
-import {
-  Button,
-  Heading,
-  Spinner,
-  Stack,
-  Text
-} from "@chakra-ui/react";
+import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
 import { deleteBot } from "../actions/deleteBot";
@@ -20,7 +14,7 @@ import { getUserBots } from "../actions/getUserBots";
 import BotCard from "@/app/components/botCard";
 
 // constants
-import { MAX_BOTS } from '../constants';
+import { MAX_BOTS } from "../constants";
 
 export default function BotsList({ userId }) {
   const [isFetching, setIsFetching] = useState(true);
@@ -35,12 +29,14 @@ export default function BotsList({ userId }) {
   async function handleDelete(id, phone) {
     setIsFetching(true);
     try {
-      alert("Are you sure you want to delete this bot? This action cannot be undone.")
+      alert(
+        "Are you sure you want to delete this bot? This action cannot be undone.",
+      );
       await deleteBot(id, phone);
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
-      console.log('error: ', error);
+      console.log("error: ", error);
     }
   }
 
@@ -48,18 +44,18 @@ export default function BotsList({ userId }) {
     if (userId) {
       fetchBots();
     }
-  }, [])
+  }, []);
 
-  useEffect(() => { }, [bots, isFetching])
+  useEffect(() => {}, [bots, isFetching]);
 
   if (isFetching) {
-    return <Spinner size="lg" />
+    return <Spinner size="lg" />;
   } else {
     return (
       <>
         {bots && bots.length ? (
           <>
-            <Heading as='h2' size="xl">
+            <Heading as="h2" size="xl">
               My bots
             </Heading>
             <Stack
@@ -68,23 +64,25 @@ export default function BotsList({ userId }) {
               gap={[4, 4, 8]}
               marginTop={4}
             >
-              {bots && bots.length && bots.map((bot, index) => (
-                <BotCard
-                  key={`${bot.botType}-${index}`}
-                  bot={bot}
-                  handleDelete={handleDelete}
-                  userId={userId}
-                />
-              ))}
+              {bots &&
+                bots.length &&
+                bots.map((bot, index) => (
+                  <BotCard
+                    key={`${bot.botType}-${index}`}
+                    bot={bot}
+                    handleDelete={handleDelete}
+                    userId={userId}
+                  />
+                ))}
             </Stack>
           </>
         ) : (
           <Text>You do not have any bots. Click below to create one.</Text>
         )}
         <Button
-          as='a'
+          as="a"
           disabled={bots && bots.length > 3}
-          href='/create'
+          href="/create"
           onClick={(e) => {
             if (bots && bots.length > 3) {
               e.preventDefault();
@@ -95,11 +93,12 @@ export default function BotsList({ userId }) {
           Create a new bot
         </Button>
         {bots && bots.length >= MAX_BOTS ? (
-          <Text fontSize="sm" marginTop={2} style={{fontStyle: "italic"}} >
-            You have reached the limit on how many bots a user may create. Please delete a bot if you would like to create a new one.
+          <Text fontSize="sm" marginTop={2} style={{ fontStyle: "italic" }}>
+            You have reached the limit on how many bots a user may create.
+            Please delete a bot if you would like to create a new one.
           </Text>
         ) : null}
       </>
-    )
+    );
   }
 }

@@ -1,5 +1,5 @@
-"use server"
-import { prisma } from '@/lib/prisma';
+"use server";
+import { prisma } from "@/lib/prisma";
 
 export const deleteBot = async (botId, botPhone) => {
   // FIXME uncomment when ready
@@ -48,11 +48,11 @@ export const deleteBot = async (botId, botPhone) => {
     const bot = await prisma.bot.delete({
       where: {
         id: botId,
-      }
+      },
     });
 
     return "deleted";
   } catch (e) {
     console.log(e);
   }
-}
+};

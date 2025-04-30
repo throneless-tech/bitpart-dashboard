@@ -1,11 +1,7 @@
 import { Buffer } from "node:buffer";
-import {
-  createHash,
-  randomBytes,
-} from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import fs from "fs";
 import { generateSlug } from "random-word-slugs";
-
 
 async function createAndHashCode() {
   const slug = generateSlug(4);
@@ -26,11 +22,11 @@ let codes = [];
 
 for (let i = 0; i < 101; i++) {
   let code = await createAndHashCode();
-  codes.push({code: code});
+  codes.push({ code: code });
 }
 
 const stringCodes = JSON.stringify(codes);
 
-fs.writeFile("codes.json", stringCodes, function(err, result) {
-  if (err) console.log('Error: ', err)
+fs.writeFile("codes.json", stringCodes, function (err, result) {
+  if (err) console.log("Error: ", err);
 });

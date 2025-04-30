@@ -3,11 +3,7 @@ import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports
-import {
-  Box,
-  Container,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 
 // components
 import Header from "@/app/components/header";
@@ -17,15 +13,12 @@ import NotAuthenticated from "@/app/components/notAuthenticated";
 export default async function Dashboard() {
   const session = await auth();
 
-  if (!session) return <NotAuthenticated />
+  if (!session) return <NotAuthenticated />;
 
   return (
     <Box>
       <Header />
-      <Container
-        marginY={3}
-        maxW="2xl"
-      >
+      <Container marginY={3} maxW="2xl">
         <Heading as="h1" size="3xl" marginBottom={8}>
           Dashboard
         </Heading>
@@ -34,5 +27,5 @@ export default async function Dashboard() {
         </Box>
       </Container>
     </Box>
-  )
+  );
 }

@@ -1,20 +1,16 @@
-"use client"
+"use client";
 
 // base imports
 import React from "react";
 
 // chakra ui imports
-import {
-  Box,
-  Button,
-  ClientOnly,
-  Flex,
-  HStack,
-  Link,
-} from "@chakra-ui/react";
+import { Box, Button, ClientOnly, Flex, HStack, Link } from "@chakra-ui/react";
 
 // component imports
-import { ColorModeButton, useColorModeValue } from "@/app/components/ui/color-mode";
+import {
+  ColorModeButton,
+  useColorModeValue,
+} from "@/app/components/ui/color-mode";
 
 export default function Header() {
   // color mode
@@ -40,9 +36,7 @@ export default function Header() {
             <Link color={color} href="/login" variant="underline">
               Login
             </Link>
-            <Button>
-              Donate
-            </Button>
+            <Button>Donate</Button>
           </HStack>
         </ClientOnly>
       </Flex>

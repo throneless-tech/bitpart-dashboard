@@ -1,13 +1,8 @@
-"use client"
-import * as React from 'react'
+"use client";
+import * as React from "react";
 
 // chakra imports
-import {
-  Field as ChakraField,
-  IconButton,
-  List,
-  Text
-} from '@chakra-ui/react'
+import { Field as ChakraField, IconButton, List, Text } from "@chakra-ui/react";
 
 // components
 import {
@@ -22,15 +17,22 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/app/components/ui/drawer";
-import PrivacyPolicyText from "@/app/components/drawer/privacyPolicy"
-import SafetyTipsText from "@/app/components/drawer/safetyTips"
+import PrivacyPolicyText from "@/app/components/drawer/privacyPolicy";
+import SafetyTipsText from "@/app/components/drawer/safetyTips";
 
 // icons
 import { LuInfo } from "react-icons/lu";
 
 export const Field = React.forwardRef(function Field(props, ref) {
-  const { label, info, children, helperText, errorText, optionalText, ...rest } =
-    props
+  const {
+    label,
+    info,
+    children,
+    helperText,
+    errorText,
+    optionalText,
+    ...rest
+  } = props;
 
   const [open, setOpen] = React.useState(false);
 
@@ -64,22 +66,30 @@ export const Field = React.forwardRef(function Field(props, ref) {
                   ) : info == "activationInstructions" ? (
                     <>
                       <Text>
-                        This is where we will offer a description and an example of what activation instructions may look like and include.
+                        This is where we will offer a description and an example
+                        of what activation instructions may look like and
+                        include.
                       </Text>
                       <Text marginTop={2}>
-                        Your will to survive, your love of life, your passion to know ... Everything that is truest and best in all species of beings has been revealed to you. Those are the qualities that make a civilization worthy to survive.
+                        Your will to survive, your love of life, your passion to
+                        know ... Everything that is truest and best in all
+                        species of beings has been revealed to you. Those are
+                        the qualities that make a civilization worthy to
+                        survive.
                       </Text>
-                      <Text marginTop={2}>
-                        Make It So!
-                      </Text>
+                      <Text marginTop={2}>Make It So!</Text>
                     </>
                   ) : info == "helpInstructions" ? (
                     <>
                       <Text>
-                        This is where we will offer a description and an example of what help instructions may look like and include.
+                        This is where we will offer a description and an example
+                        of what help instructions may look like and include.
                       </Text>
                       <Text marginTop={2}>
-                        To be human is to be complex. You can't avoid a little ugliness -- from within -- and from without. It's hard to believe that something which is neither seen nor felt can do so much harm. Khaaannnn!
+                        To be human is to be complex. You can't avoid a little
+                        ugliness -- from within -- and from without. It's hard
+                        to believe that something which is neither seen nor felt
+                        can do so much harm. Khaaannnn!
                       </Text>
                     </>
                   ) : null}
@@ -102,5 +112,5 @@ export const Field = React.forwardRef(function Field(props, ref) {
       )}
       {errorText && <ChakraField.ErrorText>{errorText}</ChakraField.ErrorText>}
     </ChakraField.Root>
-  )
-})
+  );
+});

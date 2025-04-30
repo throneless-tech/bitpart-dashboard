@@ -1,6 +1,8 @@
 export const CountryCodes = () => (
   <>
-    <option defaultValue="0" value="0">Select a country code</option>
+    <option defaultValue="0" value="0">
+      Select a country code
+    </option>
     <option value="93">Afghanistan +93</option>
     <option value="358">Aland Islands +358</option>
     <option value="355">Albania +355</option>
@@ -209,7 +211,9 @@ export const CountryCodes = () => (
     <option value="677">Solomon Islands +677</option>
     <option value="252">Somalia +252</option>
     <option value="27">South Africa +27</option>
-    <option value="500">South Georgia and the South Sandwich Islands +500</option>
+    <option value="500">
+      South Georgia and the South Sandwich Islands +500
+    </option>
     <option value="211">South Sudan +211</option>
     <option value="34">Spain +34</option>
     <option value="94">Sri Lanka +94</option>
@@ -253,4 +257,4 @@ export const CountryCodes = () => (
     <option value="260">Zambia +260</option>
     <option value="263">Zimbabwe +263</option>
   </>
-)
+);

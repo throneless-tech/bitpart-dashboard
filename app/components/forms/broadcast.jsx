@@ -1,18 +1,17 @@
 // base imports
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
-import {
-  Fieldset,
-  Input,
-  Stack,
-  Textarea
-} from "@chakra-ui/react";
+import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 
 export const BroadcastForm = () => {
-  const { register, control, formState: { errors } } = useFormContext({
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext({
     defaultValues: {
       // adminPhones: [],
       faq: [],
@@ -25,9 +24,9 @@ export const BroadcastForm = () => {
     remove: faqRemove,
   } = useFieldArray({
     control,
-    name: 'faq',
+    name: "faq",
   });
-  
+
   return (
     <>
       <Field
@@ -37,7 +36,7 @@ export const BroadcastForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="Broadcast list" {...register('name')} />
+        <Input placeholder="Broadcast list" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -49,8 +48,8 @@ export const BroadcastForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME> who runs this group." 
-          {...register('description')}
+          defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME> who runs this group."
+          {...register("description")}
         />
       </Field>
       <Field
@@ -61,68 +60,56 @@ export const BroadcastForm = () => {
         label="Safety tips"
         marginTop={4}
       >
-        <Textarea autoresize {...register('safetyTips')} />
+        <Textarea autoresize {...register("safetyTips")} />
       </Field>
-      <Fieldset.Root
-        label="FAQs"
-        marginTop={4}
-      >
+      <Fieldset.Root label="FAQs" marginTop={4}>
         <Stack>
-          <Fieldset.Legend>
-            FAQs
-          </Fieldset.Legend>
+          <Fieldset.Legend>FAQs</Fieldset.Legend>
           <Fieldset.HelperText>
-            If your list needs FAQs, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user.
+            If your list needs FAQs, we recommend four (4) or fewer
+            question/answer combos. Start with your most asked question at the
+            top. Keep in mind Bitpart will automatically add an 'other' question
+            for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
         {faqFields.map((f, i) => {
           return (
             <Stack
-              alignItems={'center'}
-              direction={['column', 'row']}
+              alignItems={"center"}
+              direction={["column", "row"]}
               justifyContent="flex-start"
               key={f.id}
               marginBottom={4}
               spacing={20}
-              width='100%'
+              width="100%"
             >
-              <Stack width='100%'>
-                <Field
-                  invalid={!!errors?.faq}
-                  errorText={errors.faq?.question}
-                >
+              <Stack width="100%">
+                <Field invalid={!!errors?.faq} errorText={errors.faq?.question}>
                   <Input
                     placeholder="Question"
                     {...register(`faq.${i}.question`)}
                   />
                 </Field>
-                <Field
-                  invalid={!!errors?.faq}
-                  errorText={errors.faq?.answer}
-                >
+                <Field invalid={!!errors?.faq} errorText={errors.faq?.answer}>
                   <Input
                     placeholder="Answer"
                     {...register(`faq.${i}.answer`)}
                   />
                 </Field>
               </Stack>
-              {i >= 0 &&
-                <Button
-                  onClick={() => faqRemove(i)}
-                  height={6}
-                  width={1}
-                >
+              {i >= 0 && (
+                <Button onClick={() => faqRemove(i)} height={6} width={1}>
                   X
                 </Button>
-              }
+              )}
             </Stack>
           );
         })}
         <Button
           onClick={() =>
             faqAppend({
-              question: '',
-              answer: '',
+              question: "",
+              answer: "",
             })
           }
           variant="subtle"
@@ -132,5 +119,5 @@ export const BroadcastForm = () => {
         </Button>
       </Fieldset.Root>
     </>
-  )
-}
+  );
+};

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 // base imports
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
 // form validation imports
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../lib/forms";
 
 // chakra ui imports
@@ -41,7 +41,9 @@ import {
   StepsNextTrigger,
   StepsPrevTrigger,
 } from "@/app/components/ui/steps";
-const StepsRoot = dynamic(() => import('@/app/components/ui/steps'), { ssr: false })
+const StepsRoot = dynamic(() => import("@/app/components/ui/steps"), {
+  ssr: false,
+});
 
 // form imports
 import { BasicsForm } from "@/app/components/forms/basics";
@@ -60,66 +62,72 @@ import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
 
 // actions
-import { createBotBitpart, createBotPrisma, createChannelBitPart, linkChannelBitpart } from '@/app/actions/createBot';
-import { createPasscode } from '@/app/actions/formatBot';
-import { emsCall } from '@/app/actions/ems';
+import {
+  createBotBitpart,
+  createBotPrisma,
+  createChannelBitPart,
+  linkChannelBitpart,
+} from "@/app/actions/createBot";
+import { createPasscode } from "@/app/actions/formatBot";
+import { emsCall } from "@/app/actions/ems";
 import { getUserBots } from "@/app/actions/getUserBots";
 
 // constants
-import { MAX_BOTS } from '@/app/constants';
+import { MAX_BOTS } from "@/app/constants";
 
 const frameworks = [
   {
     value: "broadcast",
     title: "Broadcast",
-    description: "Send messages to many recipients while protecting the privacy of both senders and recipients.",
-    icon: <TbBuildingBroadcastTower />
+    description:
+      "Send messages to many recipients while protecting the privacy of both senders and recipients.",
+    icon: <TbBuildingBroadcastTower />,
   },
   {
     value: "tipline",
     title: "Tipline",
     description: "Set up an automated system to receive tips.",
-    icon: <LuLightbulb />
+    icon: <LuLightbulb />,
   },
   {
     value: "helpdesk",
     title: "Helpdesk",
     description: "Set up an automated system to answer questions.",
-    icon: <IoHelpBuoySharp />
+    icon: <IoHelpBuoySharp />,
   },
   {
     value: "esim",
     title: "eSIM",
     description: "Distribute eSIMs to people who request codes.",
-    icon: <FaSimCard />
+    icon: <FaSimCard />,
   },
   {
     value: "vpn",
     title: "VPN",
     description: "Distribute VPN codes to people who request them.",
-    icon: <CgModem />
+    icon: <CgModem />,
   },
-]
+];
 
 const valuesToUnregister = [
-  'about',
-  'activationInstructions',
+  "about",
+  "activationInstructions",
   // 'adminPhones',
-  'csv',
-  'description',
-  'faq',
-  'helpInstructions',
-  'locations',
-  'maxCodes',
+  "csv",
+  "description",
+  "faq",
+  "helpInstructions",
+  "locations",
+  "maxCodes",
   // 'plans',
-  'privacyPolicy',
-  'problems',
-  'referral',
-  'responseTime',
-  'safetyTips',
-  'storageAccess',
-  'vpnName',
-]
+  "privacyPolicy",
+  "problems",
+  "referral",
+  "responseTime",
+  "safetyTips",
+  "storageAccess",
+  "vpnName",
+];
 
 export default function CreateBotFlow({ userId }) {
   const [notAllowed, setNotAllowed] = useState(false);
@@ -127,8 +135,8 @@ export default function CreateBotFlow({ userId }) {
   const [stepCount, setStepCount] = useState(0);
   const [dataConfirmed, setDataConfirmed] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [botPasscode, setBotPasscode] = useState('');
-  const [qrLink, setQRLink] = useState('');
+  const [botPasscode, setBotPasscode] = useState("");
+  const [qrLink, setQRLink] = useState("");
 
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
@@ -139,25 +147,25 @@ export default function CreateBotFlow({ userId }) {
       }
     }
     fetchBots();
-  }, [])
+  }, []);
 
-  useEffect(() => { }, [notAllowed])
+  useEffect(() => {}, [notAllowed]);
 
   // update the step count based on prev or next
   const updateStepCount = (step) => {
-    setStepCount(stepCount => stepCount += step);
+    setStepCount((stepCount) => (stepCount += step));
     window.scrollTo(0, 0);
-  }
+  };
 
   const methods = useForm({
-    defaultValues: { botType: 'broadcast' },
-    mode: 'onBlur',
+    defaultValues: { botType: "broadcast" },
+    mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const values = methods.getValues();
 
-  const [botType] = methods.watch(['botType']);
+  const [botType] = methods.watch(["botType"]);
 
   const watchAll = methods.watch();
 
@@ -165,7 +173,7 @@ export default function CreateBotFlow({ userId }) {
 
   // set the path that a user takes depending on which bot type they select, and unregister any previously registered but unneeded fields
   const updateBotType = (event) => {
-    methods.setValue('botType', event.target.value);
+    methods.setValue("botType", event.target.value);
     methods.clearErrors();
     methods.unregister(valuesToUnregister);
   };
@@ -185,10 +193,12 @@ export default function CreateBotFlow({ userId }) {
 
       let emsData;
       if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = emsCall('test', data.botType, data.csv);
+        emsData = emsCall("test", data.botType, data.csv);
       }
 
-      const channelBitpartLink = await linkChannelBitpart(botBitpart.data.response.bot.id)
+      const channelBitpartLink = await linkChannelBitpart(
+        botBitpart.data.response.bot.id,
+      );
 
       if (channelBitpartLink?.message_type === "Error") {
         throw new Error(channelBitpartLink.data.response);
@@ -200,40 +210,43 @@ export default function CreateBotFlow({ userId }) {
 
       // setCreatedBot(bot);
     } catch (error) {
-      setStepCount(stepCount => stepCount -= 1);
+      setStepCount((stepCount) => (stepCount -= 1));
       console.log(error);
 
-      alert("A server error occurred while trying to create this bot. Please contact an admin for assistance.");
+      alert(
+        "A server error occurred while trying to create this bot. Please contact an admin for assistance.",
+      );
     } finally {
       setIsFetching(false);
     }
-  }
+  };
 
   // handle form submission errors
   const onError = (errors, e) => {
-    console.log('errors prevented form from submitting: ', errors);
-    alert('The following errors prevented form from submitting: ', errors);
+    console.log("errors prevented form from submitting: ", errors);
+    alert("The following errors prevented form from submitting: ", errors);
   };
 
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  useEffect(() => { }, [createdBot, isFetching, stepCount, watchAll]);
+  useEffect(() => {}, [createdBot, isFetching, stepCount, watchAll]);
 
   if (notAllowed) {
     return (
       <Box>
         <Container marginTop={8} maxWidth="lg">
           <Text>
-            You have reached the limit on how many bots a user may create. Please{' '}
-            <Link color={color} href='/dashboard' variant="underline">
+            You have reached the limit on how many bots a user may create.
+            Please{" "}
+            <Link color={color} href="/dashboard" variant="underline">
               return home
-            </Link>
-            {' '}and delete a bot if you would like to create a new one.
+            </Link>{" "}
+            and delete a bot if you would like to create a new one.
           </Text>
         </Container>
       </Box>
-    )
+    );
   } else {
     return (
       <Container marginBottom={6} maxW="6xl">
@@ -252,7 +265,7 @@ export default function CreateBotFlow({ userId }) {
             variant="subtle"
           >
             <StepsList>
-              <Stack direction={['column', 'column', 'row']}>
+              <Stack direction={["column", "column", "row"]}>
                 <StepsItem index={0} title="Choose your bot type" />
                 <StepsItem index={1} title="Customize your bot" />
                 <StepsItem index={2} title="Confirm your data" />
@@ -266,23 +279,33 @@ export default function CreateBotFlow({ userId }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Text as='div' marginTop={10}>
-                Bitpart is designed to work using Signal, a platform that offers the highest standard of security and privacy among free and publicly available messaging platforms available today.
+              <Text as="div" marginTop={10}>
+                Bitpart is designed to work using Signal, a platform that offers
+                the highest standard of security and privacy among free and
+                publicly available messaging platforms available today.
               </Text>
               <Text marginTop={8}>
-                (Don’t have Signal? Get it {' '}
+                (Don’t have Signal? Get it{" "}
                 <Link
-                  href='https://signal.org/install'
+                  href="https://signal.org/install"
                   color={color}
-                  textDecoration='underline'
-                  target='_blank'
-                  variant='underline'
-                >here</Link>
+                  textDecoration="underline"
+                  target="_blank"
+                  variant="underline"
+                >
+                  here
+                </Link>
                 .)
               </Text>
               <Text marginTop={8}>
-                <Highlight styles={{ px: "0.5", bg: "yellow.muted" }} query="We recommend setting up a separate Signal account for your bot.">
-                  Remember, if you use your personal Signal account, the recipients of your messages will see your name. You will also receive all the bot messages. We recommend setting up a separate Signal account for your Bitpart bot.
+                <Highlight
+                  styles={{ px: "0.5", bg: "yellow.muted" }}
+                  query="We recommend setting up a separate Signal account for your bot."
+                >
+                  Remember, if you use your personal Signal account, the
+                  recipients of your messages will see your name. You will also
+                  receive all the bot messages. We recommend setting up a
+                  separate Signal account for your Bitpart bot.
                 </Highlight>
               </Text>
               <Heading as="h2" marginTop={10} size="md">
@@ -321,7 +344,7 @@ export default function CreateBotFlow({ userId }) {
                       minWidth={300}
                       width={300}
                       value={item.value}
-                      {...methods.register('botType')}
+                      {...methods.register("botType")}
                     />
                   ))}
                 </Stack>
@@ -342,7 +365,7 @@ export default function CreateBotFlow({ userId }) {
                 Building {botType} bot
               </Heading> */}
               <BasicsForm />
-              <Heading as='h2' marginBottom={4} size='md'>
+              <Heading as="h2" marginBottom={4} size="md">
                 Bot specifics
               </Heading>
               {botType == "broadcast" ? (
@@ -368,7 +391,8 @@ export default function CreateBotFlow({ userId }) {
               ) : (
                 <>
                   <Text>
-                    Something went wrong. Please contact a system administrator: no bot type selected.
+                    Something went wrong. Please contact a system administrator:
+                    no bot type selected.
                   </Text>
                 </>
               )}
@@ -377,7 +401,8 @@ export default function CreateBotFlow({ userId }) {
                 marginBottom={4}
                 marginTop={8}
               >
-                Please double check that the above information is correct. You will not be able to update this later.
+                Please double check that the above information is correct. You
+                will not be able to update this later.
               </Text>
             </StepsContent>
             <StepsContent
@@ -386,12 +411,12 @@ export default function CreateBotFlow({ userId }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Text marginTop={10}>
-                Here is your new bot summary:
-              </Text>
+              <Text marginTop={10}>Here is your new bot summary:</Text>
               <Summary data={values} errors={formState.errors} />
               <Text marginTop={10}>
-                Does this look correct? If so, confirm with the checkbox below. If not, go back and edit your data. You will not be able to update this later.
+                Does this look correct? If so, confirm with the checkbox below.
+                If not, go back and edit your data. You will not be able to
+                update this later.
               </Text>
               <Checkbox
                 checked={dataConfirmed}
@@ -399,7 +424,9 @@ export default function CreateBotFlow({ userId }) {
                 marginBottom={8}
                 marginTop={2}
               >
-                Yes, the information I entered to create my bot is correct. I will not be able to edit this later, and must delete this bot and create a new one if I want to update it.
+                Yes, the information I entered to create my bot is correct. I
+                will not be able to edit this later, and must delete this bot
+                and create a new one if I want to update it.
               </Checkbox>
             </StepsContent>
             <StepsContent
@@ -418,26 +445,27 @@ export default function CreateBotFlow({ userId }) {
               </QrCode.Root>
               <List.Root marginLeft={4} marginTop={4}>
                 <List.Item>
-                  On your phone, open Signal and navigate to Signal Settings {'>'} Linked devices.
+                  On your phone, open Signal and navigate to Signal Settings{" "}
+                  {">"} Linked devices.
                 </List.Item>
                 <List.Item>
-                  Tap the Android + with blue circle (Android) or Link New Device (iOS)
+                  Tap the Android + with blue circle (Android) or Link New
+                  Device (iOS)
                 </List.Item>
-                <List.Item>
-                  Use your phone to scan the QR code.
-                </List.Item>
+                <List.Item>Use your phone to scan the QR code.</List.Item>
               </List.Root>
               <Text marginTop={4}>
-                You can find more information or troubleshoot by following{' '}
+                You can find more information or troubleshoot by following{" "}
                 <Link
-                  href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'
+                  href="https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices"
                   color={color}
-                  textDecoration='underline'
-                  target='_blank'
-                  variant='underline'
+                  textDecoration="underline"
+                  target="_blank"
+                  variant="underline"
                 >
                   this link
-                </Link>.
+                </Link>
+                .
               </Text>
             </StepsContent>
             <StepsCompletedContent
@@ -451,48 +479,62 @@ export default function CreateBotFlow({ userId }) {
               </Text>
               <Text fontWeight={700} marginTop={4}>
                 How can I send out messages?
-                </Text>
-              <Text marginTop={4}>
-                For the system to recognise you as the person sending broadcast messages (and not as someone joining the broadcast channel) please send a message on Signal to your channel{' '} {createdBot && createdBot.phone ? createdBot.phone : ""} with the passcode.
               </Text>
               <Text marginTop={4}>
-                Your passcode is{' '}
+                For the system to recognise you as the person sending broadcast
+                messages (and not as someone joining the broadcast channel)
+                please send a message on Signal to your channel{" "}
+                {createdBot && createdBot.phone ? createdBot.phone : ""} with
+                the passcode.
+              </Text>
+              <Text marginTop={4}>
+                Your passcode is{" "}
                 <Text as="span" fontSize="xl">
                   {botPasscode}
                 </Text>
               </Text>
               <Text marginTop={4}>
-                You only need to send it once. Bitpart will recognise you going forwards. Any message you then send to your channel will be forwarded on to everyone who has 'signed up' to the channel.
+                You only need to send it once. Bitpart will recognise you going
+                forwards. Any message you then send to your channel will be
+                forwarded on to everyone who has 'signed up' to the channel.
               </Text>
               <Text marginTop={4}>
-                If you want to change or remove a number in future, sending "Delete" will erase the conversation and thus Bitpart's memory of you as someone who is able to send broadcast messages.
+                If you want to change or remove a number in future, sending
+                "Delete" will erase the conversation and thus Bitpart's memory
+                of you as someone who is able to send broadcast messages.
               </Text>
               <Text marginTop={4}>
-                More than one person can send broadcast messages. If another number also sends the passcode over Signal to your channel, they will be able to send out broadcast messages too.
+                More than one person can send broadcast messages. If another
+                number also sends the passcode over Signal to your channel, they
+                will be able to send out broadcast messages too.
               </Text>
               <Text marginTop={4}>
-                Keep your passcode secure. Remember -- this passcode gives someone access to send messages to the entire channel.
+                Keep your passcode secure. Remember -- this passcode gives
+                someone access to send messages to the entire channel.
               </Text>
               <Text fontWeight={700} marginTop={4}>
                 What should I do now?
               </Text>
               <List.Root as="ol" marginLeft={4} marginTop={2}>
                 <List.Item>
-                  Message your bot with the passcode to establish you as a broadcaster.
+                  Message your bot with the passcode to establish you as a
+                  broadcaster.
                 </List.Item>
                 <List.Item>
-                  Test your channel by using a different number to send a Signal message to your channel.
+                  Test your channel by using a different number to send a Signal
+                  message to your channel.
                 </List.Item>
                 <List.Item>
-                  Share your channel widely with your target audience. 
+                  Share your channel widely with your target audience.
                 </List.Item>
               </List.Root>
               <Text marginTop={4}>
-                Go {' '}
-                <Link color={color} href='/dashboard' variant="underline">
+                Go{" "}
+                <Link color={color} href="/dashboard" variant="underline">
                   home
-                </Link>
-                {' '}to see your bots and create a new one. You will be able to find the passcode again there. 
+                </Link>{" "}
+                to see your bots and create a new one. You will be able to find
+                the passcode again there.
               </Text>
             </StepsCompletedContent>
             <Group>
@@ -508,7 +550,11 @@ export default function CreateBotFlow({ userId }) {
               </StepsPrevTrigger>
               <StepsNextTrigger asChild>
                 <Button
-                  disabled={(stepCount == 1 && !formState.isValid) || (stepCount == 2 && !dataConfirmed) || stepCount > 3}
+                  disabled={
+                    (stepCount == 1 && !formState.isValid) ||
+                    (stepCount == 2 && !dataConfirmed) ||
+                    stepCount > 3
+                  }
                   onClick={() => {
                     if (!isFetching) {
                       updateStepCount(1);
@@ -517,14 +563,17 @@ export default function CreateBotFlow({ userId }) {
                   size="sm"
                   variant="outline"
                 >
-                  {stepCount == 2 ? "Submit" : stepCount >= 4 ? "Finished" : "Next"}
+                  {stepCount == 2
+                    ? "Submit"
+                    : stepCount >= 4
+                      ? "Finished"
+                      : "Next"}
                 </Button>
               </StepsNextTrigger>
             </Group>
           </StepsRoot>
         </FormProvider>
       </Container>
-    )
+    );
   }
-
 }

@@ -1,5 +1,5 @@
 // base imports
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
 import {
@@ -8,7 +8,7 @@ import {
   Input,
   Link,
   Stack,
-  Textarea
+  Textarea,
 } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
@@ -24,7 +24,11 @@ export const EsimForm = () => {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  const { register, control, formState: { errors } } = useFormContext({
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext({
     defaultValues: {
       // locations: [],
       // plans: [],
@@ -58,7 +62,7 @@ export const EsimForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="eSIM distributor" {...register('name')} />
+        <Input placeholder="eSIM distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -68,7 +72,11 @@ export const EsimForm = () => {
         marginTop={4}
         required
       >
-        <Textarea autoresize placeholder="Start typing..." {...register('description')} />
+        <Textarea
+          autoresize
+          placeholder="Start typing..."
+          {...register("description")}
+        />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
@@ -82,27 +90,32 @@ export const EsimForm = () => {
         <Textarea
           autoresize
           defaultValue={`The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`}
-          {...register('privacyPolicy')}
+          {...register("privacyPolicy")}
         />
       </Field>
       <Field
-        errorText={!!errors?.activationInstructions && errors.activationInstructions.message}
+        errorText={
+          !!errors?.activationInstructions &&
+          errors.activationInstructions.message
+        }
         helperText="Please add instructions for the steps people should take in order to activate their eSIM. The eSIM provider may have instructions you can copy and paste here. If the text is long you could link to a web page, but remember that people in low connectivity settings may be more able to receive a message on Signal than open a web page."
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea autoresize {...register('activationInstructions')} />
+        <Textarea autoresize {...register("activationInstructions")} />
       </Field>
       <Field
-        errorText={!!errors?.helpInstructions && errors.helpInstructions.message}
+        errorText={
+          !!errors?.helpInstructions && errors.helpInstructions.message
+        }
         helperText="Include helpful instructions for what a user should do if their eSIM is not working."
         info="helpInstructions"
         invalid={!!errors?.helpInstructions}
         label="Help section"
         marginTop={4}
       >
-        <Textarea autoresize {...register('helpInstructions')} />
+        <Textarea autoresize {...register("helpInstructions")} />
       </Field>
       {/* <Fieldset.Root
         label="eSIM networks"
@@ -231,17 +244,20 @@ export const EsimForm = () => {
         <Stack>
           <Fieldset.Legend>Upload eSIM codes</Fieldset.Legend>
           <Fieldset.HelperText>
-            Please provide a CSV file of your eSIM codes for use. Note that the list should only include the mobile network and the code. You may download the following template, save and export as a .csv, and upload it here.
+            Please provide a CSV file of your eSIM codes for use. Note that the
+            list should only include the mobile network and the code. You may
+            download the following template, save and export as a .csv, and
+            upload it here.
           </Fieldset.HelperText>
-          <Link color={color} href='/esim-template.csv' fontSize="sm">
+          <Link color={color} href="/esim-template.csv" fontSize="sm">
             Download template
             <FiDownload />
           </Link>
         </Stack>
         <Fieldset.Content>
-          <FileUploader register={register('csv')} />
+          <FileUploader register={register("csv")} />
         </Fieldset.Content>
       </Fieldset.Root>
     </>
-  )
-}
+  );
+};

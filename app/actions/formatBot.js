@@ -1,37 +1,37 @@
-"use server"
+"use server";
 
 // base imports
-import fs from 'node:fs/promises';
+import fs from "node:fs/promises";
 
 const schema = [
-  'about',
-  'activationInstructions',
+  "about",
+  "activationInstructions",
   // 'adminPhones',
-  'botType',
-  'botName',
-  'countryCode',
-  'csv',
-  'description',
-  'faq',
-  'helpInstructions',
-  'locations',
-  'maxCodes',
-  'name',
-  'phone',
+  "botType",
+  "botName",
+  "countryCode",
+  "csv",
+  "description",
+  "faq",
+  "helpInstructions",
+  "locations",
+  "maxCodes",
+  "name",
+  "phone",
   // 'plans',
-  'problems',
-  'privacyPolicy',
-  'referral',
-  'responseTime',
-  'safetyTips',
-  'storageAccess',
-  'vpnName'
-]
+  "problems",
+  "privacyPolicy",
+  "referral",
+  "responseTime",
+  "safetyTips",
+  "storageAccess",
+  "vpnName",
+];
 
 export const createPasscode = async () => {
-  let result = '';
+  let result = "";
   const length = 8;
-  const characters = 'ABCDEFGHJKMNPQRSTUVWXYZ123456789';
+  const characters = "ABCDEFGHJKMNPQRSTUVWXYZ123456789";
   const charactersLength = characters.length;
   let counter = 0;
   while (counter < length) {
@@ -40,15 +40,14 @@ export const createPasscode = async () => {
   }
 
   return result;
-}
-
+};
 
 // format the name of the bot for bitpart bot id
 export const formatBotName = async (botName) => {
-  let formattedBotName = botName.replace(/\s/g, '_');
+  let formattedBotName = botName.replace(/\s/g, "_");
 
   return formattedBotName;
-}
+};
 
 // format the csml string for bitpart
 export const formatCsml = async (data, passcode) => {
@@ -57,7 +56,7 @@ export const formatCsml = async (data, passcode) => {
   let formattedCsml = "";
   let phones = [];
 
-  const template = await fs.readFile(file, 'utf8', (err, data) => {
+  const template = await fs.readFile(file, "utf8", (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -67,8 +66,7 @@ export const formatCsml = async (data, passcode) => {
 
   csml = template;
 
-  schema.map(field => {
-
+  schema.map((field) => {
     // format admin phone numbers
     if (field === "adminPhones") {
       let adminPhoneOptions = "";
@@ -80,13 +78,13 @@ export const formatCsml = async (data, passcode) => {
         phones.push(phone);
 
         if (i === 0) {
-          adminPhoneOptions += `"${phone}"`
+          adminPhoneOptions += `"${phone}"`;
         } else {
-          adminPhoneOptions += ` || event.client.user_id == "${phone}"`
+          adminPhoneOptions += ` || event.client.user_id == "${phone}"`;
         }
-      })
+      });
 
-      csml = csml.replace(`[${field}]`, adminPhoneOptions)
+      csml = csml.replace(`[${field}]`, adminPhoneOptions);
       csml = csml.replace(`[${field}.array]`, phones); // TODO need correct parsing
     }
 
@@ -99,18 +97,20 @@ export const formatCsml = async (data, passcode) => {
 
         // handle location fields differently for esim and vpn
         if (data.botType === "esim") {
-          if (field === "locations") { // fields specific to esim locations
+          if (field === "locations") {
+            // fields specific to esim locations
             let places = "";
 
             data[field].map((f, i) => {
               places = places + `\\n${i + 1}) ${f.place}`;
-            })
+            });
 
             csml = csml.replace(`[${field}]`, places);
-            csml = csml.replace(`[${field}.length]`, (length + 1));
+            csml = csml.replace(`[${field}.length]`, length + 1);
           }
         } else if (data.botType === "vpn") {
-          if (field === "locations") { // fields specific to vpn locations
+          if (field === "locations") {
+            // fields specific to vpn locations
             let places = "";
 
             data[field].map((f, i) => {
@@ -118,14 +118,15 @@ export const formatCsml = async (data, passcode) => {
                 places = places + `${f.place}`;
               }
               places = places + `${f.place}, `;
-            })
+            });
 
             csml = csml.replace(`[${field}]`, places);
-            csml = csml.replace(`[${field}.length]`, (length + 1));
+            csml = csml.replace(`[${field}.length]`, length + 1);
           }
         }
 
-        if (field === "faq") { // fields specific to FAQ
+        if (field === "faq") {
+          // fields specific to FAQ
           let questions = "";
           let answers = "";
 
@@ -135,85 +136,89 @@ export const formatCsml = async (data, passcode) => {
             }
 
             if (f.answer.length) {
-              answers = answers + `
+              answers =
+                answers +
+                `
               ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
                 say "${f.answer}"
                 goto check_if_solved_step
               }
-              `
+              `;
             }
-          })
+          });
 
           if (answers.length) {
-            csml = csml.replace(`[${field}.length]`, (length + 1));
+            csml = csml.replace(`[${field}.length]`, length + 1);
             csml = csml.replace(`[${field}.answers]`, answers);
           } else {
-            questions = "Apologies, no FAQ have been entered for this bot."
-            csml = csml.replace("[faq.answers]", "")
+            questions = "Apologies, no FAQ have been entered for this bot.";
+            csml = csml.replace("[faq.answers]", "");
           }
 
           csml = csml.replace(`[${field}]`, questions);
-
-        } else if (field === "problems") { // fields specific to problem and solutions
+        } else if (field === "problems") {
+          // fields specific to problem and solutions
           let problems = "";
           let solutions = "";
 
           data[field].map((f, i) => {
-            problems = problems + `\\n${i + 1}) ${f.problem}`
+            problems = problems + `\\n${i + 1}) ${f.problem}`;
 
-            solutions = solutions + `
+            solutions =
+              solutions +
+              `
               ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
                 say "${f.solution}"
                 goto check_if_solved_step
               }
-              `
-          })
+              `;
+          });
 
           csml = csml.replace(`[${field}]`, problems);
-          csml = csml.replace(`[${field}.length]`, (length + 1));
+          csml = csml.replace(`[${field}.length]`, length + 1);
           csml = csml.replace(`[${field}.solutions]`, solutions);
         }
       } else {
         csml = csml.replace(`[${field}]`, data[field]);
       }
 
-      csml = csml.replace(`[passcode]`, passcode)
+      csml = csml.replace(`[passcode]`, passcode);
 
       let regex = /"/g;
       let quot = String.raw`\"`;
       formattedCsml = csml.replaceAll(regex, quot);
       // formattedCsml = `"${formattedCsml}"`;
     }
-  })
+  });
 
   return formattedCsml;
-}
+};
 
 // format the json string to create a bot, to send to bitpart
 export const formatCreateBotData = async (data, formattedCsml) => {
   const formattedPhone = await formatPhone(data.phone, data.countryCode);
 
   const jsonCreateBot = {
-    "message_type": "CreateBot",
-    "data": {
-      "id": formattedPhone,
-      "name": data.botName,
-      "flows": [
+    message_type: "CreateBot",
+    data: {
+      id: formattedPhone,
+      name: data.botName,
+      flows: [
         {
-          "id": "Default",
-          "name": "Default",
-          "content": formattedCsml,
-          "commands": []
-        }
+          id: "Default",
+          name: "Default",
+          content: formattedCsml,
+          commands: [],
+        },
       ],
-      "default_flow": "Default",
-    }
-  }
+      default_flow: "Default",
+    },
+  };
 
   const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
 
   return jsonStringCreateBot;
-}
+};
 
 // format the bot phone correctly for bitpart
 export const formatPhone = async (phone, countryCode) => {
@@ -222,4 +227,4 @@ export const formatPhone = async (phone, countryCode) => {
   formattedPhone = `+${formattedPhone}`;
 
   return formattedPhone;
-}
+};

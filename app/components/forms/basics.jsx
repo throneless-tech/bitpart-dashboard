@@ -1,14 +1,8 @@
 // base imports
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
-import {
-  Fieldset,
-  Heading,
-  Input,
-  Separator,
-  Stack,
-} from "@chakra-ui/react";
+import { Fieldset, Heading, Input, Separator, Stack } from "@chakra-ui/react";
 
 // component imports
 import { Button } from "@/app/components/ui/button";
@@ -19,11 +13,14 @@ import {
 } from "@/app/components/ui/native-select";
 
 // country codes
-import { CountryCodes } from './countryCodes';
+import { CountryCodes } from "./countryCodes";
 
 export const BasicsForm = () => {
-
-  const { register, control, formState: { errors }, } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   // const { register, control, formState: { errors }, } = useFormContext({
   //   defaultValues: {
@@ -42,7 +39,7 @@ export const BasicsForm = () => {
 
   return (
     <>
-      <Heading as='h2' marginBottom={4} marginTop={4} size='md'>
+      <Heading as="h2" marginBottom={4} marginTop={4} size="md">
         Bot basics
       </Heading>
       <Field
@@ -54,23 +51,23 @@ export const BasicsForm = () => {
         required
         width="320px"
       >
-        <Input {...register('botName')} />
+        <Input {...register("botName")} />
       </Field>
-      <Fieldset.Root marginTop={8} >
+      <Fieldset.Root marginTop={8}>
         <Stack>
           <Fieldset.Legend>Bot phone number details</Fieldset.Legend>
           <Fieldset.HelperText>
-            Please provide the phone number that will be associated with the bot's Signal account. The bot will be added as a secondary device on Signal and we will guide you through this process later. We recommend that you use a new phone number for Bitpart since your Signal profile information will be linked to this account.
+            Please provide the phone number that will be associated with the
+            bot's Signal account. The bot will be added as a secondary device on
+            Signal and we will guide you through this process later. We
+            recommend that you use a new phone number for Bitpart since your
+            Signal profile information will be linked to this account.
           </Fieldset.HelperText>
         </Stack>
         <Stack marginLeft={4}>
-          <Field
-            label="Country code"
-            marginBottom={2}
-            width={320}
-          >
+          <Field label="Country code" marginBottom={2} width={320}>
             <NativeSelectRoot>
-              <NativeSelectField {...register('countryCode')}>
+              <NativeSelectField {...register("countryCode")}>
                 <CountryCodes />
               </NativeSelectField>
             </NativeSelectRoot>
@@ -83,7 +80,7 @@ export const BasicsForm = () => {
             marginBottom={4}
             width="320px"
           >
-            <Input {...register('phone')} />
+            <Input {...register("phone")} />
           </Field>
         </Stack>
       </Fieldset.Root>
@@ -159,5 +156,5 @@ export const BasicsForm = () => {
       </Fieldset.Root> */}
       <Separator marginBottom={8} marginTop={8} />
     </>
-  )
-}
+  );
+};

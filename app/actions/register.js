@@ -1,13 +1,13 @@
-"use server"
-import { prisma } from '@/lib/prisma';
+"use server";
+import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
-import { LoginSchema } from "../lib/definitions"
+import { LoginSchema } from "../lib/definitions";
 
 export const register = async (prevState, formData) => {
   let redirectPath = null;
-  
+
   const password = formData.get("password");
   const passwordConfirm = formData.get("passwordConfirm");
   const username = formData.get("username");
@@ -20,30 +20,30 @@ export const register = async (prevState, formData) => {
     if (!validatedFields.username || !validatedFields.password) {
       return {
         error: validatedFields,
-      }
+      };
     }
 
     // If the passwords do not match, return early
     if (password !== passwordConfirm) {
       return {
         error: {
-          passwordConfirm: 'Passwords do not match.'
-        }
-      }
+          passwordConfirm: "Passwords do not match.",
+        },
+      };
     }
 
     const userFound = await prisma.user.findUnique({
       where: {
         username,
-      }
+      },
     });
 
     if (userFound) {
       return {
         error: {
-          username: 'Username already exists.'
-        }
-      }
+          username: "Username already exists.",
+        },
+      };
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -52,22 +52,21 @@ export const register = async (prevState, formData) => {
       data: {
         username,
         password: hashedPassword,
-      }
+      },
     });
 
-    redirectPath = '/login?message=SignUpSuccess';
-
+    redirectPath = "/login?message=SignUpSuccess";
   } catch (e) {
     console.log(e);
 
     return {
       error: {
         password: e.message,
-      }
-    }
+      },
+    };
   } finally {
     if (redirectPath) {
       return redirect(redirectPath);
     }
   }
-}
+};

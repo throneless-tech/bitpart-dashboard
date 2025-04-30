@@ -1,15 +1,14 @@
-"use server"
+"use server";
 
 // base imports
-import { prisma } from '@/lib/prisma';
-import WebSocket from 'ws';
+import { prisma } from "@/lib/prisma";
+import WebSocket from "ws";
 
 // actions
-import { formatBotName, formatCsml, formatPhone } from './formatBot';
+import { formatBotName, formatCsml, formatPhone } from "./formatBot";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
-
   _socket = null;
   _readyPromise = null;
 
@@ -20,10 +19,12 @@ class WSConnection {
   start(json) {
     this._socket = new WebSocket(this.url, {
       headers: {
-        Authorization: process.env.BITPART_SERVER_TOKEN
-      }
+        Authorization: process.env.BITPART_SERVER_TOKEN,
+      },
     });
-    this._socket.on('open', () => { this._connected(json); });
+    this._socket.on("open", () => {
+      this._connected(json);
+    });
     return new Promise((resolve, reject) => {
       this._readyPromise = { resolve, reject };
     });
@@ -32,7 +33,7 @@ class WSConnection {
   sendMessage(json) {
     return new Promise((resolve, reject) => {
       this._socket.send(json);
-      this._socket.on('message', (data) => {
+      this._socket.on("message", (data) => {
         if (data.message_type === "Error") {
           reject(data);
         } else {
@@ -41,7 +42,7 @@ class WSConnection {
         }
       });
     });
-  } 
+  }
 
   _connected(data) {
     const response = data ? JSON.parse(data) : null;
@@ -66,69 +67,76 @@ export const createBotBitpart = async (data, passcode) => {
   const formattedCsml = await formatCsml(data, passcode);
 
   const jsonCreateBot = {
-    "message_type": "CreateBot",
-    "data": {
-      "id": formattedBotName,
-      "name": data.botName,
-      "apps_endpoint": process.env.EMS_ENDPOINT,
-      "flows": [
+    message_type: "CreateBot",
+    data: {
+      id: formattedBotName,
+      name: data.botName,
+      apps_endpoint: process.env.EMS_ENDPOINT,
+      flows: [
         {
-          "id": "Default",
-          "name": "Default",
-          "content": formattedCsml,
-          "commands": []
-        }
+          id: "Default",
+          name: "Default",
+          content: formattedCsml,
+          commands: [],
+        },
       ],
-      "default_flow": "Default",
-    }
-  }
+      default_flow: "Default",
+    },
+  };
 
   const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
 
-  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
-  const response = ws.start()
+  const ws = new WSConnection(
+    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
+  );
+  const response = ws
+    .start()
     .then(async () => {
       const response = await ws.sendMessage(jsonStringCreateBot);
 
       return response;
     })
     // .then(res => console.log('res now is:', res))
-    .catch(err => { throw new Error(err.message) });
+    .catch((err) => {
+      throw new Error(err.message);
+    });
 
   return response;
-}
+};
 
 export const linkChannelBitpart = async (botId) => {
-  
   const jsonLinkChannel = {
-    "message_type": "LinkChannel",
-    "data": {
-      "id": "signal",
-      "bot_id": botId,
-      "device_name": "bitpart",
-    }
-  }
+    message_type: "LinkChannel",
+    data: {
+      id: "signal",
+      bot_id: botId,
+      device_name: "bitpart",
+    },
+  };
 
   const jsonStringLinkChannel = JSON.stringify(jsonLinkChannel);
 
-
   // send info to bitpart server via websockets
-  const ws = new WSConnection(`ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`);
-  const response = ws.start()
+  const ws = new WSConnection(
+    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
+  );
+  const response = ws
+    .start()
     .then(async () => {
       const response = await ws.sendMessage(jsonStringLinkChannel);
 
       return response;
     })
     // .then(res => console.log('res now is:', res))
-    .catch(err => { throw new Error(err.message) });
+    .catch((err) => {
+      throw new Error(err.message);
+    });
 
   return response;
-}
+};
 
 // create the bot in the prisma db
 export const createBotPrisma = async (data, userId, passcode) => {
-
   // format bot phone
   let phone = "";
 
@@ -161,12 +169,11 @@ export const createBotPrisma = async (data, userId, passcode) => {
         botType: data.botType,
         botName: data.botName,
         name: data.name,
-      }
+      },
     });
 
     return bot;
-
   } catch (error) {
     throw new Error(error.message);
   }
-}
+};

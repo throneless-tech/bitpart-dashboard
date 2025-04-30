@@ -1,9 +1,9 @@
-import { Box, Steps as ChakraSteps } from '@chakra-ui/react'
-import * as React from 'react'
-import { LuCheck } from 'react-icons/lu'
+import { Box, Steps as ChakraSteps } from "@chakra-ui/react";
+import * as React from "react";
+import { LuCheck } from "react-icons/lu";
 
 export const StepsItem = React.forwardRef(function StepsItem(props, ref) {
-  const { title, description, completedIcon, icon, ...rest } = props
+  const { title, description, completedIcon, icon, ...rest } = props;
   return (
     <ChakraSteps.Item {...rest} ref={ref}>
       <ChakraSteps.Trigger>
@@ -17,11 +17,11 @@ export const StepsItem = React.forwardRef(function StepsItem(props, ref) {
       </ChakraSteps.Trigger>
       <ChakraSteps.Separator />
     </ChakraSteps.Item>
-  )
-})
+  );
+});
 
 const StepInfo = (props) => {
-  const { title, description } = props
+  const { title, description } = props;
 
   if (title && description) {
     return (
@@ -29,7 +29,7 @@ const StepInfo = (props) => {
         <ChakraSteps.Title>{title}</ChakraSteps.Title>
         <ChakraSteps.Description>{description}</ChakraSteps.Description>
       </Box>
-    )
+    );
   }
 
   return (
@@ -39,25 +39,25 @@ const StepInfo = (props) => {
         <ChakraSteps.Description>{description}</ChakraSteps.Description>
       )}
     </>
-  )
-}
+  );
+};
 
 export const StepsIndicator = React.forwardRef(
   function StepsIndicator(props, ref) {
-    const { icon = <ChakraSteps.Number />, completedIcon } = props
+    const { icon = <ChakraSteps.Number />, completedIcon } = props;
     return (
       <ChakraSteps.Indicator ref={ref}>
         <ChakraSteps.Status complete={completedIcon} incomplete={icon} />
       </ChakraSteps.Indicator>
-    )
+    );
   },
-)
+);
 
-export const StepsList = ChakraSteps.List
-const StepsRoot = ChakraSteps.Root
-export default StepsRoot
-export const StepsContent = ChakraSteps.Content
-export const StepsCompletedContent = ChakraSteps.CompletedContent
+export const StepsList = ChakraSteps.List;
+const StepsRoot = ChakraSteps.Root;
+export default StepsRoot;
+export const StepsContent = ChakraSteps.Content;
+export const StepsCompletedContent = ChakraSteps.CompletedContent;
 
-export const StepsNextTrigger = ChakraSteps.NextTrigger
-export const StepsPrevTrigger = ChakraSteps.PrevTrigger
+export const StepsNextTrigger = ChakraSteps.NextTrigger;
+export const StepsPrevTrigger = ChakraSteps.PrevTrigger;
