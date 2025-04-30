@@ -14,11 +14,11 @@ First, install dependencies from your terminal:
 
 Run `npx auth secret` to create a random value for Auth.js. See [their docs](https://authjs.dev/getting-started/installation?framework=next-js) for more info.
 
-Add the following to your `.env.local` file:
+Add the following to your `.env.local` file (remember, you will also have a separate `.env` file with other vars):
 
 ```
 NEXTAUTH_SECRET="thisisarandomsecret0123456789="
-SESSION_SECRET="thisisanotherrandomsecret0123456789="
+SESSION_SECRET="thisisanotherrandomsecret0123456789=" // FIXME  do we need this?
 ```
 
 ### Attach the databse
@@ -27,13 +27,13 @@ This project uses [Prisma ORM](https://www.prisma.io/docs/orm/overview/databases
 
 Add the url to the database as your `DATABASE_URL` in your `.env` file.
 
-Run `prisma migrate dev` in development or `prisma migrate deploy` in production to apply the migrations.
+Run `npx prisma migrate dev` in development or `npx prisma migrate deploy` in production to apply the migrations.
 
 ### Seed the database with invite codes
 
 Users may only sign up for a Bitpart dashboard account with an invite code. **An invite code may only be used once per user, so do not plan to use the same invite codes for multiple users.** To create 100 random invite codes, run `node create-codes.mjs` from the root directory. This will create a file called `codes.json` that will contain your randomized invite codes to add to the database.
 
-Navigate to the `prisma/seed.ts` file. Here, you will see where you can enter the invite codes you've created. Replace the example codes with your unique invite codes.
+Navigate to the `prisma/seed.ts.example` file. Duplicate this file within the prisma directory and name it `seed.ts`. Here, you will see where you can enter the invite codes you've created. Replace the example codes with your unique invite codes. Note that that `seed.ts` file will NOT be committed to your version history to keep your codes safe.
 
 Finally, to seed the database, run `npx prisma db seed` in your terminal.
 
@@ -82,4 +82,8 @@ NEXT_PUBLIC_VPN_ENDPOINT="vpn_endpoint"
 
 ## Deployment
 
-## TODO Container
+### TODO Container
+
+## Documentation
+
+Check out [the documentation](https://docs.bitp.art/) for more information on how to run all of Bitpart smoothly.

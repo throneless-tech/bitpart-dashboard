@@ -41,3 +41,4 @@ next-env.d.ts
 
 # invite codes
 codes.json
+/prisma/seed.ts
