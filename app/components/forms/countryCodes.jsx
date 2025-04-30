@@ -1,5 +1,3 @@
-import React from "react";
-
 export const CountryCodes = () => (
   <>
     <option defaultValue="0" value="0">

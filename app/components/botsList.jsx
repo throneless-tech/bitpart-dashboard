@@ -1,7 +1,7 @@
 "use client";
 
 // base imports
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // chakra ui imports
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
@@ -44,7 +44,7 @@ export default function BotsList({ userId }) {
     if (userId) {
       fetchBots();
     }
-  }, []); // eslint-disable react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {}, [bots, isFetching]);
 

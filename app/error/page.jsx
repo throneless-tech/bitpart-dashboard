@@ -1,7 +1,6 @@
 "use client";
 
 // base imports
-import React from "react";
 import { useSearchParams } from "next/navigation";
 
 // chakra ui imports

@@ -1,7 +1,5 @@
 "use client";
-
-// base imports
-import React from "react";
+import * as React from "react";
 
 // chakra imports
 import { Field as ChakraField, IconButton, List, Text } from "@chakra-ui/react";

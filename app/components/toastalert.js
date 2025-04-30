@@ -2,7 +2,7 @@
 
 // base imports
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // chakra ui imports
 import { toaster, Toaster } from "@/app/components/ui/toaster";
@@ -15,7 +15,7 @@ export const ToastSignOut = () => {
     if (params.get("message") === "SignOutSuccess") {
       setShow(true);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (show) {
@@ -42,7 +42,7 @@ export const ToastSignUp = () => {
     if (params.get("message") === "SignUpSuccess") {
       setShow(true);
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (show) {

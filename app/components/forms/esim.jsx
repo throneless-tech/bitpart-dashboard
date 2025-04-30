@@ -1,5 +1,4 @@
 // base imports
-import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -246,9 +245,9 @@ export const EsimForm = () => {
           <Fieldset.Legend>Upload eSIM codes</Fieldset.Legend>
           <Fieldset.HelperText>
             Please provide a CSV file of your eSIM codes for use. Note that the
-            list should only include the mobile network and the code. Download
-            the following template, save and export as a .csv, and upload it
-            here.
+            list should only include the mobile network and the code. You may
+            download the following template, save and export as a .csv, and
+            upload it here.
           </Fieldset.HelperText>
           <Link color={color} href="/esim-template.csv" fontSize="sm">
             Download template

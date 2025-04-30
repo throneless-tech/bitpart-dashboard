@@ -66,7 +66,7 @@ export const register = async (prevState, formData) => {
     };
   } finally {
     if (redirectPath) {
-      return redirect(redirectPath);  
+      return redirect(redirectPath);
     }
   }
 };

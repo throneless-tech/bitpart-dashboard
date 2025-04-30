@@ -1,6 +1,3 @@
-// base imports
-import React from "react";
-
 // chakra imports
 import { Box, FileUpload, Icon } from "@chakra-ui/react";
 

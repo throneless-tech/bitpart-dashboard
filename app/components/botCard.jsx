@@ -1,7 +1,6 @@
 "use client";
 
-// base imports
-import React, { useState } from "react";
+import { useState } from "react";
 
 // chakra ui imports
 import {
