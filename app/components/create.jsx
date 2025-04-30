@@ -2,7 +2,7 @@
 
 // base imports
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // form validation imports
 import { FormProvider, useForm } from "react-hook-form";
@@ -147,7 +147,7 @@ export default function CreateBotFlow({ userId }) {
       }
     }
     fetchBots();
-  }, []);
+  }, []); // eslint-disable react-hooks/exhaustive-deps
 
   useEffect(() => {}, [notAllowed]);
 
@@ -206,9 +206,11 @@ export default function CreateBotFlow({ userId }) {
 
       setQRLink(channelBitpartLink.data.response);
 
-      // const bot = await createBotPrisma(data, userId, passcode);
+      console.log(channelBitpartLink.data.response);
 
-      // setCreatedBot(bot);
+      const bot = await createBotPrisma(data, userId, passcode);
+
+      setCreatedBot(bot);
     } catch (error) {
       setStepCount((stepCount) => (stepCount -= 1));
       console.log(error);
@@ -496,7 +498,7 @@ export default function CreateBotFlow({ userId }) {
               <Text marginTop={4}>
                 You only need to send it once. Bitpart will recognise you going
                 forwards. Any message you then send to your channel will be
-                forwarded on to everyone who has 'signed up' to the channel.
+                forwarded on to everyone who has "signed up" to the channel.
               </Text>
               <Text marginTop={4}>
                 If you want to change or remove a number in future, sending
@@ -540,7 +542,7 @@ export default function CreateBotFlow({ userId }) {
             <Group>
               <StepsPrevTrigger asChild>
                 <Button
-                  // disabled={stepCount == 0 || stepCount == 3}
+                  disabled={stepCount == 0 || stepCount == 3}
                   onClick={() => updateStepCount(-1)}
                   size="sm"
                   variant="outline"

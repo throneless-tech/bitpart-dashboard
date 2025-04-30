@@ -1,0 +1,25 @@
+import { defineConfig } from "eslint";
+
+export default defineConfig([
+  {
+    extends: [
+      "eslint:recommended",
+      "next/core-web-vitals",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended-legacy",
+      "prettier",
+    ],
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
+    plugins: ["react"],
+    rules: {
+      "no-undef": "off",
+      "no-unused-vars": "off",
+      "react/no-unescaped-entities": "off",
+      "react/prop-types": "off",
+    },
+  },
+]);

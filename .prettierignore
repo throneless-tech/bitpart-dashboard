@@ -1,6 +1,11 @@
 # Ignore artifacts:
 .husky
+.next
 build
 csml
 coverage
+eslint.config.js
+next.config.mjs
+package-lock.json
 prisma
+public

@@ -26,11 +26,13 @@ export default async function Header() {
               <form
                 action={async () => {
                   "use server";
+                   
                   try {
                     await signOut({ redirectTo: "/?message=SignOutSuccess" });
                   } catch (error) {
                     throw error;
                   }
+                   
                 }}
               >
                 <Button type="submit" variant="underline">

@@ -59,7 +59,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 For the dashboard to fully function, you will also need to run [bitpart](https://github.com/throneless-tech/bitpart) and [bitpart-ems](https://github.com/throneless-tech/bitpart-ems). Follow the links for instructions on how to run both.
 
-Add to your `.env` file the following:
+Add any missing vars to your `.env` file. When you're done, it should look like this:
 
 ```
 AUTH_DEBUG=true
