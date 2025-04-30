@@ -8,9 +8,9 @@ export default defineConfig([
   // { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
   // { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"], languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginReact.configs.flat.recommended,
-  pluginReact.configs.flat["jsx-runtime"],
+  pluginReact.configs.flat['jsx-runtime'],
   {
-    files: ["**/*.{js,jsx,mjs,cjs}"],
+    files: ['**/*.{js,jsx,mjs,cjs}'],
     plugins: {
       react,
     },
@@ -46,7 +46,7 @@ export default defineConfig([
       "package-lock.json",
       "prisma/*",
       "public/*",
-      "README.md",
-    ],
-  },
+      "README.md"
+    ]
+  }
 ]);
