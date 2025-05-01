@@ -18,7 +18,6 @@ Add the following to your `.env.local` file (remember, you will also have a sepa
 
 ```
 NEXTAUTH_SECRET="thisisarandomsecret0123456789="
-SESSION_SECRET="thisisanotherrandomsecret0123456789=" // FIXME  do we need this?
 ```
 
 ### Attach the databse
@@ -71,8 +70,6 @@ BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
 DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
 
 EMS_ENDPOINT="/ems"
-
-JWT_SECRET="ANOTHERLONGSECRETHERE="
 
 NEXT_PUBLIC_SERVER_URL=127.0.0.1
 NEXT_PUBLIC_EMS_PORT=3005
