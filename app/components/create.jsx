@@ -11,18 +11,23 @@ import { schema } from "../lib/forms";
 
 // chakra ui imports
 import {
+  AbsoluteCenter,
   Box,
   Button,
   Container,
+  Dialog,
   Group,
   Heading,
   Highlight,
   Icon,
   Link,
   List,
+  Portal,
   QrCode,
+  Spinner,
   Stack,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 
 // component imports
@@ -130,6 +135,7 @@ const valuesToUnregister = [
 ];
 
 export default function CreateBotFlow({ userId }) {
+  const [open, setOpen] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
   const [stepCount, setStepCount] = useState(0);
@@ -181,6 +187,7 @@ export default function CreateBotFlow({ userId }) {
   // submit bot creation for bitpart server and prisma db
   const onSubmit = async (data) => {
     setIsFetching(true);
+    setOpen(true);
     const passcode = await createPasscode();
     setBotPasscode(passcode);
 
@@ -191,9 +198,12 @@ export default function CreateBotFlow({ userId }) {
         throw new Error(botBitpart.data.response);
       }
 
-      let emsData;
       if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = emsCall("test", data.botType, data.csv);
+        const emsData = emsCall(
+          botBitpart.data.response.bot.id,
+          data.botType,
+          data.csv,
+        );
       }
 
       const channelBitpartLink = await linkChannelBitpart(
@@ -206,18 +216,18 @@ export default function CreateBotFlow({ userId }) {
 
       setQRLink(channelBitpartLink.data.response);
 
-      // const bot = await createBotPrisma(data, userId, passcode);
+      const bot = await createBotPrisma(data, userId, passcode);
 
-      // setCreatedBot(bot);
+      setCreatedBot(bot);
+      updateStepCount(1);
     } catch (error) {
-      setStepCount((stepCount) => (stepCount -= 1));
       console.log(error);
-
       alert(
         "A server error occurred while trying to create this bot. Please contact an admin for assistance.",
       );
     } finally {
       setIsFetching(false);
+      setOpen(false);
     }
   };
 
@@ -254,16 +264,7 @@ export default function CreateBotFlow({ userId }) {
           Create a new bot
         </Heading>
         <FormProvider {...methods}>
-          <StepsRoot
-            count={4}
-            step={stepCount}
-            onStepChange={(e) => {
-              if (stepCount === 2) {
-                methods.handleSubmit(onSubmit, onError)(e);
-              }
-            }}
-            variant="subtle"
-          >
+          <StepsRoot count={4} step={stepCount} variant="subtle">
             <StepsList>
               <Stack direction={["column", "column", "row"]}>
                 <StepsItem index={0} title="Choose your bot type" />
@@ -469,7 +470,6 @@ export default function CreateBotFlow({ userId }) {
               </Text>
             </StepsContent>
             <StepsCompletedContent
-              index={0}
               marginLeft="auto"
               marginRight="auto"
               maxW={"2xl"}
@@ -540,7 +540,7 @@ export default function CreateBotFlow({ userId }) {
             <Group>
               <StepsPrevTrigger asChild>
                 <Button
-                  // disabled={stepCount == 0 || stepCount == 3}
+                  disabled={stepCount === 0 || stepCount === 3}
                   onClick={() => updateStepCount(-1)}
                   size="sm"
                   variant="outline"
@@ -551,11 +551,16 @@ export default function CreateBotFlow({ userId }) {
               <StepsNextTrigger asChild>
                 <Button
                   disabled={
-                    (stepCount == 1 && !formState.isValid) ||
-                    (stepCount == 2 && !dataConfirmed) ||
+                    isFetching ||
+                    (stepCount === 1 && !formState.isValid) ||
+                    (stepCount === 2 && !dataConfirmed) ||
                     stepCount > 3
                   }
-                  onClick={() => {
+                  onClick={(e) => {
+                    if (stepCount === 2) {
+                      updateStepCount(-1);
+                      methods.handleSubmit(onSubmit, onError)(e);
+                    }
                     if (!isFetching) {
                       updateStepCount(1);
                     }
@@ -570,6 +575,33 @@ export default function CreateBotFlow({ userId }) {
                       : "Next"}
                 </Button>
               </StepsNextTrigger>
+              <Dialog.Root
+                lazyMount
+                open={open}
+                onOpenChange={(e) => setOpen(e.open)}
+                size="full"
+              >
+                <Portal>
+                  <Dialog.Backdrop />
+                  <Dialog.Positioner>
+                    <Dialog.Content
+                      style={{
+                        backgroundColor: "rgba(0, 0, 0, 0.1)",
+                        backdropFilter: "blur(5px)",
+                      }}
+                    >
+                      <Dialog.Body>
+                        <AbsoluteCenter>
+                          <VStack>
+                            <Spinner size="xl" />
+                            <Text>Creating your bot...</Text>
+                          </VStack>
+                        </AbsoluteCenter>
+                      </Dialog.Body>
+                    </Dialog.Content>
+                  </Dialog.Positioner>
+                </Portal>
+              </Dialog.Root>
             </Group>
           </StepsRoot>
         </FormProvider>

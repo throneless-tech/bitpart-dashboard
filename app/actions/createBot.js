@@ -22,6 +22,12 @@ class WSConnection {
         Authorization: process.env.BITPART_SERVER_TOKEN,
       },
     });
+
+    this._socket.on("error", (err) => {
+      this._connected(false);
+      throw new Error(err.message);
+    });
+
     this._socket.on("open", () => {
       this._connected(json);
     });
@@ -45,15 +51,19 @@ class WSConnection {
   }
 
   _connected(data) {
-    const response = data ? JSON.parse(data) : null;
+    if (data === false) {
+      this._readyPromise.reject();
+    } else {
+      const response = data ? JSON.parse(data) : null;
 
-    if (null !== this._readyPromise) {
-      if (this._socket.readyState !== this._socket.OPEN) {
-        this._readyPromise.reject(response.errorMessage);
-      } else {
-        this._readyPromise.resolve();
+      if (null !== this._readyPromise) {
+        if (this._socket.readyState !== this._socket.OPEN) {
+          this._readyPromise.reject(response.errorMessage);
+        } else {
+          this._readyPromise.resolve();
+        }
+        this._readyPromise = null;
       }
-      this._readyPromise = null;
     }
   }
 }
@@ -89,16 +99,19 @@ export const createBotBitpart = async (data, passcode) => {
   const ws = new WSConnection(
     `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
   );
+
   const response = ws
     .start()
     .then(async () => {
       const response = await ws.sendMessage(jsonStringCreateBot);
-
       return response;
     })
-    // .then(res => console.log('res now is:', res))
     .catch((err) => {
-      throw new Error(err.message);
+      throw new Error(
+        err?.message
+          ? err.message
+          : "Web socket connection was refused.Make sure the server is running.",
+      );
     });
 
   return response;
@@ -120,6 +133,11 @@ export const linkChannelBitpart = async (botId) => {
   const ws = new WSConnection(
     `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
   );
+
+  // if (!ws?._socket) {
+  //   throw new Error("Cannot connect to Bitpart server. Make sure the server is running.")
+  // }
+
   const response = ws
     .start()
     .then(async () => {
@@ -127,9 +145,12 @@ export const linkChannelBitpart = async (botId) => {
 
       return response;
     })
-    // .then(res => console.log('res now is:', res))
     .catch((err) => {
-      throw new Error(err.message);
+      throw new Error(
+        err?.message
+          ? err.message
+          : "Web socket connection was refused.Make sure the server is running.",
+      );
     });
 
   return response;
