@@ -3,6 +3,7 @@
 
 start:
 // if bitpart receives passcode, set admin
+  remember tip = ""
   do passcode = event
   do passcode.to_uppercase()
 
@@ -10,7 +11,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
     hold
 
     if (event.to_lowercase() == "help") {
@@ -22,11 +23,17 @@ start:
     goto admin_interface_step
   }
   else 
-    remember tip = ""
     // conversation is triggered by a message from a user who says they have a tip
     // TODO Bitpart interprets incoming language. Response is in the same language
-    say "Thank you for contacting [name].\nThis is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.\nFor more information at any time, including how to delete your data, send a message with the words 'My data'"
-    say "Even though this is a secure tipline, please do not share highly sensitive information here.\nPlease share your tip with us."
+    say "Thank you for contacting [name].
+    
+This is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
+    
+For more information at any time, including how to delete your data, send a message with the words 'My data'"
+
+    say "Even though this is a secure tipline, please do not share highly sensitive information here.
+    
+Please share your tip with us."
     hold
 
     if (event.to_lowercase() == "my data") {
@@ -38,16 +45,14 @@ start:
     }
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:\n\n
-  1) Receive messages\n
-  2) Exit this conversation\n
-  3) Delete my data"
+  say "What would you like to do? Enter a number:
+
+1) Receive messages
+2) Exit this conversation
+3) Delete my data"
   hold
 
   if (event == 1) {
-    
-    // TODO JOSH: how does the admin ask for the messages left for them?
-
     goto admin_interface_step
   } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
@@ -64,7 +69,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.
+  
+Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
+  
+Reply with 'Delete' to confirm.
+  
+Reply with 'Go back' to go back to the beginning."
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -78,12 +89,16 @@ delete_me_confirm_step:
 
 privacy_policy_step:
   say "[privacyPolicy]"
-  say "Reply with 'Agree' and continue to the main menu\nReply with 'Delete' to delete your data."
+  say "Reply with 'Agree' and continue to the main menu
+  
+Reply with 'Delete' to delete your data."
   hold
 
   // Agree and return to menu, disagree and delete data
   if (event.to_lowercase() == "agree") {
-    say "Even though this is a secure tipline, please do not share highly sensitive information here.\nPlease share your tip with us."
+    say "Even though this is a secure tipline, please do not share highly sensitive information here.
+    
+Please share your tip with us."
     hold
 
     do tip = event  
@@ -97,7 +112,13 @@ privacy_policy_step:
     goto privacy_policy_step
 
 delete_data_step:
-  say "You have asked that all your data be deleted from the system.\nOnce this happens, you will no longer receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the data rights."
+  say "You have asked that all your data be deleted from the system.
+  
+Once this happens, you will no longer receive messages from this number, unless you send a message to it again.
+  
+Reply with 'Delete' to confirm.
+  
+Reply with 'Go back' to go back to the data rights."
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -114,7 +135,9 @@ confirm_delete_step:
   goto end
 
 tip_reply_step:
-  say "Thank you. Our team will look into your tip and assess its suitability for our outlet.\nWe may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
+  say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
+  
+We may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
   hold
 
   if (event.to_lowercase() == "yes") {
@@ -123,7 +146,9 @@ tip_reply_step:
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper "A user sent the following anonymous tip: {{tip}}.\n\nThey did not wish to be contacted."
+    whisper "A user sent the following anonymous tip: {{tip}}.
+    
+They did not wish to be contacted."
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -134,17 +159,25 @@ tip_reply_step:
   }
 
 contact_method_step:
-  say "Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.\n1) Signal call\n2) Signal text message\n3) Phone call\n4) Any\n5) None, don't contact me"
+  remember contact_preference = ""
+
+  say "Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  
+1) Signal call
+2) Signal text message
+3) Phone call
+4) Any
+5) None, don't contact me"
   hold
 
   if (event == 1) {
-    remember contact_preference = "Signal call"
+    do contact_preference = "signal call"
     goto record_number_step    
   } else if (event == 2) {
-    remember contact_preference = "Signal text message"
+    do contact_preference = "signal text message"
     goto record_number_step    
   } else if (event == 3) {
-    remember contact_preference = "Phone call"
+    do contact_preference = "phone call"
     goto record_number_step    
   } else if (event == 4 || event == 5) {
     goto confirm_contact_method_step
@@ -162,19 +195,29 @@ record_number_step:
   remember contact_number = event
 
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
+
+  say "{{_memory}}"
   
-  whisper "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+  whisper "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  
+Here is the tip they provided: {{_memory}}"
 
   goto end
 
 confirm_contact_method_step:
-  say "Reply 'yes' to confirm we can use any method to contact you.\nReply 'back' to go to the previous menu of options\nReply 'no' if you prefer to not be contacted."
+  say "Reply 'yes' to confirm we can use any method to contact you.
+  
+Reply 'back' to go to the previous menu of options
+    
+Reply 'no' if you prefer to not be contacted."
   hold
 
   if (event.to_lowercase() == "yes") {
     say "Thank you. Your preference is noted."
 
-    whisper "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.\n\nHere is the tip they provided: {{tip}}"
+    whisper "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.
+    
+Here is the tip they provided: {{tip}}"
 
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {
