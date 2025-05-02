@@ -1,6 +1,7 @@
 "use client";
 
 // base imports
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 // chakra ui imports
@@ -17,10 +18,14 @@ import {
 // icons
 import { FaArrowLeftLong } from "react-icons/fa6";
 
-export default function AuthErrorPage() {
+function Search() {
   const search = useSearchParams();
   const error = search.get("error");
 
+  return <>{error}</>;
+}
+
+export default function AuthErrorPage() {
   return (
     <Box className="flex h-screen w-full flex-col items-center justify-center">
       <Container marginY={12} maxWidth="lg">
@@ -29,7 +34,11 @@ export default function AuthErrorPage() {
           <Text marginTop={6}>
             There was a problem when trying to authenticate. Please contact us
             if this error persists. Unique error code:{" "}
-            <Code className="rounded-sm bg-slate-100 p-1 text-xs">{error}</Code>
+            <Code className="rounded-sm bg-slate-100 p-1 text-xs">
+              <Suspense>
+                <Search />
+              </Suspense>
+            </Code>
           </Text>
           <Text as="div" marginTop={2}>
             <HStack alignItems="flex-start">

@@ -1,7 +1,7 @@
 "use client";
 
 // base imports
-import React from "react";
+import React, { Suspense } from "react";
 
 // chakra ui imports
 import {
@@ -26,7 +26,9 @@ export default function Home() {
 
   return (
     <Box>
-      <ToastSignOut />
+      <Suspense>
+        <ToastSignOut />
+      </Suspense>
       <Container py={6}>
         <Header />
       </Container>

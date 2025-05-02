@@ -62,6 +62,7 @@ Add to your `.env` file the following:
 
 ```
 AUTH_DEBUG=true
+AUTH_TRUST_HOST=false # true for production build
 
 BITPART_SERVER_URL=127.0.0.1
 BITPART_SERVER_PORT=5000
@@ -80,6 +81,8 @@ NEXT_PUBLIC_VPN_ENDPOINT="vpn_endpoint"
 ## Deployment
 
 ### TODO Container
+
+
 
 ## Documentation
 
