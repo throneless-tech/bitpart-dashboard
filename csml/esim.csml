@@ -28,15 +28,17 @@ start:
     // TODO check if the user has contacted this line before
 
     say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
-    \nWe use an automated messaging system so you can get quicker responses, but you can always reach a human."
+
+We use an automated messaging system so you can get quicker responses, but you can always reach a human."
 
     goto menu_step
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:\n\n
-  1) Receive messages\n
-  2) Exit this conversation\n
-  3) Delete my data"
+  say "What would you like to do? Enter a number:
+
+1) Receive messages
+2) Exit this conversation
+3) Delete my data"
   hold
 
   if (event == 1) {
@@ -59,7 +61,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Go back' to go back to the beginning."
+  say "You have asked that you be removed from the conversation and all your data be deleted from the system.
+  
+Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
+
+Reply with 'Delete' to confirm.
+
+Reply with 'Go back' to go back to the beginning."
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -83,12 +91,15 @@ menu_step:
 
   // TODO remove option 3
   say "Menu
-    \nWhat would you like to do?
-    \n1) Get an eSIM for myself
-    \n2) Get help with my eSIM
-    \n3) My data rights
-    \n4) About us
-    \n\nEnter the number"
+
+What would you like to do?
+
+1) Get an eSIM for myself
+2) Get help with my eSIM
+3) My data rights
+4) About us
+
+Enter the number"
   hold
 
   if (event == 1) {
@@ -111,7 +122,15 @@ menu_options_step:
     goto human_support_step
   }
   
-  say "What would you like to do now?\nReply with 'main menu' to go back to the main menu. Reply with 'Help' to go back to the help menu.\nReply with ' Talk to a human' to get more support.Reply with 'End' to end this chat for today."
+  say "What would you like to do now?
+
+Reply with 'main menu' to go back to the main menu.
+
+Reply with 'Help' to go back to the help menu.
+
+Reply with 'Talk to a human' to get more support.
+
+Reply with 'End' to end this chat for today."
   hold 
 
   if (event.to_lowercase() == "main menu") {
@@ -138,10 +157,14 @@ get_esim_1_step:
   }
 
   say "STEP 1:
-    \nFirst, you need to make sure that your phone is compatible.
-    \nTo do this, please go to your phone's Settings > Connections or SIM Manager. If your device is eSIM compatible you should be able to see if you have the option to add an eSIM.
-    \nAlternatively open your phone app, dial *#06# and press the call button. If your device is eSIM compatible you should be able to see an EID number.
-    \nIs your device e-sim compatible? Reply with Yes or No"
+
+First, you need to make sure that your phone is compatible.
+
+To do this, please go to your phone's Settings > Connections or SIM Manager. If your device is eSIM compatible you should be able to see if you have the option to add an eSIM.
+
+Alternatively open your phone app, dial *#06# and press the call button. If your device is eSIM compatible you should be able to see an EID number.
+
+Is your device e-sim compatible? Reply with Yes or No"
   hold
 
   if (event.to_lowercase() == "yes") {
@@ -174,11 +197,16 @@ get_esim_2_step:
   }
 
   say "Step 2:
-    \nWhich networks are available where you are?
-    \nTo find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
-    \n\nWhich of the following mobile networks do you see?
-    \n[locations]
-    \n\nList all networks available separated by a comma  e.g. :
+
+Which networks are available where you are?
+
+To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
+
+Which of the following mobile networks do you see?
+
+[locations]
+
+List all networks available separated by a comma  e.g. :
 1,2,5"
   hold
 
@@ -195,10 +223,14 @@ get_esim_3_step:
   }
 
   say "Step 3:
-    \nA code will follow with you unique eSIM.
-    \nHere are the instructions for it to work:
-    \n[activationInstructions]
-    \n\nIf you can't get it to work, reply with 'Help'"
+
+A code will follow with you unique eSIM.
+
+Here are the instructions for it to work:
+
+[activationInstructions]
+
+If you can't get it to work, reply with 'Help'"
   hold
 
   // external app call to EMS for an esim code from 1 network
@@ -219,29 +251,33 @@ help_step:
   }
 
   say "Help
-    \n1) How to activate an e-sim
-    \n2) My e-sim isn't working
-    \n3) Delete my eSIM
-    \n4) Other"
+
+1) How to activate an e-sim
+2) My e-sim isn't working
+3) Delete my eSIM
+4) Other"
   hold
 
   if (event == 1) {
     say "eSIM Activation
-      \n\n[activationInstructions]"
+
+[activationInstructions]"
     
     goto follow_up_step
   } else if (event == 2) {
     say "eSIM Troubleshooting
-      \n\n[helpInstructions]"
+
+[helpInstructions]"
 
     goto follow_up_step
   } else if (event == 3) {
     say "DELETE eSIM
-    \n\nStep 1: Open your phone's Settings.
-    \n2. Tap on 'Connections' (Android)
-    \n3. Then, choose 'SIM card manager.'
-    \n4. Pick the eSIM plan you want to delete.
-    \n5. Turn off the eSIM by toggling the switch. Finally, tap on 'Remove.'"
+
+Step 1: Open your phone's Settings.
+2. Tap on 'Connections' (Android)
+3. Then, choose 'SIM card manager.'
+4. Pick the eSIM plan you want to delete.
+5. Turn off the eSIM by toggling the switch. Finally, tap on 'Remove.'"
     
     goto follow_up_step
   } else if (event == 4) {
@@ -254,9 +290,12 @@ help_step:
 
 follow_up_step:
   say "What would you like to do now?
-      \nReply with 'help' to go back to the help menu
-      \nReply with 'human' to get more support
-      \nReply with 'end' to end this chat for today."
+
+Reply with 'help' to go back to the help menu
+
+Reply with 'human' to get more support
+
+Reply with 'end' to end this chat for today."
     hold
 
     if (event.to_lowercase() == "help") {
@@ -275,7 +314,8 @@ follow_up_step:
 
 human_support_step:
   say "We've understood that you have a question not covered in the Help section.
-    \nPlease share what you need help with and a member of our team will get back to you."
+
+Please share what you need help with and a member of our team will get back to you."
   hold
 
   remember problem = event
