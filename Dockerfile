@@ -1,7 +1,7 @@
 ####################################################################################################
 ## Builder
 ####################################################################################################
-FROM node:alpine AS base
+FROM node:lts-alpine as base
 
 # Set the working directory inside the container to /app.
 # We need to set the working directory so Docker knows where to run the commands.
@@ -14,6 +14,15 @@ COPY package*.json ./
 # Install project dependencies
 RUN npm install
 
+# set up prisma ORM
+COPY ./prisma/schema.prisma ./prisma/schema.prisma
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Push changes to DB
+# RUN npx prisma db push
+
 # Copy all files from the context directory (where the Dockerfile is located) to the working directory in the container.
 COPY . .
 
@@ -23,7 +32,7 @@ RUN npm run build
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM node:alpine as release
+FROM node:lts-alpine as release
 
 WORKDIR /app
 
