@@ -216,8 +216,6 @@ export default function CreateBotFlow({ userId }) {
 
       setQRLink(channelBitpartLink.data.response);
 
-      console.log(channelBitpartLink.data.response);
-
       const bot = await createBotPrisma(data, userId, passcode);
 
       setCreatedBot(bot);
@@ -539,72 +537,74 @@ export default function CreateBotFlow({ userId }) {
                 the passcode again there.
               </Text>
             </StepsCompletedContent>
-            <Group>
-              <StepsPrevTrigger asChild>
-                <Button
-                  disabled={stepCount === 0 || stepCount === 3}
-                  onClick={() => updateStepCount(-1)}
-                  size="sm"
-                  variant="outline"
-                >
-                  Prev
-                </Button>
-              </StepsPrevTrigger>
-              <StepsNextTrigger asChild>
-                <Button
-                  disabled={
-                    isFetching ||
-                    (stepCount === 1 && !formState.isValid) ||
-                    (stepCount === 2 && !dataConfirmed) ||
-                    stepCount > 3
-                  }
-                  onClick={(e) => {
-                    if (stepCount === 2) {
-                      updateStepCount(-1);
-                      methods.handleSubmit(onSubmit, onError)(e);
+            <Container maxWidth="2xl" padding={0}>
+              <Group>
+                <StepsPrevTrigger asChild>
+                  <Button
+                    disabled={stepCount === 0 || stepCount === 3}
+                    onClick={() => updateStepCount(-1)}
+                    size="sm"
+                    variant="outline"
+                  >
+                    Prev
+                  </Button>
+                </StepsPrevTrigger>
+                <StepsNextTrigger asChild>
+                  <Button
+                    disabled={
+                      isFetching ||
+                      (stepCount === 1 && !formState.isValid) ||
+                      (stepCount === 2 && !dataConfirmed) ||
+                      stepCount > 3
                     }
-                    if (!isFetching) {
-                      updateStepCount(1);
-                    }
-                  }}
-                  size="sm"
-                  variant="outline"
+                    onClick={(e) => {
+                      if (stepCount === 2) {
+                        updateStepCount(-1);
+                        methods.handleSubmit(onSubmit, onError)(e);
+                      }
+                      if (!isFetching) {
+                        updateStepCount(1);
+                      }
+                    }}
+                    size="sm"
+                    variant="outline"
+                  >
+                    {stepCount == 2
+                      ? "Submit"
+                      : stepCount >= 4
+                        ? "Finished"
+                        : "Next"}
+                  </Button>
+                </StepsNextTrigger>
+                <Dialog.Root
+                  lazyMount
+                  open={open}
+                  onOpenChange={(e) => setOpen(e.open)}
+                  size="full"
                 >
-                  {stepCount == 2
-                    ? "Submit"
-                    : stepCount >= 4
-                      ? "Finished"
-                      : "Next"}
-                </Button>
-              </StepsNextTrigger>
-              <Dialog.Root
-                lazyMount
-                open={open}
-                onOpenChange={(e) => setOpen(e.open)}
-                size="full"
-              >
-                <Portal>
-                  <Dialog.Backdrop />
-                  <Dialog.Positioner>
-                    <Dialog.Content
-                      style={{
-                        backgroundColor: "rgba(0, 0, 0, 0.1)",
-                        backdropFilter: "blur(5px)",
-                      }}
-                    >
-                      <Dialog.Body>
-                        <AbsoluteCenter>
-                          <VStack>
-                            <Spinner size="xl" />
-                            <Text>Creating your bot...</Text>
-                          </VStack>
-                        </AbsoluteCenter>
-                      </Dialog.Body>
-                    </Dialog.Content>
-                  </Dialog.Positioner>
-                </Portal>
-              </Dialog.Root>
-            </Group>
+                  <Portal>
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                      <Dialog.Content
+                        style={{
+                          backgroundColor: "rgba(0, 0, 0, 0.1)",
+                          backdropFilter: "blur(5px)",
+                        }}
+                      >
+                        <Dialog.Body>
+                          <AbsoluteCenter>
+                            <VStack>
+                              <Spinner size="xl" />
+                              <Text>Creating your bot...</Text>
+                            </VStack>
+                          </AbsoluteCenter>
+                        </Dialog.Body>
+                      </Dialog.Content>
+                    </Dialog.Positioner>
+                  </Portal>
+                </Dialog.Root>
+              </Group>
+            </Container>
           </StepsRoot>
         </FormProvider>
       </Container>

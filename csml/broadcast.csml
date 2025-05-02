@@ -150,7 +150,7 @@ Send 'menu' at any time to come back to this menu."
   hold
 
   if (event == 1) {
-    say "This is a way to receive messages from X, about Y, without being in a group (which can potentially compromise everyone in the group).
+    say "This is a way to receive messages without being in a group (which can potentially compromise everyone in the group).
     
 [description]"
   } else if (event == 2) {
