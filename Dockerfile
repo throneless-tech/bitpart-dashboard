@@ -29,22 +29,6 @@ COPY . .
 # build the project
 RUN npm run build
 
-####################################################################################################
-## Final image
-####################################################################################################
-FROM node:lts-alpine as release
-
-WORKDIR /app
-
-# # Copy the node_modules folder from the base stage to the node_modules directory in the release stage.
-COPY --from=base /app/node_modules ./node_modules
-
-# # Copy the package.json file from the base stage to the current directory in the release stage.
-COPY --from=base /app/package.json ./package.json
-
-# # Copy the .next folder from the base stage to the .next directory in the release stage.
-COPY --from=base /app/.next ./.next
-
 EXPOSE 3000
 
 # Define the default command to be executed when the container is started
