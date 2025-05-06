@@ -14,6 +14,11 @@ COPY package*.json ./
 # Install project dependencies
 RUN npm install
 
+ENV NODE_ENV production
+
+# Disable telemetry during runtime
+ENV NEXT_TELEMETRY_DISABLED 1
+
 # set up prisma ORM
 COPY ./prisma/schema.prisma ./prisma/schema.prisma
 
@@ -32,7 +37,7 @@ RUN npm run build
 EXPOSE 3000
 
 # Define the default command to be executed when the container is started
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
 
 # 
 # thanks to 
