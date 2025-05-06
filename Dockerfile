@@ -1,7 +1,7 @@
 ####################################################################################################
 ## Builder
 ####################################################################################################
-FROM node:lts-alpine as base
+FROM node:22-alpine as base
 
 # Set the working directory inside the container to /app.
 # We need to set the working directory so Docker knows where to run the commands.
