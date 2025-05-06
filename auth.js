@@ -13,6 +13,11 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
   },
   callbacks: {
     jwt({ token, trigger, user, account }) {
+      console.log('********************************');
+      console.log('in jwt', token);
+      
+      console.log('********************************');
+      
       if (trigger === "update") token.name = session.user.username;
       // if (account?.provider === "credentials") {
       //   token.credentials = true;
@@ -26,6 +31,10 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
+      console.log('********************************');
+      console.log('in session', session);
+
+      console.log('********************************');
       if (token?.id) session.id = token.id;
       if (token?.name) session.name = token.name;
 

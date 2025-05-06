@@ -37,7 +37,7 @@ RUN npm run build
 EXPOSE 3000
 
 # Define the default command to be executed when the container is started
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
 
 # 
 # thanks to 
