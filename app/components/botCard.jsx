@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // chakra ui imports
 import {
@@ -22,6 +22,7 @@ import { FaSimCard } from "react-icons/fa";
 import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
+import { formatBotName } from "../actions/formatBot";
 
 const botTypes = {
   broadcast: <TbBuildingBroadcastTower />,
@@ -34,8 +35,22 @@ const botTypes = {
 export default function BotCard(props) {
   const { bot, handleDelete } = props;
   const [checked, setChecked] = useState(false);
+  const [botName, setBotName] = useState("");
 
   if (!bot) return null;
+
+  const getFormattedBotName = async (botName) => {
+    const name = await formatBotName(bot.botName);
+    setBotName(name);
+  };
+
+  useEffect(() => {
+    if (bot?.name) {
+      getFormattedBotName(bot.name);
+    }
+  });
+
+  useEffect(() => {}, [bot, botName]);
 
   // color mode
   const color = useColorModeValue("gray.600", "gray.400");
@@ -67,7 +82,7 @@ export default function BotCard(props) {
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {/* <Button variant="outline">View</Button> */}
-        <form action={async () => await handleDelete(bot.id, bot.phone)}>
+        <form action={async () => await handleDelete(botName)}>
           <Button type="submit">Delete</Button>
         </form>
       </Card.Footer>
