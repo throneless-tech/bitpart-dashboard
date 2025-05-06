@@ -36,12 +36,6 @@ export default {
             },
           });
 
-          console.log('******************************');
-          console.log('in auth: ', user);
-          
-          console.log('******************************');
-          
-
           if (!user) {
             throw new Error("Invalid credentials.");
           }
