@@ -43,7 +43,7 @@ export default {
           const isPasswordValid = await bcrypt.compare(password, user.password);
 
           if (!isPasswordValid) {
-            throw new Error("Invalid email or password.");
+            throw new Error("Invalid credentials.");
           }
 
           // return JSON object with the user data
