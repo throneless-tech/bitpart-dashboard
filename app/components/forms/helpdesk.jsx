@@ -40,7 +40,7 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.referral && errors.referral.message}
-        helperText="Who or where a person should contact for immediate assistance."
+        helperText="Who or where a person should contact for immediate assistance, such as if they are in immediate physical danger."
         invalid={!!errors?.referral}
         label="Referral"
         marginTop={4}
@@ -60,7 +60,7 @@ export const HelpdeskForm = () => {
       </Field>
       <Field
         errorText={!!errors?.responseTime && errors.responseTime.message}
-        helperText={`How long your users can expect to have to wait for a reply, eg., "24 hours" or "2 days" or "1 week."`}
+        helperText={`How long your users can expect to have to wait for a reply from a human, eg., "24 hours" or "2 days" or "1 week."`}
         invalid={!!errors?.responseTime}
         label="Response time"
         marginTop={4}
@@ -102,7 +102,7 @@ export const HelpdeskForm = () => {
       </Field> */}
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the data rights for a person interacting with this bot."
+        helperText="Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy."
         invalid={!!errors?.privacyPolicy}
         info="privacyPolicy"
         label="Data rights"

@@ -19,10 +19,10 @@ export default function PrivacyPolicyText() {
         </List.Item>
       </List.Root>
       <Text marginTop={4}>
-        Bitpart automatically includes a message called "My data rights" that
-        anyone using your bot will be able to navigate. This message contains 2
-        sections: space for your data policy, and information about Bitpart's
-        Privacy policy:
+        Everyone who uses Bitpart will have access to this data rights policy by
+        messaging the bot with "My data." This message contains 2 sections:
+        space for your data policy, and information about Bitpart's Privacy
+        policy. See below for our recommendations:
       </Text>
       <List.Root as="ol" marginBottom={8}>
         <List.Item>
@@ -32,7 +32,16 @@ export default function PrivacyPolicyText() {
               <br />
             </Text>
             If you are part of an organization that has a privacy policy or data
-            policy, include a brief few lines summarising it in plain language
+            policy, include a{" "}
+            <Text as="span" fontWeight={700}>
+              {" "}
+              brief{" "}
+            </Text>{" "}
+            few lines summarising it in{" "}
+            <Text as="span" fontWeight={700}>
+              {" "}
+              plain language{" "}
+            </Text>{" "}
             and link to the full policy.
           </Text>
           <Text marginTop={4}>
@@ -44,7 +53,7 @@ export default function PrivacyPolicyText() {
               What information is being collected?{" "}
               <Text as="span" fontStyle="italic">
                 (For instance are your recording usernames and phone numbers?
-                What are you doing the contents of messages?)
+                What are you doing with the contents of messages?)
               </Text>
             </List.Item>
             <List.Item>
@@ -52,14 +61,14 @@ export default function PrivacyPolicyText() {
               <Text as="span" fontStyle="italic">
                 (What if someone accesses the information you are collecting,
                 who isn't meant to? It's better to minimise what you have, and
-                one way to do this is to regularly delete data)
+                one way to do this is to regularly delete data.)
               </Text>
             </List.Item>
             <List.Item>
               What happens after this period?{" "}
               <Text as="span" fontStyle="italic">
                 (For instance you may wish to delete data that is more than 6
-                months old; and set reminders so that you actually do so)
+                months old; and set reminders so that you actually do so.)
               </Text>
             </List.Item>
             <List.Item>
@@ -76,13 +85,13 @@ export default function PrivacyPolicyText() {
               What is the minimum data needed in order for us to provide the
               service{" "}
               <Text as="span" fontStyle="italic">
-                (such as helpdesk support or send an eSIM)?
+                (Such as helpdesk support or to send an eSIM?)
               </Text>
             </List.Item>
             <List.Item>
               How can someone using your bot edit or delete their data?{" "}
               <Text as="span" fontStyle="italic">
-                (for instance this may be asking you to delete it)
+                (For instance this may be asking you to delete it.)
               </Text>
             </List.Item>
           </List.Root>
@@ -99,7 +108,7 @@ export default function PrivacyPolicyText() {
             </List.Item>
             <List.Item>
               If possible, provide a way for people to contact you, like an
-              email or phone number.
+              email or phone number
             </List.Item>
           </List.Root>
         </List.Item>
@@ -113,17 +122,26 @@ export default function PrivacyPolicyText() {
               called Bitpart.
             </List.Item>
             <List.Item>
-              Signal offers' end-to-end encryption, but it is important to let
-              you know that Bitpart acts as an "end." Bitpart works by relaying
-              messages between senders and receivers, and therefore message
-              content is visible to our server momentarily in order for that to
-              happen, but is not stored.
+              Signal offers' end-to-end encryption and it is important you know
+              that Bitpart acts as an "end." Bitpart works by relaying messages
+              between senders and receivers. In order for that to happen,
+              message content is visible to our server momentarily, but we{" "}
+              <Text as="span" fontWeight={700}>
+                {" "}
+                do not store it
+              </Text>
+              .
             </List.Item>
             <List.Item>
               Bitpart seeks to minimize the amount of personal information that
               is collected from you and works to promptly delete that data once
               it is no longer required. For instance, after you finish a
-              conversation we will delete your data from our system.
+              conversation{" "}
+              <Text as="span" fontStyle="italic">
+                {" "}
+                [after X days]{" "}
+              </Text>{" "}
+              we will delete your data from our system.
             </List.Item>
             <List.Item>
               For our full terms of use and privacy policy, see{" "}

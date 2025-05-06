@@ -80,7 +80,7 @@ export const EsimForm = () => {
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
-        helperText="Describe the data rights for a person interacting with this bot."
+        helperText="Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy."
         info="privacyPolicy"
         invalid={!!errors?.privacyPolicy}
         label="Data rights"

@@ -59,6 +59,13 @@ import { Summary } from "@/app/components/forms/summary";
 import { TiplineForm } from "@/app/components/forms/tipline";
 import { VpnForm } from "@/app/components/forms/vpn";
 
+// confirmation pages
+import { BroadcastConfirmation } from "./confirmation/broadcast";
+import { EsimConfirmation } from "./confirmation/esim";
+import { HelpdeskConfirmation } from "./confirmation/helpdesk";
+import { TiplineConfirmation } from "./confirmation/tipline";
+import { VpnConfirmation } from "./confirmation/vpn";
+
 // icons imports
 import { CgModem } from "react-icons/cg";
 import { FaSimCard } from "react-icons/fa";
@@ -303,10 +310,13 @@ export default function CreateBotFlow({ userId }) {
                   styles={{ px: "0.5", bg: "yellow.muted" }}
                   query="We recommend setting up a separate Signal account for your bot."
                 >
-                  Remember, if you use your personal Signal account, the
-                  recipients of your messages will see your name. You will also
-                  receive all the bot messages. We recommend setting up a
-                  separate Signal account for your Bitpart bot.
+                  Remember, the Bitpart bot needs its own Signal account to send
+                  and receive messages to and from your service users. If you
+                  use your personal Signal account to be the bot account, the
+                  recipients of your messages would see your personal Signal
+                  profile name. You would also receive all messages sent to the
+                  bot. We recommend setting up a separate Signal account for
+                  your Bitpart bot.
                 </Highlight>
               </Text>
               <Heading as="h2" marginTop={10} size="md">
@@ -369,6 +379,12 @@ export default function CreateBotFlow({ userId }) {
               <Heading as="h2" marginBottom={4} size="md">
                 Bot specifics
               </Heading>
+              <Text fontSize="sm" marginBottom={8}>
+                Any user who has signed up to receive messages from your bot
+                will be able to request to see a menu, which offers them the
+                option to learn about the bot. Fill out these sections below to
+                customize the text.
+              </Text>
               {botType == "broadcast" ? (
                 <>
                   <BroadcastForm />
@@ -474,68 +490,38 @@ export default function CreateBotFlow({ userId }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Text marginTop={12}>
-                Your broadcast channel has now been created!
-              </Text>
-              <Text fontWeight={700} marginTop={4}>
-                How can I send out messages?
-              </Text>
-              <Text marginTop={4}>
-                For the system to recognise you as the person sending broadcast
-                messages (and not as someone joining the broadcast channel)
-                please send a message on Signal to your channel{" "}
-                {createdBot && createdBot.phone ? createdBot.phone : ""} with
-                the passcode.
-              </Text>
-              <Text marginTop={4}>
-                Your passcode is{" "}
-                <Text as="span" fontSize="xl">
-                  {botPasscode}
-                </Text>
-              </Text>
-              <Text marginTop={4}>
-                You only need to send it once. Bitpart will recognise you going
-                forwards. Any message you then send to your channel will be
-                forwarded on to everyone who has 'signed up' to the channel.
-              </Text>
-              <Text marginTop={4}>
-                If you want to change or remove a number in future, sending
-                "Delete" will erase the conversation and thus Bitpart's memory
-                of you as someone who is able to send broadcast messages.
-              </Text>
-              <Text marginTop={4}>
-                More than one person can send broadcast messages. If another
-                number also sends the passcode over Signal to your channel, they
-                will be able to send out broadcast messages too.
-              </Text>
-              <Text marginTop={4}>
-                Keep your passcode secure. Remember -- this passcode gives
-                someone access to send messages to the entire channel.
-              </Text>
-              <Text fontWeight={700} marginTop={4}>
-                What should I do now?
-              </Text>
-              <List.Root as="ol" marginLeft={4} marginTop={2}>
-                <List.Item>
-                  Message your bot with the passcode to establish you as a
-                  broadcaster.
-                </List.Item>
-                <List.Item>
-                  Test your channel by using a different number to send a Signal
-                  message to your channel.
-                </List.Item>
-                <List.Item>
-                  Share your channel widely with your target audience.
-                </List.Item>
-              </List.Root>
-              <Text marginTop={4}>
-                Go{" "}
-                <Link color={color} href="/dashboard" variant="underline">
-                  home
-                </Link>{" "}
-                to see your bots and create a new one. You will be able to find
-                the passcode again there.
-              </Text>
+              {botType == "broadcast" ? (
+                <>
+                  <BroadcastConfirmation
+                    color={color}
+                    passcode={botPasscode}
+                    phone={createdBot?.phone}
+                  />
+                </>
+              ) : botType == "esim" ? (
+                <>
+                  <EsimConfirmation />
+                </>
+              ) : botType == "helpdesk" ? (
+                <>
+                  <HelpdeskConfirmation />
+                </>
+              ) : botType == "tipline" ? (
+                <>
+                  <TiplineConfirmation />
+                </>
+              ) : botType == "vpn" ? (
+                <>
+                  <VpnConfirmation />
+                </>
+              ) : (
+                <>
+                  <Text>
+                    Something went wrong. Please contact a system administrator:
+                    no bot type selected.
+                  </Text>
+                </>
+              )}
             </StepsCompletedContent>
             <Container maxWidth="2xl" padding={0}>
               <Group>
@@ -569,7 +555,7 @@ export default function CreateBotFlow({ userId }) {
                     size="sm"
                     variant="outline"
                   >
-                    {stepCount == 2
+                    {stepCount === 2
                       ? "Submit"
                       : stepCount >= 4
                         ? "Finished"

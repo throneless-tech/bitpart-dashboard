@@ -49,8 +49,9 @@ export default function About() {
           </Text>
           <Text marginTop={2}>
             We were inspired to develop Bitpart by the need we saw for it within
-            communities we are a part of and work with; and also dormant
-            projects like Ionosphere and Signalboost.
+            communities we are a part of and work with. Dormant, similar
+            projects such as Ionosphere and Signalboost also brought us
+            inspiration.
           </Text>
           <Text marginTop={2}>
             Bitpart has been made possible through a grant and support from the
