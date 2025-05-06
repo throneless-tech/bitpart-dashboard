@@ -10,7 +10,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who can receive helpdesk messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    say Text("Welcome, you are now set up as a user who can receive helpdesk messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
     hold
 
     if (event.to_lowercase() == "help") {
@@ -25,11 +25,12 @@ start:
     remember count = 0
 
     // TODO Bitpart interprets incoming language. Response is in the same language
-    say "Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
+    say Text("Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
 
-If you are in immediate physical danger contact [referral]"
+If you are in immediate physical danger contact [referral].")
+
     // TODO: user research needed about if we want bitpart to accept voice notes
-    say "Our helpdesk will ask you to select the problem you're experiencing.
+    say Text("Our helpdesk will ask you to select the problem you're experiencing.
 
 Your answers will be stored on our system for [storageTime] and visible to [storageAccess]. We will not ask you for personal information.
 
@@ -37,7 +38,7 @@ For more information at any time, including how to delete your data, you can rep
 
 To continue, reply with 'Agree'.
 
-To disagree and end the conversation, reply with 'End'."
+To disagree and end the conversation, reply with 'End'.")
     hold
 
     if (event.to_lowercase() == "my data") {
@@ -56,10 +57,10 @@ To disagree and end the conversation, reply with 'End'."
     }
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:
+  say Text("What would you like to do? Enter a number:
   
-1) Exit this conversation
-2) Delete my data"
+**1.** Exit this conversation
+**2.** Delete my data")
   hold
 
   if (event == 1) {
@@ -77,13 +78,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system.
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
   
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning."
+Reply with 'Go back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -104,10 +105,12 @@ privacy_policy_step:
   if (count >= 3) {
     goto human_support_step
   }
-  say "[privacyPolicy]"
-  say "Reply with 'Agree' and continue to the main menu
+  say Text("**My data**
   
-Reply with 'Delete' to delete your data."
+[privacyPolicy]")
+  say Text("Reply with 'Agree' and continue to the main menu
+  
+Reply with 'Delete' to delete your data.")
   hold
 
   // Agree and return to menu, disagree and delete data
@@ -125,13 +128,13 @@ delete_data_step:
     goto human_support_step
   }
 
-  say "You have asked that all your data be deleted from the system.
+  say Text("You have asked that all your data be deleted from the system.
   
 Once this happens, you will no longer receive messages from this number, unless you send a message to it again.
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the menu."
+Reply with 'Go back' to go back to the menu.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -164,12 +167,14 @@ menu_step:
     goto human_support_step
   }
   
-  say "What issue are you seeking help with?
+  say Text("**Menu**
+  
+What issue are you seeking help with?
 
 [problems]
 [problems.length]) Other
 
-Reply with the number"
+Reply with the number.")
   hold
 
   [problems.solutions]
@@ -195,9 +200,9 @@ check_if_solved_step:
     goto human_support_step
   }
 
-  say "Did that solve your problem?
+  say Text("Did that solve your problem?
 
-Reply Yes or No."
+Reply 'Yes' or 'No'.")
   hold
 
   if (event.to_lowercase() == "yes") {
@@ -216,11 +221,11 @@ menu_options_step:
     goto human_support_step
   }
   
-  say "Glad that helped.
+  say Text("Glad that helped.
   
 Reply with 'Menu' to return to the main menu and ask further questions. Reply with 'Delete' to delete your data from our system.Reply with 'End' to end this conversation.
   
-Remember that if this is a sensitive conversation you can delete the conversation from the Signal app."
+Remember that if this is a sensitive conversation you can delete the conversation from the Signal app.")
   hold 
 
   if (event.to_lowercase() == "menu") {

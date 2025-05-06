@@ -25,15 +25,15 @@ start:
   else 
     // conversation is triggered by a message from a user who says they have a tip
     // TODO Bitpart interprets incoming language. Response is in the same language
-    say "Thank you for contacting [name].
+    say Text("Thank you for contacting [name].
     
 This is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
     
-For more information at any time, including how to delete your data, send a message with the words 'My data'"
+For more information at any time, including how to delete your data, send a message with the words 'My data'.")
 
-    say "Even though this is a secure tipline, please do not share highly sensitive information here.
+    say Text("Even though this is a secure tipline, please do not share highly sensitive information here.
     
-Please share your tip with us."
+Please share your tip with us.")
     hold
 
     if (event.to_lowercase() == "my data") {
@@ -45,11 +45,11 @@ Please share your tip with us."
     }
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:
+  say Text("What would you like to do? Enter a number:
 
-1) Receive messages
-2) Exit this conversation
-3) Delete my data"
+**1.** Receive messages
+**2.** Exit this conversation
+**3.** Delete my data")
   hold
 
   if (event == 1) {
@@ -69,13 +69,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system.
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
   
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the beginning."
+Reply with 'Go back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -88,10 +88,12 @@ Reply with 'Go back' to go back to the beginning."
     goto delete_me_confirm_step
 
 privacy_policy_step:
-  say "[privacyPolicy]"
-  say "Reply with 'Agree' and continue to the main menu
+  say Text("**My data**
   
-Reply with 'Delete' to delete your data."
+[privacyPolicy]")
+  say Text("Reply with 'Agree' and continue to the main menu.
+  
+Reply with 'Delete' to delete your data.")
   hold
 
   // Agree and return to menu, disagree and delete data
@@ -112,13 +114,13 @@ Please share your tip with us."
     goto privacy_policy_step
 
 delete_data_step:
-  say "You have asked that all your data be deleted from the system.
+  say Text("You have asked that all your data be deleted from the system.
   
 Once this happens, you will no longer receive messages from this number, unless you send a message to it again.
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the data rights."
+Reply with 'Go back' to go back to the data rights.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -161,13 +163,13 @@ They did not wish to be contacted."
 contact_method_step:
   remember contact_preference = ""
 
-  say "Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
-1) Signal call
-2) Signal text message
-3) Phone call
-4) Any
-5) None, don't contact me"
+**1.** Signal call
+**2.** Signal text message
+**3.** Phone call
+**4.** Any
+**5.** None, don't contact me")
   hold
 
   if (event == 1) {
@@ -195,21 +197,19 @@ record_number_step:
   remember contact_number = event
 
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
-
-  say "{{_memory}}"
   
   whisper "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
   
-Here is the tip they provided: {{_memory}}"
+Here is the tip they provided: {{tip}}"
 
   goto end
 
 confirm_contact_method_step:
-  say "Reply 'yes' to confirm we can use any method to contact you.
+  say Text("Reply 'Yes' to confirm we can use any method to contact you.
   
-Reply 'back' to go to the previous menu of options
+Reply 'Back' to go to the previous menu of options
     
-Reply 'no' if you prefer to not be contacted."
+Reply 'No' if you prefer to not be contacted.")
   hold
 
   if (event.to_lowercase() == "yes") {

@@ -24,17 +24,17 @@ start:
       goto submit_question_step
     }
 
-    say "Hi. You have found the distribution list [name].
+    say Text("Hi. You have found the distribution list [name].
 
 You can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
 
-You can disagree, and your contact number will be deleted automatically from the list."
+You can disagree, and your contact number will be deleted automatically from the list.")
 
-    say "Agree - I want to be added to the distribution list and consent to receiving messages.
+    say Text("**Agree** - I want to be added to the distribution list and consent to receiving messages.
     
-Disagree - please remove me from the list
+**Disagree** - please remove me from the list.
 
-Reply with 'agree' or 'disagree'"
+Reply with 'Agree' or 'Disagree'.")
     hold
 
     if (event.to_lowercase() == "agree") {
@@ -50,11 +50,11 @@ Reply with 'agree' or 'disagree'"
       goto start
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:
+  say Text("What would you like to do? Enter a number:
 
-1) Broadcast a message
-2) Exit this conversation
-3) Delete my data"
+**1.** Broadcast a message
+**2.** Exit this conversation
+**3.** Delete my data")
   hold
 
   if (event == 1) {
@@ -78,13 +78,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system
 
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning."
+Reply with 'Go back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -101,13 +101,13 @@ consent_disagree_step:
     goto submit_question_step
   }
 
-  say "You have asked that you be removed from the list and all your data be deleted from the system.
+  say Text("You have asked that you be removed from the list and all your data be deleted from the system.
   
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning."
+Reply with 'Go back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -138,15 +138,17 @@ menu_step:
     goto submit_question_step
   }
 
-  say "**Menu**
+  say Text("**Menu**
 
-1) About this channel
-2) Safety tips
-3) Frequently asked questions (FAQs)
+Reply with the corresponding number:
+
+**1.** About this channel
+**2.** Safety tips
+**3.** Frequently asked questions (FAQs)
 
 You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this list.
 
-Send 'menu' at any time to come back to this menu."  
+Send 'Menu' at any time to come back to this menu.")
   hold
 
   if (event == 1) {
@@ -154,9 +156,9 @@ Send 'menu' at any time to come back to this menu."
     
 [description]"
   } else if (event == 2) {
-      say "**Safety tips**
+      say Text("**Safety tips**
 
-[safetyTips]"
+[safetyTips]")
   } else if (event == 3) {
         goto faq_step
   } else if (event.to_lowercase() == "menu") {
@@ -174,15 +176,22 @@ faq_step:
     goto submit_question_step
   }
 
-  say "Here are some frequently answered questions. Does your question fall under one of these?
+  say Text("**FAQ**
+  
+Here are some frequently answered questions. Does your question fall under one of these?
 
 [faq]
-[faq.length]) Other"
+[faq.length]) Other
+
+Reply with the number.")
   hold
 
   [faq.answers]
 
-  if (event.to_lowercase() == "menu") {
+  else if (event == [faq.length]) {
+  goto submit_question_step
+  }
+  else if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "delete") {
     goto consent_disagree_step
@@ -190,9 +199,9 @@ faq_step:
   else
     say "Sorry, I did not get that."
 
-  say "Reply with 'FAQ' to see the list of questions.
+  say Text("Reply with 'FAQ' to see the list of questions.
   
-Reply with 'Menu' to return home."
+Reply with 'Menu' to return home.")
   hold
 
   if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
@@ -222,9 +231,9 @@ Reply Yes or No."
   hold
 
   if (event.to_lowercase() == "yes") {
-    say "Reply with 'FAQ' to see the list of questions.
+    say Text("Reply with 'FAQ' to see the list of questions.
     
-Reply with 'Menu' to return home."
+Reply with 'Menu' to return home.")
     hold
 
     if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
@@ -257,6 +266,6 @@ submit_question_step:
 
   say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 
-  say "This is an unmonitored line that cannot receive messages. We will contact you again the next time an admin broadcasts a message."
+  say "We will contact you again the next time an admin broadcasts a message."
 
   // goto end // we are not ending the conversation, uncomment if that changes

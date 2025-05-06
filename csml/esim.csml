@@ -10,7 +10,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data. "
+    say Text("Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
     hold
 
     if (event.to_lowercase() == "help") {
@@ -27,18 +27,18 @@ start:
     // TODO Bitpart interprets incoming language. Response is in the same language
     // TODO check if the user has contacted this line before
 
-    say "Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
+    say Text("Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
 
-We use an automated messaging system so you can get quicker responses, but you can always reach a human."
+We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
 
     goto menu_step
 
 admin_interface_step:
-  say "What would you like to do? Enter a number:
+  say Text("What would you like to do? Enter a number:
 
-1) Receive messages
-2) Exit this conversation
-3) Delete my data"
+**1.** Receive messages
+**2.** Exit this conversation
+**3.** Delete my data")
   hold
 
   if (event == 1) {
@@ -61,13 +61,13 @@ admin_interface_step:
   }
 
 delete_me_confirm_step:
-  say "You have asked that you be removed from the conversation and all your data be deleted from the system.
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
   
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning."
+Reply with 'Go back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
@@ -90,16 +90,16 @@ menu_step:
   }
 
   // TODO remove option 3
-  say "Menu
+  say Text("**Menu**
 
 What would you like to do?
 
-1) Get an eSIM for myself
-2) Get help with my eSIM
-3) My data rights
-4) About us
+**1.** Get an eSIM for myself
+**2.** Get help with my eSIM
+**3.** My data rights
+**4.** About us
 
-Enter the number"
+Enter the number")
   hold
 
   if (event == 1) {
@@ -122,15 +122,15 @@ menu_options_step:
     goto human_support_step
   }
   
-  say "What would you like to do now?
+  say Text("What would you like to do now?
 
-Reply with 'main menu' to go back to the main menu.
+Reply with 'Main menu' to go back to the main menu.
 
 Reply with 'Help' to go back to the help menu.
 
 Reply with 'Talk to a human' to get more support.
 
-Reply with 'End' to end this chat for today."
+Reply with 'End' to end this chat for today.")
   hold 
 
   if (event.to_lowercase() == "main menu") {
@@ -156,7 +156,7 @@ get_esim_1_step:
     goto human_support_step
   }
 
-  say "STEP 1:
+  say ("**STEP 1:**
 
 First, you need to make sure that your phone is compatible.
 
@@ -164,13 +164,15 @@ To do this, please go to your phone's Settings > Connections or SIM Manager. If 
 
 Alternatively open your phone app, dial *#06# and press the call button. If your device is eSIM compatible you should be able to see an EID number.
 
-Is your device e-sim compatible? Reply with Yes or No"
+Is your device e-sim compatible? Reply with 'Yes' or 'No'.")
   hold
 
   if (event.to_lowercase() == "yes") {
     goto get_esim_2_step
   } else if (event.to_lowercase() == "no") {
-    say "Sorry, an eSIM won't work for your device.\nWould you like to flag this to our team? Reply with 'yes' if so, or 'no' to end this conversation."
+    say Text("Sorry, an eSIM won't work for your device.
+    
+Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end this conversation.")
     hold
 
     if (event.to_lowercase() == "yes") {
@@ -196,7 +198,7 @@ get_esim_2_step:
     goto human_support_step
   }
 
-  say "Step 2:
+  say Text("**Step 2:**
 
 Which networks are available where you are?
 
@@ -207,7 +209,7 @@ Which of the following mobile networks do you see?
 [locations]
 
 List all networks available separated by a comma  e.g. :
-1,2,5"
+1,2,5")
   hold
 
   remember locations = event
@@ -222,7 +224,7 @@ get_esim_3_step:
     goto human_support_step
   }
 
-  say "Step 3:
+  say Text("**Step 3:**
 
 A code will follow with you unique eSIM.
 
@@ -230,7 +232,7 @@ Here are the instructions for it to work:
 
 [activationInstructions]
 
-If you can't get it to work, reply with 'Help'"
+If you can't get it to work, reply with 'Help'.")
   hold
 
   // external app call to EMS for an esim code from 1 network
@@ -250,34 +252,34 @@ help_step:
     goto human_support_step
   }
 
-  say "Help
+  say Text("**Help**
 
-1) How to activate an e-sim
-2) My e-sim isn't working
-3) Delete my eSIM
-4) Other"
+**1.** How to activate an e-sim
+**2.** My e-sim isn't working
+**3.** Delete my eSIM
+**4.** Other")
   hold
 
   if (event == 1) {
-    say "eSIM Activation
+    say Text("**eSIM Activation**
 
-[activationInstructions]"
+[activationInstructions]")
     
     goto follow_up_step
   } else if (event == 2) {
-    say "eSIM Troubleshooting
+    say Text("**eSIM Troubleshooting**
 
-[helpInstructions]"
+[helpInstructions]")
 
     goto follow_up_step
   } else if (event == 3) {
-    say "DELETE eSIM
+    say Text("**DELETE eSIM**
 
-Step 1: Open your phone's Settings.
-2. Tap on 'Connections' (Android)
-3. Then, choose 'SIM card manager.'
-4. Pick the eSIM plan you want to delete.
-5. Turn off the eSIM by toggling the switch. Finally, tap on 'Remove.'"
+**Step 1:** Open your phone's Settings.
+**2.** Tap on 'Connections' (Android)
+**3.** Then, choose 'SIM card manager.'
+**4.** Pick the eSIM plan you want to delete.
+**5.** Turn off the eSIM by toggling the switch. Finally, tap on 'Remove'.")
     
     goto follow_up_step
   } else if (event == 4) {
@@ -289,13 +291,13 @@ Step 1: Open your phone's Settings.
   }
 
 follow_up_step:
-  say "What would you like to do now?
+  say Text("What would you like to do now?
 
-Reply with 'help' to go back to the help menu
+Reply with 'Help' to go back to the help menu
 
-Reply with 'human' to get more support
+Reply with 'Human' to get more support
 
-Reply with 'end' to end this chat for today."
+Reply with 'End' to end this chat for today.")
     hold
 
     if (event.to_lowercase() == "help") {
