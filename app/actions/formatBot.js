@@ -102,7 +102,7 @@ export const formatCsml = async (data, passcode) => {
             let places = "";
 
             data[field].map((f, i) => {
-              places = places + `\n**${i + 1}.** ${f.place}`;
+              places = places + `\n${i + 1}. ${f.place}`;
             });
 
             csml = csml.replace(`[${field}]`, places);
@@ -132,7 +132,7 @@ export const formatCsml = async (data, passcode) => {
 
           data[field].map((f, i) => {
             if (f.question.length) {
-              questions = questions + `\n**${i + 1}.** ${f.question}`;
+              questions = questions + `\n${i + 1}. ${f.question}`;
             }
 
             if (f.answer.length) {

@@ -69,16 +69,16 @@ export const HelpdeskForm = () => {
         <Input {...register("responseTime")} maxW={280} />
       </Field>
       {/* FIXME remove storage time and access? */}
-      {/* <Field
+      <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
         helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
         label="Storage length of time"
         marginTop={4}
         required
-
       >
-        <NumberInputRoot
+        <Input {...register("storageTime")} maxW={280} />
+        {/* <NumberInputRoot
           min={1}
           formatOptions={{
             style: "unit",
@@ -89,7 +89,7 @@ export const HelpdeskForm = () => {
         >
           <NumberInputLabel />
           <NumberInputField />
-        </NumberInputRoot>
+        </NumberInputRoot> */}
       </Field>
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
@@ -98,8 +98,8 @@ export const HelpdeskForm = () => {
         label="Storage access"
         marginTop={4}
       >
-        <Input {...register('storageAccess')} />
-      </Field> */}
+        <Input {...register("storageAccess")} />
+      </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
         helperText="Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy."

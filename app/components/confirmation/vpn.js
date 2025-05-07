@@ -30,7 +30,7 @@ export const VpnConfirmation = (props) => {
       <Text marginTop={4}>
         Your passcode is{" "}
         <Text as="span" fontSize="xl">
-          {botPasscode}
+          {props?.passcode}
         </Text>
       </Text>
       <Text marginTop={4}>

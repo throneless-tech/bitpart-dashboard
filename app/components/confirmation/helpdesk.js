@@ -4,7 +4,7 @@ import React from "react";
 // chakra ui imports
 import { Box, Link, List, Text } from "@chakra-ui/react";
 
-export const HelpdeskConfirmation = () => {
+export const HelpdeskConfirmation = (props) => {
   return (
     <>
       <Text marginTop={12}>Your helpdesk bot has now been created!</Text>

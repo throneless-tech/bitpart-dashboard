@@ -77,7 +77,6 @@ import { TbBuildingBroadcastTower } from "react-icons/tb";
 import {
   createBotBitpart,
   createBotPrisma,
-  createChannelBitPart,
   linkChannelBitpart,
 } from "@/app/actions/createBot";
 import { createPasscode } from "@/app/actions/formatBot";
@@ -243,6 +242,8 @@ export default function CreateBotFlow({ userId }) {
     console.log("errors prevented form from submitting: ", errors);
     alert("The following errors prevented form from submitting: ", errors);
   };
+
+  console.log(formState.errors);
 
   // color mode
   const color = useColorModeValue("maroon", "yellow");

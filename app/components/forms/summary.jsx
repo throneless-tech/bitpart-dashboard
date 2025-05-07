@@ -68,7 +68,7 @@ export const Summary = ({ data, errors }) => {
                     ))}
                   </Box>
                 ))
-              ) : key === "csv" ? (
+              ) : data[key] && key === "csv" ? (
                 Array.from(data[key]).map((f, i) => (
                   <Box key={`csv-${i}`}>(Uploaded)</Box>
                 ))

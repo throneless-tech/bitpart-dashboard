@@ -30,9 +30,9 @@ You can agree, and receive periodic messages. You number will be stored on the s
 
 You can disagree, and your contact number will be deleted automatically from the list.")
 
-    say Text("**Agree** - I want to be added to the distribution list and consent to receiving messages.
+    say Text("Agree - I want to be added to the distribution list and consent to receiving messages.
     
-**Disagree** - please remove me from the list.
+Disagree - please remove me from the list.
 
 Reply with 'Agree' or 'Disagree'.")
     hold
