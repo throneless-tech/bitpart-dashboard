@@ -148,11 +148,6 @@ Reply with 'Go back' to go back to the menu.")
     do count += 1
     goto delete_data_step
 
-confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
-  delete
-  goto end
-
 incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
   whisper "Bitpart did not understand this user: {{event.client.user_id}}"

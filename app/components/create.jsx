@@ -243,8 +243,6 @@ export default function CreateBotFlow({ userId }) {
     alert("The following errors prevented form from submitting: ", errors);
   };
 
-  console.log(formState.errors);
-
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
