@@ -77,19 +77,19 @@ export const HelpdeskForm = () => {
         marginTop={4}
         required
       >
-        <Input {...register("storageTime")} maxW={280} />
-        {/* <NumberInputRoot
+        {/* <Input {...register("storageTime")} maxW={280} /> */}
+        <NumberInputRoot
           min={1}
           formatOptions={{
             style: "unit",
             unit: "hour",
             unitDisplay: "long",
           }}
-          {...register('storageTime')}
+          {...register("storageTime")}
         >
           <NumberInputLabel />
           <NumberInputField />
-        </NumberInputRoot> */}
+        </NumberInputRoot>
       </Field>
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
