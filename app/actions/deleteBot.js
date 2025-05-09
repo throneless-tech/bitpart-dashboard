@@ -63,11 +63,11 @@ class WSConnection {
   }
 }
 
-export const deleteBot = async (botId) => {
+export const deleteBot = async (botId, botName) => {
   const jsonDeleteBot = {
     message_type: "Delete",
     data: {
-      id: botId,
+      id: botName,
     },
   };
 

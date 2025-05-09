@@ -1,7 +1,9 @@
 "use client";
 
 // react imports
-import React, { useActionState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 // actions imports
 import { login } from "@/app/actions/login";
@@ -20,24 +22,61 @@ import {
 import { PasswordInput } from "@/app/components/ui/password-input";
 
 // components imports
+import { toaster } from "@/app/components/ui/toaster";
 import { ToastSignUp } from "./toastalert";
 import { useColorModeValue } from "@/app/components/ui/color-mode";
 
-const initialState = {
-  error: "",
-};
+function Submit() {
+  const { pending } = useFormStatus();
+  return (
+    <>
+      <Button
+        disabled={pending}
+        id="submit"
+        marginTop={8}
+        type="submit"
+        width={120}
+      >
+        Sign in
+      </Button>
+      {pending ? <Spinner /> : null}
+    </>
+  );
+}
 
 export function LoginForm() {
-  const [state, formAction, pending] = useActionState(login, initialState);
-
-  useEffect(() => {}, [state]);
+  const router = useRouter();
+  const { pending } = useFormStatus();
 
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
+  // submit form to attempt user login
+  async function onSubmit(formData) {
+    try {
+      const res = await login(formData);
+
+      if (res.success) {
+        router.push("/dashboard");
+      } else {
+        console.log(res.message);
+        toaster.create({
+          title: "Invalid credentials. Please try again.",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toaster.create({
+        title: "Invalid credentials. Please try again.",
+        type: "error",
+      });
+    }
+  }
+
   return (
     <ClientOnly>
-      <form action={formAction}>
+      <form action={onSubmit}>
         <Box marginLeft="auto" marginRight="auto" maxW={400}>
           <ToastSignUp />
           <Field.Root required>
@@ -52,16 +91,7 @@ export function LoginForm() {
               size="lg"
             />
           </Field.Root>
-          <Button
-            disabled={pending}
-            id="submit"
-            marginTop={8}
-            type="submit"
-            width={120}
-          >
-            Sign in
-          </Button>
-          {pending ? <Spinner /> : null}
+          <Submit />
           <Text marginTop={8}>
             Don't have an account? Create one with an invite code{" "}
             <Link color={color} href="/" variant="underline">

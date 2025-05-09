@@ -25,6 +25,7 @@ const schema = [
   "responseTime",
   "safetyTips",
   "storageAccess",
+  "storageTime",
   "vpnName",
 ];
 

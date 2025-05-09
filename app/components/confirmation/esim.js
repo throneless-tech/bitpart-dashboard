@@ -57,6 +57,7 @@ export const EsimConfirmation = (props) => {
         <Link
           color={props?.color}
           href="https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices"
+          target="_blank"
         >
           support.signal.org/hc/en-us/articles/360007320551-Linked-Devices
         </Link>

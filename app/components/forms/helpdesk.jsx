@@ -69,36 +69,31 @@ export const HelpdeskForm = () => {
         <Input {...register("responseTime")} maxW={280} />
       </Field>
       {/* FIXME remove storage time and access? */}
-      <Field
+      {/* <Field
         errorText={!!errors?.storageTime && errors.storageTime.message}
-        helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
+        helperText="How long the user's information will be stored in the system, in hours. We suggest XXX hours. Must be at least XX hours."
         invalid={!!errors?.storageTime}
-        label="Storage length of time"
+        label="Data retention time"
         marginTop={4}
         required
       >
-        {/* <Input {...register("storageTime")} maxW={280} /> */}
         <NumberInputRoot
           min={1}
-          formatOptions={{
-            style: "unit",
-            unit: "hour",
-            unitDisplay: "long",
-          }}
           {...register("storageTime")}
         >
           <NumberInputLabel />
           <NumberInputField />
         </NumberInputRoot>
-      </Field>
+      </Field> */}
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
-        helperText="Who will have access to the information stored."
+        helperText="How long the users' information will be stored by your team, and who will have access to the information stored."
         invalid={!!errors?.storageAccess}
-        label="Storage access"
+        label="Data retention policy"
         marginTop={4}
+        required
       >
-        <Input {...register("storageAccess")} />
+        <Textarea autoresize {...register("storageAccess")} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
@@ -115,13 +110,13 @@ export const HelpdeskForm = () => {
           {...register("privacyPolicy")}
         />
       </Field>
-      <Fieldset.Root label="Problem areas" marginTop={4}>
+      <Fieldset.Root marginTop={4}>
         <Stack>
-          <Fieldset.Legend>Problems</Fieldset.Legend>
+          <Fieldset.Legend>What do people need help with?</Fieldset.Legend>
           <Fieldset.HelperText>
-            Add as many problem areas for the help desk as you need. Keep in
-            mind this will appear as a text message, so we recommend four (4) or
-            fewer question/answer combos.
+            This is what your helpdesk will help people with. Keep in mind this
+            will appear as a text message, so we recommend four (4) or fewer
+            question/answer combos.
           </Fieldset.HelperText>
         </Stack>
         {fields.map((f, i) => {
@@ -151,7 +146,7 @@ export const HelpdeskForm = () => {
                 >
                   <Textarea
                     autoresize
-                    placeholder="Steps to solve"
+                    placeholder="Steps to resolve"
                     {...register(`problems.${i}.solution`)}
                   />
                 </Field>

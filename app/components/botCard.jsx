@@ -82,7 +82,7 @@ export default function BotCard(props) {
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
         {/* <Button variant="outline">View</Button> */}
-        <form action={async () => await handleDelete(botName)}>
+        <form action={async () => await handleDelete(bot.id, botName)}>
           <Button type="submit">Delete</Button>
         </form>
       </Card.Footer>

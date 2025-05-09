@@ -3,6 +3,7 @@
 // base imports
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // form validation imports
 import { FormProvider, useForm } from "react-hook-form";
@@ -137,10 +138,12 @@ const valuesToUnregister = [
   "responseTime",
   "safetyTips",
   "storageAccess",
+  "storageTime",
   "vpnName",
 ];
 
 export default function CreateBotFlow({ userId }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
@@ -499,19 +502,35 @@ export default function CreateBotFlow({ userId }) {
                 </>
               ) : botType == "esim" ? (
                 <>
-                  <EsimConfirmation />
+                  <EsimConfirmation
+                    color={color}
+                    passcode={botPasscode}
+                    phone={createdBot?.phone}
+                  />
                 </>
               ) : botType == "helpdesk" ? (
                 <>
-                  <HelpdeskConfirmation />
+                  <HelpdeskConfirmation
+                    color={color}
+                    passcode={botPasscode}
+                    phone={createdBot?.phone}
+                  />
                 </>
               ) : botType == "tipline" ? (
                 <>
-                  <TiplineConfirmation />
+                  <TiplineConfirmation
+                    color={color}
+                    passcode={botPasscode}
+                    phone={createdBot?.phone}
+                  />
                 </>
               ) : botType == "vpn" ? (
                 <>
-                  <VpnConfirmation />
+                  <VpnConfirmation
+                    color={color}
+                    passcode={botPasscode}
+                    phone={createdBot?.phone}
+                  />
                 </>
               ) : (
                 <>
@@ -539,10 +558,12 @@ export default function CreateBotFlow({ userId }) {
                     disabled={
                       isFetching ||
                       (stepCount === 1 && !formState.isValid) ||
-                      (stepCount === 2 && !dataConfirmed) ||
-                      stepCount > 3
+                      (stepCount === 2 && !dataConfirmed)
                     }
                     onClick={(e) => {
+                      if (stepCount >= 4) {
+                        router.push("/dashboard");
+                      }
                       if (stepCount === 2) {
                         updateStepCount(-1);
                         methods.handleSubmit(onSubmit, onError)(e);
@@ -557,7 +578,7 @@ export default function CreateBotFlow({ userId }) {
                     {stepCount === 2
                       ? "Submit"
                       : stepCount >= 4
-                        ? "Finished"
+                        ? "Go home"
                         : "Next"}
                   </Button>
                 </StepsNextTrigger>

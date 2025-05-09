@@ -28,8 +28,8 @@ export default function Header() {
             <Link color={color} href="/about" variant="underline">
               About us
             </Link>
-            <Link color={color} href="/tos-and-privacy" variant="underline">
-              Terms of use and privacy
+            <Link color={color} href="/tou-and-privacy" variant="underline">
+              Terms of Use and Privacy
             </Link>
           </HStack>
           <HStack gap={8}>

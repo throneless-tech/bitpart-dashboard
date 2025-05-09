@@ -47,7 +47,7 @@ export default function About() {
           </Text>
           <Text marginTop={2}>
             The{" "}
-            <Link color={color} href="#tos" variant="underline">
+            <Link color={color} href="#tou" variant="underline">
               Terms of Use
             </Link>{" "}
             sets out what we offer and what we expect from you if you would like
@@ -72,7 +72,7 @@ export default function About() {
             </Link>{" "}
             if you have any questions. We welcome your feedback.
           </Text>
-          <Heading as="h2" marginTop={8} size="2xl" id="tos">
+          <Heading as="h2" marginTop={8} size="2xl" id="tou">
             Terms of Use
           </Heading>
           <Text fontWeight={700} marginTop={4}>
@@ -192,9 +192,9 @@ export default function About() {
               The server receives a message via Signal, and relays it from
               someone using your Bitpart chatbot to the creator of the Bitpart
               chatbot, or vice versa. In the moment that it is received by the
-              server and relayed on, the message content is briefly stored to
-              allow for the transmission of information. It is subsequently
-              deleted and not stored further.
+              server and relayed on, the encrypted message content is briefly
+              stored to allow for the transmission of information. It is
+              subsequently deleted and not stored further.
             </List.Item>
             <List.Item>
               We have designed Bitpart so that we do not access and read message
@@ -204,7 +204,7 @@ export default function About() {
             <List.Item>
               Within each conversation with a Bitpart bot, a Constituent is able
               to opt whether to agree to Bitpart’s data policy or delete their
-              data by sending “My data” to the bot. Selecting to delete their
+              data by sending “Delete” to the bot. Selecting to delete their
               data will end the conversation and the bot will delete the
               Constituent’s data from Bitpart’s server.
             </List.Item>
@@ -341,8 +341,9 @@ export default function About() {
             Who are we?
           </Heading>
           <Text marginTop={4}>
-            Throneless Tech LLC is a technology worker-cooperative based in
-            Washington, DC and we provide the Bitpart messaging tool.
+            Throneless Tech is a technology worker-cooperative based in
+            Washington, DC registered as Throneless LLC. We provide the Bitpart
+            messaging tool.
           </Text>
           <Heading as="h3" marginTop={4}>
             Why Do We Collect Your Data?
@@ -380,7 +381,8 @@ export default function About() {
           <Text marginTop={4}>Bot creators:</Text>
           <List.Root marginLeft={4}>
             <List.Item>
-              Account information, including username, and email address.
+              Account information, including username, and possibly email
+              address TBD.
             </List.Item>
             <List.Item>
               An optional Phone number associated with a bot (i.e. the number a
@@ -415,10 +417,6 @@ export default function About() {
           <List.Root marginLeft={4}>
             <List.Item>N.B if account sign up uses email magic link.</List.Item>
           </List.Root>
-          <Text marginTop={4}>
-            Information you use to make an account are stored locally on the
-            dashboard.
-          </Text>
           <Text marginTop={4}>
             The following table explains in more detail the types of data we
             collect and the legal basis, under current data protection

@@ -32,7 +32,9 @@ If you are in immediate physical danger contact [referral].")
     // TODO: user research needed about if we want bitpart to accept voice notes
     say Text("Our helpdesk will ask you to select the problem you're experiencing.
 
-Your answers will be stored on our system for [storageTime] hours and visible to [storageAccess]. We will not ask you for personal information.
+[storageAccess]
+
+We will not ask you for personal information.
 
 For more information at any time, including how to delete your data, you can reply with 'My data'.
 

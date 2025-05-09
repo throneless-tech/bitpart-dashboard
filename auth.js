@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    jwt({ token, trigger, user, account }) {      
+    jwt({ token, trigger, user, account }) {
       if (trigger === "update") token.name = session.user.username;
       // if (account?.provider === "credentials") {
       //   token.credentials = true;
@@ -31,9 +31,6 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
 
       return session;
     },
-    // async signIn({ profile }) {
-
-    // }
   },
   credentials: {
     username: {},

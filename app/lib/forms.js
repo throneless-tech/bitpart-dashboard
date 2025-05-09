@@ -89,9 +89,9 @@ export const schema = yup.object({
     is: "helpdesk",
     then: () => yup.string().required("A referral person or place is required"),
   }),
-  storageTime: yup.string().when("botType", {
+  storageTime: yup.number("Enter a number").when("botType", {
     is: "helpdesk" || "vpn",
-    then: () => yup.string().optional(),
+    then: () => yup.number("Enter a number").optional(),
   }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",
