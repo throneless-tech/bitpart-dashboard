@@ -65,7 +65,7 @@ class WSConnection {
 
 export const deleteBot = async (botId, botName) => {
   const jsonDeleteBot = {
-    message_type: "Delete",
+    message_type: "DeleteBot",
     data: {
       id: botName,
     },
