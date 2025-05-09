@@ -74,7 +74,7 @@ export const Summary = ({ data, errors }) => {
                 ))
               ) : (
                 <Text>
-                  {key === "phone" && data[key].length
+                  {key === "phone" && data[key] && data[key].length
                     ? `+${data["countryCode"]} ${data[key]}`
                     : key === "countryCode"
                       ? ""
