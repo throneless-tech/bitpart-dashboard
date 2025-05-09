@@ -224,6 +224,7 @@ export default function CreateBotFlow({ userId }) {
       }
 
       setQRLink(channelBitpartLink.data.response);
+      console.log(channelBitpartLink.data.response);
 
       const bot = await createBotPrisma(data, userId, passcode);
 
