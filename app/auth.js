@@ -32,10 +32,6 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
       return session;
     },
   },
-  credentials: {
-    username: {},
-    password: {},
-  },
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
   },

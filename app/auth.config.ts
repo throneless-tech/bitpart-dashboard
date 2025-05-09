@@ -3,12 +3,16 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
 
-import { LoginSchema } from "./app/lib/definitions";
+import { LoginSchema } from "./lib/definitions";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {
   providers: [
     Credentials({
+      credentials: {
+        username: {},
+        password: {},
+      },
       authorize: async (credentials) => {
         try {
           let user = null;
@@ -32,7 +36,7 @@ export default {
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
             where: {
-              username: username,
+              username,
             },
           });
 

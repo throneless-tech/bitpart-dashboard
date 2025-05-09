@@ -1,9 +1,9 @@
 // base imports
 import React from "react";
-import { auth } from "@/auth";
+import { auth } from "@/app/auth";
 
 // auth imports
-import { signOut } from "@/auth";
+import { signOut } from "@/app/auth";
 
 // chakra ui imports
 import { Box, Button, Container, Flex, Link } from "@chakra-ui/react";

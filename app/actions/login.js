@@ -1,33 +1,23 @@
 "use server";
 import { AuthError } from "next-auth";
-import { isRedirectError } from "next/dist/client/components/redirect";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { signIn } from "@/auth";
+import { signIn } from "@/app/auth";
 
-export const login = async (formData) => {
+export const login = async (prevState, formData) => {
   const password = formData.get("password");
   const username = formData.get("username");
 
   try {
-    const signedIn = await signIn("credentials", {
+    await signIn("credentials", {
       username,
       password,
-      redirect: false,
+      redirect: true,
+      redirectTo: "/dashboard",
     });
-
-    return {
-      success: true,
-      message: "Your account has been successfully logged in.",
-    };
   } catch (error) {
-    // if (error instanceof AuthError) {
-    //   return redirect(`/error?error=${error.type}`);
-    // }
-    if (isRedirectError(error)) {
-      return { success: false, message: formatError(error) };
+    if (error instanceof AuthError) {
+      return redirect(`/error?error=${error.type}`);
     }
-    return { success: false, message: error.type };
+    throw error;
   }
 };
