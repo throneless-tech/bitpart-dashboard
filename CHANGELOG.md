@@ -1,3 +1,9 @@
+## 0.1.5 (2025-05-09)
+
+### Fix
+
+- console log for testing and delete syntax error fix
+
 ## 0.1.4 (2025-05-09)
 
 ### Fix
