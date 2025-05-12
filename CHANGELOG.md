@@ -1,3 +1,9 @@
+## 0.1.6 (2025-05-12)
+
+### Fix
+
+- #15 add universal delete language and commands in csml
+
 ## 0.1.5 (2025-05-09)
 
 ### Fix
