@@ -308,20 +308,21 @@ export default function CreateBotFlow({ userId }) {
                 </Link>
                 .)
               </Text>
-              <Text marginTop={8}>
-                <Highlight
-                  styles={{ px: "0.5", bg: "yellow.muted" }}
-                  query="We recommend setting up a separate Signal account for your bot."
-                >
-                  Remember, the Bitpart bot needs its own Signal account to send
-                  and receive messages to and from your service users. If you
-                  use your personal Signal account to be the bot account, the
-                  recipients of your messages would see your personal Signal
-                  profile name. You would also receive all messages sent to the
-                  bot. We recommend setting up a separate Signal account for
-                  your Bitpart bot.
-                </Highlight>
-              </Text>
+              <Box border={`1px solid ${color}`} margin={8} padding={4}>
+                <Text>
+                  <Highlight
+                    styles={{ px: "0.5", bg: "yellow.muted" }}
+                    query="We recommend setting up a separate Signal account for your bot."
+                  >
+                    The Bitpart bot needs a Signal account to send and receive
+                    messages. We recommend setting up a separate Signal account
+                    for your Bitpart bot and not using your personal one. Once
+                    the bot is activated, any messages sent over that number
+                    trigger the bot. You cannot reply to a user directly with
+                    the bot device.
+                  </Highlight>
+                </Text>
+              </Box>
               <Heading as="h2" marginTop={10} size="md">
                 What kind of bot do you want to create?
               </Heading>

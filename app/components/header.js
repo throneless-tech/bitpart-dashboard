@@ -19,6 +19,7 @@ export default async function Header() {
           <Flex gap={4}>
             <ColorModeButton />
             <Link href="/dashboard">Home</Link>
+            <Link href="/faq">FAQ</Link>
           </Flex>
           <Flex gap={4}>
             <Button>Donate</Button>

@@ -57,7 +57,7 @@ export const BasicsForm = () => {
         <Stack>
           <Fieldset.Legend>Bot phone number details</Fieldset.Legend>
           <Fieldset.HelperText>
-            Please provide the phone number that will be associated with the
+            Optionally provide the phone number that will be associated with the
             bot's Signal account. The bot will be added as a secondary device on
             Signal and we will guide you through this process later. We
             recommend that you use a new phone number for Bitpart since your
