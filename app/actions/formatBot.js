@@ -133,7 +133,7 @@ export const formatCsml = async (data, passcode) => {
 
           if (data[field].length) {
             questions =
-              "**FAQ**\n\nHere are some frequently answered questions. Does your question fall under one of these?";
+              "FAQ\n\nHere are some frequently answered questions. Does your question fall under one of these?";
 
             data[field].map((f, i) => {
               if (f.question.length) {
@@ -168,7 +168,7 @@ export const formatCsml = async (data, passcode) => {
           let solutions = "";
 
           data[field].map((f, i) => {
-            problems = problems + `\n**${i + 1}.** ${f.problem}`;
+            problems = problems + `\n${i + 1}. ${f.problem}`;
 
             solutions =
               solutions +

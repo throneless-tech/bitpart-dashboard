@@ -107,7 +107,7 @@ privacy_policy_step:
   if (count >= 3) {
     goto human_support_step
   }
-  say Text("**My data**
+  say Text("My data
   
 [privacyPolicy]")
   say Text("Reply with 'Agree' and continue to the main menu
@@ -160,7 +160,7 @@ menu_step:
     goto human_support_step
   }
   
-  say Text("**Menu**
+  say Text("Menu
   
 What issue are you seeking help with?
 

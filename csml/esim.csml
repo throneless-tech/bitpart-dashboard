@@ -90,7 +90,7 @@ menu_step:
   }
 
   // TODO remove option 3
-  say Text("**Menu**
+  say Text("Menu
 
 What would you like to do?
 
@@ -184,7 +184,7 @@ get_esim_1_step:
     goto human_support_step
   }
 
-  say ("**STEP 1:**
+  say ("STEP 1:
 
 First, you need to make sure that your phone is compatible.
 
@@ -226,7 +226,7 @@ get_esim_2_step:
     goto human_support_step
   }
 
-  say Text("**Step 2:**
+  say Text("Step 2:
 
 Which networks are available where you are?
 
@@ -252,7 +252,7 @@ get_esim_3_step:
     goto human_support_step
   }
 
-  say Text("**Step 3:**
+  say Text("Step 3:
 
 A code will follow with you unique eSIM.
 
@@ -280,7 +280,7 @@ help_step:
     goto human_support_step
   }
 
-  say Text("**Help**
+  say Text("Help
 
 1. How to activate an e-sim
 2. My e-sim isn't working
@@ -289,19 +289,19 @@ help_step:
   hold
 
   if (event == 1) {
-    say Text("**eSIM Activation**
+    say Text("eSIM Activation
 
 [activationInstructions]")
     
     goto follow_up_step
   } else if (event == 2) {
-    say Text("**eSIM Troubleshooting**
+    say Text("eSIM Troubleshooting
 
 [helpInstructions]")
 
     goto follow_up_step
   } else if (event == 3) {
-    say Text("**DELETE eSIM**
+    say Text("DELETE eSIM
 
 Step 1: Open your phone's Settings.
 2. Tap on 'Connections' (Android)

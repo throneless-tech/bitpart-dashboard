@@ -138,7 +138,7 @@ menu_step:
     goto submit_question_step
   }
 
-  say Text("**Menu**
+  say Text("Menu
 
 Reply with the corresponding number:
 
@@ -156,7 +156,7 @@ Send 'Menu' at any time to come back to this menu.")
     
 [description]"
   } else if (event == 2) {
-      say Text("**Safety tips**
+      say Text("Safety tips
 
 [safetyTips]")
   } else if (event == 3) {

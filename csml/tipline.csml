@@ -88,7 +88,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto delete_me_confirm_step
 
 privacy_policy_step:
-  say Text("**My data**
+  say Text("My data
   
 [privacyPolicy]")
   say Text("Reply with 'Agree' and continue to the main menu.
