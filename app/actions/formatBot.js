@@ -131,24 +131,29 @@ export const formatCsml = async (data, passcode) => {
           let questions = "";
           let answers = "";
 
-          data[field].map((f, i) => {
-            if (f.question.length) {
-              questions = questions + `\n${i + 1}. ${f.question}`;
-            }
+          if (data[field].length) {
+            questions =
+              "**FAQ**\n\nHere are some frequently answered questions. Does your question fall under one of these?";
 
-            if (f.answer.length) {
-              answers =
-                answers +
-                `
-              ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
+            data[field].map((f, i) => {
+              if (f.question.length) {
+                questions = questions + `\n${i + 1}. ${f.question}`;
+              }
+
+              if (f.answer.length) {
+                answers =
+                  answers +
+                  `if (event === ${i + 1}) {
                 say "${f.answer}"
                 goto check_if_solved_step
+              } else `;
               }
-              `;
-            }
-          });
+            });
 
-          if (answers.length) {
+            questions =
+              questions +
+              `${data[field].length}. Other\n\nReply with the number.`;
+
             csml = csml.replace(`[${field}.length]`, length + 1);
             csml = csml.replace(`[${field}.answers]`, answers);
           } else {

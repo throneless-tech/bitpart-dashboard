@@ -36,9 +36,9 @@ We use an automated messaging system so you can get quicker responses, but you c
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-**1.** Receive messages
-**2.** Exit this conversation
-**3.** Delete my data")
+1. Receive messages
+2. Exit this conversation
+3. Delete my data")
   hold
 
   if (event == 1) {
@@ -94,10 +94,10 @@ menu_step:
 
 What would you like to do?
 
-**1.** Get an eSIM for myself
-**2.** Get help with my eSIM
-**3.** My data rights
-**4.** About us
+1. Get an eSIM
+2. Get help with my eSIM
+3. My data rights
+4. About us
 
 Enter the number")
   hold
@@ -254,10 +254,10 @@ help_step:
 
   say Text("**Help**
 
-**1.** How to activate an e-sim
-**2.** My e-sim isn't working
-**3.** Delete my eSIM
-**4.** Other")
+1. How to activate an e-sim
+2. My e-sim isn't working
+3. Delete my eSIM
+4. Other")
   hold
 
   if (event == 1) {
@@ -275,11 +275,11 @@ help_step:
   } else if (event == 3) {
     say Text("**DELETE eSIM**
 
-**Step 1:** Open your phone's Settings.
-**2.** Tap on 'Connections' (Android)
-**3.** Then, choose 'SIM card manager.'
-**4.** Pick the eSIM plan you want to delete.
-**5.** Turn off the eSIM by toggling the switch. Finally, tap on 'Remove'.")
+Step 1: Open your phone's Settings.
+2. Tap on 'Connections' (Android)
+3. Then, choose 'SIM card manager.'
+4. Pick the eSIM plan you want to delete.
+5. Turn off the eSIM by toggling the switch. Finally, tap on 'Remove'.")
     
     goto follow_up_step
   } else if (event == 4) {

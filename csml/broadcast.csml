@@ -52,9 +52,9 @@ Reply with 'Agree' or 'Disagree'.")
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-**1.** Broadcast a message
-**2.** Exit this conversation
-**3.** Delete my data")
+1. Broadcast a message
+2. Exit this conversation
+3. Delete my data")
   hold
 
   if (event == 1) {
@@ -142,9 +142,9 @@ menu_step:
 
 Reply with the corresponding number:
 
-**1.** About this channel
-**2.** Safety tips
-**3.** Frequently asked questions (FAQs)
+1. About this channel
+2. Safety tips
+3. Frequently asked questions (FAQs)
 
 You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this list.
 
@@ -176,19 +176,10 @@ faq_step:
     goto submit_question_step
   }
 
-  say Text("**FAQ**
-  
-Here are some frequently answered questions. Does your question fall under one of these?
-
-[faq]
-[faq.length]) Other
-
-Reply with the number.")
+  say Text("[faq]")
   hold
 
-  [faq.answers]
-
-  else if (event == [faq.length]) {
+  [faq.answers] if (event == [faq.length]) {
   goto submit_question_step
   }
   else if (event.to_lowercase() == "menu") {

@@ -39,8 +39,8 @@ We offer VPN codes from [vpnName] which works in [locations]."
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-**1.** Exit this conversation
-**2.** Delete my data")
+1. Exit this conversation
+2. Delete my data")
   hold
 
   if (event == 1) {
@@ -177,18 +177,11 @@ help_step:
     goto human_support_step
   }
 
-  say Text("**Help**
-
-Here are some frequently asked questions:
-
-[faq]
-[faq.length]) Other")
+  say Text("[faq]")
 
   hold
 
-  [faq.answers]
-
-  else if (event == [faq.length]) {
+  [faq.answers] if (event == [faq.length]) {
   goto other_help_step
   }
   else if (event.to_lowercase() == "help" ) {

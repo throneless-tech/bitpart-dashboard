@@ -7,8 +7,10 @@ start:
   do passcode = event
   do passcode.to_uppercase()
 
+  say "The passcode now is " + passcode
+
   if (passcode.contains("[passcode]")) {
-    // set _whisperable var in memory
+    // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
 
     say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
@@ -47,9 +49,9 @@ Please share your tip with us.")
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-**1.** Receive messages
-**2.** Exit this conversation
-**3.** Delete my data")
+1. Receive messages
+2. Exit this conversation
+3. Delete my data")
   hold
 
   if (event == 1) {
@@ -165,11 +167,11 @@ contact_method_step:
 
   say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
-**1.** Signal call
-**2.** Signal text message
-**3.** Phone call
-**4.** Any
-**5.** None, don't contact me")
+1. Signal call
+2. Signal text message
+3. Phone call
+4. Any
+5. None, don't contact me")
   hold
 
   if (event == 1) {

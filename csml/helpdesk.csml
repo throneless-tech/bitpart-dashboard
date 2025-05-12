@@ -61,8 +61,8 @@ To disagree and end the conversation, reply with 'End'.")
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
   
-**1.** Exit this conversation
-**2.** Delete my data")
+1. Exit this conversation
+2. Delete my data")
   hold
 
   if (event == 1) {
@@ -154,8 +154,6 @@ incomplete_step:
   // bitpart tags as 'incomplete' and flags for helpdesk team (human) attention (i.e. adds to a queue)
   whisper "Bitpart did not understand this user: {{event.client.user_id}}"
   
-  delete
-  
   goto end
 
 menu_step:
@@ -234,8 +232,6 @@ Remember that if this is a sensitive conversation you can delete the conversatio
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
-    delete
-    
     goto end
   } else {
     say "Sorry, I did not get that."
@@ -249,6 +245,4 @@ human_support_step:
   // bitpart flags problem to admin
   whisper "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
   
-  delete
-
   goto end
