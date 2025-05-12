@@ -7,8 +7,6 @@ start:
   do passcode = event
   do passcode.to_uppercase()
 
-  say "The passcode now is " + passcode
-
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
@@ -157,6 +155,8 @@ They did not wish to be contacted."
     goto end
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, our system didn't understand what you meant. Please try again."
     goto tip_reply_step
@@ -187,6 +187,8 @@ contact_method_step:
     goto confirm_contact_method_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that. Please choose a number from the list."
     goto contact_method_step
@@ -230,11 +232,11 @@ Here is the tip they provided: {{tip}}"
     goto contact_method_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that."
     goto confirm_contact_method_step
   }
-
-  delete
 
   goto end

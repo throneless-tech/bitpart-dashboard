@@ -151,6 +151,34 @@ Reply with 'End' to end this chat for today.")
     goto check_if_solved_step
   }
 
+delete_data_step:
+  if (count >= 3) {
+    goto human_support_step
+  }
+
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
+  
+Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
+  
+Reply with 'Delete' to confirm.
+  
+Reply with 'Go back' to go back to the beginning.")
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto menu_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_data_step
+
+confirm_delete_step:
+  say "All your data will now be deleted and you will no longer receive messages."
+  delete
+  goto end
+
 get_esim_1_step:
   if (count >= 3) {
     goto human_support_step

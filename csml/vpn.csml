@@ -30,7 +30,10 @@ start:
 Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation.
 
 We offer VPN codes from [vpnName] which works in [locations]."
-    // TODO 
+
+goto menu_step
+
+menu_step:
     say "How many codes do you need? (Note that admin approval is needed for a request higher than [maxCodes] and will take longer.) Please enter the amount:"
     hold
 
@@ -62,7 +65,7 @@ admin_interface_step:
     goto admin_interface_step
   }
 
-delete_me_confirm_step:
+delete_me_confirm_step: // admins
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
 
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
@@ -80,6 +83,29 @@ Reply with 'Go back' to go back to the beginning.")
     say "Sorry, I did not get that."
     do count += 1
     goto delete_me_confirm_step
+
+delete_data_step: // end users
+  if (count >= 3) {
+    goto human_support_step
+  }
+
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
+  
+Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
+  
+Reply with 'Delete' to confirm.
+  
+Reply with 'Go back' to go back to the beginning.")
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto confirm_delete_step
+  } else if (event.to_lowercase() == "go back") {
+    goto menu_step
+  } else
+    say "Sorry, I did not get that."
+    do count += 1
+    goto delete_data_step
 
 confirm_delete_step:
   say "All your data will now be deleted and you will no longer receive messages."

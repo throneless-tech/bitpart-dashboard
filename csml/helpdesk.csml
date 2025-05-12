@@ -130,7 +130,7 @@ delete_data_step:
     goto human_support_step
   }
 
-  say Text("You have asked that all your data be deleted from the system.
+  say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
   
 Once this happens, you will no longer receive messages from this number, unless you send a message to it again.
 
@@ -141,9 +141,7 @@ Reply with 'Go back' to go back to the menu.")
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
-    goto question_consent_step
-  } else if (event.to_lowercase() == "menu") {
+  } else if (event.to_lowercase() == "go back" || event.to_lowercase() == "menu") {
     goto menu_step
   } else
     say "Sorry, I did not get that."
@@ -184,6 +182,8 @@ Reply with the number.")
     goto menu_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     do count += 1
     say "Sorry, our system didn't understand what you meant. Please select the most appropriate option:"
@@ -204,6 +204,8 @@ Reply 'Yes' or 'No'.")
     goto menu_options_step
   } else if (event.to_lowercase() == "no") {
     goto human_support_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that."
     do count += 1
@@ -218,7 +220,7 @@ menu_options_step:
   
   say Text("Glad that helped.
   
-Reply with 'Menu' to return to the main menu and ask further questions. Reply with 'Delete' to delete your data from our system.Reply with 'End' to end this conversation.
+Reply with 'Menu' to return to the main menu and ask further questions. Reply with 'Delete' to delete your data from our system. Reply with 'End' to end this conversation.
   
 Remember that if this is a sensitive conversation you can delete the conversation from the Signal app.")
   hold 
@@ -231,7 +233,6 @@ Remember that if this is a sensitive conversation you can delete the conversatio
     goto privacy_policy_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
-    
     goto end
   } else {
     say "Sorry, I did not get that."
