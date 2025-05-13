@@ -9,6 +9,7 @@ export const parseCSV = (botId, botType, fileList) => {
   const file = fileList[0];
 
   Papa.parse(file, {
+    encoding: "utf-8",
     complete: (results) => {
       let data = results.data;
 
