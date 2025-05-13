@@ -64,18 +64,18 @@ Add to your `.env` file the following:
 AUTH_DEBUG=true
 AUTH_TRUST_HOST=false # true for production build
 
-BITPART_SERVER_URL=127.0.0.1
+SERVER_URL=127.0.0.1
+
 BITPART_SERVER_PORT=5000
 BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
 
-DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
-
+EMS_PORT=3005
 EMS_ENDPOINT="/ems"
 
-NEXT_PUBLIC_SERVER_URL=127.0.0.1
-NEXT_PUBLIC_EMS_PORT=3005
-NEXT_PUBLIC_ESIM_ENDPOINT="esim_endpoint"
-NEXT_PUBLIC_VPN_ENDPOINT="vpn_endpoint"
+ESIM_ENDPOINT="/esim_codes"
+VPN_ENDPOINT="/vpn_tokens"
+
+DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
 ```
 
 ## Deployment
@@ -86,7 +86,7 @@ The instructions above work for local deployment. However, if you'd like to use 
 
 Ensure your Bitpart, Bitpart EMS and Bitpart dashboard images are all running on the same network. To run the dashboard, customize the following command:
 ```
-podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_URL=127.0.0.1 -e BITPART_SERVER_PORT=5000 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_ENDPOINT="/ems" -e NEXT_PUBLIC_SERVER_URL=127.0.0.1 -e NEXT_PUBLIC_EMS_PORT=3005 -e NEXT_PUBLIC_ESIM_ENDPOINT="esim_codes" -e NEXT_PUBLIC_VPN_ENDPOINT="vpn_tokens" -e AUTH_TRUST_HOST=true -e NEXTAUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
+podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e SERVER_URL=127.0.0.1 -e BITPART_SERVER_PORT=5000 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_ENDPOINT="/ems" -e SERVER_URL=127.0.0.1 -e EMS_PORT=3005 -e ESIM_ENDPOINT="esim_codes" -e VPN_ENDPOINT="vpn_tokens" -e AUTH_TRUST_HOST=true -e NEXTAUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
 ```
 
 ## Documentation

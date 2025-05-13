@@ -81,7 +81,7 @@ import {
   linkChannelBitpart,
 } from "@/app/actions/createBot";
 import { createPasscode } from "@/app/actions/formatBot";
-import { emsCall } from "@/app/actions/ems";
+import { parseCSV } from "@/app/actions/csv";
 import { getUserBots } from "@/app/actions/getUserBots";
 
 // constants
@@ -207,12 +207,17 @@ export default function CreateBotFlow({ userId }) {
         throw new Error(botBitpart.data.response);
       }
 
+      let emsData;
       if (data.botType === "esim" || data.botType === "vpn") {
-        const emsData = emsCall(
+        emsData = await parseCSV(
           botBitpart.data.response.bot.id,
           data.botType,
           data.csv,
         );
+      }
+
+      if (emsData?.error) {
+        throw new Error(emsData.error.message);
       }
 
       const channelBitpartLink = await linkChannelBitpart(

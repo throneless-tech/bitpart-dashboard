@@ -20,20 +20,7 @@ export const FileUploader = (props) => {
         </FileUpload.DropzoneContent>
       </FileUpload.Dropzone>
       <FileUpload.Trigger />
-      <FileUpload.ItemGroup>
-        <FileUpload.Context>
-          {({ acceptedFiles }) =>
-            acceptedFiles.map((file) => (
-              <FileUpload.Item key={file.name} file={file}>
-                <FileUpload.ItemPreview />
-                <FileUpload.ItemName />
-                <FileUpload.ItemSizeText />
-                <FileUpload.ItemDeleteTrigger />
-              </FileUpload.Item>
-            ))
-          }
-        </FileUpload.Context>
-      </FileUpload.ItemGroup>
+      <FileUpload.List />
     </FileUpload.Root>
   );
 };
