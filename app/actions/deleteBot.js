@@ -75,7 +75,7 @@ export const deleteBot = async (botId, botName) => {
 
   // send info to bitpart server via websockets
   const ws = new WSConnection(
-    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
+    `ws://${process.env.SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
   );
 
   const response = ws
