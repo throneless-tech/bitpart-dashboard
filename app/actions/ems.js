@@ -22,14 +22,17 @@ export async function sendToEMS(botId, botType, json) {
         ? process.env.VPN_ENDPOINT
         : "";
 
-  fetch(`http://${process.env.SERVER_URL}:${process.env.EMS_PORT}${endpoint}`, {
-    method: "post",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
+  fetch(
+    `http://${process.env.EMS_SERVER_URL}:${process.env.EMS_PORT}${endpoint}`,
+    {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     },
-    body: JSON.stringify(data),
-  })
+  )
     .then((res) => {
       return res;
     })

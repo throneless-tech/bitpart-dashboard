@@ -388,30 +388,54 @@ export default function CreateBotFlow({ userId }) {
               <Heading as="h2" marginBottom={4} size="md">
                 Bot specifics
               </Heading>
-              <Text fontSize="sm" marginBottom={8}>
-                Any user who has signed up to receive messages from your bot
-                will be able to request to see a menu, which offers them the
-                option to learn about the bot. Fill out these sections below to
-                customize the text.
-              </Text>
               {botType == "broadcast" ? (
                 <>
+                  <Text fontSize="sm" marginBottom={8}>
+                    Anyone who has signed up to receive messages from your bot
+                    will be able to request to see a menu, which offers them the
+                    option to learn about the bot. Fill out these sections below
+                    to customize the text.
+                  </Text>
                   <BroadcastForm />
                 </>
               ) : botType == "esim" ? (
                 <>
+                  <Text fontSize="sm" marginBottom={8}>
+                    Anyone who has started a conversation with your bot will be
+                    able to request to see a menu, which offers them the option
+                    to learn about the bot. Fill out these sections below to
+                    customize the text.
+                  </Text>
                   <EsimForm />
                 </>
               ) : botType == "helpdesk" ? (
                 <>
+                  <Text fontSize="sm" marginBottom={8}>
+                    Anyone who has started a conversation with your bot will be
+                    able to request to see a menu, which offers them the option
+                    to learn about the bot. Fill out these sections below to
+                    customize the text.
+                  </Text>
                   <HelpdeskForm />
                 </>
               ) : botType == "tipline" ? (
                 <>
+                  <Text fontSize="sm" marginBottom={8}>
+                    Anyone who has started a conversation with your bot will be
+                    able to request to see a menu, which offers them the option
+                    to learn about the bot. Fill out these sections below to
+                    customize the text.
+                  </Text>
                   <TiplineForm />
                 </>
               ) : botType == "vpn" ? (
                 <>
+                  <Text fontSize="sm" marginBottom={8}>
+                    Anyone who has started a conversation with your bot will be
+                    able to request to see a menu, which offers them the option
+                    to learn about the bot. Fill out these sections below to
+                    customize the text.
+                  </Text>
                   <VpnForm />
                 </>
               ) : (
