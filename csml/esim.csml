@@ -174,11 +174,6 @@ Reply with 'Go back' to go back to the beginning.")
     do count += 1
     goto delete_data_step
 
-confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
-  delete
-  goto end
-
 get_esim_1_step:
   if (count >= 3) {
     goto human_support_step
