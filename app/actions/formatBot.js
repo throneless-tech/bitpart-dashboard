@@ -143,7 +143,7 @@ export const formatCsml = async (data, passcode) => {
               if (f.answer.length) {
                 answers =
                   answers +
-                  `if (event === ${i + 1}) {
+                  `if (event == ${i + 1}) {
                 say "${f.answer}"
                 goto check_if_solved_step
               } else `;
@@ -160,6 +160,9 @@ export const formatCsml = async (data, passcode) => {
             questions = "Apologies, no FAQ have been entered for this bot.";
             csml = csml.replace("[faq.answers]", "");
           }
+
+          console.log(answers);
+          console.log("**************************");
 
           csml = csml.replace(`[${field}]`, questions);
         } else if (field === "problems") {
