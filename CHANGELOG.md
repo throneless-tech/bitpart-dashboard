@@ -1,3 +1,9 @@
+## 0.1.9 (2025-05-16)
+
+### Fix
+
+- #22 keep qr code in light mode no matter the mode for the rest of the page
+
 ## 0.1.8 (2025-05-13)
 
 ### Fix
