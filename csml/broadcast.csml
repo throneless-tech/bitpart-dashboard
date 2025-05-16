@@ -45,7 +45,7 @@ Reply with 'Agree' or 'Disagree'.")
     } 
     else {
       say "Sorry, I do not understand."
-      do count += 1
+      remember count += 1
       goto start
     }
 
@@ -93,7 +93,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_me_confirm_step
   }
 
@@ -120,7 +120,7 @@ Reply with 'Go back' to go back to the beginning.")
   }
   else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto consent_disagree_step
   }
 
@@ -170,7 +170,7 @@ Send 'Menu' at any time to come back to this menu.")
   }
   else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto menu_step
   }
 
@@ -207,7 +207,7 @@ Reply with 'Menu' to return home.")
   } 
   else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     if (count >= 3) {
       goto submit_question_step
     } 
@@ -239,14 +239,14 @@ Reply with 'Menu' to return home.")
     } 
     else
       say "Sorry, I did not get that."
-      do count += 1
+      remember count += 1
       goto check_if_solved_step
   } else if (event.to_lowercase() == "no") {
     goto submit_question_step
   } 
   else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto check_if_solved_step
 
 submit_question_step:

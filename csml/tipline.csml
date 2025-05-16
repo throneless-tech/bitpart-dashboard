@@ -3,14 +3,13 @@
 
 start:
 // if bitpart receives passcode, set admin
-  remember tip = ""
   do passcode = event.to_uppercase()
 
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    say "Welcome, you are now set up as a user who will receive tips. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
     hold
 
     if (event.to_lowercase() == "help") {
@@ -38,7 +37,7 @@ Please share your tip with us.")
     if (event.to_lowercase() == "my data") {
       goto privacy_policy_step
     } else { 
-      do tip = event  
+      remember tip = event  
       
       goto tip_reply_step
     }
@@ -83,7 +82,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_me_confirm_step
 
 privacy_policy_step:
@@ -102,7 +101,7 @@ Reply with 'Delete' to delete your data.")
 Please share your tip with us."
     hold
 
-    do tip = event  
+    remember tip = event  
     
     goto tip_reply_step
 
@@ -136,8 +135,6 @@ confirm_delete_step:
   goto end
 
 tip_reply_step:
-  say "Tip is: {{tip}}"
-  say Text("Tip is! {{tip}}")
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
   
 We may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
@@ -164,8 +161,6 @@ They did not wish to be contacted."
   }
 
 contact_method_step:
-  remember contact_preference = ""
-
   say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
 1. Signal call
@@ -176,13 +171,13 @@ contact_method_step:
   hold
 
   if (event == 1) {
-    do contact_preference = "signal call"
+    remember contact_preference = "signal call"
     goto record_number_step    
   } else if (event == 2) {
-    do contact_preference = "signal text message"
+    remember contact_preference = "signal text message"
     goto record_number_step    
   } else if (event == 3) {
-    do contact_preference = "phone call"
+    remember contact_preference = "phone call"
     goto record_number_step    
   } else if (event == 4 || event == 5) {
     goto confirm_contact_method_step

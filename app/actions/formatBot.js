@@ -190,9 +190,11 @@ export const formatCsml = async (data, passcode) => {
 
       csml = csml.replace(`[passcode]`, passcode);
 
-      const regex = /"/g;
-      const quot = String.raw`\"`;
-      formattedCsml = csml.replaceAll(regex, quot);
+      formattedCsml = csml;
+
+      // const regex = /"/g;
+      // const quot = String.raw`\"`;
+      // formattedCsml = csml.replaceAll(regex, quot);
       // formattedCsml = `"${formattedCsml}"`;
     }
   });

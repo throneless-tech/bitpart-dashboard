@@ -94,7 +94,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_me_confirm_step
 
 confirm_delete_step:
@@ -121,7 +121,7 @@ Reply with 'Delete' to delete your data.")
     goto delete_data_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto privacy_policy_step
 
 delete_data_step:
@@ -144,7 +144,7 @@ Reply with 'Go back' to go back to the menu.")
     goto menu_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_data_step
 
 incomplete_step:
@@ -184,7 +184,7 @@ Reply with the number.")
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    do count += 1
+    remember count += 1
     say "Sorry, our system didn't understand what you meant. Please select the most appropriate option:"
     goto menu_step
   }
@@ -207,7 +207,7 @@ Reply 'Yes' or 'No'.")
     goto delete_data_step
   } else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto check_if_solved_step
   }
 
@@ -235,7 +235,7 @@ Remember that if this is a sensitive conversation you can delete the conversatio
     goto end
   } else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto check_if_solved_step
   }
 

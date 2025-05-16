@@ -80,7 +80,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_me_confirm_step
 
 delete_data_step: // end users
@@ -103,7 +103,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto menu_step
   } else
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto delete_data_step
 
 confirm_delete_step:
@@ -123,7 +123,7 @@ request_step:
     goto over_limit_step
   } else {
     say "Sorry, I did not get that. Please enter a number."
-    do count += 1
+    remember count += 1
     goto request_step
   }
 
@@ -213,7 +213,7 @@ help_step:
     goto human_support_step
   } else {
     say "Sorry, I did not get that."
-    do count += 1
+    remember count += 1
     goto help_step
   }
 
