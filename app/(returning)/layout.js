@@ -1,7 +1,7 @@
 // base imports
 import React from "react";
 
-//chakra provider
+// chakra provider
 import { Provider } from "@/app/components/ui/provider";
 
 // auth session provider

@@ -6,18 +6,13 @@ import { Box, Container, Flex, Heading } from "@chakra-ui/react";
 import { LoginForm } from "../../components/login";
 
 // components
-import { ColorModeButton } from "@/app/components/ui/color-mode";
+import Header from "@/app/components/header";
 
 export default function Login() {
   return (
     <Box>
       <Container py={6}>
-        <Flex justifyContent="space-between">
-          <ColorModeButton />
-          <Heading as="a" href="/">
-            Bitpart
-          </Heading>
-        </Flex>
+        <Header />
       </Container>
       <Container py={6}>
         <LoginForm />

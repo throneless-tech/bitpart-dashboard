@@ -2,6 +2,7 @@
 
 // base imports
 import React from "react";
+import { useSession } from "next-auth/react";
 
 // chakra ui imports
 import {
@@ -18,16 +19,19 @@ import {
 
 // component imports
 import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "../components/headerOuter";
+import Header from "../components/header";
 
 export default function About() {
+  // session
+  const { data: session } = useSession();
+
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
   return (
     <Box>
       <Container py={6}>
-        <Header />
+        <Header session={session} />
       </Container>
       <Container maxW="3xl" py={6}>
         <Heading as="h1" marginTop={8} size="3xl" textAlign="center">

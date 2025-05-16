@@ -295,37 +295,24 @@ export default function CreateBotFlow({ userId }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Text as="div" marginTop={10}>
-                Bitpart is designed to work using Signal, a platform that offers
-                the highest standard of security and privacy among free and
-                publicly available messaging platforms available today.
-              </Text>
-              <Text marginTop={8}>
-                (Don’t have Signal? Get it{" "}
-                <Link
-                  href="https://signal.org/install"
-                  color={color}
-                  textDecoration="underline"
-                  target="_blank"
-                  variant="underline"
-                >
-                  here
-                </Link>
-                .)
-              </Text>
               <Box border={`1px solid ${color}`} margin={8} padding={4}>
                 <Text>
-                  <Highlight
-                    styles={{ px: "0.5", bg: "yellow.muted" }}
-                    query="We recommend setting up a separate Signal account for your bot."
+                  The Bitpart bot needs a{" "}
+                  <Link
+                    href="https://signal.org/install"
+                    color={color}
+                    textDecoration="underline"
+                    target="_blank"
+                    variant="underline"
                   >
-                    The Bitpart bot needs a Signal account to send and receive
-                    messages. We recommend setting up a separate Signal account
-                    for your Bitpart bot and not using your personal one. Once
-                    the bot is activated, any messages sent over that number
-                    trigger the bot. You cannot reply to a user directly with
-                    the bot device.
-                  </Highlight>
+                    Signal account
+                  </Link>{" "}
+                  to send and receive messages.
+                </Text>
+                <Text marginTop={4}>
+                  Set up a separate Signal account for your Bitpart bot and do
+                  not use your personal one. Once the bot is activated, any
+                  messages sent to that number trigger the bot.
                 </Text>
               </Box>
               <Heading as="h2" marginTop={10} size="md">

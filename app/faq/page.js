@@ -2,6 +2,7 @@
 
 // base imports
 import React from "react";
+import { useSession } from "next-auth/react";
 
 // chakra ui imports
 import {
@@ -16,23 +17,60 @@ import {
 
 // components imports
 import { useColorModeValue } from "@/app/components/ui/color-mode";
+import Header from "../components/header";
 
 export default function FAQ() {
+  // session
+  const { data: session } = useSession();
+
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
   return (
     <Box>
+      <Container py={6}>
+        <Header session={session} />
+      </Container>
       <Container marginY={8} maxW="3xl">
         <Heading as="h1" size="2xl">
           FAQs
         </Heading>
         <List.Root marginLeft={4}>
-          <List.Item>
-            <Link>Tipline</Link>
-          </List.Item>
+          <ClientOnly>
+            <List.Item>
+              <Link color={color} href="#broadcast" variant="underline">
+                Broadcast
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#helpdesk" variant="underline">
+                Helpdesk
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#tipline" variant="underline">
+                Tipline
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#esim" variant="underline">
+                eSIM distribution
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#vpn" variant="underline">
+                VPN distribution
+              </Link>
+            </List.Item>
+          </ClientOnly>
         </List.Root>
-        <Heading as="h2" marginTop={4}>
+        <Heading as="h2" id="broadcast" marginTop={4}>
+          Broadcast
+        </Heading>
+        <Heading as="h2" id="helpdesk" marginTop={4}>
+          Helpdesk
+        </Heading>
+        <Heading as="h2" id="tipline" marginTop={4}>
           Tipline
         </Heading>
         <Text fontWeight={700} marginTop={4}>
@@ -84,6 +122,12 @@ export default function FAQ() {
           Remember -- the passcode gives someone access to receive messages from
           people using your bot. Please keep it safe.
         </Text>
+        <Heading as="h2" id="esim" marginTop={4}>
+          eSIM distribution
+        </Heading>
+        <Heading as="h2" id="vpn" marginTop={4}>
+          VPN distribution
+        </Heading>
       </Container>
     </Box>
   );

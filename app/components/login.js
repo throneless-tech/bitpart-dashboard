@@ -46,7 +46,6 @@ function Submit() {
 
 export function LoginForm() {
   const router = useRouter();
-  const { pending } = useFormStatus();
 
   // color mode
   const color = useColorModeValue("maroon", "yellow");

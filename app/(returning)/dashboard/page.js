@@ -17,7 +17,9 @@ export default async function Dashboard() {
 
   return (
     <Box>
-      <Header />
+      <Container py={6}>
+        <Header session={session} />
+      </Container>
       <Container marginY={3} maxW="2xl">
         <Heading as="h1" size="3xl" marginBottom={8}>
           Dashboard

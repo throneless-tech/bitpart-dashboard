@@ -3,7 +3,7 @@ import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 // component imports
 import CreateBotFlow from "@/app/components/create";
@@ -17,7 +17,9 @@ export default async function Create() {
 
   return (
     <Box>
-      <Header />
+      <Container py={6}>
+        <Header session={session} />
+      </Container>
       <CreateBotFlow userId={session.id} />
     </Box>
   );

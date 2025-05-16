@@ -161,9 +161,6 @@ export const formatCsml = async (data, passcode) => {
             csml = csml.replace("[faq.answers]", "");
           }
 
-          console.log(answers);
-          console.log("**************************");
-
           csml = csml.replace(`[${field}]`, questions);
         } else if (field === "problems") {
           // fields specific to problem and solutions

@@ -144,7 +144,6 @@ export const VpnForm = () => {
           errors.activationInstructions.message
         }
         helperText="Please add instructions for the steps people should take in order to use their VPN code. The  VPN provider may have instructions you can copy and paste here. If the text is long you could link to a web page, but remember that people in low connectivity settings may be more able to receive a message on Signal than open a web page."
-        info="activationInstructions"
         invalid={!!errors?.activationInstructions}
         label="Activation instructions"
         marginTop={4}

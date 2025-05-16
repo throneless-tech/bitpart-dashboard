@@ -2,16 +2,14 @@
 
 // base imports
 import React from "react";
+import { useSession } from "next-auth/react";
 
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Container,
-  Flex,
   Heading,
-  HStack,
   Link,
   List,
   Table,
@@ -20,16 +18,19 @@ import {
 
 // component imports
 import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "../components/headerOuter";
+import Header from "../components/header";
 
 export default function About() {
+  // session
+  const { data: session } = useSession();
+
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
   return (
     <Box>
       <Container py={6}>
-        <Header />
+        <Header session={session} />
       </Container>
       <Container maxW="3xl" py={6}>
         <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
@@ -659,13 +660,8 @@ export default function About() {
           </Text>
           <List.Root marginLeft={4}>
             <List.Item>
-              Where data processing is based on consent, you may revoke this
-              consent at any time and we will make it as easy as possible for
-              you to do this (for example by building an automated data deletion
-              function within the Bitpart chatbot).
-            </List.Item>
-            <List.Item>
-              You have the right to edit and/or delete your information.
+              You have the right to ask for rectification and/or deletion of
+              your information.
             </List.Item>
             <List.Item>
               You have the right of access to your information.
@@ -678,16 +674,10 @@ export default function About() {
               You have the right to object to the processing of your personal
               data.
             </List.Item>
-            <List.Item>
-              You have the right to lodge a complaint with the EU Information
-              Commissioner if you feel your rights have been infringed.
-            </List.Item>
           </List.Root>
           <Text marginTop={4}>
-            The UK A full summary of your legal rights over your data can be
-            found on the Information Commissioner’s Office (ICO) website
-            provides with guidance on the rights that may be available to you
-            here:{" "}
+            The UK Information Commissioner’s Office (ICO) website provides
+            guidance on these rights:{" "}
             <Link
               color={color}
               href="https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights"

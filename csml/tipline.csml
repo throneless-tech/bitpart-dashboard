@@ -137,6 +137,8 @@ confirm_delete_step:
   goto end
 
 tip_reply_step:
+  say "Tip is: {{tip}}"
+  say Text("Tip is! {{tip}}")
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
   
 We may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."

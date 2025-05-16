@@ -1,9 +1,6 @@
 "use server";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 
 export const login = async (formData) => {
@@ -11,7 +8,7 @@ export const login = async (formData) => {
   const username = formData.get("username");
 
   try {
-    const signedIn = await signIn("credentials", {
+    await signIn("credentials", {
       username,
       password,
       redirect: false,

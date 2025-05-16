@@ -2,6 +2,7 @@
 
 // base imports
 import React, { Suspense } from "react";
+import { useSession } from "next-auth/react";
 
 // chakra ui imports
 import {
@@ -18,9 +19,12 @@ import {
 import { useColorModeValue } from "@/app/components/ui/color-mode";
 import { InviteForm } from "./components/enterInvite";
 import { ToastSignOut } from "./components/toastalert";
-import Header from "./components/headerOuter";
+import Header from "./components/header";
 
 export default function Home() {
+  // session
+  const { data: session } = useSession();
+
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
@@ -30,7 +34,7 @@ export default function Home() {
         <ToastSignOut />
       </Suspense>
       <Container py={6}>
-        <Header />
+        <Header session={session} />
       </Container>
       <Container marginBottom={6} maxW="2xl">
         <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
@@ -43,7 +47,7 @@ export default function Home() {
         </Text>
         <Text marginTop={2}>
           It enables you to send secure, automated messages to a particular
-          constituency over Signal by creating your own bot. The bot can operate
+          community over Signal by creating your own bot. The bot can operate
           within five different communication formats, depending on your needs,
           all while protecting the privacy of both the senders and recipients of
           messages.
@@ -72,13 +76,13 @@ export default function Home() {
             <Text as="span" fontWeight="bold">
               eSim distribution:{" "}
             </Text>
-            distribute eSims to members of your constituency
+            distribute eSims to members of your community
           </List.Item>
           <List.Item>
             <Text as="span" fontWeight="bold">
               VPN distribution:{" "}
             </Text>
-            distribute VPN codes to members of your constituency
+            distribute VPN codes to members of your community
           </List.Item>
         </List.Root>
         <Box marginTop={8} textAlign="center">

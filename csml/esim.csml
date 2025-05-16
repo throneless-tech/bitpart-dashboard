@@ -27,7 +27,7 @@ start:
     // TODO Bitpart interprets incoming language. Response is in the same language
     // TODO check if the user has contacted this line before
 
-    say Text("Thank you for contacting [name]. We help people in conflict zones get e-sims for free. We only provide eSIMs for people in certain locations.
+    say Text("Thank you for contacting [name]. [description]
 
 We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
 
@@ -260,6 +260,8 @@ If you can't get it to work, reply with 'Help'.")
 
   // external app call to EMS for an esim code from 1 network
   do esim = App("ems", method_id = "EsimData", provider=providers[0])
+
+  say "{{esim}}"
 
   if (event.to_lowercase() == "help") {
     goto help_step

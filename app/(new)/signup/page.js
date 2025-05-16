@@ -6,11 +6,15 @@ import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
 // components
 import { ColorModeButton } from "@/app/components/ui/color-mode";
+import Header from "@/app/components/header";
 import { SignupForm } from "@/app/components/signup";
 
-export default function Singup() {
+export default function Signup() {
   return (
     <Box>
+      <Container py={6}>
+        <Header />
+      </Container>
       <Container py={6}>
         <Flex justifyContent="space-between">
           <ColorModeButton />
