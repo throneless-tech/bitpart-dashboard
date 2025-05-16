@@ -165,17 +165,6 @@ export const createBotPrisma = async (data, userId, passcode) => {
     phone = await formatPhone(data.phone, data.countryCode);
   }
 
-  // // admin phones array
-  // let phones = [];
-
-  // // format admin phone numbers
-  // data.adminPhones.map(async (p) => {
-  //   let phone = await formatPhone(p.code + p.number);
-  //   phone = phone.replace(/^(\+)|\D/g, "$1");
-  //   phone = `+${phone}`;
-  //   phones.push(phone);
-  // })
-
   try {
     delete data.csv; // we are not saving the codes here
 

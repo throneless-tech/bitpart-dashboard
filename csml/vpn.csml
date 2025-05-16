@@ -2,8 +2,7 @@
 
 start:
 // if bitpart receives passcode, set admin
-  do passcode = event
-  do passcode.to_uppercase()
+  do passcode = event.to_uppercase()
 
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
@@ -17,7 +16,7 @@ start:
     }
   }
   // if _whisperable is set, user is already an admin
-  if (event._whisperable == true) {
+  if (_whisperable == true) {
     goto admin_interface_step
   }
   else
