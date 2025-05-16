@@ -33,7 +33,7 @@ import {
 
 // component imports
 import { Checkbox } from "@/app/components/ui/checkbox";
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { LightMode, useColorModeValue } from "@/app/components/ui/color-mode";
 import {
   RadioCardItem,
   RadioCardLabel,
@@ -475,11 +475,15 @@ export default function CreateBotFlow({ userId }) {
               <Heading as="h2" marginBottom={4} marginTop={10} size="md">
                 Connect Bitpart to Signal
               </Heading>
-              <QrCode.Root value={qrLink}>
-                <QrCode.Frame>
-                  <QrCode.Pattern />
-                </QrCode.Frame>
-              </QrCode.Root>
+              <LightMode>
+                <Box backgroundColor="#fff" width={120}>
+                  <QrCode.Root value={qrLink}>
+                    <QrCode.Frame>
+                      <QrCode.Pattern />
+                    </QrCode.Frame>
+                  </QrCode.Root>
+                </Box>
+              </LightMode>
               <List.Root marginLeft={4} marginTop={4}>
                 <List.Item>
                   On your phone, open Signal and navigate to Signal Settings{" "}
