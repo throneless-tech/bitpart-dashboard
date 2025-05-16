@@ -75,7 +75,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else
     say "Sorry, I did not get that."
-    remember count += 1
+    remember count = count + 1
     goto delete_me_confirm_step
 
 confirm_delete_step:
@@ -146,7 +146,7 @@ Reply with 'End' to end this chat for today.")
     goto end
   } else {
     say "Sorry, I did not get that."
-    remember count += 1
+    remember count = count + 1
     goto check_if_solved_step
   }
 
@@ -170,7 +170,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto menu_step
   } else
     say "Sorry, I did not get that."
-    remember count += 1
+    remember count = count + 1
     goto delete_data_step
 
 get_esim_1_step:
@@ -205,13 +205,13 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
       goto end
     } else {
       say "Sorry, I did not get that."
-      remember count += 1
+      remember count = count + 1
       goto get_esim_1_step
     }
 
   } else {
     say "Sorry, I did not get that."
-    remember count += 1
+    remember count = count + 1
     goto get_esim_1_step
   }
 
@@ -265,7 +265,7 @@ If you can't get it to work, reply with 'Help'.")
   if (event.to_lowercase() == "help") {
     goto help_step
   } else {
-    remember count += 1
+    remember count = count + 1
     goto get_esim_3_step
   }
 
@@ -310,7 +310,7 @@ Step 1: Open your phone's Settings.
     goto human_support_step
   } else { 
     say "Sorry, I did not get that."
-    remember count += 1
+    remember count = count + 1
     goto help_step
   }
 
@@ -334,7 +334,7 @@ Reply with 'End' to end this chat for today.")
       goto end
     } else {
       say "Sorry, I did not get that."
-      remember count += 1
+      remember count = count + 1
       goto help_step
     }
 
