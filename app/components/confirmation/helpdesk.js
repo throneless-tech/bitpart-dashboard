@@ -75,7 +75,7 @@ export const HelpdeskConfirmation = (props) => {
           <List.Item>
             <Text marginTop={4}>
               Go to{" "}
-              <Link color={props?.color} href="/dashboard" variant="underline">
+              <Link color={props?.color} href="/home" variant="underline">
                 home
               </Link>{" "}
               to see your bots and create a new one. You will also be able to

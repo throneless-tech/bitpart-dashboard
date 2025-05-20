@@ -56,7 +56,7 @@ export function LoginForm() {
       const res = await login(formData);
 
       if (res.success) {
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         console.log(res.message);
         toaster.create({
