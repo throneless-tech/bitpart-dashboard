@@ -1,0 +1,27 @@
+// base imports
+import React from "react";
+import { auth } from "@/auth";
+
+// chakra ui imports
+import { Box, Container } from "@chakra-ui/react";
+
+// component imports
+import CreateBotFlow from "@/app/components/create";
+import Header from "@/app/components/header";
+import NotAuthenticated from "@/app/components/notAuthenticated";
+
+export default async function Edit({ params }) {
+  const { id } = await params;
+  const session = await auth();
+
+  if (!session) return <NotAuthenticated />;
+
+  return (
+    <Box>
+      <Container py={6}>
+        <Header session={session} />
+      </Container>
+      <CreateBotFlow userId={session.id} />
+    </Box>
+  );
+}

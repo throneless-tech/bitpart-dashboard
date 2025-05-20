@@ -80,7 +80,7 @@ import {
   createBotPrisma,
   linkChannelBitpart,
 } from "@/app/actions/createBot";
-import { createPasscode } from "@/app/actions/formatBot";
+import { createPasscode, formatBotName } from "@/app/actions/formatBot";
 import { parseCSV } from "@/app/actions/csv";
 import { getUserBots } from "@/app/actions/getUserBots";
 
@@ -201,7 +201,10 @@ export default function CreateBotFlow({ userId }) {
     setBotPasscode(passcode);
 
     try {
-      const botBitpart = await createBotBitpart(data, passcode);
+      // format bot id for bitpart
+      const bitpartId = await formatBotName(data.botName, userId);
+
+      const botBitpart = await createBotBitpart(data, bitpartId, passcode);
 
       if (botBitpart?.message_type === "Error") {
         throw new Error(botBitpart.data.response);
@@ -231,7 +234,7 @@ export default function CreateBotFlow({ userId }) {
       setQRLink(channelBitpartLink.data.response);
       console.log(channelBitpartLink.data.response);
 
-      const bot = await createBotPrisma(data, userId, passcode);
+      const bot = await createBotPrisma(data, bitpartId, userId, passcode);
 
       setCreatedBot(bot);
       updateStepCount(1);

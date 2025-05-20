@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import WebSocket from "ws";
 
 // actions
-import { formatBotName, formatCsml, formatPhone } from "./formatBot";
+import { formatCsml, formatPhone } from "./formatBot";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -69,17 +69,14 @@ class WSConnection {
 }
 
 // create the bot on the bitpart server
-export const createBotBitpart = async (data, passcode) => {
-  // format bot name
-  const formattedBotName = await formatBotName(data.botName);
-
+export const createBotBitpart = async (data, bitpartId, passcode) => {
   // format csml
   const formattedCsml = await formatCsml(data, passcode);
 
   const jsonCreateBot = {
     message_type: "CreateBot",
     data: {
-      id: formattedBotName,
+      id: bitpartId,
       name: data.botName,
       apps_endpoint: process.env.EMS_ENDPOINT,
       flows: [
@@ -157,7 +154,7 @@ export const linkChannelBitpart = async (botId) => {
 };
 
 // create the bot in the prisma db
-export const createBotPrisma = async (data, userId, passcode) => {
+export const createBotPrisma = async (data, bitpartId, userId, passcode) => {
   // format bot phone
   let phone = "";
 
@@ -178,6 +175,7 @@ export const createBotPrisma = async (data, userId, passcode) => {
         passcode,
         botType: data.botType,
         botName: data.botName,
+        bitpartId,
         name: data.name,
       },
     });
