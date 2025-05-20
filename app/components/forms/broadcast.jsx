@@ -6,7 +6,7 @@ import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 
-export const BroadcastForm = () => {
+export const BroadcastForm = ({ bot }) => {
   const {
     register,
     control,
@@ -36,7 +36,11 @@ export const BroadcastForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="Broadcast list" {...register("name")} />
+        <Input
+          defaultValue={bot?.name}
+          placeholder="Broadcast list"
+          {...register("name")}
+        />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -48,7 +52,11 @@ export const BroadcastForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME / EMAIL> who runs this group."
+          defaultValue={
+            bot
+              ? bot.description
+              : "Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME / EMAIL> who runs this group."
+          }
           {...register("description")}
         />
       </Field>
@@ -60,7 +68,11 @@ export const BroadcastForm = () => {
         label="Safety tips"
         marginTop={4}
       >
-        <Textarea autoresize {...register("safetyTips")} />
+        <Textarea
+          autoresize
+          defaultValue={bot?.safetyTips}
+          {...register("safetyTips")}
+        />
       </Field>
       <Fieldset.Root label="FAQs" marginTop={4}>
         <Stack>

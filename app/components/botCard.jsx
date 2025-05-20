@@ -22,7 +22,7 @@ import { FaSimCard } from "react-icons/fa";
 import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
-import { formatBotName } from "../actions/formatBot";
+import { formatBotName, formatPhone } from "../actions/formatBot";
 
 const botTypes = {
   broadcast: <TbBuildingBroadcastTower />,
@@ -36,17 +36,29 @@ export default function BotCard(props) {
   const { bot, handleDelete } = props;
   const [checked, setChecked] = useState(false);
   const [botName, setBotName] = useState("");
+  const [botPhone, setBotPhone] = useState("");
 
   if (!bot) return null;
+
+  console.log(bot);
 
   const getFormattedBotName = async (botName) => {
     const name = await formatBotName(bot.botName);
     setBotName(name);
   };
 
+  const getFormattedPhone = async (countryCode, botPhone) => {
+    const phone = await formatPhone(countryCode, botPhone);
+    setBotPhone(phone);
+  };
+
   useEffect(() => {
     if (bot?.name) {
       getFormattedBotName(bot.name);
+    }
+
+    if (bot?.phone) {
+      getFormattedPhone(bot.countryCode, bot.phone);
     }
   });
 
@@ -62,7 +74,7 @@ export default function BotCard(props) {
         <Card.Title mt="2">{bot.botName}</Card.Title>
         <ClientOnly>
           <Box color={color}>
-            {bot.phone ? <Text>{bot.phone}</Text> : null}
+            {botPhone ? <Text>{botPhone}</Text> : null}
             <Stack alignItems="flex-start" direction="row" marginTop={2}>
               <Text>View passcode </Text>
               <Switch.Root
@@ -81,7 +93,9 @@ export default function BotCard(props) {
         </ClientOnly>
       </Card.Body>
       <Card.Footer justifyContent="flex-end">
-        {/* <Button variant="outline">View</Button> */}
+        <Button as="a" href={`/edit/${bot.id}`} variant="outline">
+          Edit
+        </Button>
         <form action={async () => await handleDelete(bot.id, botName)}>
           <Button type="submit">Delete</Button>
         </form>

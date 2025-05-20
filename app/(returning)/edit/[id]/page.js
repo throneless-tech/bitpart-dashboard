@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { Box, Container } from "@chakra-ui/react";
 
 // component imports
-import CreateBotFlow from "@/app/components/create";
+import EditBotFlow from "@/app/components/edit";
 import Header from "@/app/components/header";
 import NotAuthenticated from "@/app/components/notAuthenticated";
 
@@ -21,7 +21,7 @@ export default async function Edit({ params }) {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <CreateBotFlow userId={session.id} />
+      <EditBotFlow botId={id} />
     </Box>
   );
 }

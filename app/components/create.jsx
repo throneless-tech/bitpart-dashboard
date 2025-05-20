@@ -252,7 +252,9 @@ export default function CreateBotFlow({ userId }) {
   // handle form submission errors
   const onError = (errors, e) => {
     console.log("errors prevented form from submitting: ", errors);
-    alert("The following errors prevented form from submitting: ", errors);
+    alert(
+      "Errors prevented form from submitting. See console or contact an admin for more information.",
+    );
   };
 
   // color mode

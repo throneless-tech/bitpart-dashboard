@@ -15,7 +15,7 @@ import {
 // country codes
 import { CountryCodes } from "./countryCodes";
 
-export const BasicsForm = () => {
+export const BasicsForm = ({ bot }) => {
   const {
     register,
     control,
@@ -51,7 +51,7 @@ export const BasicsForm = () => {
         required
         width="320px"
       >
-        <Input {...register("botName")} />
+        <Input defaultValue={bot?.botName} {...register("botName")} />
       </Field>
       <Fieldset.Root marginTop={8}>
         <Stack>
@@ -67,7 +67,10 @@ export const BasicsForm = () => {
         <Stack marginLeft={4}>
           <Field label="Country code" marginBottom={2} width={320}>
             <NativeSelectRoot>
-              <NativeSelectField {...register("countryCode")}>
+              <NativeSelectField
+                defaultValue={bot?.countryCode}
+                {...register("countryCode")}
+              >
                 <CountryCodes />
               </NativeSelectField>
             </NativeSelectRoot>
@@ -80,7 +83,7 @@ export const BasicsForm = () => {
             marginBottom={4}
             width="320px"
           >
-            <Input {...register("phone")} />
+            <Input defaultValue={bot?.phone} {...register("phone")} />
           </Field>
         </Stack>
       </Fieldset.Root>

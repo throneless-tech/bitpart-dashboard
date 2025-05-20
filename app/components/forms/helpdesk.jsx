@@ -11,7 +11,7 @@ import {
   NumberInputRoot,
 } from "@/app/components/ui/number-input";
 
-export const HelpdeskForm = () => {
+export const HelpdeskForm = ({ bot }) => {
   const {
     register,
     control,
@@ -36,7 +36,7 @@ export const HelpdeskForm = () => {
         label="Helpdesk name"
         required
       >
-        <Input {...register("name")} />
+        <Input defaultValue={bot?.name} {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.referral && errors.referral.message}
@@ -46,7 +46,7 @@ export const HelpdeskForm = () => {
         marginTop={4}
         required
       >
-        <Input {...register("referral")} />
+        <Input defaultValue={bot?.referral} {...register("referral")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -56,7 +56,11 @@ export const HelpdeskForm = () => {
         marginTop={4}
         required
       >
-        <Textarea autoresize {...register("description")} />
+        <Textarea
+          autoresize
+          defaultValue={bot?.description}
+          {...register("description")}
+        />
       </Field>
       <Field
         errorText={!!errors?.responseTime && errors.responseTime.message}
@@ -66,7 +70,11 @@ export const HelpdeskForm = () => {
         marginTop={4}
         required
       >
-        <Input {...register("responseTime")} maxW={280} />
+        <Input
+          defaultValue={bot?.responseTime}
+          {...register("responseTime")}
+          maxW={280}
+        />
       </Field>
       {/* FIXME remove storage time and access? */}
       {/* <Field
@@ -93,7 +101,11 @@ export const HelpdeskForm = () => {
         marginTop={4}
         required
       >
-        <Textarea autoresize {...register("storageAccess")} />
+        <Textarea
+          autoresize
+          defaultValue={bot?.storageAccess}
+          {...register("storageAccess")}
+        />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
@@ -106,7 +118,11 @@ export const HelpdeskForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue={`The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`}
+          defaultValue={
+            bot
+              ? bot.privacyPolicy
+              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
+          }
           {...register("privacyPolicy")}
         />
       </Field>

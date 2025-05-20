@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import WebSocket from "ws";
 
 // actions
-import { formatCsml } from "./formatBot";
+import { formatCsml, formatPhone } from "./formatBot";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -68,12 +68,12 @@ class WSConnection {
   }
 }
 
-// create the bot on the bitpart server
-export const createBotBitpart = async (data, bitpartId, passcode) => {
+// update the bot on the bitpart server
+export const updateBotBitpart = async (data, bitpartId, passcode) => {
   // format csml
   const formattedCsml = await formatCsml(data, passcode);
 
-  const jsonCreateBot = {
+  const jsonUpdateBot = {
     message_type: "CreateBot",
     data: {
       id: bitpartId,
@@ -91,7 +91,7 @@ export const createBotBitpart = async (data, bitpartId, passcode) => {
     },
   };
 
-  const jsonStringCreateBot = JSON.stringify(jsonCreateBot);
+  const jsonStringUpdateBot = JSON.stringify(jsonUpdateBot);
 
   const ws = new WSConnection(
     `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
@@ -100,7 +100,7 @@ export const createBotBitpart = async (data, bitpartId, passcode) => {
   const response = ws
     .start()
     .then(async () => {
-      const response = await ws.sendMessage(jsonStringCreateBot);
+      const response = await ws.sendMessage(jsonStringUpdateBot);
       return response;
     })
     .catch((err) => {
@@ -114,62 +114,23 @@ export const createBotBitpart = async (data, bitpartId, passcode) => {
   return response;
 };
 
-export const linkChannelBitpart = async (botId) => {
-  const jsonLinkChannel = {
-    message_type: "LinkChannel",
-    data: {
-      id: "signal",
-      bot_id: botId,
-      device_name: "bitpart",
-    },
-  };
-
-  const jsonStringLinkChannel = JSON.stringify(jsonLinkChannel);
-
-  // send info to bitpart server via websockets
-  const ws = new WSConnection(
-    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
-  );
-
-  // if (!ws?._socket) {
-  //   throw new Error("Cannot connect to Bitpart server. Make sure the server is running.")
-  // }
-
-  const response = ws
-    .start()
-    .then(async () => {
-      const response = await ws.sendMessage(jsonStringLinkChannel);
-
-      return response;
-    })
-    .catch((err) => {
-      throw new Error(
-        err?.message
-          ? err.message
-          : "Web socket connection was refused.Make sure the server is running.",
-      );
-    });
-
-  return response;
-};
-
-// create the bot in the prisma db
-export const createBotPrisma = async (data, bitpartId, userId, passcode) => {
+// update the bot in the prisma db
+export const updateBotPrisma = async (
+  data,
+  botId,
+  bitpartId,
+  userId,
+  passcode,
+) => {
   try {
     delete data.csv; // we are not saving the codes here
 
-    const bot = await prisma.bot.create({
+    const bot = await prisma.bot.update({
+      where: {
+        id: botId,
+      },
       data: {
         ...data,
-        creatorId: userId,
-        // countryCode: data.countryCode,
-        // phone,
-        // adminPhones: phones,
-        passcode,
-        botType: data.botType,
-        botName: data.botName,
-        bitpartId,
-        name: data.name,
       },
     });
 

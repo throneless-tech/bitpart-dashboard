@@ -18,7 +18,7 @@ import { useColorModeValue } from "@/app/components/ui/color-mode";
 // icons
 import { FiDownload } from "react-icons/fi";
 
-export const VpnForm = () => {
+export const VpnForm = ({ bot }) => {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
@@ -61,7 +61,11 @@ export const VpnForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="VPN Distribution Org" {...register("name")} />
+        <Input
+          defaultValue={bot?.name}
+          placeholder="VPN Distribution Org"
+          {...register("name")}
+        />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -73,6 +77,7 @@ export const VpnForm = () => {
       >
         <Textarea
           autoresize
+          defaultValue={bot?.description}
           placeholder="Start typing..."
           {...register("description")}
         />
@@ -86,6 +91,7 @@ export const VpnForm = () => {
         required
       >
         <NumberInputRoot
+          defaultValue={bot?.maxCodes}
           min={1}
           formatOptions={{
             maximumFractionDigits: 0,
@@ -104,7 +110,11 @@ export const VpnForm = () => {
         marginTop={4}
         required
       >
-        <Input {...register("responseTime")} maxW={280} />
+        <Input
+          defaultValue={bot?.responseTime}
+          {...register("responseTime")}
+          maxW={280}
+        />
       </Field>
       {/* FIXME do we need storage time? */}
       {/* <Field
@@ -148,7 +158,11 @@ export const VpnForm = () => {
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea autoresize {...register("activationInstructions")} />
+        <Textarea
+          autoresize
+          defaultValue={bot?.activationInstructions}
+          {...register("activationInstructions")}
+        />
       </Field>
       {/* We are currently parsing providers from csv; removing the following field */}
       {/* <Fieldset.Root

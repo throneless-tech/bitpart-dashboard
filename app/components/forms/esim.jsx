@@ -20,7 +20,7 @@ import { useColorModeValue } from "@/app/components/ui/color-mode";
 // icons
 import { FiDownload } from "react-icons/fi";
 
-export const EsimForm = () => {
+export const EsimForm = ({ bot }) => {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
@@ -62,7 +62,11 @@ export const EsimForm = () => {
         label="Public name"
         required
       >
-        <Input placeholder="eSIM distributor" {...register("name")} />
+        <Input
+          defaultValue={bot?.name}
+          placeholder="eSIM distributor"
+          {...register("name")}
+        />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -74,6 +78,7 @@ export const EsimForm = () => {
       >
         <Textarea
           autoresize
+          defaultValue={bot?.description}
           placeholder="Start typing..."
           {...register("description")}
         />
@@ -89,7 +94,11 @@ export const EsimForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue={`The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`}
+          defaultValue={
+            bot
+              ? bot.privacyPolicy
+              : `The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`
+          }
           {...register("privacyPolicy")}
         />
       </Field>
@@ -103,7 +112,11 @@ export const EsimForm = () => {
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea autoresize {...register("activationInstructions")} />
+        <Textarea
+          defaultValue={bot?.activationInstructions}
+          autoresize
+          {...register("activationInstructions")}
+        />
       </Field>
       <Field
         errorText={
@@ -115,7 +128,11 @@ export const EsimForm = () => {
         label="Help section"
         marginTop={4}
       >
-        <Textarea autoresize {...register("helpInstructions")} />
+        <Textarea
+          autoresize
+          defaultValue={bot?.helpInstructions}
+          {...register("helpInstructions")}
+        />
       </Field>
       {/* <Fieldset.Root
         label="eSIM networks"

@@ -59,7 +59,7 @@ model VerificationToken {
 }
 
 model Bot {
-  id                     Int      @id @default(autoincrement())
+  id                     String    @id @default(cuid())
   botType                String
   botName                String
   bitpartId              String   @unique
