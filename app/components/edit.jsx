@@ -33,7 +33,7 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { LightMode, useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/components/ui/color-mode";
 
 // form imports
 import { BasicsForm } from "@/app/components/forms/basics";
@@ -86,8 +86,9 @@ const valuesToUnregister = [
   "vpnName",
 ];
 
-export default function EditBotFlow({ botId }) {
+export default function EditBotFlow({ botId, userId }) {
   const router = useRouter();
+  const [notAllowed, setNotAllowed] = useState(false);
   const [open, setOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [botPasscode, setBotPasscode] = useState("");
@@ -105,12 +106,22 @@ export default function EditBotFlow({ botId }) {
   const formState = methods.formState;
 
   const fetchBot = useCallback(async () => {
-    const fetchedBot = await getBot(botId);
-    setBot(fetchedBot);
-    methods.reset(fetchedBot);
-    methods.clearErrors();
-    methods.unregister(valuesToUnregister, { keepDefaultValue: true });
-    setIsFetching(false);
+    try {
+      const fetchedBot = await getBot(botId, userId);
+
+      if (!fetchedBot) {
+        setNotAllowed(true);
+      }
+
+      setBot(fetchedBot);
+      methods.reset(fetchedBot);
+      methods.clearErrors();
+      methods.unregister(valuesToUnregister, { keepDefaultValue: true });
+    } catch (error) {
+      setNotAllowed(true);
+    } finally {
+      setIsFetching(false);
+    }
   }, [methods.reset]);
 
   useEffect(() => {
@@ -172,117 +183,134 @@ export default function EditBotFlow({ botId }) {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
-  useEffect(() => {}, [isFetching, watchAll]);
+  useEffect(() => {}, [isFetching, notAllowed, watchAll]);
 
-  return (
-    <Container marginBottom={6} maxW="3xl">
-      <Heading as="h1" marginBottom={4} size="xl">
-        Edit{` ${bot?.botName}`}
-      </Heading>
-      <FormProvider {...methods}>
-        <BasicsForm bot={bot} />
-        <Heading as="h2" marginBottom={4} size="md">
-          Bot specifics
+  if (notAllowed) {
+    return (
+      <Box>
+        <Container marginTop={8} maxWidth="lg">
+          <Text>You do not have access rights to view or edit this bot.</Text>
+          <Text marginTop={4}>
+            You can{" "}
+            <Link color={color} href="/home" variant="underline">
+              return home
+            </Link>
+            .
+          </Text>
+        </Container>
+      </Box>
+    );
+  } else {
+    return (
+      <Container marginBottom={6} maxW="3xl">
+        <Heading as="h1" marginBottom={4} size="xl">
+          Edit{` ${bot?.botName}`}
         </Heading>
-        {bot?.botType == "broadcast" ? (
-          <>
-            <Text fontSize="sm" marginBottom={8}>
-              Anyone who has signed up to receive messages from your bot will be
-              able to request to see a menu, which offers them the option to
-              learn about the bot. Fill out these sections below to customize
-              the text.
-            </Text>
-            <BroadcastForm bot={bot} />
-          </>
-        ) : bot?.botType == "esim" ? (
-          <>
-            <Text fontSize="sm" marginBottom={8}>
-              Anyone who has started a conversation with your bot will be able
-              to request to see a menu, which offers them the option to learn
-              about the bot. Fill out these sections below to customize the
-              text.
-            </Text>
-            <EsimForm bot={bot} />
-          </>
-        ) : bot?.botType == "helpdesk" ? (
-          <>
-            <Text fontSize="sm" marginBottom={8}>
-              Anyone who has started a conversation with your bot will be able
-              to request to see a menu, which offers them the option to learn
-              about the bot. Fill out these sections below to customize the
-              text.
-            </Text>
-            <HelpdeskForm bot={bot} />
-          </>
-        ) : bot?.botType == "tipline" ? (
-          <>
-            <Text fontSize="sm" marginBottom={8}>
-              Anyone who has started a conversation with your bot will be able
-              to request to see a menu, which offers them the option to learn
-              about the bot. Fill out these sections below to customize the
-              text.
-            </Text>
-            <TiplineForm bot={bot} />
-          </>
-        ) : bot?.botType == "vpn" ? (
-          <>
-            <Text fontSize="sm" marginBottom={8}>
-              Anyone who has started a conversation with your bot will be able
-              to request to see a menu, which offers them the option to learn
-              about the bot. Fill out these sections below to customize the
-              text.
-            </Text>
-            <VpnForm bot={bot} />
-          </>
-        ) : (
-          <Spinner size="xl" />
-        )}
-        <HStack gap={4} marginTop={8}>
-          <Button as="a" href="/home" size="sm" variant="outline">
-            Cancel
-          </Button>
-          <Button
-            disabled={isFetching}
-            onClick={(e) => {
-              methods.setValue("botType", bot.botType, {
-                shouldValidate: true,
-                shouldDirty: true,
-              });
-              methods.handleSubmit(onSubmit, onError)(e);
-            }}
-            size="sm"
+        <FormProvider {...methods}>
+          <BasicsForm bot={bot} />
+          <Heading as="h2" marginBottom={4} size="md">
+            Bot specifics
+          </Heading>
+          {bot?.botType == "broadcast" ? (
+            <>
+              <Text fontSize="sm" marginBottom={8}>
+                Anyone who has signed up to receive messages from your bot will
+                be able to request to see a menu, which offers them the option
+                to learn about the bot. Fill out these sections below to
+                customize the text.
+              </Text>
+              <BroadcastForm bot={bot} />
+            </>
+          ) : bot?.botType == "esim" ? (
+            <>
+              <Text fontSize="sm" marginBottom={8}>
+                Anyone who has started a conversation with your bot will be able
+                to request to see a menu, which offers them the option to learn
+                about the bot. Fill out these sections below to customize the
+                text.
+              </Text>
+              <EsimForm bot={bot} />
+            </>
+          ) : bot?.botType == "helpdesk" ? (
+            <>
+              <Text fontSize="sm" marginBottom={8}>
+                Anyone who has started a conversation with your bot will be able
+                to request to see a menu, which offers them the option to learn
+                about the bot. Fill out these sections below to customize the
+                text.
+              </Text>
+              <HelpdeskForm bot={bot} />
+            </>
+          ) : bot?.botType == "tipline" ? (
+            <>
+              <Text fontSize="sm" marginBottom={8}>
+                Anyone who has started a conversation with your bot will be able
+                to request to see a menu, which offers them the option to learn
+                about the bot. Fill out these sections below to customize the
+                text.
+              </Text>
+              <TiplineForm bot={bot} />
+            </>
+          ) : bot?.botType == "vpn" ? (
+            <>
+              <Text fontSize="sm" marginBottom={8}>
+                Anyone who has started a conversation with your bot will be able
+                to request to see a menu, which offers them the option to learn
+                about the bot. Fill out these sections below to customize the
+                text.
+              </Text>
+              <VpnForm bot={bot} />
+            </>
+          ) : (
+            <Spinner size="xl" />
+          )}
+          <HStack gap={4} marginTop={8}>
+            <Button as="a" href="/home" size="sm" variant="outline">
+              Cancel
+            </Button>
+            <Button
+              disabled={isFetching}
+              onClick={(e) => {
+                methods.setValue("botType", bot.botType, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
+                methods.handleSubmit(onSubmit, onError)(e);
+              }}
+              size="sm"
+            >
+              Submit
+            </Button>
+          </HStack>
+          <Dialog.Root
+            lazyMount
+            open={open}
+            onOpenChange={(e) => setOpen(e.open)}
+            size="full"
           >
-            Submit
-          </Button>
-        </HStack>
-        <Dialog.Root
-          lazyMount
-          open={open}
-          onOpenChange={(e) => setOpen(e.open)}
-          size="full"
-        >
-          <Portal>
-            <Dialog.Backdrop />
-            <Dialog.Positioner>
-              <Dialog.Content
-                style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.1)",
-                  backdropFilter: "blur(5px)",
-                }}
-              >
-                <Dialog.Body>
-                  <AbsoluteCenter>
-                    <VStack>
-                      <Spinner size="xl" />
-                      <Text>Updating your bot...</Text>
-                    </VStack>
-                  </AbsoluteCenter>
-                </Dialog.Body>
-              </Dialog.Content>
-            </Dialog.Positioner>
-          </Portal>
-        </Dialog.Root>
-      </FormProvider>
-    </Container>
-  );
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content
+                  style={{
+                    backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    backdropFilter: "blur(5px)",
+                  }}
+                >
+                  <Dialog.Body>
+                    <AbsoluteCenter>
+                      <VStack>
+                        <Spinner size="xl" />
+                        <Text>Updating your bot...</Text>
+                      </VStack>
+                    </AbsoluteCenter>
+                  </Dialog.Body>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
+        </FormProvider>
+      </Container>
+    );
+  }
 }

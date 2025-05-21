@@ -15,11 +15,12 @@ export const getUserBots = async (userId) => {
   }
 };
 
-export const getBot = async (botId) => {
+export const getBot = async (botId, userId) => {
   try {
     const bot = await prisma.bot.findUnique({
       where: {
         id: botId,
+        creatorId: userId,
       },
     });
 

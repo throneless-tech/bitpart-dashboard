@@ -38,7 +38,7 @@ export default async function View({ params }) {
             <RiEditLine />
           </Button>
         </Stack>
-        <Summary botId={id} />
+        <Summary botId={id} userId={session.id} />
       </Container>
     </Box>
   );

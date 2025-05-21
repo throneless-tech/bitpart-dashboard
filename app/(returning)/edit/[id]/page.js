@@ -21,7 +21,7 @@ export default async function Edit({ params }) {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <EditBotFlow botId={id} />
+      <EditBotFlow botId={id} userId={session.id} />
     </Box>
   );
 }
