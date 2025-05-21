@@ -70,16 +70,18 @@ export default function Header(props) {
           <Portal>
             <Menu.Positioner>
               <Menu.Content>
-                <Menu.Item>
-                  <Link color={color} href="/" variant="underline">
-                    Bitpart Home
-                  </Link>
-                </Menu.Item>
+                {!session && (
+                  <Menu.Item>
+                    <Link color={color} href="/" variant="underline">
+                      Bitpart Home
+                    </Link>
+                  </Menu.Item>
+                )}
                 {session ? (
                   <>
                     <Menu.Item>
                       <Link color={color} href="/home" variant="underline">
-                        Dashboard
+                        My bots
                       </Link>
                     </Menu.Item>
                     <Menu.Item>
@@ -131,12 +133,14 @@ export default function Header(props) {
           <Flex gap={4}>
             <ColorModeButton />
             <ClientOnly>
-              <Link color={color} href="/" variant="underline">
-                Bitpart Home
-              </Link>
+              {!session && (
+                <Link color={color} href="/" variant="underline">
+                  Bitpart Home
+                </Link>
+              )}
               {session && (
                 <Link color={color} href="/home" variant="underline">
-                  Dashboard
+                  My bots
                 </Link>
               )}
               <Link color={color} href="/about" variant="underline">

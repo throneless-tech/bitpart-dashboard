@@ -1,4 +1,5 @@
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -13,19 +14,21 @@ import {
 
 export const HelpdeskForm = ({ bot }) => {
   const {
-    register,
     control,
-    formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      problems: [],
-    },
-  });
+    formState: { defaultValues, errors },
+    register,
+  } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, replace, remove } = useFieldArray({
     control,
     name: "problems",
   });
+
+  useEffect(() => {
+    if (bot?.problems && bot.problems.length) {
+      replace(bot.problems);
+    }
+  }, [bot]);
 
   return (
     <>
@@ -36,7 +39,7 @@ export const HelpdeskForm = ({ bot }) => {
         label="Helpdesk name"
         required
       >
-        <Input defaultValue={bot?.name} {...register("name")} />
+        <Input {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.referral && errors.referral.message}
@@ -46,7 +49,7 @@ export const HelpdeskForm = ({ bot }) => {
         marginTop={4}
         required
       >
-        <Input defaultValue={bot?.referral} {...register("referral")} />
+        <Input {...register("referral")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -56,11 +59,7 @@ export const HelpdeskForm = ({ bot }) => {
         marginTop={4}
         required
       >
-        <Textarea
-          autoresize
-          defaultValue={bot?.description}
-          {...register("description")}
-        />
+        <Textarea autoresize {...register("description")} />
       </Field>
       <Field
         errorText={!!errors?.responseTime && errors.responseTime.message}
@@ -70,11 +69,7 @@ export const HelpdeskForm = ({ bot }) => {
         marginTop={4}
         required
       >
-        <Input
-          defaultValue={bot?.responseTime}
-          {...register("responseTime")}
-          maxW={280}
-        />
+        <Input {...register("responseTime")} maxW={280} />
       </Field>
       {/* FIXME remove storage time and access? */}
       {/* <Field
@@ -101,11 +96,7 @@ export const HelpdeskForm = ({ bot }) => {
         marginTop={4}
         required
       >
-        <Textarea
-          autoresize
-          defaultValue={bot?.storageAccess}
-          {...register("storageAccess")}
-        />
+        <Textarea autoresize {...register("storageAccess")} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}

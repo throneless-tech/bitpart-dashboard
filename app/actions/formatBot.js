@@ -231,8 +231,8 @@ export const formatCreateBotData = async (data, formattedCsml) => {
 
 // format the bot phone correctly for bitpart
 export const formatPhone = async (phone, countryCode) => {
-  let formattedPhone = countryCode + phone;
-  formattedPhone = formattedPhone.replace(/^(\+)|\D/g, "$1");
+  let formattedPhone = `${countryCode} ${phone}`;
+  // formattedPhone = formattedPhone.replace(/^(\+)|\D/g, "$1");
   formattedPhone = `+${formattedPhone}`;
 
   return formattedPhone;

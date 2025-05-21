@@ -7,9 +7,8 @@ import { Field } from "@/app/components/ui/field";
 
 export const TiplineForm = ({ bot }) => {
   const {
-    register,
     formState: { errors },
-    watch,
+    register,
   } = useFormContext();
 
   return (
@@ -21,7 +20,7 @@ export const TiplineForm = ({ bot }) => {
         label="Tipline name"
         required
       >
-        <Input defaultValue={bot?.name} {...register("name")} />
+        <Input {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}

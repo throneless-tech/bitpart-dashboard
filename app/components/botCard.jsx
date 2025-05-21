@@ -40,15 +40,13 @@ export default function BotCard(props) {
 
   if (!bot) return null;
 
-  console.log(bot);
-
   const getFormattedBotName = async (botName) => {
     const name = await formatBotName(bot.botName);
     setBotName(name);
   };
 
-  const getFormattedPhone = async (countryCode, botPhone) => {
-    const phone = await formatPhone(countryCode, botPhone);
+  const getFormattedPhone = async (botPhone, countryCode) => {
+    const phone = await formatPhone(botPhone, countryCode);
     setBotPhone(phone);
   };
 
@@ -58,11 +56,11 @@ export default function BotCard(props) {
     }
 
     if (bot?.phone) {
-      getFormattedPhone(bot.countryCode, bot.phone);
+      getFormattedPhone(bot.phone, bot.countryCode);
     }
   });
 
-  useEffect(() => {}, [bot, botName]);
+  useEffect(() => {}, [bot, botName, botPhone]);
 
   // color mode
   const color = useColorModeValue("gray.600", "gray.400");
@@ -92,7 +90,10 @@ export default function BotCard(props) {
           </Box>
         </ClientOnly>
       </Card.Body>
-      <Card.Footer justifyContent="flex-end">
+      <Card.Footer justifyContent="center">
+        <Button as="a" href={`/view/${bot.id}`} variant="outline">
+          View
+        </Button>
         <Button as="a" href={`/edit/${bot.id}`} variant="outline">
           Edit
         </Button>

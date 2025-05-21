@@ -51,7 +51,7 @@ export const BasicsForm = ({ bot }) => {
         required
         width="320px"
       >
-        <Input defaultValue={bot?.botName} {...register("botName")} />
+        <Input {...register("botName")} />
       </Field>
       <Fieldset.Root marginTop={8}>
         <Stack>
@@ -67,10 +67,7 @@ export const BasicsForm = ({ bot }) => {
         <Stack marginLeft={4}>
           <Field label="Country code" marginBottom={2} width={320}>
             <NativeSelectRoot>
-              <NativeSelectField
-                defaultValue={bot?.countryCode}
-                {...register("countryCode")}
-              >
+              <NativeSelectField {...register("countryCode")}>
                 <CountryCodes />
               </NativeSelectField>
             </NativeSelectRoot>
@@ -83,7 +80,7 @@ export const BasicsForm = ({ bot }) => {
             marginBottom={4}
             width="320px"
           >
-            <Input defaultValue={bot?.phone} {...register("phone")} />
+            <Input {...register("phone")} />
           </Field>
         </Stack>
       </Fieldset.Root>

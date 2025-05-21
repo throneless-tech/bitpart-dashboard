@@ -148,7 +148,6 @@ export default function CreateBotFlow({ userId }) {
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
   const [stepCount, setStepCount] = useState(0);
-  const [dataConfirmed, setDataConfirmed] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [botPasscode, setBotPasscode] = useState("");
   const [qrLink, setQRLink] = useState("");
@@ -438,14 +437,6 @@ export default function CreateBotFlow({ userId }) {
                   </Text>
                 </>
               )}
-              <Text
-                backgroundColor="yellow.muted"
-                marginBottom={4}
-                marginTop={8}
-              >
-                Please double check that the above information is correct. You
-                will not be able to update this later.
-              </Text>
             </StepsContent>
             <StepsContent
               index={2}
@@ -456,20 +447,10 @@ export default function CreateBotFlow({ userId }) {
               <Text marginTop={10}>Here is your new bot summary:</Text>
               <Summary data={values} errors={formState.errors} />
               <Text marginTop={10}>
-                Does this look correct? If so, confirm with the checkbox below.
-                If not, go back and edit your data. You will not be able to
-                update this later.
+                Does the above information look correct? If not, go back and
+                update it. If so, click "Submit" to create your bot. You will be
+                able to edit your bot again later if needed.
               </Text>
-              <Checkbox
-                checked={dataConfirmed}
-                onCheckedChange={(e) => setDataConfirmed(!!e.checked)}
-                marginBottom={8}
-                marginTop={2}
-              >
-                Yes, the information I entered to create my bot is correct. I
-                will not be able to edit this later, and must delete this bot
-                and create a new one if I want to update it.
-              </Checkbox>
             </StepsContent>
             <StepsContent
               index={3}
@@ -583,9 +564,7 @@ export default function CreateBotFlow({ userId }) {
                 <StepsNextTrigger asChild>
                   <Button
                     disabled={
-                      isFetching ||
-                      (stepCount === 1 && !formState.isValid) ||
-                      (stepCount === 2 && !dataConfirmed)
+                      isFetching || (stepCount === 1 && !formState.isValid)
                     }
                     onClick={(e) => {
                       if (stepCount >= 4) {

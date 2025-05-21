@@ -1,4 +1,5 @@
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -26,17 +27,12 @@ export const VpnForm = ({ bot }) => {
     register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      faq: [],
-      locations: [],
-      // plans: [],
-    },
-  });
+  } = useFormContext();
 
   const {
     fields: locationFields,
     append: locationAppend,
+    replace: locationReplace,
     remove: locationRemove,
   } = useFieldArray({
     control,
@@ -46,11 +42,22 @@ export const VpnForm = ({ bot }) => {
   const {
     fields: faqFields,
     append: faqAppend,
+    replace: faqReplace,
     remove: faqRemove,
   } = useFieldArray({
     control,
     name: "faq",
   });
+
+  useEffect(() => {
+    if (bot?.faq && bot.faq.length) {
+      faqReplace(bot.faq);
+    }
+
+    if (bot?.locations && bot.locations.length) {
+      locationReplace(bot.locations);
+    }
+  }, [bot]);
 
   return (
     <>
@@ -61,11 +68,7 @@ export const VpnForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input
-          defaultValue={bot?.name}
-          placeholder="VPN Distribution Org"
-          {...register("name")}
-        />
+        <Input placeholder="VPN Distribution Org" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -77,7 +80,6 @@ export const VpnForm = ({ bot }) => {
       >
         <Textarea
           autoresize
-          defaultValue={bot?.description}
           placeholder="Start typing..."
           {...register("description")}
         />
@@ -91,7 +93,6 @@ export const VpnForm = ({ bot }) => {
         required
       >
         <NumberInputRoot
-          defaultValue={bot?.maxCodes}
           min={1}
           formatOptions={{
             maximumFractionDigits: 0,
@@ -110,11 +111,7 @@ export const VpnForm = ({ bot }) => {
         marginTop={4}
         required
       >
-        <Input
-          defaultValue={bot?.responseTime}
-          {...register("responseTime")}
-          maxW={280}
-        />
+        <Input {...register("responseTime")} maxW={280} />
       </Field>
       {/* FIXME do we need storage time? */}
       {/* <Field
@@ -158,11 +155,7 @@ export const VpnForm = ({ bot }) => {
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea
-          autoresize
-          defaultValue={bot?.activationInstructions}
-          {...register("activationInstructions")}
-        />
+        <Textarea autoresize {...register("activationInstructions")} />
       </Field>
       {/* We are currently parsing providers from csv; removing the following field */}
       {/* <Fieldset.Root

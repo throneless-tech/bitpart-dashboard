@@ -1,4 +1,5 @@
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -28,12 +29,7 @@ export const EsimForm = ({ bot }) => {
     register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      // locations: [],
-      // plans: [],
-    },
-  });
+  } = useFormContext();
 
   // const {
   //   fields: locationFields,
@@ -62,11 +58,7 @@ export const EsimForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input
-          defaultValue={bot?.name}
-          placeholder="eSIM distributor"
-          {...register("name")}
-        />
+        <Input placeholder="eSIM distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -78,7 +70,6 @@ export const EsimForm = ({ bot }) => {
       >
         <Textarea
           autoresize
-          defaultValue={bot?.description}
           placeholder="Start typing..."
           {...register("description")}
         />
@@ -112,11 +103,7 @@ export const EsimForm = ({ bot }) => {
         label="Activation instructions"
         marginTop={4}
       >
-        <Textarea
-          defaultValue={bot?.activationInstructions}
-          autoresize
-          {...register("activationInstructions")}
-        />
+        <Textarea autoresize {...register("activationInstructions")} />
       </Field>
       <Field
         errorText={
@@ -128,11 +115,7 @@ export const EsimForm = ({ bot }) => {
         label="Help section"
         marginTop={4}
       >
-        <Textarea
-          autoresize
-          defaultValue={bot?.helpInstructions}
-          {...register("helpInstructions")}
-        />
+        <Textarea autoresize {...register("helpInstructions")} />
       </Field>
       {/* <Fieldset.Root
         label="eSIM networks"

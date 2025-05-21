@@ -1,4 +1,7 @@
+"use client";
+
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -8,24 +11,26 @@ import { Field } from "@/app/components/ui/field";
 
 export const BroadcastForm = ({ bot }) => {
   const {
-    register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      // adminPhones: [],
-      faq: [],
-    },
-  });
+    register,
+  } = useFormContext();
 
   const {
     fields: faqFields,
     append: faqAppend,
+    replace: faqReplace,
     remove: faqRemove,
   } = useFieldArray({
     control,
     name: "faq",
   });
+
+  useEffect(() => {
+    if (bot?.faq && bot.faq.length) {
+      faqReplace(bot.faq);
+    }
+  }, [bot]);
 
   return (
     <>
@@ -36,11 +41,7 @@ export const BroadcastForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input
-          defaultValue={bot?.name}
-          placeholder="Broadcast list"
-          {...register("name")}
-        />
+        <Input placeholder="Broadcast list" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -68,11 +69,7 @@ export const BroadcastForm = ({ bot }) => {
         label="Safety tips"
         marginTop={4}
       >
-        <Textarea
-          autoresize
-          defaultValue={bot?.safetyTips}
-          {...register("safetyTips")}
-        />
+        <Textarea autoresize {...register("safetyTips")} />
       </Field>
       <Fieldset.Root label="FAQs" marginTop={4}>
         <Stack>
