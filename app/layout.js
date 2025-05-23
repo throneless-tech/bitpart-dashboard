@@ -27,13 +27,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
-      <body>
-        <SessionProvider>
+    <SessionProvider>
+      <html lang="en" suppressHydrationWarning>
+        {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
+        <body>
           <Provider>{children}</Provider>
-        </SessionProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

@@ -10,7 +10,7 @@ import Header from "@/app/components/header";
 import BotsList from "@/app/components/botsList";
 import NotAuthenticated from "@/app/components/notAuthenticated";
 
-export default async function Dashboard() {
+export default async function Account() {
   const session = await auth();
 
   if (!session) return <NotAuthenticated />;
@@ -22,11 +22,9 @@ export default async function Dashboard() {
       </Container>
       <Container marginY={3} maxW="2xl">
         <Heading as="h1" size="3xl" marginBottom={8}>
-          My Bots
+          My Account
         </Heading>
-        <Box>
-          <BotsList userId={session.id} />
-        </Box>
+        <Box></Box>
       </Container>
     </Box>
   );

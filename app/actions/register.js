@@ -55,7 +55,18 @@ export const register = async (prevState, formData) => {
       },
     });
 
+    const account = await prisma.account.create({
+      data: {
+        userId: user.id,
+        type: "credentials",
+        provider: "credentials",
+        providerAccountId: user.id,
+      },
+    });
+
     redirectPath = "/login?message=SignUpSuccess";
+
+    return user && account;
   } catch (e) {
     console.log(e);
 

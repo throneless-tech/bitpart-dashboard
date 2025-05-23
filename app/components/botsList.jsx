@@ -55,9 +55,6 @@ export default function BotsList({ userId }) {
       <>
         {bots && bots.length ? (
           <>
-            <Heading as="h2" size="xl">
-              My bots
-            </Heading>
             <Stack
               direction={["column", "column", "row"]}
               wrap={"wrap"}

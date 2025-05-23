@@ -34,6 +34,8 @@ export default function Header(props) {
   const color = useColorModeValue("maroon", "yellow");
   const { session } = props;
 
+  console.log(session);
+
   // submit form to attempt user login
   async function onSubmit(formData) {
     try {
@@ -70,16 +72,23 @@ export default function Header(props) {
           <Portal>
             <Menu.Positioner>
               <Menu.Content>
-                <Menu.Item>
-                  <Link color={color} href="/" variant="underline">
-                    Bitpart Home
-                  </Link>
-                </Menu.Item>
-                {session ? (
+                {!session && (
+                  <Menu.Item>
+                    <Link color={color} href="/" variant="underline">
+                      Welcome
+                    </Link>
+                  </Menu.Item>
+                )}
+                {session && (
                   <>
                     <Menu.Item>
                       <Link color={color} href="/home" variant="underline">
-                        Dashboard
+                        My Bots
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Link color={color} href="/account" variant="underline">
+                        My Account
                       </Link>
                     </Menu.Item>
                     <Menu.Item>
@@ -90,7 +99,8 @@ export default function Header(props) {
                       </form>
                     </Menu.Item>
                   </>
-                ) : (
+                )}
+                {!session && (
                   <Menu.Item>
                     <Link color={color} href="/login" variant="underline">
                       Login
@@ -131,13 +141,20 @@ export default function Header(props) {
           <Flex gap={4}>
             <ColorModeButton />
             <ClientOnly>
-              <Link color={color} href="/" variant="underline">
-                Bitpart Home
-              </Link>
-              {session && (
-                <Link color={color} href="/home" variant="underline">
-                  Dashboard
+              {!session && (
+                <Link color={color} href="/" variant="underline">
+                  Welcome
                 </Link>
+              )}
+              {session && (
+                <>
+                  <Link color={color} href="/home" variant="underline">
+                    My Bots
+                  </Link>
+                  <Link color={color} href="/account" variant="underline">
+                    My Account
+                  </Link>
+                </>
               )}
               <Link color={color} href="/about" variant="underline">
                 About Us
@@ -155,13 +172,14 @@ export default function Header(props) {
               Donate
             </Button>
             <ClientOnly>
-              {session ? (
+              {session && (
                 <form action={onSubmit}>
                   <Button color={color} type="submit" variant="subtle">
                     Logout
                   </Button>
                 </form>
-              ) : (
+              )}
+              {!session && (
                 <Link color={color} href="/login" variant="underline">
                   Login
                 </Link>

@@ -4,12 +4,18 @@ import authConfig from "./auth.config";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 
-export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
+export const {
+  auth,
+  handlers,
+  newUser,
+  signIn,
+  signOut,
+} = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
   adapter: PrismaAdapter(prisma),
   session: {
-    maxAge: 60 * 60,
-    strategy: "jwt",
+    maxAge: 60 * 30, // 30 min
+    strategy: "database",
   },
   callbacks: {
     jwt({ token, trigger, user, account }) {
@@ -36,9 +42,9 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
     username: {},
     password: {},
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-  },
+  // jwt: {
+  //   secret: process.env.NEXTAUTH_SECRET,
+  // },
   pages: {
     error: "/error",
     newUser: "/signup",
