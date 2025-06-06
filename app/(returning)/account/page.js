@@ -7,7 +7,7 @@ import { Box, Container, Heading } from "@chakra-ui/react";
 
 // components
 import Header from "@/app/components/header";
-import BotsList from "@/app/components/botsList";
+import SessionsList from "@/app/components/sessionsList";
 import NotAuthenticated from "@/app/components/notAuthenticated";
 
 export default async function Account() {
@@ -24,7 +24,9 @@ export default async function Account() {
         <Heading as="h1" size="3xl" marginBottom={8}>
           My Account
         </Heading>
-        <Box></Box>
+        <Box>
+          <SessionsList userId={session.id} />
+        </Box>
       </Container>
     </Box>
   );

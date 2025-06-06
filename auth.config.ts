@@ -2,14 +2,22 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
-
+import { encode as defaultEncode } from "next-auth/jwt"
 import { LoginSchema } from "./app/lib/definitions";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
-// Notice this is only an object, not a full Auth.js instance
-export default {
+const adapter = PrismaAdapter(prisma)
+import { v4 as uuid } from "uuid"
+
+const authConfig: NextAuthConfig = {
+  adapter,
   providers: [
     Credentials({
-      authorize: async (credentials) => {
+      credentials: {
+        username: {},
+        password: {},
+      },
+      async authorize(credentials) {
         try {
           let user = null;
 
@@ -53,6 +61,44 @@ export default {
           return null;
         }
       },
-    }),
+
+    })
   ],
-} satisfies NextAuthConfig;
+  callbacks: {
+    async jwt({ token, user, account }) {
+      if (account?.provider === "credentials") {
+        token.credentials = true
+      }
+      return token
+    },
+  },
+  jwt: {
+    encode: async function (params) {
+      console.log("PARAMS ****", params)
+      if (params.token?.credentials) {
+        const sessionToken = uuid()
+
+        if (!params.token.sub) {
+          throw new Error("No user ID found in token")
+        }
+
+        const createdSession = await prisma.session.create({
+          data: {
+            sessionToken: sessionToken,
+            userId: params.token.sub,
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+          }
+        })
+
+        if (!createdSession) {
+          throw new Error("Failed to create session")
+        }
+
+        return sessionToken
+      }
+      return defaultEncode(params)
+    },
+  },
+}
+
+export default authConfig;
