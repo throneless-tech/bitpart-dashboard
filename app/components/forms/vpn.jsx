@@ -1,4 +1,5 @@
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -18,7 +19,7 @@ import { useColorModeValue } from "@/app/components/ui/color-mode";
 // icons
 import { FiDownload } from "react-icons/fi";
 
-export const VpnForm = () => {
+export const VpnForm = ({ bot }) => {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
@@ -26,17 +27,12 @@ export const VpnForm = () => {
     register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      faq: [],
-      locations: [],
-      // plans: [],
-    },
-  });
+  } = useFormContext();
 
   const {
     fields: locationFields,
     append: locationAppend,
+    replace: locationReplace,
     remove: locationRemove,
   } = useFieldArray({
     control,
@@ -46,11 +42,22 @@ export const VpnForm = () => {
   const {
     fields: faqFields,
     append: faqAppend,
+    replace: faqReplace,
     remove: faqRemove,
   } = useFieldArray({
     control,
     name: "faq",
   });
+
+  useEffect(() => {
+    if (bot?.faq && bot.faq.length) {
+      faqReplace(bot.faq);
+    }
+
+    if (bot?.locations && bot.locations.length) {
+      locationReplace(bot.locations);
+    }
+  }, [bot]);
 
   return (
     <>

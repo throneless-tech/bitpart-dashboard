@@ -44,8 +44,9 @@ export const createPasscode = async () => {
 };
 
 // format the name of the bot for bitpart bot id
-export const formatBotName = async (botName) => {
-  const formattedBotName = botName.replace(/\s/g, "_");
+export const formatBotName = async (botName, userId) => {
+  let formattedBotName = botName.replace(/\s/g, "_");
+  formattedBotName = `${formattedBotName}_${userId}`;
 
   return formattedBotName;
 };
@@ -230,8 +231,8 @@ export const formatCreateBotData = async (data, formattedCsml) => {
 
 // format the bot phone correctly for bitpart
 export const formatPhone = async (phone, countryCode) => {
-  let formattedPhone = countryCode + phone;
-  formattedPhone = formattedPhone.replace(/^(\+)|\D/g, "$1");
+  let formattedPhone = `${countryCode} ${phone}`;
+  // formattedPhone = formattedPhone.replace(/^(\+)|\D/g, "$1");
   formattedPhone = `+${formattedPhone}`;
 
   return formattedPhone;

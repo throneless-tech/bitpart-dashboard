@@ -14,3 +14,18 @@ export const getUserBots = async (userId) => {
     console.log(e);
   }
 };
+
+export const getBot = async (botId, userId) => {
+  try {
+    const bot = await prisma.bot.findUnique({
+      where: {
+        id: botId,
+        creatorId: userId,
+      },
+    });
+
+    return bot;
+  } catch (e) {
+    console.log(e);
+  }
+};

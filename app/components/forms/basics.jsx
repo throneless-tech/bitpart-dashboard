@@ -15,7 +15,7 @@ import {
 // country codes
 import { CountryCodes } from "./countryCodes";
 
-export const BasicsForm = () => {
+export const BasicsForm = ({ bot }) => {
   const {
     register,
     control,

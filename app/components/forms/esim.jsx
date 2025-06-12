@@ -1,4 +1,5 @@
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -20,7 +21,7 @@ import { useColorModeValue } from "@/app/components/ui/color-mode";
 // icons
 import { FiDownload } from "react-icons/fi";
 
-export const EsimForm = () => {
+export const EsimForm = ({ bot }) => {
   // color mode
   const color = useColorModeValue("maroon", "yellow");
 
@@ -28,12 +29,7 @@ export const EsimForm = () => {
     register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      // locations: [],
-      // plans: [],
-    },
-  });
+  } = useFormContext();
 
   // const {
   //   fields: locationFields,
@@ -89,7 +85,11 @@ export const EsimForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue={`The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`}
+          defaultValue={
+            bot
+              ? bot.privacyPolicy
+              : `The automated system intentionally does not ask for your phone number or location, to help keep you safe. You will be asked to check if you have a compatible phone, and which mobile networks you can see where you use your phone, in order to give you an eSIM that will work.\n\nWe keep records of which eSIMs are distributed or not, in order to provide you with a valid eSIM. This data may also be associated with the profile information you share on Signal (such as your profile name, username, and/or phone number if it's visible); and with metadata (like timestamps of when you contacted us.)\n\nWe record and store this information <WHERE?>. It is deleted <HOW OFTEN?>`
+          }
           {...register("privacyPolicy")}
         />
       </Field>

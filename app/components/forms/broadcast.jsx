@@ -1,4 +1,7 @@
+"use client";
+
 // base imports
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
@@ -6,26 +9,28 @@ import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
 import { Button } from "@/app/components/ui/button";
 import { Field } from "@/app/components/ui/field";
 
-export const BroadcastForm = () => {
+export const BroadcastForm = ({ bot }) => {
   const {
-    register,
     control,
     formState: { errors },
-  } = useFormContext({
-    defaultValues: {
-      // adminPhones: [],
-      faq: [],
-    },
-  });
+    register,
+  } = useFormContext();
 
   const {
     fields: faqFields,
     append: faqAppend,
+    replace: faqReplace,
     remove: faqRemove,
   } = useFieldArray({
     control,
     name: "faq",
   });
+
+  useEffect(() => {
+    if (bot?.faq && bot.faq.length) {
+      faqReplace(bot.faq);
+    }
+  }, [bot]);
 
   return (
     <>
@@ -48,7 +53,11 @@ export const BroadcastForm = () => {
       >
         <Textarea
           autoresize
-          defaultValue="Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME / EMAIL> who runs this group."
+          defaultValue={
+            bot
+              ? bot.description
+              : "Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME / EMAIL> who runs this group."
+          }
           {...register("description")}
         />
       </Field>

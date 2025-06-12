@@ -1,7 +1,7 @@
 "use client";
 
 // base imports
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // chakra ui imports
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
@@ -20,11 +20,15 @@ export default function BotsList({ userId }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
 
-  async function fetchBots() {
+  const fetchBots = useCallback(async () => {
     const fetchedBots = await getUserBots(userId);
     setBots(fetchedBots);
     setIsFetching(false);
-  }
+  });
+
+  useEffect(() => {
+    fetchBots();
+  }, []);
 
   async function handleDelete(id, phone) {
     setIsFetching(true);
@@ -64,16 +68,14 @@ export default function BotsList({ userId }) {
               gap={[4, 4, 8]}
               marginTop={4}
             >
-              {bots &&
-                bots.length &&
-                bots.map((bot, index) => (
-                  <BotCard
-                    key={`${bot.botType}-${index}`}
-                    bot={bot}
-                    handleDelete={handleDelete}
-                    userId={userId}
-                  />
-                ))}
+              {bots.map((bot, index) => (
+                <BotCard
+                  key={`${bot.botType}-${index}`}
+                  bot={bot}
+                  handleDelete={handleDelete}
+                  userId={userId}
+                />
+              ))}
             </Stack>
           </>
         ) : (
