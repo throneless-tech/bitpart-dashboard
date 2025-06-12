@@ -1,3 +1,9 @@
+## 0.1.10 (2025-06-12)
+
+### Fix
+
+- #28 add user ids to bitpart ids for more bot id variability
+
 ## 0.1.9 (2025-05-16)
 
 ### Fix
