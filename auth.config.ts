@@ -26,9 +26,6 @@ export default {
           // 2. Prepare data for insertion into database
           const { username, password } = validatedFields;
 
-          // Hash the user's password before storing it when creating a new user
-          // const hashedPassword = await bcrypt.hash(password, 10)
-
           // 3. Insert the user into the database or verify if the user exists
           user = await prisma.user.findUnique({
             where: {
