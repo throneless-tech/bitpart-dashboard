@@ -18,7 +18,7 @@ import {
 
 // component imports
 import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "../components/header";
+import Header from "@/app/components/header";
 
 export default function About() {
   // session
