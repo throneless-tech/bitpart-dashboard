@@ -82,7 +82,6 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_interface_step
   } else
     say "Sorry, I did not get that."
-    remember count = count + 1
     goto delete_me_confirm_step
 
 privacy_policy_step:

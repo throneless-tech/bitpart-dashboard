@@ -185,7 +185,7 @@ export const formatCsml = async (data, passcode) => {
           csml = csml.replace(`[${field}.solutions]`, solutions);
         }
       } else {
-        csml = csml.replace(`[${field}]`, data[field]);
+        csml = csml.replaceAll(`[${field}]`, data[field]);
       }
 
       csml = csml.replace(`[passcode]`, passcode);

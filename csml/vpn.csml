@@ -47,14 +47,12 @@ admin_interface_step:
 
   if (event == 1) {
     
-    // TODO JOSH: how does the admin ask for the messages left for them?
-
-    goto admin_interface_step
-  } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
 
     goto end
-  } else if (event == 3) {
+  } else if (event == 2) {
+    say "I am now closing this conversation. Please send the passcode again if you need me."
+
     goto delete_me_confirm_step
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
@@ -116,12 +114,15 @@ request_step:
     goto human_support_step
   }
 
-  if (event <= [maxCodes]) {
+  if (event <= "[maxCodes]".to_int()) {
+    say "You have asked for {{event}} codes"
     remember codesNumber = event
     goto share_codes_step
-  } else if (event > [maxCodes]) {
+  } else if (event > "[maxCodes]".to_int()) {
     goto over_limit_step
   } else {
+    say "You have asked for {{event}} codes. The limit is [maxCodes]"
+
     say "Sorry, I did not get that. Please enter a number."
     remember count = count + 1
     goto request_step
@@ -162,7 +163,7 @@ or
 Reply with 'Human' for a team member to meet your request manually."
   hold
 
-  if (event.is_number()) {
+  if (event.to_int() <= "[maxCodes]".to_int()) {
     goto request_step
   } else if (event.to_lowercase() == "human") {
     // TODO save request to send to help step

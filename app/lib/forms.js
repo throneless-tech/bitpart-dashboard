@@ -112,7 +112,7 @@ export const schema = yup.object({
   }),
   maxCodes: yup.number().when("botType", {
     is: "vpn",
-    then: () => yup.number().optional(),
+    then: () => yup.number(),
   }),
   // vpnName: yup.string().when("botType", {
   //   is: "vpn",
