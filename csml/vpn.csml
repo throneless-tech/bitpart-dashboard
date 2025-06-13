@@ -121,6 +121,8 @@ request_step:
     goto share_codes_step
   } else if (event > [maxCodes]) {
     goto over_limit_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that. Please enter a number."
     remember count = count + 1
@@ -147,6 +149,8 @@ Otherwise, please send us a message next time you need VPN codes."
 
   if (event.to_lowercase() == "help") {
     goto help_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     goto i_dont_understand_step
   }
@@ -164,6 +168,8 @@ Reply with 'Human' for a team member to meet your request manually."
 
   if (event.is_number()) {
     goto request_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else if (event.to_lowercase() == "human") {
     // TODO save request to send to help step
     goto human_support_step
@@ -191,6 +197,8 @@ If you want to contact the team directly, reply with 'Human'."
 
   if (event.to_lowercase() == "help") {
     goto help_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else if (event.to_lowercase() == "human" ) {
     goto human_support_step
   } else {
@@ -211,6 +219,8 @@ help_step:
   }
   else if (event.to_lowercase() == "help" ) {
     goto human_support_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that."
     remember count = count + 1
@@ -230,6 +240,8 @@ Reply with 'End' to end the conversation for now."
     goto other_help_step
   } else if (event.to_lowercase() == "help") {
     goto help_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
