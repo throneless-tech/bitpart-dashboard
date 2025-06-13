@@ -55,7 +55,7 @@ export const BasicsForm = ({ bot }) => {
       </Field>
       <Fieldset.Root marginTop={8}>
         <Stack>
-          <Fieldset.Legend>Bot phone number details</Fieldset.Legend>
+          <Fieldset.Legend>Bot phone number details (OPTIONAL)</Fieldset.Legend>
           <Fieldset.HelperText>
             Optionally provide the phone number that will be associated with the
             bot's Signal account. The bot will be added as a secondary device on
