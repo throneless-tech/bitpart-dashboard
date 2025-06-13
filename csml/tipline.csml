@@ -191,7 +191,7 @@ contact_method_step:
   }
 
 record_number_step:
-  say "Thank you. Your preference is noted. Please share your preferred phone number."
+  say "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable."
   hold
 
   remember contact_number = event
