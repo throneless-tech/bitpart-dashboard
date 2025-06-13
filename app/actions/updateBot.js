@@ -78,7 +78,7 @@ export const updateBotBitpart = async (data, bitpartId, passcode) => {
     data: {
       id: bitpartId,
       name: data.botName,
-      apps_endpoint: process.env.EMS_ENDPOINT,
+      apps_endpoint: `http://${process.env.EMS_SERVER_URL}:${process.env.EMS_PORT}${process.env.EMS_ENDPOINT}`,
       flows: [
         {
           id: "Default",
