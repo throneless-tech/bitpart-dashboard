@@ -1,3 +1,13 @@
+## 0.1.11 (2025-06-16)
+
+### Fix
+
+- #74 update language on FAQ page
+- #25 UX for showing bot phone number is an optional field
+- #48 update text for tipline contact method
+- related to #26, update confirmation page langauge
+- #39 update langauge for emergency support contact in helpdesk form
+
 ## 0.1.10 (2025-06-12)
 
 ### Fix
