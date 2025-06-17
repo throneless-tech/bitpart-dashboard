@@ -43,9 +43,9 @@ export const HelpdeskForm = ({ bot }) => {
       </Field>
       <Field
         errorText={!!errors?.referral && errors.referral.message}
-        helperText="Who or where a person should contact for immediate assistance, such as if they are in immediate physical danger."
+        helperText="Add a phone number, Signal username, or link to a service that a person should contact if they need emergency assistance. For example, this could be emergency services or your work phone. It depends on your helpdesk as to what is appropriate."
         invalid={!!errors?.referral}
-        label="Referral"
+        label="Emergency support contact"
         marginTop={4}
         required
       >

@@ -14,8 +14,9 @@ export const TiplineConfirmation = (props) => {
         </Text>
         <List.Root as="ol" lineHeight={2} marginLeft={4} marginTop={2}>
           <List.Item>
-            Message your bot with the following passcode from the number you
-            would like tips forwarded to (optional):{" "}
+            Optional: If you would like the tips forwarded to a different number
+            than the one to which your bot is connected, send the following
+            passcode from that number:{" "}
             <Text as="span" fontSize="xl">
               {props?.passcode}
             </Text>
@@ -29,7 +30,7 @@ export const TiplineConfirmation = (props) => {
           </List.Item>
           <List.Item>
             <Text>
-              Go to{" "}
+              Go{" "}
               <Link color={props?.color} href="/home" variant="underline">
                 home
               </Link>{" "}

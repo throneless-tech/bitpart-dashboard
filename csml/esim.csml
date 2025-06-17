@@ -35,21 +35,15 @@ We use an automated messaging system so you can get quicker responses, but you c
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-1. Receive messages
-2. Exit this conversation
-3. Delete my data")
+1. Exit this conversation
+2. Delete my data")
   hold
 
   if (event == 1) {
-    
-    // TODO JOSH: how does the admin ask for the messages left for them?
-
-    goto admin_interface_step
-  } else if (event == 2) {
     say "I am now closing this conversation. Please send the passcode again if you need me."
 
     goto end
-  } else if (event == 3) {
+  } else if (event == 2) {
     goto delete_me_confirm_step
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
@@ -209,6 +203,8 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
       goto get_esim_1_step
     }
 
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     say "Sorry, I did not get that."
     remember count = count + 1
@@ -233,6 +229,10 @@ Which of the following mobile networks do you see?
 List all networks available separated by a comma  e.g. :
 1,2,5")
   hold
+
+  if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } 
 
   remember locations = event
 
@@ -264,6 +264,8 @@ If you can't get it to work, reply with 'Help'.")
 
   if (event.to_lowercase() == "help") {
     goto help_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else {
     remember count = count + 1
     goto get_esim_3_step
@@ -308,6 +310,8 @@ Step 1: Open your phone's Settings.
     goto follow_up_step
   } else if (event == 4) {
     goto human_support_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
   } else { 
     say "Sorry, I did not get that."
     remember count = count + 1
@@ -332,6 +336,8 @@ Reply with 'End' to end this chat for today.")
       say "Thanks for using this service, we hope your eSIM helps."
       
       goto end
+    } else if (event.to_lowercase() == "delete") {
+      goto delete_data_step
     } else {
       say "Sorry, I did not get that."
       remember count = count + 1
