@@ -20,7 +20,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    say "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
     hold
 
     if (event.to_lowercase() == "help") {
@@ -59,11 +59,11 @@ admin_interface_step:
 
   if (event == 1) {
     
-    say "I am now closing this conversation. Please send the passcode again if you need me."
+    say "I am now closing this conversation. Please send a message again if you need me."
 
     goto end
   } else if (event == 2) {
-    say "I am now closing this conversation. Please send the passcode again if you need me."
+    say "After this, you will need to send the passcode again if you need me."
 
     goto delete_me_confirm_step
   } else if (event.to_lowercase() == "help") {
@@ -134,10 +134,12 @@ request_step:
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "You have asked for {{event}} codes. The limit is [maxCodes]"
+    say "You have asked for {{event}} codes. The limit is [maxCodes]. Please enter a lower number."
 
-    say "Sorry, I did not get that. Please enter a number."
     remember count = count + 1
+
+    hold
+
     goto request_step
   }
 
@@ -180,15 +182,15 @@ over_limit_step:
 You can either:
 Send a number lower than [maxCodes]
 or
-Reply with 'Human' for a team member to meet your request manually."
+Reply with the number of codes you would like to request, for a team member to meet your request manually."
   hold
 
   if (event <= [maxCodes]) {
     goto request_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
-  } else if (event.to_lowercase() == "human") {
-    // TODO save request to send to help step
+  } else if (event > [maxCodes]) {
+    remember request = event
     goto human_support_step
   }
 
@@ -196,7 +198,7 @@ human_support_step:
   // send request to admin
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
 
-  whisper "A user has asked for help with VPN codes: {{event.client.user_id}}"
+  whisper "A user has asked for {{request}} VPN codes. They can be contacted at {{event.content.client.user_id}}"
   goto end
 
   // TODO SACHA: say something to close out convo?
@@ -267,6 +269,42 @@ Reply with 'End' to end the conversation for now."
     goto help_step
   }
 
+check_if_solved_step:
+  if (count >= 3) {
+    goto other_help_step
+  }
+
+  say "Did that solve your problem?
+
+Reply Yes or No."
+  hold
+
+  if (event.to_lowercase() == "yes") {
+    say Text("Reply with 'help' to see the list of questions again. You can also say 'End' or 'Delete'")
+    hold
+
+    if (event.to_lowercase() == "help") {
+      goto help_step
+    } else if (event.to_lowercase() == "end") {
+      say "Please contact us again if you need us."
+      goto end
+    } else if (event.to_lowercase() == "delete") {
+      goto consent_disagree_step
+    } 
+    else
+      say "Sorry, I did not get that."
+      hold
+      remember count = count + 1
+      goto check_if_solved_step
+  } else if (event.to_lowercase() == "no") {
+    goto other_help_step
+  } 
+  else
+    say "Sorry, I did not get that."
+    hold
+    remember count = count + 1
+    goto check_if_solved_step
+
 other_help_step:
   say "We've understood that you have a question not covered by the help section. Please type your question:"
   hold
@@ -278,4 +316,12 @@ other_help_step:
   
   say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
 
-  goto end
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else {
+    goto start
+  }
+
+  // goto end // we are not ending the conversation, uncomment if that changes

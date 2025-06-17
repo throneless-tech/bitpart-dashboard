@@ -9,7 +9,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say Text("Welcome, you are now set up as a user who can receive messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
+    say Text("Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
     hold
 
     if (event.to_lowercase() == "help") {
@@ -40,7 +40,7 @@ admin_interface_step:
   hold
 
   if (event == 1) {
-    say "I am now closing this conversation. Please send the passcode again if you need me."
+    say "I am now closing this conversation. Please send a message again if you need me."
 
     goto end
   } else if (event == 2) {
@@ -357,4 +357,16 @@ Please share what you need help with and a member of our team will get back to y
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 
-  goto end
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    goto start
+  }
+
+  // goto end // we are not ending the conversation, uncomment if that changes
+

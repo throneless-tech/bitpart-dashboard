@@ -134,11 +134,11 @@ export const formatCsml = async (data, passcode) => {
 
           if (data[field].length) {
             questions =
-              "FAQ\n\nHere are some frequently answered questions. Does your question fall under one of these?";
+              "FAQ\n\nHere are some frequently asked questions. Does your question fall under one of these?\n";
 
             data[field].map((f, i) => {
               if (f.question.length) {
-                questions = questions + `\n${i + 1}. ${f.question}`;
+                questions = questions + `${i + 1}. ${f.question}\n`;
               }
 
               if (f.answer.length) {
@@ -153,7 +153,7 @@ export const formatCsml = async (data, passcode) => {
 
             questions =
               questions +
-              `${data[field].length}. Other\n\nReply with the number.`;
+              `${data[field].length + 1}. Other\n\nReply with the number.`;
 
             csml = csml.replace(`[${field}.length]`, length + 1);
             csml = csml.replace(`[${field}.answers]`, answers);

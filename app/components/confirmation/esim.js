@@ -23,17 +23,18 @@ export const EsimConfirmation = (props) => {
             </Text>
           </List.Item>
           <List.Item>
-            Test your eSIM distribution bot by using a different number to send
-            a Signal message to your channel.
+            Test your bot by using a different number to send a Signal message
+            to your bot.
           </List.Item>
           <List.Item>
-            Share your channel widely with your target audience.
+            Share your bot's Signal contact information with your target
+            audience.
           </List.Item>
           <List.Item>
             <Text>
-              Go{" "}
+              Go to{" "}
               <Link color={props?.color} href="/home" variant="underline">
-                home
+                My Bots
               </Link>{" "}
               to see your bots and create a new one. You will also be able to
               find the passcode there.

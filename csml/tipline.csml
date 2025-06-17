@@ -9,7 +9,7 @@ start:
     // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a user who will receive tips. You will receive messages from users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    say "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
     hold
 
     if (event.to_lowercase() == "help") {
@@ -50,7 +50,7 @@ admin_interface_step:
   hold
 
   if (event == 1) {
-    say "I am now closing this conversation. Please send the passcode again if you need me."
+    say "I am now closing this conversation. Please send a message again if you need me."
 
     goto end
   } else if (event == 2) {
@@ -231,4 +231,4 @@ Here is the tip they provided: {{tip}}"
     goto confirm_contact_method_step
   }
 
-  goto end
+  // goto end // we are not ending the conversation, uncomment if that changes

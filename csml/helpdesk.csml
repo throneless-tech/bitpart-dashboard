@@ -9,7 +9,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say Text("Welcome, you are now set up as a user who can receive helpdesk messages from people who have asked for human support. You will receive messages from users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
+    say Text("Welcome, you are now set up as a bot administrator who can receive helpdesk messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
     hold
 
     if (event.to_lowercase() == "help") {
@@ -65,7 +65,7 @@ admin_interface_step:
   hold
 
   if (event == 1) {
-    say "I am now closing this conversation. Please send the passcode again if you need me."
+    say "I am now closing this conversation. Please send a message again if you need me."
 
     goto end
   } else if (event == 2) {
@@ -244,5 +244,19 @@ human_support_step:
 
   // bitpart flags problem to admin
   whisper "A user asked the helpdesk the following question, which they were unable to solve: {{problem}}. They can be contacted at {{event.client.user_id}}"
+
+  hold
+
+  if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    goto start
+  }
   
-  goto end
+  // goto end // we are not ending the conversation, uncomment if that changes
+
