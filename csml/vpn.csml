@@ -1,5 +1,17 @@
 // This is a template. It will not work before being processed by the system
 
+fn parse_codes(c) {
+  do codes_string = ""
+  foreach (item) in c {
+    do codes_string = codes_string + "Provider: {{item.provider}}
+Code: {{item.secret}}
+=====
+"
+  }
+
+  return codes_string
+}
+
 start:
 // if bitpart receives passcode, set admin
   do passcode = event.to_uppercase()
@@ -114,11 +126,10 @@ request_step:
     goto human_support_step
   }
 
-  if (event <= "[maxCodes]".to_int()) {
-    say "You have asked for {{event}} codes"
+  if (event <= [maxCodes]) {
     remember codesNumber = event
     goto share_codes_step
-  } else if (event > "[maxCodes]".to_int()) {
+  } else if (event > [maxCodes]) {
     goto over_limit_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
@@ -131,16 +142,21 @@ request_step:
   }
 
 share_codes_step:
+  say "You have asked for {{codesNumber}} codes."
   // get the codes from bitpart with external function call to EMS
-  do codes = App("ems", method_id="VpnData", quantity=codesNumber )
+  do unfilteredCodes = App("ems", method_id="VpnData", quantity=codesNumber.to_int() )
+  do codes = parse_codes(unfilteredCodes)
+
   say "Here is the list of VPN codes:
   
 {{codes}}"
+
 
   // TODO parse the bitpart data to list the codes if needed
   say "Here are instructions on how to activate the VPN codes.
 
 [activationInstructions]"
+
   say "If you need further support please type 'Help'
 
 Otherwise, please send us a message next time you need VPN codes."
@@ -167,7 +183,7 @@ or
 Reply with 'Human' for a team member to meet your request manually."
   hold
 
-  if (event.to_int() <= "[maxCodes]".to_int()) {
+  if (event <= [maxCodes]) {
     goto request_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
