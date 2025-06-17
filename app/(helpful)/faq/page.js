@@ -848,8 +848,11 @@ export default function FAQ() {
           How can I edit the text in my bot?
         </Heading>
         <Text marginTop={4}>
-          Navigate to your Dashboard. There you will see a list of the bots you
-          have created.
+          Navigate to your Dashboard/My bots page. There you will see a list of
+          the bots you have created. Click the "Edit" button on the bot your
+          wish to edit. You will see the information you previously entered when
+          creating the bot. Change the information you would like ot edit, then
+          confirm by pressing "Edit."
         </Text>
         <Heading id="my-bot-is-getting-spammed" marginTop={8} size="lg">
           My bot is getting spammed, what can I do?
