@@ -56,7 +56,7 @@ export function LoginForm() {
       const res = await login(formData);
 
       if (res.success) {
-        router.push("/home");
+        router.push("/bots");
       } else {
         console.log(res.message);
         toaster.create({

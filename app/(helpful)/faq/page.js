@@ -675,7 +675,7 @@ export default function FAQ() {
           <List.Item>
             Find the passcode by navigating to your{" "}
             <ClientOnly>
-              <Link color={color} href="/home" variant="underline">
+              <Link color={color} href="/bots" variant="underline">
                 dashboard
               </Link>
             </ClientOnly>{" "}

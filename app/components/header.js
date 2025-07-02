@@ -73,14 +73,14 @@ export default function Header(props) {
                 {!session && (
                   <Menu.Item>
                     <Link color={color} href="/" variant="underline">
-                      Bitpart Home
+                      Bitpart
                     </Link>
                   </Menu.Item>
                 )}
                 {session ? (
                   <>
                     <Menu.Item>
-                      <Link color={color} href="/home" variant="underline">
+                      <Link color={color} href="/bots" variant="underline">
                         My Bots
                       </Link>
                     </Menu.Item>
@@ -135,11 +135,11 @@ export default function Header(props) {
             <ClientOnly>
               {!session && (
                 <Link color={color} href="/" variant="underline">
-                  Bitpart Home
+                  Bitpart
                 </Link>
               )}
               {session && (
-                <Link color={color} href="/home" variant="underline">
+                <Link color={color} href="/bots" variant="underline">
                   My Bots
                 </Link>
               )}

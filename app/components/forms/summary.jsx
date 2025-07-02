@@ -57,8 +57,8 @@ export const Summary = ({ data, errors, botId, userId }) => {
           <Text>You do not have access rights to view or edit this bot.</Text>
           <Text marginTop={4}>
             You can{" "}
-            <Link color={color} href="/home" variant="underline">
-              return home
+            <Link color={color} href="/bots" variant="underline">
+              return to My Bots
             </Link>
             .
           </Text>

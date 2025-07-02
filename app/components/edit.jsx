@@ -195,8 +195,8 @@ export default function EditBotFlow({ botId, userId }) {
           <Text>You do not have access rights to view or edit this bot.</Text>
           <Text marginTop={4}>
             You can{" "}
-            <Link color={color} href="/home" variant="underline">
-              return home
+            <Link color={color} href="/bots" variant="underline">
+              return to My Bots
             </Link>
             .
           </Text>
@@ -268,7 +268,7 @@ export default function EditBotFlow({ botId, userId }) {
             <Spinner size="xl" />
           )}
           <HStack gap={4} marginTop={8}>
-            <Button as="a" href="/home" size="sm" variant="outline">
+            <Button as="a" href="/bots" size="sm" variant="outline">
               Cancel
             </Button>
             <Button

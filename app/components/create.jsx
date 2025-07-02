@@ -268,8 +268,8 @@ export default function CreateBotFlow({ userId }) {
           <Text>
             You have reached the limit on how many bots a user may create.
             Please{" "}
-            <Link color={color} href="/home" variant="underline">
-              return home
+            <Link color={color} href="/bots" variant="underline">
+              return to My Bots
             </Link>{" "}
             and delete a bot if you would like to create a new one.
           </Text>
@@ -568,7 +568,7 @@ export default function CreateBotFlow({ userId }) {
                     }
                     onClick={(e) => {
                       if (stepCount >= 4) {
-                        router.push("/home");
+                        router.push("/bots");
                       }
                       if (stepCount === 2) {
                         updateStepCount(-1);
@@ -584,7 +584,7 @@ export default function CreateBotFlow({ userId }) {
                     {stepCount === 2
                       ? "Submit"
                       : stepCount >= 4
-                        ? "Go home"
+                        ? "Go to My Bots"
                         : "Next"}
                   </Button>
                 </StepsNextTrigger>

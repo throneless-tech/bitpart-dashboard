@@ -31,7 +31,7 @@ export const BroadcastConfirmation = (props) => {
           <List.Item>
             <Text>
               Go to{" "}
-              <Link color={props?.color} href="/home" variant="underline">
+              <Link color={props?.color} href="/bots" variant="underline">
                 My Bots
               </Link>{" "}
               to see your bots and create a new one. You will also be able to
