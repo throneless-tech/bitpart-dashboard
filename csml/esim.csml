@@ -96,6 +96,8 @@ Enter the number")
   hold
 
   if (event == 1) {
+    // external app call to EMS to notify of locations; handle no locations match
+    remember providers = App("ems", method_id="GetProviders")
     goto get_esim_1_step
   } else if (event == 2) {
     goto help_step
@@ -224,7 +226,7 @@ To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Au
 
 Which of the following mobile networks do you see?
 
-[locations]
+{{providers}}
 
 List all networks available separated by a comma  e.g. :
 1,2,5")
@@ -236,9 +238,6 @@ List all networks available separated by a comma  e.g. :
 
   remember locations = event
 
-  // external app call to EMS to notify of locations; handle no locations match
-  remember providers = App("ems", method_id="GetProviders")
-
   goto get_esim_3_step
 
 get_esim_3_step:
@@ -248,7 +247,7 @@ get_esim_3_step:
 
   say Text("Step 3:
 
-A code will follow with you unique eSIM.
+A code will follow with your unique eSIM.
 
 Here are the instructions for it to work:
 
