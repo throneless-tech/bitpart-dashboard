@@ -236,7 +236,7 @@ List all networks available separated by a comma  e.g. :
     goto delete_data_step
   } 
 
-  remember locations = event
+  remember provider = event
 
   goto get_esim_3_step
 
@@ -245,9 +245,13 @@ get_esim_3_step:
     goto human_support_step
   }
 
+  remember esim = App("ems", method_id = "EsimData", provider=provider)
+
   say Text("Step 3:
 
-A code will follow with your unique eSIM.
+Here is a unique eSIM code for you:
+
+{{esim}}
 
 Here are the instructions for it to work:
 
@@ -256,10 +260,7 @@ Here are the instructions for it to work:
 If you can't get it to work, reply with 'Help'.")
   hold
 
-  // external app call to EMS for an esim code from 1 network
-  do esim = App("ems", method_id = "EsimData", provider=providers[0])
-
-  say "{{esim}}"
+  //TODO: what should the flow here be?
 
   if (event.to_lowercase() == "help") {
     goto help_step
