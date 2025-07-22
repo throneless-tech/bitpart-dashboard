@@ -6,8 +6,8 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
 import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
-import { Button } from "@/app/components/ui/button";
-import { Field } from "@/app/components/ui/field";
+import { Button } from "@/app/_components/ui/button";
+import { Field } from "@/app/_components/ui/field";
 
 export const BroadcastForm = ({ bot }) => {
   const {

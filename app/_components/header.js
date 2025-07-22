@@ -5,7 +5,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 // actions imports
-import { logout } from "@/app/actions/logout";
+import { logout } from "@/app/_actions/logout";
 
 // chakra ui imports
 import {
@@ -23,8 +23,8 @@ import {
 import {
   ColorModeButton,
   useColorModeValue,
-} from "@/app/components/ui/color-mode";
-import { toaster } from "@/app/components/ui/toaster";
+} from "@/app/_components/ui/color-mode";
+import { toaster } from "@/app/_components/ui/toaster";
 
 // icons imports
 import { RxHamburgerMenu } from "react-icons/rx";

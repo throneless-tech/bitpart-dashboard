@@ -6,9 +6,9 @@ import { auth } from "@/auth";
 import { Box, Container, Heading } from "@chakra-ui/react";
 
 // components
-import Header from "@/app/components/header";
-import BotsList from "@/app/components/botsList";
-import NotAuthenticated from "@/app/components/notAuthenticated";
+import Header from "@/app/_components/header";
+import BotsList from "@/app/_components/botsList";
+import NotAuthenticated from "@/app/_components/notAuthenticated";
 
 export default async function Dashboard() {
   const session = await auth();

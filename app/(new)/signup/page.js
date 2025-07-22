@@ -5,9 +5,9 @@ import React from "react";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/app/components/ui/color-mode";
-import Header from "@/app/components/header";
-import { SignupForm } from "@/app/components/signup";
+import { ColorModeButton } from "@/app/_components/ui/color-mode";
+import Header from "@/app/_components/header";
+import { SignupForm } from "@/app/_components/signup";
 
 export default function Signup() {
   return (

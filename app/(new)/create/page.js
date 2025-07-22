@@ -6,9 +6,9 @@ import { auth } from "@/auth";
 import { Box, Container } from "@chakra-ui/react";
 
 // component imports
-import CreateBotFlow from "@/app/components/create";
-import Header from "@/app/components/header";
-import NotAuthenticated from "@/app/components/notAuthenticated";
+import CreateBotFlow from "@/app/_components/create";
+import Header from "@/app/_components/header";
+import NotAuthenticated from "@/app/_components/notAuthenticated";
 
 export default async function Create() {
   const session = await auth();

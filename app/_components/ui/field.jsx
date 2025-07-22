@@ -16,9 +16,9 @@ import {
   DrawerRoot,
   DrawerTitle,
   DrawerTrigger,
-} from "@/app/components/ui/drawer";
-import PrivacyPolicyText from "@/app/components/drawer/privacyPolicy";
-import SafetyTipsText from "@/app/components/drawer/safetyTips";
+} from "@/app/_components/ui/drawer";
+import PrivacyPolicyText from "@/app/_components/drawer/privacyPolicy";
+import SafetyTipsText from "@/app/_components/drawer/safetyTips";
 
 // icons
 import { LuInfo } from "react-icons/lu";

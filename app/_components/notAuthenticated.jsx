@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export default function NotAuthenticated() {
   // color mode

@@ -6,9 +6,9 @@ import { auth } from "@/auth";
 import { Box, Container } from "@chakra-ui/react";
 
 // component imports
-import EditBotFlow from "@/app/components/edit";
-import Header from "@/app/components/header";
-import NotAuthenticated from "@/app/components/notAuthenticated";
+import EditBotFlow from "@/app/_components/edit";
+import Header from "@/app/_components/header";
+import NotAuthenticated from "@/app/_components/notAuthenticated";
 
 export default async function Edit({ params }) {
   const { id } = await params;
