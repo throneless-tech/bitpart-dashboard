@@ -2,8 +2,8 @@
 
 // base imports
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // form validation imports
 import { FormProvider, useForm } from "react-hook-form";
@@ -144,6 +144,7 @@ const valuesToUnregister = [
 
 export default function CreateBotFlow({ userId }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
@@ -151,6 +152,8 @@ export default function CreateBotFlow({ userId }) {
   const [isFetching, setIsFetching] = useState(false);
   const [botPasscode, setBotPasscode] = useState("");
   const [qrLink, setQRLink] = useState("");
+
+  const step = searchParams.get("step");
 
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
@@ -165,11 +168,31 @@ export default function CreateBotFlow({ userId }) {
 
   useEffect(() => {}, [notAllowed]);
 
-  // update the step count based on prev or next
+  // update the step count based on prev or next button
   const updateStepCount = (step) => {
     setStepCount((stepCount) => (stepCount += step));
     window.scrollTo(0, 0);
   };
+
+  // update the step count based on prev or next browser step
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    if (step) {
+      setStepCount(parseInt(step));
+    } else {
+      router.push(`create?${createQueryString("step", "0")}`);
+    }
+  }, [step]);
 
   const methods = useForm({
     defaultValues: { botType: "broadcast" },
@@ -554,7 +577,10 @@ export default function CreateBotFlow({ userId }) {
                 <StepsPrevTrigger asChild>
                   <Button
                     disabled={stepCount === 0 || stepCount === 3}
-                    onClick={() => updateStepCount(-1)}
+                    onClick={() => {
+                      // updateStepCount(-1)
+                      router.push(`?step=${stepCount - 1}`);
+                    }}
                     size="sm"
                     variant="outline"
                   >
@@ -575,8 +601,9 @@ export default function CreateBotFlow({ userId }) {
                         methods.handleSubmit(onSubmit, onError)(e);
                       }
                       if (!isFetching) {
-                        updateStepCount(1);
+                        // updateStepCount(1);
                       }
+                      router.push(`?step=${stepCount + 1}`);
                     }}
                     size="sm"
                     variant="outline"
