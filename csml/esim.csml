@@ -352,21 +352,97 @@ Please share what you need help with and a member of our team will get back to y
 
   remember problem = event
 
-  // flag relevant data to bitpart
-  whisper "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
-
-  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
-
-  hold
-
   if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
   } else {
-    goto start
+    goto contact_method_step
   }
 
   // goto end // we are not ending the conversation, uncomment if that changes
 
+contact_method_step:
+  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  
+1. Signal call
+2. Signal text message
+3. Phone call
+4. Any
+5. None, don't contact me")
+
+  hold
+
+  if (event == 1) {
+    remember contact_preference = "signal call"
+    goto record_number_step    
+  } else if (event == 2) {
+    remember contact_preference = "signal text message"
+    goto record_number_step    
+  } else if (event == 3) {
+    remember contact_preference = "phone call"
+    goto record_number_step    
+  } else if (event == 4 || event == 5) {
+    goto confirm_contact_method_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please choose a number from the list."
+    goto contact_method_step
+  }
+
+record_number_step:
+  say "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable."
+  hold
+
+  remember contact_number = event
+
+  // flag relevant data to bitpart
+  whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  
+Here is the problem they experienced: {{problem}}"
+
+  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+
+  goto end
+
+confirm_contact_method_step:
+  say Text("Reply 'Yes' to confirm we can use any method to contact you.
+  
+Reply 'Back' to go to the previous menu of options
+    
+Reply 'No' if you prefer to not be contacted.")
+  hold
+
+  if (event.to_lowercase() == "yes") {
+    say "Thank you. Your preference is noted."
+
+    whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via any method, contact {{contact_number}}.
+    
+Here is the problem they experienced: {{problem}}"
+
+    // TODO SACHA do we accept another message after this?
+  } else if (event.to_lowercase() == "no") {
+    say "Ok, we will not contact you. Thanks again for the heads up."
+
+    whisper "A user had the following problem not covered in the help section of the eSIM distribution: {{problem}}.
+    
+They sent this problem anonymously and did not wish to be contacted."
+
+    goto end
+  } else if (event.to_lowercase() == "back") {
+    goto contact_method_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else {
+    say "Sorry, I did not get that."
+    goto confirm_contact_method_step
+  }
+
+  // goto end // we are not ending the conversation, uncomment if that changes
