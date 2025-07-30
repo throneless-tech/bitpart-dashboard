@@ -14,6 +14,15 @@ export const parseCSV = (botId, botType, fileList) => {
       let data = results.data;
 
       data = data.map((item) => {
+        console.log("*****ITEM", item);
+
+        const keys = Object.keys(item);
+
+        keys.forEach((key) => {
+          item[key.split("-")[1]] = item[key]; //taking into account the invalid characters that can be introduced depending on UTF formatting
+          delete item[key];
+        });
+
         return {
           bot_id: botId,
           ...item,
@@ -27,3 +36,5 @@ export const parseCSV = (botId, botType, fileList) => {
     skipEmptyLines: "greedy",
   });
 };
+
+// item.key.replace(/[^a-zA-Z]/g, '')
