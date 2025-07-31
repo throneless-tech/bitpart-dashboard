@@ -1,6 +1,9 @@
 import Papa from "papaparse";
 import { sendToEMS } from "@/app/actions/ems.js";
 
+// list of accepted column headers in the EMS database
+const HEADERS = ["provider", "code", "iccid", "smdp", "secret"];
+
 export const parseCSV = (botId, botType, fileList) => {
   if (fileList.length > 1) {
     throw new Error("Only one csv file is allowed.");
@@ -14,13 +17,19 @@ export const parseCSV = (botId, botType, fileList) => {
       let data = results.data;
 
       data = data.map((item) => {
-        console.log("*****ITEM", item);
-
         const keys = Object.keys(item);
 
-        keys.forEach((key) => {
-          item[key.split("-")[1]] = item[key]; //taking into account the invalid characters that can be introduced depending on UTF formatting
-          delete item[key];
+        // headers clean up
+        keys.map((key) => {
+          HEADERS.map((header) => {
+            if (key === header) {
+              return;
+            }
+            if (key.includes(header)) {
+              item[header] = item[key];
+              delete item[key];
+            }
+          });
         });
 
         return {
@@ -36,5 +45,3 @@ export const parseCSV = (botId, botType, fileList) => {
     skipEmptyLines: "greedy",
   });
 };
-
-// item.key.replace(/[^a-zA-Z]/g, '')
