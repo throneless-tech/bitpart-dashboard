@@ -181,15 +181,15 @@ export const formatCsml = async (data, passcode) => {
               `;
           });
 
-          csml = csml.replace(`[${field}]`, problems);
-          csml = csml.replace(`[${field}.length]`, length + 1);
-          csml = csml.replace(`[${field}.solutions]`, solutions);
+          csml = csml.replaceAll(`[${field}]`, problems);
+          csml = csml.replaceAll(`[${field}.length]`, length + 1);
+          csml = csml.replaceAll(`[${field}.solutions]`, solutions);
         }
       } else {
         csml = csml.replaceAll(`[${field}]`, data[field]);
       }
 
-      csml = csml.replace(`[passcode]`, passcode);
+      csml = csml.replaceAll(`[passcode]`, passcode);
 
       formattedCsml = csml;
 
