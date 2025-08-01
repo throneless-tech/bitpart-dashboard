@@ -80,7 +80,7 @@ export default function Header(props) {
                 {session ? (
                   <>
                     <Menu.Item>
-                      <Link color={color} href="/bots" variant="underline">
+                      <Link color={color} href="/my-bots" variant="underline">
                         My Bots
                       </Link>
                     </Menu.Item>
@@ -139,7 +139,7 @@ export default function Header(props) {
                 </Link>
               )}
               {session && (
-                <Link color={color} href="/bots" variant="underline">
+                <Link color={color} href="/my-bots" variant="underline">
                   My Bots
                 </Link>
               )}

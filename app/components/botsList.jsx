@@ -16,12 +16,12 @@ import BotCard from "@/app/components/botCard";
 // constants
 import { MAX_BOTS } from "../constants";
 
-export default function BotsList({ userId }) {
+export default function BotsList({ authed }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
 
   const fetchBots = useCallback(async () => {
-    const fetchedBots = await getUserBots(userId);
+    const fetchedBots = await getUserBots();
     setBots(fetchedBots);
     setIsFetching(false);
   });
@@ -45,7 +45,7 @@ export default function BotsList({ userId }) {
   }
 
   useEffect(() => {
-    if (userId) {
+    if (authed) {
       fetchBots();
     }
   }, []);
@@ -73,7 +73,6 @@ export default function BotsList({ userId }) {
                   key={`${bot.botType}-${index}`}
                   bot={bot}
                   handleDelete={handleDelete}
-                  userId={userId}
                 />
               ))}
             </Stack>

@@ -31,7 +31,7 @@ export default async function View({ params }) {
           justifyContent="space-between"
         >
           <Text>Here is your bot summary:</Text>
-          <Button as="a" href={`/edit/${id}`} variant="outline">
+          <Button as="a" href={`/my-bots/edit/${id}`} variant="outline">
             <Text as="span" paddingTop={2}>
               Edit
             </Text>

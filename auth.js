@@ -12,6 +12,11 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
+    authorized({ request, auth }) {
+      const { pathname } = request.nextUrl
+      if (pathname === "/my-bots") return !!auth
+      return true
+    },
     jwt({ token, trigger, user, account }) {
       if (trigger === "update") token.name = session.user.username;
       // if (account?.provider === "credentials") {

@@ -163,7 +163,7 @@ export default function EditBotFlow({ botId, userId }) {
 
       await updateBotPrisma(data, bot.id, bot.bitpartId, bot.passcode);
 
-      router.push(`/view/${bot.id}`);
+      router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
       console.log(error);
       alert(
@@ -195,7 +195,7 @@ export default function EditBotFlow({ botId, userId }) {
           <Text>You do not have access rights to view or edit this bot.</Text>
           <Text marginTop={4}>
             You can{" "}
-            <Link color={color} href="/bots" variant="underline">
+            <Link color={color} href="/my-bots" variant="underline">
               return to My Bots
             </Link>
             .
@@ -268,7 +268,7 @@ export default function EditBotFlow({ botId, userId }) {
             <Spinner size="xl" />
           )}
           <HStack gap={4} marginTop={8}>
-            <Button as="a" href="/bots" size="sm" variant="outline">
+            <Button as="a" href="/my-bots" size="sm" variant="outline">
               Cancel
             </Button>
             <Button

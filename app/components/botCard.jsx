@@ -91,10 +91,10 @@ export default function BotCard(props) {
         </ClientOnly>
       </Card.Body>
       <Card.Footer justifyContent="center">
-        <Button as="a" href={`/view/${bot.id}`} variant="outline">
+        <Button as="a" href={`/my-bots/view/${bot.id}`} variant="outline">
           View
         </Button>
-        <Button as="a" href={`/edit/${bot.id}`} variant="outline">
+        <Button as="a" href={`/my-bots/edit/${bot.id}`} variant="outline">
           Edit
         </Button>
         <form action={async () => await handleDelete(bot.id, botName)}>
