@@ -62,6 +62,16 @@ export const BroadcastForm = ({ bot }) => {
         />
       </Field>
       <Field
+        errorText={!!errors?.referral && errors.referral.message}
+        helperText="Add a phone number, Signal username, or email that a person should contact if they need assistance with an issue not covered in the menu or FAQ."
+        invalid={!!errors?.referral}
+        label="Contact"
+        marginTop={4}
+        required
+      >
+        <Input {...register("referral")} />
+      </Field>
+      <Field
         errorText={!!errors?.safetyTips && errors.safetyTips.message}
         helperText="Include safety tips for the list recipients, such as what to do in an emergency or best practices for digital security hygiene."
         info="safetyTips"
