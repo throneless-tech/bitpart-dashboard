@@ -3,7 +3,7 @@ import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports
-import { Box, Container, Heading } from "@chakra-ui/react";
+import { Box, Container, Heading, Text } from "@chakra-ui/react";
 
 // components
 import Header from "@/app/components/header";
@@ -22,7 +22,7 @@ export default async function Dashboard() {
       </Container>
       <Container marginY={3} maxW="2xl">
         <Heading as="h1" size="3xl" marginBottom={8}>
-          Dashboard
+          Welcome, {session?.user?.name}
         </Heading>
         <Box>
           <BotsList username={session?.user?.name} />
