@@ -1,3 +1,5 @@
+"use server";
+
 // base imports
 import React from "react";
 import { auth } from "@/auth";
@@ -38,7 +40,7 @@ export default async function View({ params }) {
             <RiEditLine />
           </Button>
         </Stack>
-        <Summary botId={id} userId={session.id} />
+        <Summary botId={id} username={session?.user?.name} />
       </Container>
     </Box>
   );

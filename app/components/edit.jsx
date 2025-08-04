@@ -1,7 +1,6 @@
 "use client";
 
 // base imports
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,17 +16,11 @@ import {
   Button,
   Container,
   Dialog,
-  Group,
   Heading,
-  Highlight,
   HStack,
-  Icon,
   Link,
-  List,
   Portal,
-  QrCode,
   Spinner,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -43,27 +36,10 @@ import { HelpdeskForm } from "@/app/components/forms/helpdesk";
 import { TiplineForm } from "@/app/components/forms/tipline";
 import { VpnForm } from "@/app/components/forms/vpn";
 
-// confirmation pages
-import { BroadcastConfirmation } from "./confirmation/broadcast";
-import { EsimConfirmation } from "./confirmation/esim";
-import { HelpdeskConfirmation } from "./confirmation/helpdesk";
-import { TiplineConfirmation } from "./confirmation/tipline";
-import { VpnConfirmation } from "./confirmation/vpn";
-
-// icons imports
-import { CgModem } from "react-icons/cg";
-import { FaSimCard } from "react-icons/fa";
-import { IoHelpBuoySharp } from "react-icons/io5";
-import { LuLightbulb } from "react-icons/lu";
-import { TbBuildingBroadcastTower } from "react-icons/tb";
-
 // actions
 import { updateBotBitpart, updateBotPrisma } from "@/app/actions/updateBot";
 import { parseCSV } from "@/app/actions/csv";
 import { getBot } from "@/app/actions/getUserBots";
-
-// constants
-import { MAX_BOTS } from "@/app/constants";
 
 const valuesToUnregister = [
   "about",
@@ -86,7 +62,7 @@ const valuesToUnregister = [
   "vpnName",
 ];
 
-export default function EditBotFlow({ botId, userId }) {
+export default function EditBotFlow({ botId, username }) {
   const router = useRouter();
   const [notAllowed, setNotAllowed] = useState(false);
   const [open, setOpen] = useState(false);
@@ -107,7 +83,7 @@ export default function EditBotFlow({ botId, userId }) {
 
   const fetchBot = useCallback(async () => {
     try {
-      const fetchedBot = await getBot(botId, userId);
+      const fetchedBot = await getBot(botId, username);
 
       if (!fetchedBot) {
         setNotAllowed(true);

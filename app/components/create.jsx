@@ -142,7 +142,7 @@ const valuesToUnregister = [
   "vpnName",
 ];
 
-export default function CreateBotFlow({ userId }) {
+export default function CreateBotFlow({ username }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
@@ -155,7 +155,7 @@ export default function CreateBotFlow({ userId }) {
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
     async function fetchBots() {
-      const fetchedBots = await getUserBots(userId);
+      const fetchedBots = await getUserBots(username);
       if (fetchedBots.length >= MAX_BOTS) {
         setNotAllowed(true);
       }
@@ -201,7 +201,7 @@ export default function CreateBotFlow({ userId }) {
 
     try {
       // format bot id for bitpart
-      const bitpartId = await formatBotName(data.botName, userId);
+      const bitpartId = await formatBotName(data.botName, username);
 
       const botBitpart = await createBotBitpart(data, bitpartId, passcode);
 
@@ -233,7 +233,7 @@ export default function CreateBotFlow({ userId }) {
       setQRLink(channelBitpartLink.data.response);
       console.log(channelBitpartLink.data.response);
 
-      const bot = await createBotPrisma(data, bitpartId, userId, passcode);
+      const bot = await createBotPrisma(data, bitpartId, username, passcode);
 
       setCreatedBot(bot);
       updateStepCount(1);

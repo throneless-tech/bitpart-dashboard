@@ -13,14 +13,14 @@ import { getBot } from "@/app/actions/getUserBots";
 import { Alert } from "@/app/components/ui/alert";
 import { useColorModeValue } from "@/app/components/ui/color-mode";
 
-export const Summary = ({ data, errors, botId, userId }) => {
+export const Summary = ({ data, errors, botId, username }) => {
   const [bot, setBot] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
 
   const fetchBot = useCallback(async () => {
     try {
-      const fetchedBot = await getBot(botId, userId);
+      const fetchedBot = await getBot(botId, username);
 
       if (!fetchedBot) {
         setNotAllowed(true);
@@ -35,7 +35,7 @@ export const Summary = ({ data, errors, botId, userId }) => {
   });
 
   useEffect(() => {
-    if (botId && userId) {
+    if (botId && username) {
       fetchBot();
     } else {
       setBot(data);

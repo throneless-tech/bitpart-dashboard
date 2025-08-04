@@ -1,11 +1,22 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export const getUserBots = async (userId) => {
+const getUser = async (username) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+
+  return user;
+};
+
+export const getUserBots = async (username) => {
   try {
+    const user = await getUser(username);
     const bots = await prisma.bot.findMany({
       where: {
-        creatorId: userId,
+        creator: user,
       },
     });
 
@@ -15,12 +26,13 @@ export const getUserBots = async (userId) => {
   }
 };
 
-export const getBot = async (botId, userId) => {
+export const getBot = async (botId, username) => {
   try {
+    const user = await getUser(username);
     const bot = await prisma.bot.findUnique({
       where: {
         id: botId,
-        creatorId: userId,
+        creator: user,
       },
     });
 

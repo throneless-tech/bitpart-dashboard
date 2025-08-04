@@ -7,21 +7,21 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
-import { deleteBot } from "../actions/deleteBot";
-import { getUserBots } from "../actions/getUserBots";
+import { deleteBot } from "@/app/actions/deleteBot";
+import { getUserBots } from "@/app/actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/components/botCard";
 
 // constants
-import { MAX_BOTS } from "../constants";
+import { MAX_BOTS } from "@/app/constants";
 
-export default function BotsList({ authed }) {
+export default function BotsList({ username }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
 
   const fetchBots = useCallback(async () => {
-    const fetchedBots = await getUserBots();
+    const fetchedBots = await getUserBots(username);
     setBots(fetchedBots);
     setIsFetching(false);
   });
@@ -45,8 +45,8 @@ export default function BotsList({ authed }) {
   }
 
   useEffect(() => {
-    if (authed) {
-      fetchBots();
+    if (username) {
+      fetchBots(username);
     }
   }, []);
 

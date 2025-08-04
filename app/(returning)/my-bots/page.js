@@ -25,7 +25,7 @@ export default async function Dashboard() {
           Dashboard
         </Heading>
         <Box>
-          <BotsList authed={!!session} />
+          <BotsList username={session?.user?.name} />
         </Box>
       </Container>
     </Box>
