@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // chakra ui imports
-import { toaster, Toaster } from "@/app/components/ui/toaster";
+import { toaster, Toaster } from "@/app/_components/ui/toaster";
 
 export const ToastSignOut = () => {
   const params = useSearchParams();

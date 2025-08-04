@@ -7,11 +7,11 @@ import { useCallback, useEffect, useState } from "react";
 import { Box, Container, Link, List, Spinner, Text } from "@chakra-ui/react";
 
 // actions imports
-import { getBot } from "@/app/actions/getUserBots";
+import { getBot } from "@/app/_actions/getUserBots";
 
 // components imports
-import { Alert } from "@/app/components/ui/alert";
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { Alert } from "@/app/_components/ui/alert";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const Summary = ({ data, errors, botId, userId }) => {
   const [bot, setBot] = useState(null);

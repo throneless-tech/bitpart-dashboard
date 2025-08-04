@@ -4,11 +4,11 @@
 import React, { useActionState, useEffect } from "react";
 
 // actions imports
-import { register } from "@/app/actions/register";
+import { register } from "@/app/_actions/register";
 
 // chakra ui imports
 import { Button, Container, Field, Input } from "@chakra-ui/react";
-import { PasswordInput } from "@/app/components/ui/password-input";
+import { PasswordInput } from "@/app/_components/ui/password-input";
 
 const initialState = {
   error: "",

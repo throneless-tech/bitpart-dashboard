@@ -6,7 +6,7 @@ import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 
 // actions imports
-import { login } from "@/app/actions/login";
+import { login } from "@/app/_actions/login";
 
 // chakra ui imports
 import {
@@ -19,12 +19,12 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { PasswordInput } from "@/app/components/ui/password-input";
+import { PasswordInput } from "@/app/_components/ui/password-input";
 
 // components imports
-import { toaster } from "@/app/components/ui/toaster";
+import { toaster } from "@/app/_components/ui/toaster";
 import { ToastSignUp } from "./toastalert";
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 function Submit() {
   const { pending } = useFormStatus();

@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "../../components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import Header from "../../_components/header";
 
 export default function FAQ() {
   // session

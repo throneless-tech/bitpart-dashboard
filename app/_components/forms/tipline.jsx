@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 
 // chakra imports
 import { Heading, Input, Stack, Textarea } from "@chakra-ui/react";
-import { Field } from "@/app/components/ui/field";
+import { Field } from "@/app/_components/ui/field";
 
 export const TiplineForm = ({ bot }) => {
   const {

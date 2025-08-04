@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import { sendToEMS } from "@/app/actions/ems.js";
+import { sendToEMS } from "@/app/_actions/ems.js";
 
 export const parseCSV = (botId, botType, fileList) => {
   if (fileList.length > 1) {

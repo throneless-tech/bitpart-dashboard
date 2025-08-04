@@ -7,11 +7,11 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
-import { deleteBot } from "../actions/deleteBot";
-import { getUserBots } from "../actions/getUserBots";
+import { deleteBot } from "../_actions/deleteBot";
+import { getUserBots } from "../_actions/getUserBots";
 
 // components imports
-import BotCard from "@/app/components/botCard";
+import BotCard from "@/app/_components/botCard";
 
 // constants
 import { MAX_BOTS } from "../constants";
