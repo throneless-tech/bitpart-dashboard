@@ -2,13 +2,13 @@
 
 // base imports
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // form validation imports
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../lib/forms";
+import { schema } from "../_lib/forms";
 
 // chakra ui imports
 import {
@@ -32,13 +32,13 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { Checkbox } from "@/app/components/ui/checkbox";
-import { LightMode, useColorModeValue } from "@/app/components/ui/color-mode";
+import { Checkbox } from "@/app/_components/ui/checkbox";
+import { LightMode, useColorModeValue } from "@/app/_components/ui/color-mode";
 import {
   RadioCardItem,
   RadioCardLabel,
   RadioCardRoot,
-} from "@/app/components/ui/radio-card";
+} from "@/app/_components/ui/radio-card";
 import {
   StepsCompletedContent,
   StepsContent,
@@ -46,19 +46,19 @@ import {
   StepsList,
   StepsNextTrigger,
   StepsPrevTrigger,
-} from "@/app/components/ui/steps";
-const StepsRoot = dynamic(() => import("@/app/components/ui/steps"), {
+} from "@/app/_components/ui/steps";
+const StepsRoot = dynamic(() => import("@/app/_components/ui/steps"), {
   ssr: false,
 });
 
 // form imports
-import { BasicsForm } from "@/app/components/forms/basics";
-import { BroadcastForm } from "@/app/components/forms/broadcast";
-import { EsimForm } from "@/app/components/forms/esim";
-import { HelpdeskForm } from "@/app/components/forms/helpdesk";
-import { Summary } from "@/app/components/forms/summary";
-import { TiplineForm } from "@/app/components/forms/tipline";
-import { VpnForm } from "@/app/components/forms/vpn";
+import { BasicsForm } from "@/app/_components/forms/basics";
+import { BroadcastForm } from "@/app/_components/forms/broadcast";
+import { EsimForm } from "@/app/_components/forms/esim";
+import { HelpdeskForm } from "@/app/_components/forms/helpdesk";
+import { Summary } from "@/app/_components/forms/summary";
+import { TiplineForm } from "@/app/_components/forms/tipline";
+import { VpnForm } from "@/app/_components/forms/vpn";
 
 // confirmation pages
 import { BroadcastConfirmation } from "./confirmation/broadcast";
@@ -79,10 +79,10 @@ import {
   createBotBitpart,
   createBotPrisma,
   linkChannelBitpart,
-} from "@/app/actions/createBot";
-import { createPasscode, formatBotName } from "@/app/actions/formatBot";
-import { parseCSV } from "@/app/actions/csv";
-import { getUserBots } from "@/app/actions/getUserBots";
+} from "@/app/_actions/createBot";
+import { createPasscode, formatBotName } from "@/app/_actions/formatBot";
+import { parseCSV } from "@/app/_actions/csv";
+import { getUserBots } from "@/app/_actions/getUserBots";
 
 // constants
 import { MAX_BOTS } from "@/app/constants";
@@ -144,6 +144,7 @@ const valuesToUnregister = [
 
 export default function CreateBotFlow({ username }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   const [notAllowed, setNotAllowed] = useState(false);
   const [createdBot, setCreatedBot] = useState(null);
@@ -151,6 +152,8 @@ export default function CreateBotFlow({ username }) {
   const [isFetching, setIsFetching] = useState(false);
   const [botPasscode, setBotPasscode] = useState("");
   const [qrLink, setQRLink] = useState("");
+
+  const step = searchParams.get("step");
 
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
@@ -165,11 +168,31 @@ export default function CreateBotFlow({ username }) {
 
   useEffect(() => {}, [notAllowed]);
 
-  // update the step count based on prev or next
+  // update the step count based on prev or next button
   const updateStepCount = (step) => {
     setStepCount((stepCount) => (stepCount += step));
     window.scrollTo(0, 0);
   };
+
+  // update the step count based on prev or next browser step
+
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    if (step) {
+      setStepCount(parseInt(step));
+    } else {
+      router.push(`create?${createQueryString("step", "0")}`);
+    }
+  }, [step]);
 
   const methods = useForm({
     defaultValues: { botType: "broadcast" },
@@ -554,7 +577,10 @@ export default function CreateBotFlow({ username }) {
                 <StepsPrevTrigger asChild>
                   <Button
                     disabled={stepCount === 0 || stepCount === 3}
-                    onClick={() => updateStepCount(-1)}
+                    onClick={() => {
+                      // updateStepCount(-1)
+                      router.push(`?step=${stepCount - 1}`);
+                    }}
                     size="sm"
                     variant="outline"
                   >
@@ -575,8 +601,9 @@ export default function CreateBotFlow({ username }) {
                         methods.handleSubmit(onSubmit, onError)(e);
                       }
                       if (!isFetching) {
-                        updateStepCount(1);
+                        // updateStepCount(1);
                       }
+                      router.push(`?step=${stepCount + 1}`);
                     }}
                     size="sm"
                     variant="outline"

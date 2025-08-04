@@ -8,9 +8,9 @@ import { auth } from "@/auth";
 import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
 
 // component imports
-import Header from "@/app/components/header";
-import NotAuthenticated from "@/app/components/notAuthenticated";
-import { Summary } from "@/app/components/forms/summary";
+import Header from "@/app/_components/header";
+import NotAuthenticated from "@/app/_components/notAuthenticated";
+import { Summary } from "@/app/_components/forms/summary";
 
 // icon imports
 import { RiEditLine } from "react-icons/ri";

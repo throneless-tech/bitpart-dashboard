@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
-import { LoginSchema } from "../lib/definitions";
+import { LoginSchema } from "../_lib/definitions";
 
 export const register = async (prevState, formData) => {
   let redirectPath = null;

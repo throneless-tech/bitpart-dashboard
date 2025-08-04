@@ -16,10 +16,10 @@ import {
 } from "@chakra-ui/react";
 
 // components
-import { useColorModeValue } from "@/app/components/ui/color-mode";
-import { InviteForm } from "./components/enterInvite";
-import { ToastSignOut } from "./components/toastalert";
-import Header from "./components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import { InviteForm } from "./_components/enterInvite";
+import { ToastSignOut } from "./_components/toastalert";
+import Header from "./_components/header";
 
 export default function Home() {
   // session

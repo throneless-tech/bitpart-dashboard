@@ -11,7 +11,7 @@ import { deleteBot } from "@/app/actions/deleteBot";
 import { getUserBots } from "@/app/actions/getUserBots";
 
 // components imports
-import BotCard from "@/app/components/botCard";
+import BotCard from "@/app/_components/botCard";
 
 // constants
 import { MAX_BOTS } from "@/app/constants";

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 // form validation imports
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../lib/forms";
+import { schema } from "../_lib/forms";
 
 // chakra ui imports
 import {
@@ -27,20 +27,20 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // form imports
-import { BasicsForm } from "@/app/components/forms/basics";
-import { BroadcastForm } from "@/app/components/forms/broadcast";
-import { EsimForm } from "@/app/components/forms/esim";
-import { HelpdeskForm } from "@/app/components/forms/helpdesk";
-import { TiplineForm } from "@/app/components/forms/tipline";
-import { VpnForm } from "@/app/components/forms/vpn";
+import { BasicsForm } from "@/app/_components/forms/basics";
+import { BroadcastForm } from "@/app/_components/forms/broadcast";
+import { EsimForm } from "@/app/_components/forms/esim";
+import { HelpdeskForm } from "@/app/_components/forms/helpdesk";
+import { TiplineForm } from "@/app/_components/forms/tipline";
+import { VpnForm } from "@/app/_components/forms/vpn";
 
 // actions
-import { updateBotBitpart, updateBotPrisma } from "@/app/actions/updateBot";
-import { parseCSV } from "@/app/actions/csv";
-import { getBot } from "@/app/actions/getUserBots";
+import { updateBotBitpart, updateBotPrisma } from "@/app/_actions/updateBot";
+import { parseCSV } from "@/app/_actions/csv";
+import { getBot } from "@/app/_actions/getUserBots";
 
 const valuesToUnregister = [
   "about",

@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // icons imports
 import { CgModem } from "react-icons/cg";
@@ -22,7 +22,7 @@ import { FaSimCard } from "react-icons/fa";
 import { IoHelpBuoySharp } from "react-icons/io5";
 import { LuLightbulb } from "react-icons/lu";
 import { TbBuildingBroadcastTower } from "react-icons/tb";
-import { formatBotName, formatPhone } from "../actions/formatBot";
+import { formatBotName, formatPhone } from "../_actions/formatBot";
 
 const botTypes = {
   broadcast: <TbBuildingBroadcastTower />,
