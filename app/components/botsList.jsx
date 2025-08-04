@@ -30,13 +30,13 @@ export default function BotsList({ username }) {
     fetchBots();
   }, []);
 
-  async function handleDelete(id, phone) {
+  async function handleDelete(id, phone, username) {
     setIsFetching(true);
     try {
       alert(
         "Are you sure you want to delete this bot? This action cannot be undone.",
       );
-      await deleteBot(id, phone);
+      await deleteBot(id, phone, username);
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
@@ -73,6 +73,7 @@ export default function BotsList({ username }) {
                   key={`${bot.botType}-${index}`}
                   bot={bot}
                   handleDelete={handleDelete}
+                  username={username}
                 />
               ))}
             </Stack>

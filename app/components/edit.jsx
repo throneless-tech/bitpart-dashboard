@@ -14,6 +14,7 @@ import {
   AbsoluteCenter,
   Box,
   Button,
+  Center,
   Container,
   Dialog,
   Heading,
@@ -66,7 +67,7 @@ export default function EditBotFlow({ botId, username }) {
   const router = useRouter();
   const [notAllowed, setNotAllowed] = useState(false);
   const [open, setOpen] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [botPasscode, setBotPasscode] = useState("");
   const [bot, setBot] = useState(null);
 
@@ -137,7 +138,13 @@ export default function EditBotFlow({ botId, username }) {
         throw new Error(emsData.error.message);
       }
 
-      await updateBotPrisma(data, bot.id, bot.bitpartId, bot.passcode);
+      await updateBotPrisma(
+        data,
+        bot.id,
+        bot.bitpartId,
+        username,
+        bot.passcode,
+      );
 
       router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
@@ -164,7 +171,13 @@ export default function EditBotFlow({ botId, username }) {
 
   useEffect(() => {}, [isFetching, notAllowed, watchAll]);
 
-  if (notAllowed) {
+  if (isFetching) {
+    return (
+      <Center>
+        <Spinner size="xl" />
+      </Center>
+    );
+  } else if (notAllowed) {
     return (
       <Box>
         <Container marginTop={8} maxWidth="lg">

@@ -33,7 +33,7 @@ const botTypes = {
 };
 
 export default function BotCard(props) {
-  const { bot, handleDelete } = props;
+  const { bot, handleDelete, username } = props;
   const [checked, setChecked] = useState(false);
   const [botName, setBotName] = useState("");
   const [botPhone, setBotPhone] = useState("");
@@ -97,7 +97,9 @@ export default function BotCard(props) {
         <Button as="a" href={`/my-bots/edit/${bot.id}`} variant="outline">
           Edit
         </Button>
-        <form action={async () => await handleDelete(bot.id, botName)}>
+        <form
+          action={async () => await handleDelete(bot.id, botName, username)}
+        >
           <Button type="submit">Delete</Button>
         </form>
       </Card.Footer>
