@@ -15,7 +15,7 @@ import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const Summary = ({ data, errors, botId, username }) => {
   const [bot, setBot] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [notAllowed, setNotAllowed] = useState(false);
 
   const fetchBot = useCallback(async () => {

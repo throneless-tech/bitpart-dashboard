@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 
 // actions
-import { getUser } from "@/app/actions/getUser";
+import { getUser } from "./getUser";
 
 export const getUserBots = async (username) => {
   try {

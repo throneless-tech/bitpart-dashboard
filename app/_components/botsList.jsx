@@ -7,8 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
-import { deleteBot } from "@/app/actions/deleteBot";
-import { getUserBots } from "@/app/actions/getUserBots";
+import { deleteBot } from "@/app/_actions/deleteBot";
+import { getUserBots } from "@/app/_actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/_components/botCard";
