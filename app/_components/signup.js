@@ -17,12 +17,21 @@ const initialState = {
 export function SignupForm() {
   const [state, formAction, pending] = useActionState(register, initialState);
 
-  useEffect(() => {}, [state]);
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   return (
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
-        <Field.Root invalid={state?.error?.username} required>
+        <Field.Root invalid={state?.error} required>
+          <Field.Label>Enter invite code:</Field.Label>
+          <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
+          {state?.error ? (
+            <Field.ErrorText>{state?.error?.code}</Field.ErrorText>
+          ) : null}
+        </Field.Root>
+        <Field.Root invalid={state?.error?.username} marginTop={12} required>
           <Field.Label>Choose a username</Field.Label>
           <Input name="username" placeholder="username.here" size="lg" />
           {state?.error?.username ? (
