@@ -39,6 +39,7 @@ export const Summary = ({ data, errors, botId, username }) => {
       fetchBot();
     } else {
       setBot(data);
+      setIsFetching(false);
     }
   }, [data]);
 

@@ -188,6 +188,9 @@ export default function CreateBotFlow({ username }) {
 
   useEffect(() => {
     if (step) {
+      if (step > 4) {
+        router.push("/my-bots");
+      }
       setStepCount(parseInt(step));
     } else {
       router.push(`create?${createQueryString("step", "0")}`);
@@ -265,6 +268,8 @@ export default function CreateBotFlow({ username }) {
       alert(
         "A server error occurred while trying to create this bot. Please contact an admin for assistance.",
       );
+      updateStepCount(-1);
+      router.push(`?step=${stepCount - 1}`);
     } finally {
       setIsFetching(false);
       setOpen(false);
