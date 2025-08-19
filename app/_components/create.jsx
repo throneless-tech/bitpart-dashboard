@@ -142,7 +142,7 @@ const valuesToUnregister = [
   "vpnName",
 ];
 
-export default function CreateBotFlow({ userId }) {
+export default function CreateBotFlow({ username }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -158,7 +158,7 @@ export default function CreateBotFlow({ userId }) {
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
     async function fetchBots() {
-      const fetchedBots = await getUserBots(userId);
+      const fetchedBots = await getUserBots(username);
       if (fetchedBots.length >= MAX_BOTS) {
         setNotAllowed(true);
       }
@@ -188,6 +188,9 @@ export default function CreateBotFlow({ userId }) {
 
   useEffect(() => {
     if (step) {
+      if (step > 4) {
+        router.push("/my-bots");
+      }
       setStepCount(parseInt(step));
     } else {
       router.push(`create?${createQueryString("step", "0")}`);
@@ -224,7 +227,7 @@ export default function CreateBotFlow({ userId }) {
 
     try {
       // format bot id for bitpart
-      const bitpartId = await formatBotName(data.botName, userId);
+      const bitpartId = await formatBotName(data.botName, username);
 
       const botBitpart = await createBotBitpart(data, bitpartId, passcode);
 
@@ -256,7 +259,7 @@ export default function CreateBotFlow({ userId }) {
       setQRLink(channelBitpartLink.data.response);
       console.log(channelBitpartLink.data.response);
 
-      const bot = await createBotPrisma(data, bitpartId, userId, passcode);
+      const bot = await createBotPrisma(data, bitpartId, username, passcode);
 
       setCreatedBot(bot);
       updateStepCount(1);
@@ -265,6 +268,8 @@ export default function CreateBotFlow({ userId }) {
       alert(
         "A server error occurred while trying to create this bot. Please contact an admin for assistance.",
       );
+      updateStepCount(-1);
+      router.push(`?step=${stepCount - 1}`);
     } finally {
       setIsFetching(false);
       setOpen(false);
@@ -291,7 +296,7 @@ export default function CreateBotFlow({ userId }) {
           <Text>
             You have reached the limit on how many bots a user may create.
             Please{" "}
-            <Link color={color} href="/bots" variant="underline">
+            <Link color={color} href="/my-bots" variant="underline">
               return to My Bots
             </Link>{" "}
             and delete a bot if you would like to create a new one.
@@ -594,7 +599,7 @@ export default function CreateBotFlow({ userId }) {
                     }
                     onClick={(e) => {
                       if (stepCount >= 4) {
-                        router.push("/bots");
+                        router.push("/my-bots");
                       }
                       if (stepCount === 2) {
                         updateStepCount(-1);

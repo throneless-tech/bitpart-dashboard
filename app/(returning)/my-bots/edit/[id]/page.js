@@ -1,3 +1,5 @@
+"use server";
+
 // base imports
 import React from "react";
 import { auth } from "@/auth";
@@ -21,7 +23,7 @@ export default async function Edit({ params }) {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <EditBotFlow botId={id} userId={session.id} />
+      <EditBotFlow botId={id} username={session?.user?.name} />
     </Box>
   );
 }

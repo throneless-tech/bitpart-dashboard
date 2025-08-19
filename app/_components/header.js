@@ -1,7 +1,7 @@
 "use client";
 
 // base imports
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // actions imports
@@ -33,6 +33,8 @@ export default function Header(props) {
   const router = useRouter();
   const color = useColorModeValue("maroon", "yellow");
   const { session } = props;
+
+  useEffect(() => {}, [session]);
 
   // submit form to attempt user login
   async function onSubmit(formData) {
@@ -80,7 +82,7 @@ export default function Header(props) {
                 {session ? (
                   <>
                     <Menu.Item>
-                      <Link color={color} href="/bots" variant="underline">
+                      <Link color={color} href="/my-bots" variant="underline">
                         My Bots
                       </Link>
                     </Menu.Item>
@@ -139,7 +141,7 @@ export default function Header(props) {
                 </Link>
               )}
               {session && (
-                <Link color={color} href="/bots" variant="underline">
+                <Link color={color} href="/my-bots" variant="underline">
                   My Bots
                 </Link>
               )}
