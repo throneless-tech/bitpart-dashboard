@@ -6,16 +6,42 @@ import {
 } from "@chakra-ui/react";
 import * as React from "react";
 
+// fonts
+import { geistMono } from "@/app/fonts";
+
+// icons
+import ArrowRight from "@/app/_icons/arrowRight";
+
 export const Button = React.forwardRef(function Button(props, ref) {
-  const { loading, disabled, loadingText, children, ...rest } = props;
+  const {
+    color,
+    colorPalette,
+    loading,
+    disabled,
+    loadingText,
+    children,
+    ...rest
+  } = props;
   return (
-    <ChakraButton disabled={loading || disabled} ref={ref} {...rest}>
+    <ChakraButton
+      borderRadius={8}
+      className={geistMono.className}
+      colorPalette={colorPalette}
+      disabled={loading || disabled}
+      fontSize={16}
+      fontWeight={600}
+      height="48px"
+      ref={ref}
+      {...rest}
+      textTransform="uppercase"
+    >
       {loading && !loadingText ? (
         <>
           <AbsoluteCenter display="inline-flex">
             <Spinner size="inherit" color="inherit" />
           </AbsoluteCenter>
           <Span opacity={0}>{children}</Span>
+          <ArrowRight color={color} />
         </>
       ) : loading && loadingText ? (
         <>
@@ -23,7 +49,10 @@ export const Button = React.forwardRef(function Button(props, ref) {
           {loadingText}
         </>
       ) : (
-        children
+        <>
+          {children}
+          <ArrowRight color={colorPalette ? "white" : color} />
+        </>
       )}
     </ChakraButton>
   );

@@ -10,7 +10,6 @@ import { logout } from "@/app/_actions/logout";
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Flex,
   Heading,
@@ -22,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
+import { Button } from "@/app/_components/ui/button";
 import {
   ColorModeButton,
   useColorModeValue,
@@ -88,7 +88,7 @@ export default function Header(props) {
                         <>
                           <Menu.Item>
                             <Link
-                              color={color}
+                              color="purple.600"
                               href="/bots"
                               variant="underline"
                             >
@@ -98,7 +98,7 @@ export default function Header(props) {
                           <Menu.Item>
                             <form action={onSubmit}>
                               <Button
-                                color={color}
+                                color="purple.600"
                                 type="submit"
                                 variant="subtle"
                               >
@@ -109,24 +109,36 @@ export default function Header(props) {
                         </>
                       ) : (
                         <Menu.Item>
-                          <Link color={color} href="/login" variant="underline">
+                          <Link
+                            color="purple.600"
+                            href="/login"
+                            variant="underline"
+                          >
                             Login
                           </Link>
                         </Menu.Item>
                       )}
                       <Menu.Item>
-                        <Link color={color} href="/about" variant="underline">
+                        <Link
+                          color="purple.600"
+                          href="/about"
+                          variant="underline"
+                        >
                           About Us
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        <Link color={color} href="/faq" variant="underline">
+                        <Link
+                          color="purple.600"
+                          href="/faq"
+                          variant="underline"
+                        >
                           FAQ
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
                         <Link
-                          color={color}
+                          color="purple.600"
                           href="/tou-and-privacy"
                           variant="underline"
                         >
@@ -134,7 +146,11 @@ export default function Header(props) {
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        <Link color={color} href="/login" variant="underline">
+                        <Link
+                          color="purple.600"
+                          href="/login"
+                          variant="underline"
+                        >
                           Donate
                         </Link>
                       </Menu.Item>
@@ -150,34 +166,38 @@ export default function Header(props) {
             <Flex gap={4}>
               <ClientOnly>
                 {session && (
-                  <Link color={color} href="/bots" variant="underline">
+                  <Link color="purple.600" href="/bots" variant="underline">
                     My Bots
                   </Link>
                 )}
-                <Link color={color} href="/about" variant="underline">
+                <Link color="purple.600" href="/about" variant="underline">
                   About Us
                 </Link>
-                <Link color={color} href="/faq" variant="underline">
+                <Link color="purple.600" href="/faq" variant="underline">
                   FAQ
                 </Link>
-                <Link color={color} href="/tou-and-privacy" variant="underline">
+                <Link
+                  color="purple.600"
+                  href="/tou-and-privacy"
+                  variant="underline"
+                >
                   Terms of Use and Privacy
                 </Link>
               </ClientOnly>
             </Flex>
             <Flex gap={4}>
-              <Button as="a" href="#">
+              <Button as="a" colorPalette="purple" href="#">
                 Donate
               </Button>
               <ClientOnly>
                 {session ? (
                   <form action={onSubmit}>
-                    <Button color={color} type="submit" variant="subtle">
+                    <Button color="purple.600" type="submit" variant="subtle">
                       Logout
                     </Button>
                   </form>
                 ) : (
-                  <Link color={color} href="/login" variant="underline">
+                  <Link color="purple.600" href="/login" variant="underline">
                     Login
                   </Link>
                 )}

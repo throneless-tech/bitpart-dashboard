@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Container,
   Heading,
@@ -17,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 
 // components
+import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 import { ToastSignOut } from "./_components/toastalert";
 import Header from "./_components/header";
@@ -26,7 +26,7 @@ export default function Home() {
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("white", "black");
 
   return (
     <Box>
@@ -87,7 +87,13 @@ export default function Home() {
         </List.Root>
         <Box marginTop={8} textAlign="center">
           <Text marginBottom={8}>Ready to go?</Text>
-          <Button as="a" href="/signup" marginTop={4}>
+          <Button
+            as="a"
+            color={color}
+            colorPalette="purple"
+            href="/signup"
+            marginTop={4}
+          >
             Get started
           </Button>
           <Text marginTop={8} fontStyle="italic" textStyle="sm">
