@@ -1,3 +1,5 @@
+"use server";
+
 // base imports
 import React from "react";
 import { auth } from "@/auth";
@@ -31,14 +33,14 @@ export default async function View({ params }) {
           justifyContent="space-between"
         >
           <Text>Here is your bot summary:</Text>
-          <Button as="a" href={`/edit/${id}`} variant="outline">
+          <Button as="a" href={`/my-bots/edit/${id}`} variant="outline">
             <Text as="span" paddingTop={2}>
               Edit
             </Text>
             <RiEditLine />
           </Button>
         </Stack>
-        <Summary botId={id} userId={session.id} />
+        <Summary botId={id} username={session?.user?.name} />
       </Container>
     </Box>
   );

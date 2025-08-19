@@ -7,21 +7,21 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
-import { deleteBot } from "../_actions/deleteBot";
-import { getUserBots } from "../_actions/getUserBots";
+import { deleteBot } from "@/app/_actions/deleteBot";
+import { getUserBots } from "@/app/_actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/_components/botCard";
 
 // constants
-import { MAX_BOTS } from "../constants";
+import { MAX_BOTS } from "@/app/constants";
 
-export default function BotsList({ userId }) {
+export default function BotsList({ username }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
 
   const fetchBots = useCallback(async () => {
-    const fetchedBots = await getUserBots(userId);
+    const fetchedBots = await getUserBots(username);
     setBots(fetchedBots);
     setIsFetching(false);
   });
@@ -30,13 +30,13 @@ export default function BotsList({ userId }) {
     fetchBots();
   }, []);
 
-  async function handleDelete(id, phone) {
+  async function handleDelete(id, phone, username) {
     setIsFetching(true);
     try {
       alert(
         "Are you sure you want to delete this bot? This action cannot be undone.",
       );
-      await deleteBot(id, phone);
+      await deleteBot(id, phone, username);
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
@@ -45,8 +45,8 @@ export default function BotsList({ userId }) {
   }
 
   useEffect(() => {
-    if (userId) {
-      fetchBots();
+    if (username) {
+      fetchBots(username);
     }
   }, []);
 
@@ -73,7 +73,7 @@ export default function BotsList({ userId }) {
                   key={`${bot.botType}-${index}`}
                   bot={bot}
                   handleDelete={handleDelete}
-                  userId={userId}
+                  username={username}
                 />
               ))}
             </Stack>

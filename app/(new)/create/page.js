@@ -20,7 +20,7 @@ export default async function Create() {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <CreateBotFlow userId={session.id} />
+      <CreateBotFlow username={session?.user?.name} />
     </Box>
   );
 }

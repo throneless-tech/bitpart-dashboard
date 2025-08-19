@@ -1,7 +1,7 @@
 "use client";
 
 // base imports
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // actions imports
@@ -36,6 +36,8 @@ export default function Header(props) {
   const router = useRouter();
   const color = useColorModeValue("black", "white");
   const { session } = props;
+
+  useEffect(() => {}, [session]);
 
   // submit form to attempt user login
   async function onSubmit(formData) {
