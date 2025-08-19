@@ -4,21 +4,11 @@ import React from "react";
 //chakra provider
 import { Provider } from "@/app/_components/ui/provider";
 
+// fonts
+import { geist } from "./fonts";
+
 // auth session provider
 import { SessionProvider } from "next-auth/react";
-// import localFont from "next/font/local";
-// import "./globals.css";
-
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
 
 export const metadata = {
   title: "Bitpart Dashboard",
@@ -27,8 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
+    <html lang="en" className={geist.className} suppressHydrationWarning>
       <body>
         <SessionProvider>
           <Provider>{children}</Provider>

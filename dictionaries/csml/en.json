@@ -1,0 +1,6 @@
+{
+  "welcome": {
+    "admin": "Welcome, you are now set up as a bot administrator who can send broadcast messages.",
+    "user": "Hi. You have found the distribution list [name]. \nYou can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages. \nYou can disagree, and your contact number will be deleted automatically from the list."
+  }
+}

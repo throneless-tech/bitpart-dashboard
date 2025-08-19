@@ -13,10 +13,12 @@ import {
   Button,
   ClientOnly,
   Flex,
+  Heading,
   IconButton,
   Link,
   Menu,
   Portal,
+  VisuallyHidden,
 } from "@chakra-ui/react";
 
 // components imports
@@ -27,11 +29,12 @@ import {
 import { toaster } from "@/app/_components/ui/toaster";
 
 // icons imports
-import { RxHamburgerMenu } from "react-icons/rx";
+import LogoWordmark from "@/app/_icons/logo-wordmark";
+import MenuIcon from "@/app/_icons/menu";
 
 export default function Header(props) {
   const router = useRouter();
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("black", "white");
   const { session } = props;
 
   // submit form to attempt user login
@@ -59,121 +62,128 @@ export default function Header(props) {
 
   return (
     <Box>
-      <Flex gap={4} hideFrom="md" justifyContent="space-between">
-        <ColorModeButton />
-        <Menu.Root>
-          <Menu.Trigger asChild>
-            <IconButton>
-              <RxHamburgerMenu />
-            </IconButton>
-          </Menu.Trigger>
-          <Portal>
-            <Menu.Positioner>
-              <Menu.Content>
-                {!session && (
-                  <Menu.Item>
-                    <Link color={color} href="/" variant="underline">
-                      Bitpart
-                    </Link>
-                  </Menu.Item>
-                )}
-                {session ? (
-                  <>
-                    <Menu.Item>
-                      <Link color={color} href="/bots" variant="underline">
-                        My Bots
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <form action={onSubmit}>
-                        <Button color={color} type="submit" variant="subtle">
-                          Logout
-                        </Button>
-                      </form>
-                    </Menu.Item>
-                  </>
-                ) : (
-                  <Menu.Item>
-                    <Link color={color} href="/login" variant="underline">
-                      Login
-                    </Link>
-                  </Menu.Item>
-                )}
-                <Menu.Item>
-                  <Link color={color} href="/about" variant="underline">
-                    About Us
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <Link color={color} href="/faq" variant="underline">
-                    FAQ
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <Link
-                    color={color}
-                    href="/tou-and-privacy"
-                    variant="underline"
-                  >
-                    Terms of Use and Privacy
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <Link color={color} href="/login" variant="underline">
-                    Donate
-                  </Link>
-                </Menu.Item>
-              </Menu.Content>
-            </Menu.Positioner>
-          </Portal>
-        </Menu.Root>
-      </Flex>
-      <Box hideBelow="md">
-        <Flex justifyContent="space-between">
-          <Flex gap={4}>
+      <ClientOnly>
+        <Flex gap={8} justify="space-between" width="100%">
+          <Heading as="h1">
+            <Link as="a" href="/" width={[200, 340]}>
+              <VisuallyHidden>Bitpart</VisuallyHidden>
+              <LogoWordmark color={color} />
+            </Link>
+          </Heading>
+          <Flex gap={1}>
             <ColorModeButton />
-            <ClientOnly>
-              {!session && (
-                <Link color={color} href="/" variant="underline">
-                  Bitpart
-                </Link>
-              )}
-              {session && (
-                <Link color={color} href="/bots" variant="underline">
-                  My Bots
-                </Link>
-              )}
-              <Link color={color} href="/about" variant="underline">
-                About Us
-              </Link>
-              <Link color={color} href="/faq" variant="underline">
-                FAQ
-              </Link>
-              <Link color={color} href="/tou-and-privacy" variant="underline">
-                Terms of Use and Privacy
-              </Link>
-            </ClientOnly>
-          </Flex>
-          <Flex gap={4}>
-            <Button as="a" href="#">
-              Donate
-            </Button>
-            <ClientOnly>
-              {session ? (
-                <form action={onSubmit}>
-                  <Button color={color} type="submit" variant="subtle">
-                    Logout
-                  </Button>
-                </form>
-              ) : (
-                <Link color={color} href="/login" variant="underline">
-                  Login
-                </Link>
-              )}
-            </ClientOnly>
+            <Flex hideFrom="md">
+              <Menu.Root>
+                <Menu.Trigger asChild>
+                  <IconButton variant="none">
+                    <MenuIcon color={color} />
+                  </IconButton>
+                </Menu.Trigger>
+                <Portal>
+                  <Menu.Positioner>
+                    <Menu.Content>
+                      {session ? (
+                        <>
+                          <Menu.Item>
+                            <Link
+                              color={color}
+                              href="/bots"
+                              variant="underline"
+                            >
+                              My Bots
+                            </Link>
+                          </Menu.Item>
+                          <Menu.Item>
+                            <form action={onSubmit}>
+                              <Button
+                                color={color}
+                                type="submit"
+                                variant="subtle"
+                              >
+                                Logout
+                              </Button>
+                            </form>
+                          </Menu.Item>
+                        </>
+                      ) : (
+                        <Menu.Item>
+                          <Link color={color} href="/login" variant="underline">
+                            Login
+                          </Link>
+                        </Menu.Item>
+                      )}
+                      <Menu.Item>
+                        <Link color={color} href="/about" variant="underline">
+                          About Us
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Link color={color} href="/faq" variant="underline">
+                          FAQ
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Link
+                          color={color}
+                          href="/tou-and-privacy"
+                          variant="underline"
+                        >
+                          Terms of Use and Privacy
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Link color={color} href="/login" variant="underline">
+                          Donate
+                        </Link>
+                      </Menu.Item>
+                    </Menu.Content>
+                  </Menu.Positioner>
+                </Portal>
+              </Menu.Root>
+            </Flex>
           </Flex>
         </Flex>
-      </Box>
+        <Box hideBelow="md">
+          <Flex justifyContent="space-between">
+            <Flex gap={4}>
+              <ClientOnly>
+                {session && (
+                  <Link color={color} href="/bots" variant="underline">
+                    My Bots
+                  </Link>
+                )}
+                <Link color={color} href="/about" variant="underline">
+                  About Us
+                </Link>
+                <Link color={color} href="/faq" variant="underline">
+                  FAQ
+                </Link>
+                <Link color={color} href="/tou-and-privacy" variant="underline">
+                  Terms of Use and Privacy
+                </Link>
+              </ClientOnly>
+            </Flex>
+            <Flex gap={4}>
+              <Button as="a" href="#">
+                Donate
+              </Button>
+              <ClientOnly>
+                {session ? (
+                  <form action={onSubmit}>
+                    <Button color={color} type="submit" variant="subtle">
+                      Logout
+                    </Button>
+                  </form>
+                ) : (
+                  <Link color={color} href="/login" variant="underline">
+                    Login
+                  </Link>
+                )}
+              </ClientOnly>
+            </Flex>
+          </Flex>
+        </Box>
+      </ClientOnly>
     </Box>
   );
 }

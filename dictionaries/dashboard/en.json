@@ -1,0 +1,44 @@
+{
+  "navigation": {
+    "home": "Bitpart Home",
+    "my_bots": "My Bots",
+    "about": "About Us",
+    "faq": "FAQ",
+    "tou": "Terms of Use and Privacy",
+    "donate": "Donate",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "home": {
+    "welcome": "Welcome to Bitpart.",
+    "description": "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance.\nIt enables you to send secure, automated messages to a particular community over Signal by creating your own bot. The bot can operate within five different communication formats, depending on your needs, all while protecting the privacy of both the senders and recipients of messages.",
+    "formats": {
+      "title": "These formats include:",
+      "types": {
+        "broadcast": {
+          "title": "Broadcasting:",
+          "description": "send alerts and other information to many recipients at once"
+        },
+        "tipline": {
+          "title": "Tipline:",
+          "description": "set up a channel to receive tips from anonymous senders"
+        },
+        "helpdesk": {
+          "title": "Helpdesk:",
+          "description": "set up a channel to receive questions and respond to them"
+        },
+        "esim": {
+          "title": "eSIM distribution:",
+          "description": "distribute eSims to members of your community"
+        },
+        "vpn": {
+          "title": "VPN distribution:",
+          "description": "distribute VPN codes to members of your community"
+        }
+      }
+    },
+    "cta": "Ready to get started?",
+    "button": "Enter invite code here",
+    "contact": "Contact us if you have questions or need a code:"
+  }
+}
