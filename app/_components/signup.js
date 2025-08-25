@@ -17,10 +17,6 @@ const initialState = {
 export function SignupForm() {
   const [state, formAction, pending] = useActionState(register, initialState);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   return (
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">

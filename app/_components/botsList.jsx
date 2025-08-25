@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 // chakra ui imports
-import { Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
 import { deleteBot } from "@/app/_actions/deleteBot";
@@ -12,6 +12,7 @@ import { getUserBots } from "@/app/_actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/_components/botCard";
+import PrivacyConsent from "@/app/_components/privacyConsent";
 
 // constants
 import { MAX_BOTS } from "@/app/constants";
@@ -19,11 +20,20 @@ import { MAX_BOTS } from "@/app/constants";
 export default function BotsList({ username }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
+  const [consentAgree, setConsentAgree] = useState(false);
 
   const fetchBots = useCallback(async () => {
-    const fetchedBots = await getUserBots(username);
-    setBots(fetchedBots);
-    setIsFetching(false);
+    try {
+      const fetched = await getUserBots(username);
+      console.log(fetched);
+
+      setBots(fetched.bots);
+      setConsentAgree(fetched.user.consent_agree);
+    } catch (error) {
+      throw new Error(error.message);
+    } finally {
+      setIsFetching(false);
+    }
   });
 
   useEffect(() => {
@@ -50,14 +60,21 @@ export default function BotsList({ username }) {
     }
   }, []);
 
-  useEffect(() => {}, [bots, isFetching]);
+  useEffect(() => {}, [bots, consentAgree, isFetching]);
 
   if (isFetching) {
     return <Spinner size="lg" />;
   } else {
     return (
       <>
-        {bots && bots.length ? (
+        {!consentAgree ? (
+          <Box>
+            <PrivacyConsent
+              username={username}
+              setConsentAgree={setConsentAgree}
+            />
+          </Box>
+        ) : bots && bots.length ? (
           <>
             <Heading as="h2" size="xl">
               My bots
@@ -83,10 +100,10 @@ export default function BotsList({ username }) {
         )}
         <Button
           as="a"
-          disabled={bots && bots.length > 3}
+          disabled={bots?.consent_agree === false || (bots && bots.length > 3)}
           href="/create"
           onClick={(e) => {
-            if (bots && bots.length > 3) {
+            if (bots?.consent_agree === false || (bots && bots.length > 3)) {
               e.preventDefault();
             }
           }}
