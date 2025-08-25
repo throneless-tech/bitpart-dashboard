@@ -79,16 +79,12 @@ export function LoginForm() {
         <Box marginLeft="auto" marginRight="auto" maxW={400}>
           <ToastSignUp />
           <Field.Root required>
-            <Field.Label>Username</Field.Label>
-            <Input name="username" placeholder="username.here" size="lg" />
+            <Field.Label>Username or email</Field.Label>
+            <Input name="username" size="lg" />
           </Field.Root>
           <Field.Root marginTop={4} required>
             <Field.Label>Password</Field.Label>
-            <PasswordInput
-              name="password"
-              placeholder="AVeryGoodPassword"
-              size="lg"
-            />
+            <PasswordInput name="password" size="lg" />
           </Field.Root>
           <Submit />
           <Text marginTop={8}>

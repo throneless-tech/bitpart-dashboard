@@ -11,6 +11,7 @@ export const register = async (prevState, formData) => {
   const password = formData.get("password");
   const passwordConfirm = formData.get("passwordConfirm");
   const username = formData.get("username");
+  const email = formData.get("email");
 
   try {
     // validate form fields
@@ -32,16 +33,16 @@ export const register = async (prevState, formData) => {
       };
     }
 
-    const userFound = await prisma.user.findUnique({
+    const userFound = await prisma.user.findFirst({
       where: {
-        username,
+        OR: [{ email }, { username }],
       },
     });
 
     if (userFound) {
       return {
         error: {
-          username: "Username already exists.",
+          username: "A user with these credentials already exists.",
         },
       };
     }
@@ -79,6 +80,7 @@ export const register = async (prevState, formData) => {
 
     const user = await prisma.user.create({
       data: {
+        email,
         username,
         password: hashedPassword,
       },
@@ -90,7 +92,7 @@ export const register = async (prevState, formData) => {
 
     return {
       error: {
-        password: e.message,
+        general: e.message,
       },
     };
   } finally {
