@@ -32,7 +32,7 @@ export const TiplineConfirmation = (props) => {
           <List.Item>
             <Text>
               Go to{" "}
-              <Link color={props?.color} href="/bots" variant="underline">
+              <Link color={props?.color} href="/my-bots" variant="underline">
                 My Bots
               </Link>{" "}
               to see your bots and create a new one. You will also be able to

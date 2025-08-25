@@ -1,7 +1,6 @@
 "use client";
 
 // base imports
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -15,19 +14,14 @@ import {
   AbsoluteCenter,
   Box,
   Button,
+  Center,
   Container,
   Dialog,
-  Group,
   Heading,
-  Highlight,
   HStack,
-  Icon,
   Link,
-  List,
   Portal,
-  QrCode,
   Spinner,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -43,27 +37,10 @@ import { HelpdeskForm } from "@/app/_components/forms/helpdesk";
 import { TiplineForm } from "@/app/_components/forms/tipline";
 import { VpnForm } from "@/app/_components/forms/vpn";
 
-// confirmation pages
-import { BroadcastConfirmation } from "./confirmation/broadcast";
-import { EsimConfirmation } from "./confirmation/esim";
-import { HelpdeskConfirmation } from "./confirmation/helpdesk";
-import { TiplineConfirmation } from "./confirmation/tipline";
-import { VpnConfirmation } from "./confirmation/vpn";
-
-// icons imports
-import { CgModem } from "react-icons/cg";
-import { FaSimCard } from "react-icons/fa";
-import { IoHelpBuoySharp } from "react-icons/io5";
-import { LuLightbulb } from "react-icons/lu";
-import { TbBuildingBroadcastTower } from "react-icons/tb";
-
 // actions
 import { updateBotBitpart, updateBotPrisma } from "@/app/_actions/updateBot";
 import { parseCSV } from "@/app/_actions/csv";
 import { getBot } from "@/app/_actions/getUserBots";
-
-// constants
-import { MAX_BOTS } from "@/app/constants";
 
 const valuesToUnregister = [
   "about",
@@ -86,11 +63,11 @@ const valuesToUnregister = [
   "vpnName",
 ];
 
-export default function EditBotFlow({ botId, userId }) {
+export default function EditBotFlow({ botId, username }) {
   const router = useRouter();
   const [notAllowed, setNotAllowed] = useState(false);
   const [open, setOpen] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [botPasscode, setBotPasscode] = useState("");
   const [bot, setBot] = useState(null);
 
@@ -107,7 +84,7 @@ export default function EditBotFlow({ botId, userId }) {
 
   const fetchBot = useCallback(async () => {
     try {
-      const fetchedBot = await getBot(botId, userId);
+      const fetchedBot = await getBot(botId, username);
 
       if (!fetchedBot) {
         setNotAllowed(true);
@@ -161,9 +138,15 @@ export default function EditBotFlow({ botId, userId }) {
         throw new Error(emsData.error.message);
       }
 
-      await updateBotPrisma(data, bot.id, bot.bitpartId, bot.passcode);
+      await updateBotPrisma(
+        data,
+        bot.id,
+        bot.bitpartId,
+        username,
+        bot.passcode,
+      );
 
-      router.push(`/view/${bot.id}`);
+      router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
       console.log(error);
       alert(
@@ -188,14 +171,20 @@ export default function EditBotFlow({ botId, userId }) {
 
   useEffect(() => {}, [isFetching, notAllowed, watchAll]);
 
-  if (notAllowed) {
+  if (isFetching) {
+    return (
+      <Center>
+        <Spinner size="xl" />
+      </Center>
+    );
+  } else if (notAllowed) {
     return (
       <Box>
         <Container marginTop={8} maxWidth="lg">
           <Text>You do not have access rights to view or edit this bot.</Text>
           <Text marginTop={4}>
             You can{" "}
-            <Link color={color} href="/bots" variant="underline">
+            <Link color={color} href="/my-bots" variant="underline">
               return to My Bots
             </Link>
             .
@@ -268,7 +257,7 @@ export default function EditBotFlow({ botId, userId }) {
             <Spinner size="xl" />
           )}
           <HStack gap={4} marginTop={8}>
-            <Button as="a" href="/bots" size="sm" variant="outline">
+            <Button as="a" href="/my-bots" size="sm" variant="outline">
               Cancel
             </Button>
             <Button

@@ -6,6 +6,7 @@ import WebSocket from "ws";
 
 // actions
 import { formatCsml } from "./formatBot";
+import { getUser } from "./getUser";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -154,14 +155,16 @@ export const linkChannelBitpart = async (botId) => {
 };
 
 // create the bot in the prisma db
-export const createBotPrisma = async (data, bitpartId, userId, passcode) => {
+export const createBotPrisma = async (data, bitpartId, username, passcode) => {
   try {
     delete data.csv; // we are not saving the codes here
+
+    const user = await getUser(username);
 
     const bot = await prisma.bot.create({
       data: {
         ...data,
-        creatorId: userId,
+        creatorId: user.id,
         // countryCode: data.countryCode,
         // phone,
         // adminPhones: phones,

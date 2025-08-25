@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 // chakra ui imports
 import {
   Box,
+  Button,
   ClientOnly,
   Container,
   Heading,
@@ -17,7 +18,6 @@ import {
 
 // components
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
-import { InviteForm } from "./_components/enterInvite";
 import { ToastSignOut } from "./_components/toastalert";
 import Header from "./_components/header";
 
@@ -86,10 +86,10 @@ export default function Home() {
           </List.Item>
         </List.Root>
         <Box marginTop={8} textAlign="center">
-          <Text marginBottom={8}>
-            Ready to get started? Enter your invite code below:
-          </Text>
-          <InviteForm />
+          <Text marginBottom={8}>Ready to go?</Text>
+          <Button as="a" href="/signup" marginTop={4}>
+            Get started
+          </Button>
           <Text marginTop={8} fontStyle="italic" textStyle="sm">
             Contact us if you have questions or need a code:{" "}
             <ClientOnly>

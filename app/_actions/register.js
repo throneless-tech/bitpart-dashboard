@@ -46,6 +46,35 @@ export const register = async (prevState, formData) => {
       };
     }
 
+    const inviteCode = await prisma.inviteCode.findUnique({
+      where: {
+        code: formData.get("code"),
+      },
+    });
+
+    if (!inviteCode) {
+      return {
+        error: {
+          code: "Invite code is not valid. Please try again.",
+        },
+      };
+    } else if (inviteCode.used) {
+      return {
+        error: {
+          code: "Invite code has already been used. Please enter a different code or contact an administrator.",
+        },
+      };
+    }
+
+    const updateInviteCode = await prisma.inviteCode.update({
+      where: {
+        code: inviteCode.code,
+      },
+      data: {
+        used: true,
+      },
+    });
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({

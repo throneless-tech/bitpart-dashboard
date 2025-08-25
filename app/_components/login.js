@@ -1,7 +1,7 @@
 "use client";
 
 // react imports
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 
@@ -56,7 +56,7 @@ export function LoginForm() {
       const res = await login(formData);
 
       if (res.success) {
-        router.push("/bots");
+        router.push("/my-bots");
       } else {
         console.log(res.message);
         toaster.create({

@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import WebSocket from "ws";
+import { getUser } from "./getUser";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -63,7 +64,7 @@ class WSConnection {
   }
 }
 
-export const deleteBot = async (botId, botName) => {
+export const deleteBot = async (botId, botName, username) => {
   const jsonDeleteBot = {
     message_type: "DeleteBot",
     data: {
@@ -93,9 +94,12 @@ export const deleteBot = async (botId, botName) => {
     });
 
   try {
+    const user = await getUser(username);
+
     const bot = await prisma.bot.delete({
       where: {
         id: botId,
+        creatorId: user.id,
       },
     });
 

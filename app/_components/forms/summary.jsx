@@ -13,14 +13,14 @@ import { getBot } from "@/app/_actions/getUserBots";
 import { Alert } from "@/app/_components/ui/alert";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
-export const Summary = ({ data, errors, botId, userId }) => {
+export const Summary = ({ data, errors, botId, username }) => {
   const [bot, setBot] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [notAllowed, setNotAllowed] = useState(false);
 
   const fetchBot = useCallback(async () => {
     try {
-      const fetchedBot = await getBot(botId, userId);
+      const fetchedBot = await getBot(botId, username);
 
       if (!fetchedBot) {
         setNotAllowed(true);
@@ -35,10 +35,11 @@ export const Summary = ({ data, errors, botId, userId }) => {
   });
 
   useEffect(() => {
-    if (botId && userId) {
+    if (botId && username) {
       fetchBot();
     } else {
       setBot(data);
+      setIsFetching(false);
     }
   }, [data]);
 
@@ -57,7 +58,7 @@ export const Summary = ({ data, errors, botId, userId }) => {
           <Text>You do not have access rights to view or edit this bot.</Text>
           <Text marginTop={4}>
             You can{" "}
-            <Link color={color} href="/bots" variant="underline">
+            <Link color={color} href="/my-bots" variant="underline">
               return to My Bots
             </Link>
             .

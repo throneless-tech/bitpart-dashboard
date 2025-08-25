@@ -30,23 +30,17 @@ const schema = [
 ];
 
 export const createPasscode = async () => {
-  let result = "";
-  const length = 8;
-  const characters = "ABCDEFGHJKMNPQRSTUVWXYZ123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
+  const array = new Uint32Array(4);
+  const bytes = crypto.getRandomValues(array);
+  const result = Buffer.from(bytes).toString("hex", 0, 6).toUpperCase();
 
   return result;
 };
 
 // format the name of the bot for bitpart bot id
-export const formatBotName = async (botName, userId) => {
+export const formatBotName = async (botName, username) => {
   let formattedBotName = botName.replace(/\s/g, "_");
-  formattedBotName = `${formattedBotName}_${userId}`;
+  formattedBotName = `${formattedBotName}_${username}`;
 
   return formattedBotName;
 };
