@@ -81,7 +81,6 @@ model Bot {
   referral               String?
   responseTime           String?
   storageAccess          String?
-  storageTime            Int?
   problems               Json[]
   vpnName                String?
   creatorId              String
