@@ -23,15 +23,15 @@ start:
       goto submit_question_step
     }
 
-    say Text("Hi. You have found the distribution list [name].
+    say Text("Hi. You have found the broadcast channel [name].
 
 You can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
 
-You can disagree, and your contact number will be deleted automatically from the list.")
+You can disagree, and your contact number will be deleted automatically from the channel.")
 
-    say Text("Agree - I want to be added to the distribution list and consent to receiving messages.
+    say Text("Agree - I want to be added to the broadcast channel and consent to receiving messages.
     
-Disagree - please remove me from the list.
+Disagree - please remove me from the channel.
 
 Reply with 'Agree' or 'Disagree'.")
     hold
@@ -102,7 +102,7 @@ consent_disagree_step:
     goto submit_question_step
   }
 
-  say Text("You have asked that you be removed from the list and all your data be deleted from the system.
+  say Text("You have asked that you be removed from the channel and all your data be deleted from the system.
   
 Once this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.
 
@@ -130,7 +130,7 @@ confirm_delete_step:
   goto end
 
 consent_agree_step:
-  say "Confirmed, we've added you to the list.
+  say "Confirmed, we've added you to the channel.
 
 Welcome!"
   goto menu_step
@@ -148,7 +148,7 @@ Reply with the corresponding number:
 2. Safety tips
 3. Frequently asked questions (FAQs)
 
-You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this list.
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
 
 Send 'Menu' at any time to come back to this menu.")
   hold
@@ -252,16 +252,19 @@ Reply with 'Menu' to return home.")
     goto check_if_solved_step
 
 submit_question_step:
-  say "We've understood that you have a question not covered by the FAQs. Please ask your question?"
-  hold
+  say "We've understood that you have a question not covered by the FAQs. Please reach out to [referral] for support."
+  goto menu_step
 
-  remember problem = event
+
+  // hold
+
+  // remember problem = event
 
   // bitpart flags conversation to list owner
-  whisper "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.content.client.user_id}}"
+  // whisper "A user asked the following question of the broadcast list, which they were unable to solve: {{problem}}. They can be contacted at {{event.content.client.user_id}}"
 
-  say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
+  // say "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch."
 
-  say "We will contact you again the next time an admin broadcasts a message."
+  // say "We will contact you again the next time an admin broadcasts a message."
 
   // goto end // we are not ending the conversation, uncomment if that changes
