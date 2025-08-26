@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "../../components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import Header from "../../_components/header";
 
 export default function FAQ() {
   // session
@@ -675,7 +675,7 @@ export default function FAQ() {
           <List.Item>
             Find the passcode by navigating to your{" "}
             <ClientOnly>
-              <Link color={color} href="/bots" variant="underline">
+              <Link color={color} href="/my-bots" variant="underline">
                 dashboard
               </Link>
             </ClientOnly>{" "}

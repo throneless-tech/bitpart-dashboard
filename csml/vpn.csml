@@ -38,9 +38,7 @@ start:
     // TODO Bitpart interprets incoming language. Response is in the same language
     say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
 
-Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation.
-
-We offer VPN codes from [vpnName] which works in [locations]."
+Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation."
 
 goto menu_step
 
