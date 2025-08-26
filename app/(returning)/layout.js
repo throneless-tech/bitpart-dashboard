@@ -2,7 +2,7 @@
 import React from "react";
 
 // chakra provider
-import { Provider } from "@/app/components/ui/provider";
+import { Provider } from "@/app/_components/ui/provider";
 
 // auth session provider
 import { SessionProvider } from "next-auth/react";
