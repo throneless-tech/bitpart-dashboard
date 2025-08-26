@@ -59,7 +59,6 @@ const valuesToUnregister = [
   "responseTime",
   "safetyTips",
   "storageAccess",
-  "storageTime",
   "vpnName",
 ];
 

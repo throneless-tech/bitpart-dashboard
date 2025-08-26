@@ -27,9 +27,12 @@ export default {
           const { username, password } = validatedFields;
 
           // 3. Insert the user into the database or verify if the user exists
-          user = await prisma.user.findUnique({
+          user = await prisma.user.findFirst({
             where: {
-              username: username,
+              OR: [
+                {username},
+                {email: username}
+              ]
             },
           });
 

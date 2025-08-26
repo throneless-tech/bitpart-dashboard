@@ -8,15 +8,21 @@ import { getUser } from "./getUser";
 export const getUserBots = async (username) => {
   try {
     const user = await getUser(username);
+
     const bots = await prisma.bot.findMany({
       where: {
         creatorId: user.id,
       },
     });
 
-    return bots;
-  } catch (e) {
-    console.log(e);
+    return {
+      bots,
+      user: {
+        consent_agree: user.consent_agree,
+      },
+    };
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
 
@@ -31,7 +37,7 @@ export const getBot = async (botId, username) => {
     });
 
     return bot;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
