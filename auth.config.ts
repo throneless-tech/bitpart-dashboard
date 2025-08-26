@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
 
-import { LoginSchema } from "./app/lib/definitions";
+import { LoginSchema } from "./app/_lib/definitions";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {

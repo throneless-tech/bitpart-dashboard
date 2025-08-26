@@ -1,3 +1,5 @@
+"use server";
+
 // base imports
 import React from "react";
 import { auth } from "@/auth";
@@ -6,11 +8,12 @@ import { auth } from "@/auth";
 import { Box, Container } from "@chakra-ui/react";
 
 // component imports
-import CreateBotFlow from "@/app/_components/create";
+import EditBotFlow from "@/app/_components/edit";
 import Header from "@/app/_components/header";
 import NotAuthenticated from "@/app/_components/notAuthenticated";
 
-export default async function Create() {
+export default async function Edit({ params }) {
+  const { id } = await params;
   const session = await auth();
 
   if (!session) return <NotAuthenticated />;
@@ -20,7 +23,7 @@ export default async function Create() {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <CreateBotFlow username={session?.user?.name} />
+      <EditBotFlow botId={id} username={session?.user?.name} />
     </Box>
   );
 }
