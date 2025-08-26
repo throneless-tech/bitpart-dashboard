@@ -473,10 +473,7 @@ export default function CreateBotFlow({ username }) {
                   On your phone, open Signal and navigate to Signal Settings{" "}
                   {">"} Linked devices.
                 </List.Item>
-                <List.Item>
-                  Tap the Android + with blue circle (Android) or Link New
-                  Device (iOS)
-                </List.Item>
+                <List.Item>Tap the blue button: "Link a new device"</List.Item>
                 <List.Item>Use your phone to scan the QR code.</List.Item>
               </List.Root>
               <Text marginTop={4}>
