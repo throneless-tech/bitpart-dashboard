@@ -126,7 +126,7 @@ menu_options_step:
   
   say Text("What would you like to do now?
 
-Reply with 'Main menu' to go back to the main menu.
+Reply with 'Menu' to go back to the main menu.
 
 Reply with 'Help' to go back to the help menu.
 
@@ -135,7 +135,7 @@ Reply with 'Talk to a human' to get more support.
 Reply with 'End' to end this chat for today.")
   hold 
 
-  if (event.to_lowercase() == "main menu") {
+  if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "help") {
     goto help_step
@@ -193,7 +193,7 @@ Is your device e-sim compatible? Reply with 'Yes' or 'No'.")
   hold
 
   if (event.to_lowercase() == "yes") {
-    goto get_esim_2_step
+    goto get_esim_3_step
   } else if (event.to_lowercase() == "no") {
     say Text("Sorry, an eSIM won't work for your device.
     
@@ -220,32 +220,32 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
     goto get_esim_1_step
   }
 
-get_esim_2_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
+// get_esim_2_step:
+//   if (count >= 3) {
+//     goto human_support_step
+//   }
 
-  say Text("Step 2:
+//   say Text("Step 2:
 
-Which networks are available where you are?
+// Which networks are available where you are?
 
-To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
+// To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
 
-Which of the following mobile networks do you see?
+// Which of the following mobile networks do you see?
 
-{{providers}}
+// {{providers}}
 
-List all networks available separated by a comma  e.g. :
-1,2,5")
-  hold
+// List all networks available separated by a comma  e.g. :
+// 1,2,5")
+//   hold
 
-  if (event.to_lowercase() == "delete") {
-    goto delete_data_step
-  } 
+//   if (event.to_lowercase() == "delete") {
+//     goto delete_data_step
+//   } 
 
-  remember provider = event
+//   remember provider = event
 
-  goto get_esim_3_step
+//   goto get_esim_3_step
 
 get_esim_3_step:
   if (count >= 3) {
@@ -255,7 +255,7 @@ get_esim_3_step:
   remember rawEsim = App("ems", method_id = "EsimData", provider=provider)
   remember esim = parse_codes(rawEsim)
 
-  say Text("Step 3:
+  say Text("Step 2:
 
 Here is a unique eSIM code for you:
 
