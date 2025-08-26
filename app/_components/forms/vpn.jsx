@@ -68,7 +68,7 @@ export const VpnForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input placeholder="VPN Distribution Org" {...register("name")} />
+        <Input placeholder="VPN Distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}

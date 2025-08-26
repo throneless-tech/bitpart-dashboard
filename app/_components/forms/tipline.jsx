@@ -17,7 +17,7 @@ export const TiplineForm = ({ bot }) => {
         errorText={!!errors?.name && errors.name.message}
         helperText="Name your tipline. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
-        label="Tipline name"
+        label="Public name"
         required
       >
         <Input {...register("name")} />

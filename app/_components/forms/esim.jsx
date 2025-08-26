@@ -58,7 +58,7 @@ export const EsimForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input placeholder="eSIM distributor" {...register("name")} />
+        <Input placeholder="eSIM Distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
