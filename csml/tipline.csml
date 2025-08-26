@@ -218,6 +218,11 @@ Here is the tip they provided: {{tip}}"
     // TODO SACHA do we accept another message after this?
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
+
+    whisper "A user sent the following anonymous tip: {{tip}}.
+    
+They did not wish to be contacted."
+
     delete
     goto end
   } else if (event.to_lowercase() == "back") {

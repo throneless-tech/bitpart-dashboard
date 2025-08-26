@@ -10,6 +10,8 @@ ICCID: {{data.iccid}}"
 
 start:
   // if bitpart receives passcode, set admin
+  remember attempt = 0
+  remember count = 0
   do passcode = event.to_uppercase()
 
   if (passcode.contains("[passcode]")) {
@@ -17,9 +19,13 @@ start:
     remember _whisperable = true
 
     say Text("Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
+
     hold
 
     if (event.to_lowercase() == "help") {
+      goto admin_interface_step
+    } else {
+      say "Sorry, I did not get that."
       goto admin_interface_step
     }
   }
@@ -28,16 +34,38 @@ start:
     goto admin_interface_step
   }
   else
-    remember count = 0
     // conversation is triggered by a message from a user who says they need an esim
     // TODO Bitpart interprets incoming language. Response is in the same language
     // TODO check if the user has contacted this line before
 
-    say Text("Thank you for contacting [name]. [description]
+    goto user_welcome_step
 
-We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
+admin_passcode_step:
+  do passcode = event.to_uppercase()
+  
+  say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  hold
 
-    goto menu_step
+  if (attempt >= 3) {
+    // TODO set flagged on bitpart server
+    remember _whisperable = false
+    
+    say "You have tried to login too many times. Please contact an administrator for help."
+
+    goto user_welcome_step
+  } else if (event.to_lowercase() == "exit") {
+    remember _whisperable = false
+    
+    goto user_welcome_step
+  } else if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    
+    goto admin_interface_step
+  } else {
+    remember attempt = attempt + 1
+  }
 
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
@@ -59,6 +87,13 @@ admin_interface_step:
 
     goto admin_interface_step
   }
+
+user_welcome_step:
+  say Text("Thank you for contacting [name]. [description]
+
+We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
+
+  goto menu_step
 
 delete_me_confirm_step:
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
@@ -360,21 +395,97 @@ Please share what you need help with and a member of our team will get back to y
 
   remember problem = event
 
-  // flag relevant data to bitpart
-  whisper "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
-
-  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
-
-  hold
-
   if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
   } else {
-    goto start
+    goto contact_method_step
   }
 
   // goto end // we are not ending the conversation, uncomment if that changes
 
+contact_method_step:
+  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  
+1. Signal call
+2. Signal text message
+3. Phone call
+4. Any
+5. None, don't contact me")
+
+  hold
+
+  if (event == 1) {
+    remember contact_preference = "signal call"
+    goto record_number_step    
+  } else if (event == 2) {
+    remember contact_preference = "signal text message"
+    goto record_number_step    
+  } else if (event == 3) {
+    remember contact_preference = "phone call"
+    goto record_number_step    
+  } else if (event == 4 || event == 5) {
+    goto confirm_contact_method_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please choose a number from the list."
+    goto contact_method_step
+  }
+
+record_number_step:
+  say "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable."
+  hold
+
+  remember contact_number = event
+
+  // flag relevant data to bitpart
+  whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  
+Here is the problem they experienced: {{problem}}"
+
+  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+
+  goto end
+
+confirm_contact_method_step:
+  say Text("Reply 'Yes' to confirm we can use any method to contact you.
+  
+Reply 'Back' to go to the previous menu of options
+    
+Reply 'No' if you prefer to not be contacted.")
+  hold
+
+  if (event.to_lowercase() == "yes") {
+    say "Thank you. Your preference is noted."
+
+    whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via any method, contact {{contact_number}}.
+    
+Here is the problem they experienced: {{problem}}"
+
+    // TODO SACHA do we accept another message after this?
+  } else if (event.to_lowercase() == "no") {
+    say "Ok, we will not contact you. Thanks again for the heads up."
+
+    whisper "A user had the following problem not covered in the help section of the eSIM distribution: {{problem}}.
+    
+They sent this problem anonymously and did not wish to be contacted."
+
+    goto end
+  } else if (event.to_lowercase() == "back") {
+    goto contact_method_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else {
+    say "Sorry, I did not get that."
+    goto confirm_contact_method_step
+  }
+
+  // goto end // we are not ending the conversation, uncomment if that changes
