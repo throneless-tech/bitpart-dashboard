@@ -5,9 +5,9 @@ import React from "react";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/app/components/ui/color-mode";
-import Header from "@/app/components/header";
-import { SignupForm } from "@/app/components/signup";
+import { ColorModeButton } from "@/app/_components/ui/color-mode";
+import Header from "@/app/_components/header";
+import { SignupForm } from "@/app/_components/signup";
 
 export default function Signup() {
   return (
@@ -15,15 +15,7 @@ export default function Signup() {
       <Container py={6}>
         <Header />
       </Container>
-      <Container py={6}>
-        <Flex justifyContent="space-between">
-          <ColorModeButton />
-          <Heading as="a" href="/">
-            Bitpart
-          </Heading>
-        </Flex>
-      </Container>
-      <Container py={6} maxW="lg">
+      <Container py={12} maxW="lg">
         <Text marginBottom={12}>
           Choose a unique username and password, and store this somewhere safe.
           Since we do not collect your email, we will not be able to send you a

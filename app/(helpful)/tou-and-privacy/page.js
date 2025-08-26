@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import { useColorModeValue } from "@/app/components/ui/color-mode";
-import Header from "@/app/components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import Header from "@/app/_components/header";
 
 export default function About() {
   // session

@@ -1,0 +1,167 @@
+// base imports
+import { useEffect } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+
+// chakra imports
+import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
+import { Button } from "@/app/_components/ui/button";
+import { Field } from "@/app/_components/ui/field";
+import {
+  NumberInputField,
+  NumberInputLabel,
+  NumberInputRoot,
+} from "@/app/_components/ui/number-input";
+
+export const HelpdeskForm = ({ bot }) => {
+  const {
+    control,
+    formState: { defaultValues, errors },
+    register,
+  } = useFormContext();
+
+  const { fields, append, replace, remove } = useFieldArray({
+    control,
+    name: "problems",
+  });
+
+  useEffect(() => {
+    if (bot?.problems && bot.problems.length) {
+      replace(bot.problems);
+    }
+  }, [bot]);
+
+  return (
+    <>
+      <Field
+        errorText={!!errors?.name && errors.name.message}
+        helperText="Name your helpdesk. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
+        invalid={!!errors?.name}
+        label="Helpdesk name"
+        required
+      >
+        <Input {...register("name")} />
+      </Field>
+      <Field
+        errorText={!!errors?.referral && errors.referral.message}
+        helperText="Add a phone number, Signal username, or link to a service that a person should contact if they need emergency assistance. For example, this could be emergency services or your work phone. It depends on your helpdesk as to what is appropriate."
+        invalid={!!errors?.referral}
+        label="Emergency support contact"
+        marginTop={4}
+        required
+      >
+        <Input {...register("referral")} />
+      </Field>
+      <Field
+        errorText={!!errors?.description && errors.description.message}
+        helperText="Enter one sentence about who you are and what this helpline offers. This information will be shared in the first message, after the name of the helpdesk. "
+        invalid={!!errors?.description}
+        label="About"
+        marginTop={4}
+        required
+      >
+        <Textarea autoresize {...register("description")} />
+      </Field>
+      <Field
+        errorText={!!errors?.responseTime && errors.responseTime.message}
+        helperText={`How long your users can expect to have to wait for a reply from a human, eg., "24 hours" or "2 days" or "1 week."`}
+        invalid={!!errors?.responseTime}
+        label="Response time"
+        marginTop={4}
+        required
+      >
+        <Input {...register("responseTime")} maxW={280} />
+      </Field>
+      <Field
+        errorText={!!errors?.storageAccess && errors.storageAccess.message}
+        helperText="How long the users' information will be stored by your team, and who will have access to the information stored."
+        invalid={!!errors?.storageAccess}
+        label="Data retention policy"
+        marginTop={4}
+        required
+      >
+        <Textarea autoresize {...register("storageAccess")} />
+      </Field>
+      <Field
+        errorText={!!errors?.privacyPolicy && errors.privacyPolicy.message}
+        helperText="Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy."
+        invalid={!!errors?.privacyPolicy}
+        info="privacyPolicy"
+        label="Data rights"
+        marginTop={4}
+        required
+      >
+        <Textarea
+          autoresize
+          defaultValue={
+            bot
+              ? bot.privacyPolicy
+              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
+          }
+          {...register("privacyPolicy")}
+        />
+      </Field>
+      <Fieldset.Root marginTop={4}>
+        <Stack>
+          <Fieldset.Legend>What do people need help with?</Fieldset.Legend>
+          <Fieldset.HelperText>
+            This is what your helpdesk will help people with. Keep in mind this
+            will appear as a text message, so we recommend four (4) or fewer
+            question/answer combos.
+          </Fieldset.HelperText>
+        </Stack>
+        {fields.map((f, i) => {
+          return (
+            <Stack
+              alignItems={"center"}
+              direction={["column", "row"]}
+              justifyContent="flex-start"
+              key={f.id}
+              marginBottom={4}
+              spacing={20}
+              width="100%"
+            >
+              <Stack width="100%">
+                <Field
+                  invalid={!!errors?.problems}
+                  errorText={errors.problems?.problem}
+                >
+                  <Input
+                    placeholder="Problem"
+                    {...register(`problems.${i}.problem`)}
+                  />
+                </Field>
+                <Field
+                  invalid={!!errors?.problems}
+                  errorText={errors.problems?.solution}
+                >
+                  <Textarea
+                    autoresize
+                    placeholder="Steps to resolve"
+                    {...register(`problems.${i}.solution`)}
+                  />
+                </Field>
+              </Stack>
+              {i >= 0 && (
+                <Button onClick={() => remove(i)} height={6} width={1}>
+                  X
+                </Button>
+              )}
+            </Stack>
+          );
+        })}
+        <Button
+          onClick={() =>
+            append({
+              problem: "",
+              solution: "",
+            })
+          }
+          variant="subtle"
+          width={40}
+        >
+          Add problem area
+        </Button>
+      </Fieldset.Root>
+    </>
+  );
+};
