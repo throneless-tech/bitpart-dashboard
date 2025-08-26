@@ -1,5 +1,12 @@
 // This is a template. It will not work before being processed by the system
-
+fn parse_codes(data) {
+  do codes_string = "Code: {{data.code}}
+Provider: {{data.provider}}
+SMDP Address: {{data.smdp_addr}}
+ICCID: {{data.iccid}}"
+  
+  return codes_string
+}
 
 start:
   // if bitpart receives passcode, set admin
@@ -245,7 +252,8 @@ get_esim_3_step:
     goto human_support_step
   }
 
-  remember esim = App("ems", method_id = "EsimData", provider=provider)
+  remember rawEsim = App("ems", method_id = "EsimData", provider=provider)
+  remember esim = parse_codes(rawEsim)
 
   say Text("Step 3:
 
@@ -280,8 +288,8 @@ help_step:
 
   say Text("Help
 
-1. How to activate an e-sim
-2. My e-sim isn't working
+1. How to activate an eSIM
+2. My eSIM isn't working
 3. Delete my eSIM
 4. Other")
   hold
