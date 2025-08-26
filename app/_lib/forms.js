@@ -94,10 +94,15 @@ export const schema = yup.object({
           "A referral or emergency contact person or place is required",
         ),
   }),
-  storageTime: yup.number("Enter a number").when("botType", {
-    is: "helpdesk" || "vpn",
-    then: () => yup.number("Enter a number").optional(),
-  }),
+  responseTime: yup
+    .string("Enter a length of time, in hours, days or weeks etc.")
+    .when("botType", {
+      is: "helpdesk" || "vpn",
+      then: () =>
+        yup
+          .string("Enter a length of time, in hours, days or weeks etc.")
+          .optional(),
+    }),
   storageAccess: yup.string().when("botType", {
     is: "helpdesk",
     then: () => yup.string().optional(),

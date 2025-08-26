@@ -113,38 +113,6 @@ export const VpnForm = ({ bot }) => {
       >
         <Input {...register("responseTime")} maxW={280} />
       </Field>
-      {/* FIXME do we need storage time? */}
-      {/* <Field
-        errorText={!!errors?.storageTime && errors.storageTime.message}
-        helperText="How long the user's information will be stored in the system, in hours. We suggest XX days, or XXX hours. Must be at least XX hours."
-        invalid={!!errors?.storageTime}
-        label="Data retention time"
-        marginTop={4}
-        required
-      >
-        <NumberInputRoot
-          min={1}
-          formatOptions={{
-            style: "unit",
-            unit: "hour",
-            unitDisplay: "long",
-          }}
-          {...register('storageTime')}
-        >
-          <NumberInputLabel />
-          <NumberInputField />
-        </NumberInputRoot>
-      </Field> */}
-      {/* <Field
-        errorText={!!errors?.vpnName && errors.vpnName.message}
-        helperText="Name of the VPN provider."
-        invalid={!!errors?.vpnName}
-        label="VPN provider name"
-        marginTop={4}
-        required
-      >
-        <Input {...register('vpnName')} />
-      </Field> */}
       <Field
         errorText={
           !!errors?.activationInstructions &&

@@ -71,23 +71,6 @@ export const HelpdeskForm = ({ bot }) => {
       >
         <Input {...register("responseTime")} maxW={280} />
       </Field>
-      {/* FIXME remove storage time and access? */}
-      {/* <Field
-        errorText={!!errors?.storageTime && errors.storageTime.message}
-        helperText="How long the user's information will be stored in the system, in hours. We suggest XXX hours. Must be at least XX hours."
-        invalid={!!errors?.storageTime}
-        label="Data retention time"
-        marginTop={4}
-        required
-      >
-        <NumberInputRoot
-          min={1}
-          {...register("storageTime")}
-        >
-          <NumberInputLabel />
-          <NumberInputField />
-        </NumberInputRoot>
-      </Field> */}
       <Field
         errorText={!!errors?.storageAccess && errors.storageAccess.message}
         helperText="How long the users' information will be stored by your team, and who will have access to the information stored."
