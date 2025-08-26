@@ -58,7 +58,7 @@ admin_interface_step:
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
+    say "Sorry, the bot did not understand 🤖"
 
     goto admin_interface_step
   }
@@ -78,7 +78,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto admin_interface_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto delete_me_confirm_step
 
 privacy_policy_step:
@@ -104,7 +104,7 @@ Please share your tip with us."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto privacy_policy_step
 
 delete_data_step:
@@ -122,7 +122,7 @@ Reply with 'Go back' to go back to the data rights.")
   } else if (event.to_lowercase() == "go back") {
     goto privacy_policy_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto delete_data_step
 
 confirm_delete_step:
@@ -152,7 +152,7 @@ They did not wish to be contacted."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, our system didn't understand what you meant. Please try again."
+    say "Sorry, the bot did not understand 🤖"
     goto tip_reply_step
   }
 
@@ -182,7 +182,7 @@ contact_method_step:
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
+    say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
   }
 
@@ -232,7 +232,7 @@ They did not wish to be contacted."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step
   }
 

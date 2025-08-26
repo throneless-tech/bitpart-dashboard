@@ -53,7 +53,9 @@ To disagree and end the conversation, reply with 'End'.")
       say "Ok. A member of our helpdesk team will follow up as soon as they can."
       goto incomplete_step
     } else {
-      say "Sorry,  our system didn't understand what you meant. A member of our helpdesk team will be in touch with you as soon as possible."
+      say "Sorry, the bot did not understand 🤖
+
+A member of our helpdesk team will be in touch with you as soon as possible."
       goto incomplete_step
     }
 
@@ -73,8 +75,7 @@ admin_interface_step:
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
-
+    say "Sorry, the bot did not understand 🤖"
     goto admin_interface_step
   }
 
@@ -93,7 +94,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto admin_interface_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_me_confirm_step
 
@@ -120,7 +121,7 @@ Reply with 'Delete' to delete your data.")
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto privacy_policy_step
 
@@ -143,7 +144,7 @@ Reply with 'Go back' to go back to the menu.")
   } else if (event.to_lowercase() == "go back" || event.to_lowercase() == "menu") {
     goto menu_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_data_step
 
@@ -155,7 +156,7 @@ incomplete_step:
 
 menu_step:
   if (count >= 3) {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto human_support_step
   }
   
@@ -181,7 +182,7 @@ Reply with the number.")
     goto delete_data_step
   } else {
     remember count = count + 1
-    say "Sorry, our system didn't understand what you meant. Please select the most appropriate option:"
+    say "Sorry, the bot did not understand 🤖"
     goto menu_step
   }
 
@@ -202,14 +203,14 @@ Reply 'Yes' or 'No'.")
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto check_if_solved_step
   }
 
 menu_options_step:
   if (count >= 3) {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto human_support_step
   }
   
@@ -230,7 +231,7 @@ Remember that if this is a sensitive conversation you can delete the conversatio
     say "Please contact us again if you need us."
     goto end
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto check_if_solved_step
   }
@@ -285,7 +286,7 @@ contact_method_step:
     say "Please contact us again if you need us."
     goto end
   } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
+    say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
   }
 
@@ -335,7 +336,7 @@ They sent this problem anonymously and did not wish to be contacted."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step
   }
 

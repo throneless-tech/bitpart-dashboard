@@ -36,9 +36,11 @@ start:
 
     // conversation is triggered by a message from a user who says they need a vpn code
     // TODO Bitpart interprets incoming language. Response is in the same language
-    say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
+    say "Thank you for contacting [name].
 
-Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation."
+[description]
+
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients)."
 
 goto menu_step
 
@@ -67,7 +69,7 @@ admin_interface_step:
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
+    say "Sorry, the bot did not understand 🤖"
 
     goto admin_interface_step
   }
@@ -87,7 +89,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto admin_interface_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_me_confirm_step
 
@@ -110,7 +112,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto menu_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_data_step
 
@@ -175,7 +177,7 @@ Otherwise, please send us a message next time you need VPN codes."
   goto end
 
 over_limit_step:
-  say "I'm sorry, your request is higher than the available limit of codes.
+  say "Sorry, your request is higher than the available limit of codes.
 
 You can either:
 Send a number lower than [maxCodes]
@@ -220,7 +222,7 @@ i_dont_understand_step:
   //   \nIf you want to contact the team directly, reply with 'Human'"
 
   // removing FAQ step from this flow for now
-  say "Sorry, this is an automated system, your request wasn't understood.
+  say "Sorry, the bot did not understand 🤖
 
 If you want to contact the team directly, reply with 'Human'."
   hold
@@ -252,7 +254,7 @@ help_step:
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto help_step
   }
@@ -276,7 +278,7 @@ Reply with 'End' to end the conversation for now."
     say "Please contact us again if you need us."
     goto end
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto help_step
   }
 
@@ -303,7 +305,7 @@ Reply Yes or No."
       goto consent_disagree_step
     } 
     else
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       hold
       remember count = count + 1
       goto check_if_solved_step
@@ -311,7 +313,7 @@ Reply Yes or No."
     goto other_help_step
   } 
   else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     hold
     remember count = count + 1
     goto check_if_solved_step
@@ -361,7 +363,7 @@ contact_method_step:
     say "Please contact us again if you need us."
     goto end
   } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
+    say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
   }
 
@@ -419,7 +421,7 @@ They sent this problem anonymously and did not wish to be contacted."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step
   }
 

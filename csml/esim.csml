@@ -18,7 +18,7 @@ start:
     if (event.to_lowercase() == "help") {
       goto admin_interface_step
     } else {
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       goto admin_interface_step
     }
   }
@@ -76,7 +76,7 @@ admin_interface_step:
   } else if (event.to_lowercase() == "help") {
     goto admin_interface_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
+    say "Sorry, the bot did not understand 🤖"
 
     goto admin_interface_step
   }
@@ -103,7 +103,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto admin_interface_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_me_confirm_step
 
@@ -146,7 +146,7 @@ Enter the number")
 
 menu_options_step:
   if (count >= 3) {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto human_support_step
   }
   
@@ -174,7 +174,7 @@ Reply with 'End' to end this chat for today.")
     
     goto end
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto check_if_solved_step
   }
@@ -198,7 +198,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "go back") {
     goto menu_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_data_step
 
@@ -233,7 +233,7 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
       
       goto end
     } else {
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       remember count = count + 1
       goto get_esim_1_step
     }
@@ -241,7 +241,7 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto get_esim_1_step
   }
@@ -348,7 +348,7 @@ Step 1: Open your phone's Settings.
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else { 
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto help_step
   }
@@ -374,7 +374,7 @@ Reply with 'End' to end this chat for today.")
     } else if (event.to_lowercase() == "delete") {
       goto delete_data_step
     } else {
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       remember count = count + 1
       goto help_step
     }
@@ -426,7 +426,7 @@ contact_method_step:
     say "Please contact us again if you need us."
     goto end
   } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
+    say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
   }
 
@@ -476,7 +476,7 @@ They sent this problem anonymously and did not wish to be contacted."
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step
   }
 

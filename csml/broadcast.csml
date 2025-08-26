@@ -88,21 +88,23 @@ admin_interface_step:
   } else if (event == 3) {
     goto delete_me_confirm_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
+    say "Sorry, the bot did not understand 🤖"
 
     goto admin_interface_step
   }
 
 user_welcome_step:
-  say Text("Hi. You have found the distribution list [name].
+  say Text("Hi. You have found the broadcast channel [name].
 
-You can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).  
 
-You can disagree, and your contact number will be deleted automatically from the list.")
+You can agree, and receive periodic messages.   
 
-  say Text("Agree - I want to be added to the distribution list and consent to receiving messages.
-    
-Disagree - please remove me from the list.
+You can disagree, and end the conversation.")
+
+  say Text("Agree - I want to be added to the broadcast channel and consent to receiving messages
+
+Disagree - please remove me from the broadcast channel
 
 Reply with 'Agree' or 'Disagree'.")
 
@@ -118,7 +120,7 @@ Reply with 'Agree' or 'Disagree'.")
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I do not understand."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto start
   }
@@ -140,7 +142,7 @@ Reply with 'Go back' to go back to the beginning.")
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_me_confirm_step
   }
@@ -169,7 +171,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto consent_disagree_step
   }
@@ -225,7 +227,7 @@ Send 'Menu' at any time to come back to this menu.")
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto menu_step
   }
@@ -259,7 +261,7 @@ await_reply_step:
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto menu_step
   }
@@ -283,7 +285,7 @@ faq_step:
     goto admin_passcode_step
   } 
   else 
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
 
   say Text("Reply with 'FAQ' to see the list of questions.
   
@@ -300,7 +302,7 @@ Reply with 'Menu' to return home.")
     goto admin_passcode_step
   } 
   else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     if (count >= 3) {
       goto submit_question_step
@@ -336,7 +338,7 @@ Reply with 'Menu' to return home.")
       goto admin_passcode_step
     } 
     else
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       hold
       remember count = count + 1
       goto check_if_solved_step
@@ -346,7 +348,7 @@ Reply with 'Menu' to return home.")
     goto admin_passcode_step
   } 
   else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     hold
     remember count = count + 1
     goto check_if_solved_step
