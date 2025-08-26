@@ -11,7 +11,8 @@ generator client {
 model User {
   id            String    @id @default(cuid())
   username      String    @unique
-  password      String    @unique
+  email         String?   @unique
+  password      String
   accounts      Account[]
   sessions      Session[]
   bots          Bot[]
@@ -82,7 +83,6 @@ model Bot {
   referral               String?
   responseTime           String?
   storageAccess          String?
-  storageTime            Int?
   problems               Json[]
   vpnName                String?
   creatorId              String

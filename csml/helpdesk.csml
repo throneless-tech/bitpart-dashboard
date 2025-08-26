@@ -164,7 +164,7 @@ menu_step:
 What issue are you seeking help with?
 
 [problems]
-[problems.length]) Other
+[problems.length]. Other
 
 Reply with the number.")
   hold

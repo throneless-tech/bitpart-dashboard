@@ -21,10 +21,24 @@ export function SignupForm() {
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
         <Field.Root invalid={state?.error} required>
-          <Field.Label>Enter invite code:</Field.Label>
+          <Field.Label>Enter your invite code</Field.Label>
           <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
           {state?.error ? (
-            <Field.ErrorText>{state?.error?.code}</Field.ErrorText>
+            <Field.ErrorText>
+              {state?.error?.general || state?.error?.code}
+            </Field.ErrorText>
+          ) : null}
+        </Field.Root>
+        <Field.Root invalid={state?.error?.username} marginTop={12}>
+          <Field.Label>Enter your email address</Field.Label>
+          <Input name="email" placeholder="email@mail.org" size="lg" />
+          <Field.HelperText>
+            This field is optional. You may include an email for password
+            recovery. Password recovery will not be possible without an email
+            address.
+          </Field.HelperText>
+          {state?.error?.email ? (
+            <Field.ErrorText>{state.error.email}</Field.ErrorText>
           ) : null}
         </Field.Root>
         <Field.Root invalid={state?.error?.username} marginTop={12} required>
