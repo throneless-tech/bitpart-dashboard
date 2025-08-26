@@ -13,27 +13,91 @@ Code: {{item.secret}}
 }
 
 start:
-// if bitpart receives passcode, set admin
+  // if bitpart receives passcode, set admin
+  remember attempt = 0
+  remember count = 0
   do passcode = event.to_uppercase()
+
+  // if _whisperable is set, user is already an admin
+  if (_whisperable == true) {
+    goto admin_interface_step
+  }
 
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
     say "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
-    hold
+    
+    goto admin_interface_step
 
-    if (event.to_lowercase() == "help") {
-      goto admin_interface_step
-    }
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   }
-  // if _whisperable is set, user is already an admin
-  if (_whisperable == true) {
+
+  else
+    if (count >= 3) {
+      goto submit_question_step
+    }
+
+    goto user_welcome_step
+
+admin_passcode_step:
+  say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  
+  hold
+  
+  do passcode = event.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    
+    goto admin_interface_step
+  } else if (event.to_lowercase() == "exit") {
+      remember _whisperable = false
+      
+      goto user_welcome_step
+  } else if (attempt >= 3) {
+    // TODO set flagged on bitpart server
+    remember _whisperable = false
+    
+    say "You have tried to login too many times. Please contact an administrator for help."
+
+    goto user_welcome_step
+  } else {
+    say "Incorrect passcode."
+    
+    remember attempt = attempt + 1
+
+    goto admin_passcode_step
+  }
+
+admin_interface_step:
+  say Text("What would you like to do? Enter a number:
+
+1. Exit this conversation and interact as a bot user
+2. Delete my data
+
+You do not need to do anything else to receive messages.")
+  hold
+
+  if (event == 1) {
+    say "You can send a message that says 'Admin' at any time to return to this menu."
+    remember _whisperable = false
+    goto user_welcome_step
+  } else if (event == 2) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
+  } else {
+    say "Sorry, the bot did not understand 🤖"
+
     goto admin_interface_step
   }
-  else
-    remember count = 0
 
+user_welcome_step:
     // conversation is triggered by a message from a user who says they need a vpn code
     // TODO Bitpart interprets incoming language. Response is in the same language
     say "Thank you for contacting [name].
@@ -50,30 +114,6 @@ menu_step:
 
     goto request_step
 
-admin_interface_step:
-  say Text("What would you like to do? Enter a number:
-
-1. Exit this conversation
-2. Delete my data")
-  hold
-
-  if (event == 1) {
-    
-    say "I am now closing this conversation. Please send a message again if you need me."
-
-    goto end
-  } else if (event == 2) {
-    say "After this, you will need to send the passcode again if you need me."
-
-    goto delete_me_confirm_step
-  } else if (event.to_lowercase() == "help") {
-    goto admin_interface_step
-  } else {
-    say "Sorry, the bot did not understand 🤖"
-
-    goto admin_interface_step
-  }
-
 delete_me_confirm_step: // admins
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
 
@@ -81,13 +121,15 @@ Once this happens, you will no longer be able to receive messages from this numb
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto admin_interface_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -104,13 +146,15 @@ Once this happens, you will no longer be able to receive messages from this numb
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto menu_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -129,10 +173,14 @@ request_step:
   if (event <= [maxCodes]) {
     remember codesNumber = event
     goto share_codes_step
-  } else if (event > [maxCodes]) {
+  } else if (event.to_lowercase() == "help") {
+    goto help_step
+  }  else if (event > [maxCodes]) {
     goto over_limit_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "You have asked for {{event}} codes. The limit is [maxCodes]. Please enter a lower number."
 
@@ -170,6 +218,8 @@ Otherwise, please send us a message next time you need VPN codes."
     goto help_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     goto i_dont_understand_step
   }
@@ -187,11 +237,17 @@ Reply with the number of codes you would like to request, for a team member to m
 
   if (event <= [maxCodes]) {
     goto request_step
+  } else if (event.to_lowercase() == "help") {
+    goto help_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event > [maxCodes]) {
     remember request = event
     goto human_support_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
+  } else {
+    goto i_dont_understand_step
   }
 
 human_support_step:
@@ -202,7 +258,7 @@ human_support_step:
 
   if (event.to_lowercase() == "no") {
     remember problem = "No additional data was shared."
-    goto delete_data_step
+    goto contact_method_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event.to_lowercase() == "my data") {
@@ -210,6 +266,8 @@ human_support_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     remember problem = event
 
@@ -217,11 +275,10 @@ human_support_step:
   }
 
 i_dont_understand_step:
-  // say "Sorry, this is an automated system, your request wasn't understood.
-  //   \nIf you want to see commonly asked questions, reply with 'Help'
-  //   \nIf you want to contact the team directly, reply with 'Human'"
+  if (count >= 3) {
+    goto human_support_step
+  }
 
-  // removing FAQ step from this flow for now
   say "Sorry, the bot did not understand 🤖
 
 If you want to contact the team directly, reply with 'Human'."
@@ -233,6 +290,8 @@ If you want to contact the team directly, reply with 'Human'."
     goto delete_data_step
   } else if (event.to_lowercase() == "human" ) {
     goto human_support_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     goto i_dont_understand_step
   }
@@ -253,6 +312,8 @@ help_step:
     goto human_support_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -277,6 +338,8 @@ Reply with 'End' to end the conversation for now."
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto help_step
@@ -311,6 +374,10 @@ Reply Yes or No."
       goto check_if_solved_step
   } else if (event.to_lowercase() == "no") {
     goto other_help_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
+  } else if (event.to_lowercase() == "delete") {
+    goto consent_disagree_step
   } 
   else
     say "Sorry, the bot did not understand 🤖"
@@ -331,6 +398,8 @@ other_help_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     goto contact_method_step
   }
@@ -362,6 +431,8 @@ contact_method_step:
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
@@ -420,6 +491,8 @@ They sent this problem anonymously and did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step

@@ -7,70 +7,74 @@ start:
   remember count = 0
   do passcode = event.to_uppercase()
 
+  // if _whisperable is set, user is already an admin
+  if (_whisperable == true) {
+    goto admin_interface_step
+  }
+
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory
     remember _whisperable = true
 
     say Text("Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
 
-    hold
-
-    if (event.to_lowercase() == "help") {
-      goto admin_interface_step
-    } else {
-      say "Sorry, the bot did not understand 🤖"
-      goto admin_interface_step
-    }
-  }
-  // if _whisperable is set, user is already an admin
-  if (_whisperable == true) {
     goto admin_interface_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   }
-  else
-    // conversation is triggered by a message from a user who says they need an esim
-    // TODO Bitpart interprets incoming language. Response is in the same language
-    // TODO check if the user has contacted this line before
 
+  else
+    if (count >= 3) {
+      goto submit_question_step
+    }
+    
     goto user_welcome_step
 
 admin_passcode_step:
-  do passcode = event.to_uppercase()
-  
   say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  
   hold
+  
+  do passcode = event.to_uppercase()
 
-  if (attempt >= 3) {
+  if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say Text("Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
+    
+    goto admin_interface_step
+  } else if (event.to_lowercase() == "exit") {
+      remember _whisperable = false
+      
+      goto user_welcome_step
+  } else if (attempt >= 3) {
     // TODO set flagged on bitpart server
     remember _whisperable = false
     
     say "You have tried to login too many times. Please contact an administrator for help."
 
     goto user_welcome_step
-  } else if (event.to_lowercase() == "exit") {
-    remember _whisperable = false
-    
-    goto user_welcome_step
-  } else if (passcode.contains("[passcode]")) {
-    remember _whisperable = true
-
-    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
-    
-    goto admin_interface_step
   } else {
+    say "Incorrect passcode."
+
     remember attempt = attempt + 1
+
+    goto admin_passcode_step
   }
 
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
-1. Exit this conversation
-2. Delete my data")
+1. Exit this conversation and interact as a bot user
+2. Delete my data
+
+You do not need to do anything else to receive messages.")
   hold
 
   if (event == 1) {
-    say "I am now closing this conversation. Please send a message again if you need me."
-
-    goto end
+    say "You can send a message that says 'Admin' at any time to return to this menu."
+    remember _whisperable = false
+    goto user_welcome_step
   } else if (event == 2) {
     goto delete_me_confirm_step
   } else if (event.to_lowercase() == "help") {
@@ -82,6 +86,10 @@ admin_interface_step:
   }
 
 user_welcome_step:
+  // conversation is triggered by a message from a user who says they need an esim
+  // TODO Bitpart interprets incoming language. Response is in the same language
+  // TODO check if the user has contacted this line before
+
   say Text("Thank you for contacting [name]. [description]
 
 We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
@@ -95,13 +103,15 @@ Once this happens, you will no longer be able to receive messages from this numb
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto admin_interface_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -142,6 +152,13 @@ Enter the number")
     say "[description]"
 
     goto menu_options_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_me_confirm_step
+  } else {
+    say "Sorry, the bot did not understand 🤖"
+    goto menu_step
   }
 
 menu_options_step:
@@ -167,6 +184,8 @@ Reply with 'End' to end this chat for today.")
     goto help_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else if (event.to_lowercase() == "end") {
@@ -190,13 +209,15 @@ Once this happens, you will no longer be able to receive messages from this numb
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto menu_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -219,7 +240,7 @@ Is your device e-sim compatible? Reply with 'Yes' or 'No'.")
   hold
 
   if (event.to_lowercase() == "yes") {
-    goto get_esim_2_step
+    goto get_esim_3_step
   } else if (event.to_lowercase() == "no") {
     say Text("Sorry, an eSIM won't work for your device.
     
@@ -240,48 +261,50 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
 
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto get_esim_1_step
   }
 
-get_esim_2_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
+// get_esim_2_step:
+//   if (count >= 3) {
+//     goto human_support_step
+//   }
 
-  say Text("Step 2:
+//   say Text("Step 2:
 
-Which networks are available where you are?
+// Which networks are available where you are?
 
-To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
+// To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
 
-Which of the following mobile networks do you see?
+// Which of the following mobile networks do you see?
 
-[locations]
+// [locations]
 
-List all networks available separated by a comma  e.g. :
-1,2,5")
-  hold
+// List all networks available separated by a comma  e.g. :
+// 1,2,5")
+//   hold
 
-  if (event.to_lowercase() == "delete") {
-    goto delete_data_step
-  } 
+//   if (event.to_lowercase() == "delete") {
+//     goto delete_data_step
+//   } 
 
-  remember locations = event
+//   remember locations = event
 
-  // external app call to EMS to notify of locations; handle no locations match
-  remember providers = App("ems", method_id="GetProviders")
+//   // external app call to EMS to notify of locations; handle no locations match
+//   remember providers = App("ems", method_id="GetProviders")
 
-  goto get_esim_3_step
+//   goto get_esim_3_step
 
 get_esim_3_step:
   if (count >= 3) {
     goto human_support_step
   }
 
-  say Text("Step 3:
+  say Text("Step 2:
 
 A code will follow with you unique eSIM.
 
@@ -301,6 +324,8 @@ If you can't get it to work, reply with 'Help'.")
     goto help_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     remember count = count + 1
     goto get_esim_3_step
@@ -347,6 +372,8 @@ Step 1: Open your phone's Settings.
     goto human_support_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else { 
     say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
@@ -373,6 +400,8 @@ Reply with 'End' to end this chat for today.")
       goto end
     } else if (event.to_lowercase() == "delete") {
       goto delete_data_step
+    } else if (event.to_lowercase() == "admin") {
+      goto admin_passcode_step
     } else {
       say "Sorry, the bot did not understand 🤖"
       remember count = count + 1
@@ -392,6 +421,8 @@ Please share what you need help with and a member of our team will get back to y
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     goto contact_method_step
   }
@@ -422,6 +453,8 @@ contact_method_step:
     goto confirm_contact_method_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
@@ -475,6 +508,8 @@ They sent this problem anonymously and did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step

@@ -94,6 +94,11 @@ export default function BotsList({ username }) {
                 />
               ))}
             </Stack>
+            <Text fontStyle="italic" marginTop={8}>
+              Tip: You can send the word "Admin" to your bot at any time to
+              enter the passcode and view your bot as an administrator in
+              Signal.
+            </Text>
           </>
         ) : (
           <Text>You do not have any bots. Click below to create one.</Text>

@@ -2,25 +2,91 @@
 
 
 start:
-// if bitpart receives passcode, set admin
+  // if bitpart receives passcode, set admin
+  remember attempt = 0
+  remember count = 0
   do passcode = event.to_uppercase()
+
+  // if _whisperable is set, user is already an admin
+  if (_whisperable == true) {
+    goto admin_interface_step
+  }
 
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
 
     say "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
-    hold
+    
+    goto admin_interface_step
 
-    if (event.to_lowercase() == "help") {
-      goto admin_interface_step
-    }
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   }
-  // if _whisperable is set, user is already an admin
-  if (_whisperable == true) {
+
+  else
+    if (count >= 3) {
+      goto submit_question_step
+    }
+
+    goto user_welcome_step
+
+admin_passcode_step:
+  say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  
+  hold
+  
+  do passcode = event.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    
+    goto admin_interface_step
+  } else if (event.to_lowercase() == "exit") {
+      remember _whisperable = false
+      
+      goto user_welcome_step
+  } else if (attempt >= 3) {
+    // TODO set flagged on bitpart server
+    remember _whisperable = false
+    
+    say "You have tried to login too many times. Please contact an administrator for help."
+
+    goto user_welcome_step
+  } else {
+    say "Incorrect passcode."
+
+    remember attempt = attempt + 1
+
+    goto admin_passcode_step
+  }
+
+admin_interface_step:
+  say Text("What would you like to do? Enter a number:
+
+1. Exit this conversation and interact as a bot user
+2. Delete my data
+
+You do not need to do anything else to receive messages.")
+  hold
+
+  if (event == 1) {
+    say "You can send a message that says 'Admin' at any time to return to this menu."
+    remember _whisperable = false
+    goto user_welcome_step
+  } else if (event == 2) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
+  } else {
+    say "Sorry, the bot did not understand 🤖"
+
     goto admin_interface_step
   }
-  else 
+
+user_welcome_step:
     // conversation is triggered by a message from a user who says they have a tip
     // TODO Bitpart interprets incoming language. Response is in the same language
     say Text("Thank you for contacting [name].
@@ -36,32 +102,13 @@ Please share your tip with us.")
 
     if (event.to_lowercase() == "my data") {
       goto privacy_policy_step
+    } else if (event.to_lowercase() == "admin") {
+      goto admin_passcode_step
     } else { 
       remember tip = event  
       
       goto tip_reply_step
     }
-
-admin_interface_step:
-  say Text("What would you like to do? Enter a number:
-
-1. Exit this conversation
-2. Delete my data")
-  hold
-
-  if (event == 1) {
-    say "I am now closing this conversation. Please send a message again if you need me."
-
-    goto end
-  } else if (event == 2) {
-    goto delete_me_confirm_step
-  } else if (event.to_lowercase() == "help") {
-    goto admin_interface_step
-  } else {
-    say "Sorry, the bot did not understand 🤖"
-
-    goto admin_interface_step
-  }
 
 delete_me_confirm_step:
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
@@ -70,13 +117,15 @@ Once this happens, you will no longer be able to receive messages from this numb
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto admin_interface_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     goto delete_me_confirm_step
@@ -103,6 +152,8 @@ Please share your tip with us."
 
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     goto privacy_policy_step
@@ -114,13 +165,15 @@ Once this happens, you will no longer receive messages from this number, unless 
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the data rights.")
+Reply with 'Back' to go back to the data rights.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
     say "Sorry, the bot did not understand 🤖"
     goto delete_data_step
@@ -151,6 +204,8 @@ They did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto tip_reply_step
@@ -181,6 +236,8 @@ contact_method_step:
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
@@ -231,6 +288,8 @@ They did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
     say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step

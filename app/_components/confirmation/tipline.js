@@ -22,6 +22,10 @@ export const TiplineConfirmation = (props) => {
             </Text>
           </List.Item>
           <List.Item>
+            Message your bot with the word "Admin" at any time to enter your
+            passcode.
+          </List.Item>
+          <List.Item>
             Test your bot by using a different number to send a Signal message
             to your bot.
           </List.Item>
