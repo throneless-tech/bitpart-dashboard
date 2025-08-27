@@ -117,14 +117,16 @@ export const Summary = ({ data, errors, botId, username }) => {
                                             ? "List of codes"
                                             : key === "locations"
                                               ? "Network/Provider"
-                                              : key === "bitpartId" ||
-                                                  key === "countryCode" ||
-                                                  key === "createdAt" ||
-                                                  key === "creatorId" ||
-                                                  key === "id" ||
-                                                  key === "updatedAt"
-                                                ? ""
-                                                : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+                                              : key === "description"
+                                                ? "About"
+                                                : key === "bitpartId" ||
+                                                    key === "countryCode" ||
+                                                    key === "createdAt" ||
+                                                    key === "creatorId" ||
+                                                    key === "id" ||
+                                                    key === "updatedAt"
+                                                  ? ""
+                                                  : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
                     : null}
                 </Text>
                 {!!bot[key] &&

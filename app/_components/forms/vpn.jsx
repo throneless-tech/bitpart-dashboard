@@ -72,7 +72,7 @@ export const VpnForm = ({ bot }) => {
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Enter one sentence describing your group or organization, why you distribute VPNs or who the VPN distribution is for."
+        helperText="Enter one sentence describing your group or organization, why you distribute VPNs or who the VPN distribution is for. Also include locations where the VPN codes work."
         invalid={!!errors?.description}
         label="About"
         marginTop={4}

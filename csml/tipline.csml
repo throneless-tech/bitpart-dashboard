@@ -93,9 +93,7 @@ user_welcome_step:
     
 This is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
     
-For more information at any time, including how to delete your data, send a message with the words 'My data'.")
-
-    say Text("Even though this is a secure tipline, please do not share highly sensitive information here.
+For more information at any time, including how to delete your data, send a message with the words 'My data'.
     
 Please share your tip with us.")
     hold
@@ -186,7 +184,7 @@ confirm_delete_step:
 tip_reply_step:
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
   
-We may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
+We may want to follow up with you. Do you give permission for one of our team to contact you? You can reply with yes or no."
   hold
 
   if (event.to_lowercase() == "yes") {
