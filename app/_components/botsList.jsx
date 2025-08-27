@@ -25,8 +25,6 @@ export default function BotsList({ username }) {
   const fetchBots = useCallback(async () => {
     try {
       const fetched = await getUserBots(username);
-      console.log(fetched);
-
       setBots(fetched.bots);
       setConsentAgree(fetched.user.consent_agree);
     } catch (error) {

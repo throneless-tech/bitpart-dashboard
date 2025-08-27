@@ -74,6 +74,20 @@ export default function PrivacyConsent({ setConsentAgree, username }) {
                 </Link>
                 .
               </Text>
+              <Text marginTop={4}>
+                In addition, we store a small amount of information through
+                cookies. This is necessary for us to deliver login and logout
+                functionality. You can read more about{" "}
+                <Link
+                  color={color}
+                  href="/tou-and-privacy#privacy-policy-personal-data"
+                  target="_blank"
+                  variant="underline"
+                >
+                  what we use cookies for here
+                </Link>
+                .
+              </Text>
               <Text fontSize={16} fontWeight={700} marginTop={12}>
                 Do you agree to the terms of use and privacy policy?
               </Text>
