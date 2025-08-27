@@ -179,6 +179,8 @@ Reply with 'End' to end this chat for today.")
     goto delete_data_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "talk to a human") {
+    goto human_support_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
@@ -391,7 +393,7 @@ Reply with 'End' to end this chat for today.")
 human_support_step:
   say "We've understood that you have a question not covered in the Help section.
 
-Please share what you need help with and a member of our team will get back to you."
+Please share what you need help with and a member of our team will get back to you from another Signal account."
   hold
 
   remember problem = event
