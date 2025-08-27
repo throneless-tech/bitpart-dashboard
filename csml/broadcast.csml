@@ -15,7 +15,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    say "Welcome, you are now set up as a bot administrator for [name]. You can now send broadcast messages."
     
     goto admin_interface_step
   } else if (event.to_lowercase() == "admin") {
@@ -52,7 +52,7 @@ admin_passcode_step:
     } else if (passcode.contains("[passcode]")) {
       remember _whisperable = true
 
-      say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+      say "Welcome, you are now set up as a bot administrator for [name]. You can now send broadcast messages."
       
       goto admin_interface_step
     } else {
