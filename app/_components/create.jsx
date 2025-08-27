@@ -247,7 +247,10 @@ export default function CreateBotFlow({ username }) {
         );
       }
 
+      console.log("ems data++>0", emsData);
+
       if (emsData?.error) {
+        console.log("ems data error");
         throw new Error(emsData.error.message);
       }
 

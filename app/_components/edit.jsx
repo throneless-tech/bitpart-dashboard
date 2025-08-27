@@ -126,14 +126,17 @@ export default function EditBotFlow({ botId, username }) {
         (data.botType === "esim" || data.botType === "vpn") &&
         data?.csv?.length
       ) {
-        emsData = await parseCSV(
+        emsData = parseCSV(
           botBitpart.data.response.bot.id,
           data.botType,
           data.csv,
         );
       }
 
+      console.log("EMS DATA!!!", emsData);
+
       if (emsData?.error) {
+        console.log("ems data has errored");
         throw new Error(emsData.error.message);
       }
 
