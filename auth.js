@@ -43,13 +43,6 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
 
       return session;
     },
-    newUser(props) {
-      console.log('****************************');
-      console.log(props);
-      console.log('****************************');
-      
-      
-    },
   },
   credentials: {
     username: {},

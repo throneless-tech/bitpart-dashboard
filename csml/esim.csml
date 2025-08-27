@@ -1,8 +1,17 @@
 // This is a template. It will not work before being processed by the system
-
+fn parse_codes(data) {
+  do codes_string = "Code: {{data.code}}
+Provider: {{data.provider}}
+SMDP Address: {{data.smdp_addr}}
+ICCID: {{data.iccid}}"
+  
+  return codes_string
+}
 
 start:
   // if bitpart receives passcode, set admin
+  remember attempt = 0
+  remember count = 0
   do passcode = event.to_uppercase()
 
   if (passcode.contains("[passcode]")) {
@@ -10,9 +19,13 @@ start:
     remember _whisperable = true
 
     say Text("Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data.")
+
     hold
 
     if (event.to_lowercase() == "help") {
+      goto admin_interface_step
+    } else {
+      say "Sorry, I did not get that."
       goto admin_interface_step
     }
   }
@@ -21,16 +34,38 @@ start:
     goto admin_interface_step
   }
   else
-    remember count = 0
     // conversation is triggered by a message from a user who says they need an esim
     // TODO Bitpart interprets incoming language. Response is in the same language
     // TODO check if the user has contacted this line before
 
-    say Text("Thank you for contacting [name]. [description]
+    goto user_welcome_step
 
-We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
+admin_passcode_step:
+  do passcode = event.to_uppercase()
+  
+  say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  hold
 
-    goto menu_step
+  if (attempt >= 3) {
+    // TODO set flagged on bitpart server
+    remember _whisperable = false
+    
+    say "You have tried to login too many times. Please contact an administrator for help."
+
+    goto user_welcome_step
+  } else if (event.to_lowercase() == "exit") {
+    remember _whisperable = false
+    
+    goto user_welcome_step
+  } else if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    
+    goto admin_interface_step
+  } else {
+    remember attempt = attempt + 1
+  }
 
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
@@ -52,6 +87,13 @@ admin_interface_step:
 
     goto admin_interface_step
   }
+
+user_welcome_step:
+  say Text("Thank you for contacting [name]. [description]
+
+We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
+
+  goto menu_step
 
 delete_me_confirm_step:
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
@@ -96,6 +138,9 @@ Enter the number")
   hold
 
   if (event == 1) {
+    // external app call to EMS to notify of locations; handle no locations match
+    remember providers = App("ems", method_id="GetProviders")
+    remember provider = providers[0]
     goto get_esim_1_step
   } else if (event == 2) {
     goto help_step
@@ -117,7 +162,7 @@ menu_options_step:
   
   say Text("What would you like to do now?
 
-Reply with 'Main menu' to go back to the main menu.
+Reply with 'Menu' to go back to the main menu.
 
 Reply with 'Help' to go back to the help menu.
 
@@ -126,7 +171,7 @@ Reply with 'Talk to a human' to get more support.
 Reply with 'End' to end this chat for today.")
   hold 
 
-  if (event.to_lowercase() == "main menu") {
+  if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "help") {
     goto help_step
@@ -184,7 +229,7 @@ Is your device e-sim compatible? Reply with 'Yes' or 'No'.")
   hold
 
   if (event.to_lowercase() == "yes") {
-    goto get_esim_2_step
+    goto get_esim_3_step
   } else if (event.to_lowercase() == "no") {
     say Text("Sorry, an eSIM won't work for your device.
     
@@ -211,44 +256,46 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
     goto get_esim_1_step
   }
 
-get_esim_2_step:
-  if (count >= 3) {
-    goto human_support_step
-  }
+// get_esim_2_step:
+//   if (count >= 3) {
+//     goto human_support_step
+//   }
 
-  say Text("Step 2:
+//   say Text("Step 2:
 
-Which networks are available where you are?
+// Which networks are available where you are?
 
-To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
+// To find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection
 
-Which of the following mobile networks do you see?
+// Which of the following mobile networks do you see?
 
-[locations]
+// {{providers}}
 
-List all networks available separated by a comma  e.g. :
-1,2,5")
-  hold
+// List all networks available separated by a comma  e.g. :
+// 1,2,5")
+//   hold
 
-  if (event.to_lowercase() == "delete") {
-    goto delete_data_step
-  } 
+//   if (event.to_lowercase() == "delete") {
+//     goto delete_data_step
+//   } 
 
-  remember locations = event
+  // remember provider = event
 
-  // external app call to EMS to notify of locations; handle no locations match
-  remember providers = App("ems", method_id="GetProviders")
-
-  goto get_esim_3_step
+//   goto get_esim_3_step
 
 get_esim_3_step:
   if (count >= 3) {
     goto human_support_step
   }
 
-  say Text("Step 3:
+  remember rawEsim = App("ems", method_id = "EsimData", provider=provider)
+  remember esim = parse_codes(rawEsim)
 
-A code will follow with you unique eSIM.
+  say Text("Step 2:
+
+Here is a unique eSIM code for you:
+
+{{esim}}
 
 Here are the instructions for it to work:
 
@@ -257,10 +304,7 @@ Here are the instructions for it to work:
 If you can't get it to work, reply with 'Help'.")
   hold
 
-  // external app call to EMS for an esim code from 1 network
-  do esim = App("ems", method_id = "EsimData", provider=providers[0])
-
-  say "{{esim}}"
+  //TODO: what should the flow here be?
 
   if (event.to_lowercase() == "help") {
     goto help_step
@@ -280,8 +324,8 @@ help_step:
 
   say Text("Help
 
-1. How to activate an e-sim
-2. My e-sim isn't working
+1. How to activate an eSIM
+2. My eSIM isn't working
 3. Delete my eSIM
 4. Other")
   hold
@@ -352,21 +396,97 @@ Please share what you need help with and a member of our team will get back to y
 
   remember problem = event
 
-  // flag relevant data to bitpart
-  whisper "A user had a problem not covered in the help section of the eSIM distribution: {{problem}}. Contact phone: {{event.client.user_id}}"
-
-  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
-
-  hold
-
   if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     goto end
   } else {
-    goto start
+    goto contact_method_step
   }
 
   // goto end // we are not ending the conversation, uncomment if that changes
 
+contact_method_step:
+  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  
+1. Signal call
+2. Signal text message
+3. Phone call
+4. Any
+5. None, don't contact me")
+
+  hold
+
+  if (event == 1) {
+    remember contact_preference = "signal call"
+    goto record_number_step    
+  } else if (event == 2) {
+    remember contact_preference = "signal text message"
+    goto record_number_step    
+  } else if (event == 3) {
+    remember contact_preference = "phone call"
+    goto record_number_step    
+  } else if (event == 4 || event == 5) {
+    goto confirm_contact_method_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please choose a number from the list."
+    goto contact_method_step
+  }
+
+record_number_step:
+  say "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable."
+  hold
+
+  remember contact_number = event
+
+  // flag relevant data to bitpart
+  whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  
+Here is the problem they experienced: {{problem}}"
+
+  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+
+  goto end
+
+confirm_contact_method_step:
+  say Text("Reply 'Yes' to confirm we can use any method to contact you.
+  
+Reply 'Back' to go to the previous menu of options
+    
+Reply 'No' if you prefer to not be contacted.")
+  hold
+
+  if (event.to_lowercase() == "yes") {
+    say "Thank you. Your preference is noted."
+
+    whisper "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via any method, contact {{contact_number}}.
+    
+Here is the problem they experienced: {{problem}}"
+
+    // TODO SACHA do we accept another message after this?
+  } else if (event.to_lowercase() == "no") {
+    say "Ok, we will not contact you. Thanks again for the heads up."
+
+    whisper "A user had the following problem not covered in the help section of the eSIM distribution: {{problem}}.
+    
+They sent this problem anonymously and did not wish to be contacted."
+
+    goto end
+  } else if (event.to_lowercase() == "back") {
+    goto contact_method_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else {
+    say "Sorry, I did not get that."
+    goto confirm_contact_method_step
+  }
+
+  // goto end // we are not ending the conversation, uncomment if that changes

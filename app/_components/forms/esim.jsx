@@ -110,7 +110,6 @@ export const EsimForm = ({ bot }) => {
           !!errors?.helpInstructions && errors.helpInstructions.message
         }
         helperText="Include helpful instructions for what a user should do if their eSIM is not working."
-        info="helpInstructions"
         invalid={!!errors?.helpInstructions}
         label="Help section"
         marginTop={4}

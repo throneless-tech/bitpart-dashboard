@@ -138,7 +138,6 @@ const valuesToUnregister = [
   "responseTime",
   "safetyTips",
   "storageAccess",
-  "storageTime",
   "vpnName",
 ];
 
@@ -158,8 +157,12 @@ export default function CreateBotFlow({ username }) {
   // ensure user has not maxed out the number of bots they can create
   useEffect(() => {
     async function fetchBots() {
-      const fetchedBots = await getUserBots(username);
-      if (fetchedBots.length >= MAX_BOTS) {
+      const fetched = await getUserBots(username);
+
+      if (
+        fetched?.user?.consent_agree === false ||
+        fetched?.bots.length >= MAX_BOTS
+      ) {
         setNotAllowed(true);
       }
     }
@@ -237,7 +240,7 @@ export default function CreateBotFlow({ username }) {
 
       let emsData;
       if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = await parseCSV(
+        emsData = parseCSV(
           botBitpart.data.response.bot.id,
           data.botType,
           data.csv,
@@ -294,12 +297,16 @@ export default function CreateBotFlow({ username }) {
       <Box>
         <Container marginTop={8} maxWidth="lg">
           <Text>
-            You have reached the limit on how many bots a user may create.
+            You either have not consented to the privacy policy, or have reached
+            the limit on how many bots a user may create.
+          </Text>
+          <Text marginTop={4}>
             Please{" "}
             <Link color={color} href="/my-bots" variant="underline">
               return to My Bots
             </Link>{" "}
-            and delete a bot if you would like to create a new one.
+            and either complete the privacy consent form, or delete a bot if you
+            would like to create a new one.
           </Text>
         </Container>
       </Box>
@@ -311,7 +318,7 @@ export default function CreateBotFlow({ username }) {
           Create a new bot
         </Heading>
         <FormProvider {...methods}>
-          <StepsRoot count={4} step={stepCount} variant="subtle">
+          <StepsRoot count={4} linear step={stepCount} variant="subtle">
             <StepsList>
               <Stack direction={["column", "column", "row"]}>
                 <StepsItem index={0} title="Choose your bot type" />

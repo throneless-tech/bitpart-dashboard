@@ -38,9 +38,7 @@ start:
     // TODO Bitpart interprets incoming language. Response is in the same language
     say "Thank you for contacting [name]. [description] We're using a secure automated messaging system so you can get quicker responses.
 
-Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation.
-
-We offer VPN codes from [vpnName] which works in [locations]."
+Your phone number or username will be stored (encrypted) while you interact with this number, but will be deleted after you end the conversation."
 
 goto menu_step
 
@@ -196,12 +194,25 @@ Reply with the number of codes you would like to request, for a team member to m
 
 human_support_step:
   // send request to admin
-  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])." // TODO Sacha: # of days or ASAP?
+  say "Your request will be flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime]). Is there any additional information you would like to share? Please share now, or reply with 'No' if not."
 
-  whisper "A user has asked for {{request}} VPN codes. They can be contacted at {{event.content.client.user_id}}"
-  goto end
+  hold
 
-  // TODO SACHA: say something to close out convo?
+  if (event.to_lowercase() == "no") {
+    remember problem = "No additional data was shared."
+    goto delete_data_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    remember problem = event
+
+    goto contact_method_step
+  }
 
 i_dont_understand_step:
   // say "Sorry, this is an automated system, your request wasn't understood.
@@ -309,19 +320,107 @@ other_help_step:
   say "We've understood that you have a question not covered by the help section. Please type your question:"
   hold
 
-  do question = event
-
-  //send question to bitpart, who can later update help section depending on questions asked
-  whisper "A user asked the following question of the broadcast list, which they were unable to solve: {{question}}. They can be contacted at {{event.client.user_id}}"
-  
-  say "Your request has been flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime])."
-
-  hold
+  remember problem = event
 
   if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
   } else {
-    goto start
+    goto contact_method_step
+  }
+
+contact_method_step:
+  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  
+1. Signal call
+2. Signal text message
+3. Phone call
+4. Any
+5. None, don't contact me")
+
+  hold
+
+  if (event == 1) {
+    remember contact_preference = "signal call"
+    goto record_number_step    
+  } else if (event == 2) {
+    remember contact_preference = "signal text message"
+    goto record_number_step    
+  } else if (event == 3) {
+    remember contact_preference = "phone call"
+    goto record_number_step    
+  } else if (event == 4 || event == 5) {
+    goto confirm_contact_method_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else if (event.to_lowercase() == "end") {
+    say "Please contact us again if you need us."
+    goto end
+  } else {
+    say "Sorry, I did not get that. Please choose a number from the list."
+    goto contact_method_step
+  }
+
+record_number_step:
+  say "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable."
+  hold
+
+  remember contact_number = event
+
+  // flag relevant data to bitpart
+  whisper "A user had a problem not covered by the help section, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  
+Here is the information they shared: {{problem}}"
+
+  if (Exists("request")) {
+    say "They requested {{request}} VPN codes."
+  } 
+
+  say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+
+  goto end
+
+confirm_contact_method_step:
+  say Text("Reply 'Yes' to confirm we can use any method to contact you.
+  
+Reply 'Back' to go to the previous menu of options
+    
+Reply 'No' if you prefer to not be contacted.")
+  hold
+
+  if (event.to_lowercase() == "yes") {
+    say "Thank you. Your preference is noted."
+
+    whisper "A user had a problem not covered by the help section, and provided the following contact information: Via any method, contact {{contact_number}}.
+    
+Here is the information they shared: {{problem}}"
+
+  if (Exists("request")) {
+    say "They requested {{request}} VPN codes."
+  } 
+
+    // TODO SACHA do we accept another message after this?
+  } else if (event.to_lowercase() == "no") {
+    say "Ok, we will not contact you. Thanks again for the heads up."
+
+    whisper "A user had a problem not covered by the help section: {{problem}}.
+    
+They sent this problem anonymously and did not wish to be contacted."
+
+    goto end
+  } else if (event.to_lowercase() == "back") {
+    goto contact_method_step
+  } else if (event.to_lowercase() == "my data") {
+    goto privacy_policy_step
+  } else if (event.to_lowercase() == "delete") {
+    goto delete_data_step
+  } else {
+    say "Sorry, I did not get that."
+    goto confirm_contact_method_step
   }
 
   // goto end // we are not ending the conversation, uncomment if that changes
