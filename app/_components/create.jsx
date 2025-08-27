@@ -336,8 +336,8 @@ export default function CreateBotFlow({ username }) {
             >
               <Box border={`1px solid ${color}`} margin={8} padding={4}>
                 <Text>
-                  The Bitpart bot needs a Signal account to send and receive
-                  messages. (Learn more about{" "}
+                  The Bitpart bot connects to a Signal account to send and
+                  receive messages. (Learn more about{" "}
                   <Link
                     href="/faq#how-does-bitpart-work"
                     color={color}
@@ -359,11 +359,20 @@ export default function CreateBotFlow({ username }) {
                     variant="underline"
                   >
                     separate Signal account
+                  </Link>
+                  . You may need a separate SIM card and device or an online
+                  number. Once the bot is activated, the bot responds to all
+                  messages sent to that Signal account.{" "}
+                  <Link
+                    href="https://support.signal.org/hc/en-us/articles/360007318691-Register-a-phone-number"
+                    color={color}
+                    textDecoration="underline"
+                    target="_blank"
+                    variant="underline"
+                  >
+                    Learn more about why
                   </Link>{" "}
-                  for your Bitpart bot and do not use your personal one. (This
-                  may need a separate sim card and device, or an online number).
-                  Once the bot is activated, the bot responds to any messages
-                  sent to that Signal account.
+                  we don't recommend using your personal account.
                 </Text>
               </Box>
               <Heading as="h2" marginTop={10} size="md">
