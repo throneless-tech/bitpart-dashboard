@@ -140,6 +140,7 @@ Enter the number")
   if (event == 1) {
     // external app call to EMS to notify of locations; handle no locations match
     remember providers = App("ems", method_id="GetProviders")
+    remember provider = providers[0]
     goto get_esim_1_step
   } else if (event == 2) {
     goto help_step
@@ -278,7 +279,7 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
 //     goto delete_data_step
 //   } 
 
-//   remember provider = event
+  // remember provider = event
 
 //   goto get_esim_3_step
 
