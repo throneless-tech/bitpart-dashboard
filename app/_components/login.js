@@ -11,7 +11,6 @@ import { login } from "@/app/_actions/login";
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Field,
   Input,
@@ -22,6 +21,7 @@ import {
 import { PasswordInput } from "@/app/_components/ui/password-input";
 
 // components imports
+import { Button } from "@/app/_components/ui/button";
 import { toaster } from "@/app/_components/ui/toaster";
 import { ToastSignUp } from "./toastalert";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
@@ -31,6 +31,8 @@ function Submit() {
   return (
     <>
       <Button
+        color="white"
+        colorPalette="purple"
         disabled={pending}
         id="submit"
         marginTop={8}
@@ -48,7 +50,7 @@ export function LoginForm() {
   const router = useRouter();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
 
   // submit form to attempt user login
   async function onSubmit(formData) {
@@ -87,9 +89,11 @@ export function LoginForm() {
             <PasswordInput name="password" size="lg" />
           </Field.Root>
           <Submit />
-          <Text marginTop={8}>
+        </Box>
+        <Box marginLeft="auto" marginRight="auto" maxW={500}>
+          <Text fontStyle="italic" marginTop={8}>
             Don't have an account? Create one with an invite code{" "}
-            <Link color={color} href="/" variant="underline">
+            <Link color={color} href="/" variant="plain">
               here
             </Link>
             .

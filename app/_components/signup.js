@@ -7,8 +7,11 @@ import React, { useActionState, useEffect } from "react";
 import { register } from "@/app/_actions/register";
 
 // chakra ui imports
-import { Button, Container, Field, Input } from "@chakra-ui/react";
+import { Container, Field, Input } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/_components/ui/password-input";
+
+// components
+import { Button } from "@/app/_components/ui/button";
 
 const initialState = {
   error: "",
@@ -74,7 +77,14 @@ export function SignupForm() {
             <Field.ErrorText>{state.error.passwordConfirm}</Field.ErrorText>
           ) : null}
         </Field.Root>
-        <Button disabled={pending} marginTop={8} type="submit" width={120}>
+        <Button
+          color="white"
+          colorPalette="purple"
+          disabled={pending}
+          marginTop={8}
+          type="submit"
+          width={120}
+        >
           Sign up
         </Button>
       </Container>

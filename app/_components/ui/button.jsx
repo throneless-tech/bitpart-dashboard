@@ -19,6 +19,7 @@ export const Button = React.forwardRef(function Button(props, ref) {
     loading,
     disabled,
     loadingText,
+    variant,
     children,
     ...rest
   } = props;
@@ -26,6 +27,7 @@ export const Button = React.forwardRef(function Button(props, ref) {
     <ChakraButton
       borderRadius={8}
       className={geistMono.className}
+      color={variant === "none" ? colorPalette : color}
       colorPalette={colorPalette}
       disabled={loading || disabled}
       fontSize={16}
@@ -34,6 +36,7 @@ export const Button = React.forwardRef(function Button(props, ref) {
       ref={ref}
       {...rest}
       textTransform="uppercase"
+      variant={variant ? variant : "solid"}
     >
       {loading && !loadingText ? (
         <>
@@ -51,7 +54,9 @@ export const Button = React.forwardRef(function Button(props, ref) {
       ) : (
         <>
           {children}
-          <ArrowRight color={colorPalette ? "white" : color} />
+          {variant === "none" ? null : (
+            <ArrowRight color={colorPalette ? "white" : color} />
+          )}
         </>
       )}
     </ChakraButton>

@@ -4,6 +4,9 @@
 import React, { Suspense } from "react";
 import { useSession } from "next-auth/react";
 
+// fonts
+import { funnel } from "./fonts";
+
 // chakra ui imports
 import {
   Box,
@@ -26,7 +29,7 @@ export default function Home() {
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("white", "black");
+  const color = useColorModeValue("black", "white");
 
   return (
     <Box>
@@ -37,8 +40,14 @@ export default function Home() {
         <Header session={session} />
       </Container>
       <Container marginBottom={6} maxW="2xl">
-        <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
-          Welcome to Bitpart.
+        <Heading
+          as="h1"
+          className={funnel.className}
+          marginTop={[2, 4, 8]}
+          size="6xl"
+          textAlign="center"
+        >
+          welcome to bitpart.
         </Heading>
         <Text marginTop={4}>
           Bitpart is a messaging tool designed for human rights organizations,

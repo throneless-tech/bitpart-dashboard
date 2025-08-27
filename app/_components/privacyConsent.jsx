@@ -14,7 +14,7 @@ export default function PrivacyConsent({ setConsentAgree, username }) {
   const [open, setOpen] = useState(true);
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
 
   // submit form
   async function updateConsent() {

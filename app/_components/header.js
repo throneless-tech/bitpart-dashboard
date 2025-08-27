@@ -4,6 +4,9 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+// fonts
+import { geistMono } from "@/app/fonts";
+
 // actions imports
 import { logout } from "@/app/_actions/logout";
 
@@ -35,6 +38,7 @@ import MenuIcon from "@/app/_icons/menu";
 export default function Header(props) {
   const router = useRouter();
   const color = useColorModeValue("black", "white");
+  const textColor = useColorModeValue("purple.600", "purple.400");
   const { session } = props;
 
   useEffect(() => {}, [session]);
@@ -63,11 +67,15 @@ export default function Header(props) {
   }
 
   return (
-    <Box>
+    <Box
+      className={geistMono.className}
+      fontWeight={600}
+      textTransform="uppercase"
+    >
       <ClientOnly>
         <Flex gap={8} justify="space-between" width="100%">
           <Heading as="h1">
-            <Link as="a" href="/" width={[200, 340]}>
+            <Link as="a" href="/" width={200}>
               <VisuallyHidden>Bitpart</VisuallyHidden>
               <LogoWordmark color={color} />
             </Link>
@@ -83,24 +91,28 @@ export default function Header(props) {
                 </Menu.Trigger>
                 <Portal>
                   <Menu.Positioner>
-                    <Menu.Content>
+                    <Menu.Content
+                      className={geistMono.className}
+                      fontWeight={600}
+                      textTransform="uppercase"
+                    >
                       {session ? (
                         <>
-                          <Menu.Item>
+                          <Menu.Item paddingY={2}>
                             <Link
-                              color="purple.600"
+                              color={textColor}
                               href="/bots"
-                              variant="underline"
+                              variant="plain"
                             >
                               My Bots
                             </Link>
                           </Menu.Item>
-                          <Menu.Item>
+                          <Menu.Item paddingY={2}>
                             <form action={onSubmit}>
                               <Button
-                                color="purple.600"
+                                color={textColor}
                                 type="submit"
-                                variant="subtle"
+                                variant="none"
                               >
                                 Logout
                               </Button>
@@ -108,49 +120,33 @@ export default function Header(props) {
                           </Menu.Item>
                         </>
                       ) : (
-                        <Menu.Item>
-                          <Link
-                            color="purple.600"
-                            href="/login"
-                            variant="underline"
-                          >
+                        <Menu.Item paddingY={2}>
+                          <Link color={textColor} href="/login" variant="plain">
                             Login
                           </Link>
                         </Menu.Item>
                       )}
-                      <Menu.Item>
-                        <Link
-                          color="purple.600"
-                          href="/about"
-                          variant="underline"
-                        >
+                      <Menu.Item paddingY={2}>
+                        <Link color={textColor} href="/about" variant="plain">
                           About Us
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
-                        <Link
-                          color="purple.600"
-                          href="/faq"
-                          variant="underline"
-                        >
+                      <Menu.Item paddingY={2}>
+                        <Link color={textColor} href="/faq" variant="plain">
                           FAQ
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
+                      <Menu.Item paddingY={2}>
                         <Link
-                          color="purple.600"
+                          color={textColor}
                           href="/tou-and-privacy"
-                          variant="underline"
+                          variant="plain"
                         >
                           Terms of Use and Privacy
                         </Link>
                       </Menu.Item>
                       <Menu.Item>
-                        <Link
-                          color="purple.600"
-                          href="/login"
-                          variant="underline"
-                        >
+                        <Link color={textColor} href="/login" variant="plain">
                           Donate
                         </Link>
                       </Menu.Item>
@@ -161,26 +157,22 @@ export default function Header(props) {
             </Flex>
           </Flex>
         </Flex>
-        <Box hideBelow="md">
+        <Box hideBelow="md" marginTop={2}>
           <Flex justifyContent="space-between">
             <Flex gap={4}>
               <ClientOnly>
                 {session && (
-                  <Link color="purple.600" href="/bots" variant="underline">
+                  <Link color={textColor} href="/bots" variant="plain">
                     My Bots
                   </Link>
                 )}
-                <Link color="purple.600" href="/about" variant="underline">
+                <Link color={textColor} href="/about" variant="plain">
                   About Us
                 </Link>
-                <Link color="purple.600" href="/faq" variant="underline">
+                <Link color={textColor} href="/faq" variant="plain">
                   FAQ
                 </Link>
-                <Link
-                  color="purple.600"
-                  href="/tou-and-privacy"
-                  variant="underline"
-                >
+                <Link color={textColor} href="/tou-and-privacy" variant="plain">
                   Terms of Use and Privacy
                 </Link>
               </ClientOnly>
@@ -192,12 +184,12 @@ export default function Header(props) {
               <ClientOnly>
                 {session ? (
                   <form action={onSubmit}>
-                    <Button color="purple.600" type="submit" variant="subtle">
+                    <Button color={textColor} type="submit" variant="none">
                       Logout
                     </Button>
                   </form>
                 ) : (
-                  <Link color="purple.600" href="/login" variant="underline">
+                  <Link color={textColor} href="/login" variant="plain">
                     Login
                   </Link>
                 )}
