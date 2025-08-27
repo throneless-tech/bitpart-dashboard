@@ -194,7 +194,7 @@ Reply with the corresponding number:
 
 1. About this channel
 2. Safety tips
-3. Frequently asked questions (FAQs)
+3. Frequently asked questions (FAQ)
 
 You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
 
@@ -288,7 +288,7 @@ faq_step:
 Reply with 'Menu' to return home.")
   hold
 
-  if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
+  if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faq") {
     goto faq_step
   } else if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
     goto menu_step
@@ -324,7 +324,7 @@ Reply Yes or No."
 Reply with 'Menu' to return home.")
     hold
 
-    if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
+    if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faq") {
       goto faq_step
     } else if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
       goto menu_step
@@ -350,7 +350,7 @@ Reply with 'Menu' to return home.")
     goto check_if_solved_step
 
 submit_question_step:
-  say "We've understood that you have a question not covered by the FAQs. Please reach out to [referral] for support."
+  say "We've understood that you have a question not covered by the FAQ. Please reach out to [referral] for support."
   goto menu_step
 
 

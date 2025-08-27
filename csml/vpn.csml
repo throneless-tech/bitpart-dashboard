@@ -257,7 +257,7 @@ human_support_step:
   hold
 
   if (event.to_lowercase() == "no") {
-    remember problem = "No additional data was shared."
+    remember problem = "No additional data was shared"
     goto contact_method_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
@@ -386,7 +386,11 @@ Reply Yes or No."
     goto check_if_solved_step
 
 other_help_step:
-  say "We've understood that you have a question not covered by the help section. Please type your question:"
+  say "We've understood that you have a question not covered by the help section.
+
+Please note that if we have forwarding set up, your question will be forwarded to team members' Signal accounts.
+
+Please type your question:"
   hold
 
   remember problem = event
@@ -405,7 +409,9 @@ other_help_step:
   }
 
 contact_method_step:
-  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  say ("Thank you. When you provide contact information, please note that if we have forwarding set up, it will be forwarded to team members' Signal accounts. 
+
+How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
 1. Signal call
 2. Signal text message
@@ -424,8 +430,12 @@ contact_method_step:
   } else if (event == 3) {
     remember contact_preference = "phone call"
     goto record_number_step    
-  } else if (event == 4 || event == 5) {
-    goto confirm_contact_method_step
+  } else if (event == 4) {
+    remember contact_preference = "any method"
+    goto record_number_step
+  } else if (event == 5) {
+    remember contact_preference = event
+    goto confirm_no_contact_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
   } else if (event.to_lowercase() == "end") {
@@ -450,39 +460,30 @@ record_number_step:
 Here is the information they shared: {{problem}}"
 
   if (Exists("request")) {
-    say "They requested {{request}} VPN codes."
+    whisper "They requested {{request}} VPN codes."
   } 
 
   say "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
 
   goto end
 
-confirm_contact_method_step:
-  say Text("Reply 'Yes' to confirm we can use any method to contact you.
-  
-Reply 'Back' to go to the previous menu of options
-    
-Reply 'No' if you prefer to not be contacted.")
+confirm_no_contact_step:
+  say Text("Reply 'No' to confirm we will not contact you.
+
+Reply 'Back' to go to the previous menu of options")
+
   hold
 
-  if (event.to_lowercase() == "yes") {
-    say "Thank you. Your preference is noted."
-
-    whisper "A user had a problem not covered by the help section, and provided the following contact information: Via any method, contact {{contact_number}}.
-    
-Here is the information they shared: {{problem}}"
-
-  if (Exists("request")) {
-    say "They requested {{request}} VPN codes."
-  } 
-
-    // TODO SACHA do we accept another message after this?
-  } else if (event.to_lowercase() == "no") {
-    say "Ok, we will not contact you. Thanks again for the heads up."
+if (event.to_lowercase() == "no") {
+    say "Ok, we will not contact you."
 
     whisper "A user had a problem not covered by the help section: {{problem}}.
     
 They sent this problem anonymously and did not wish to be contacted."
+
+  if (Exists("request")) {
+    whisper "They requested {{request}} VPN codes."
+  } 
 
     goto end
   } else if (event.to_lowercase() == "back") {

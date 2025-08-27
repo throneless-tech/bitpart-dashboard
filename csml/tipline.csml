@@ -212,7 +212,9 @@ They did not wish to be contacted."
   }
 
 contact_method_step:
-  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  say ("Thank you. When you provide contact information, please note that if we have forwarding set up, it will be forwarded to team members' Signal accounts. 
+
+How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
 1. Signal call
 2. Signal text message
@@ -230,8 +232,12 @@ contact_method_step:
   } else if (event == 3) {
     remember contact_preference = "phone call"
     goto record_number_step    
-  } else if (event == 4 || event == 5) {
-    goto confirm_contact_method_step
+  } else if (event == 4) {
+    remember contact_preference = "any method"
+    goto record_number_step
+  } else if (event == 5) {
+    remember contact_preference = event
+    goto confirm_no_contact_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
@@ -257,23 +263,14 @@ Here is the tip they provided: {{tip}}"
 
   goto end
 
-confirm_contact_method_step:
-  say Text("Reply 'Yes' to confirm we can use any method to contact you.
-  
-Reply 'Back' to go to the previous menu of options
-    
-Reply 'No' if you prefer to not be contacted.")
+confirm_no_contact_step:
+  say Text("Reply 'No' to confirm we will not contact you.
+
+Reply 'Back' to go to the previous menu of options")
+
   hold
-
-  if (event.to_lowercase() == "yes") {
-    say "Thank you. Your preference is noted."
-
-    whisper "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.
-    
-Here is the tip they provided: {{tip}}"
-
-    // TODO SACHA do we accept another message after this?
-  } else if (event.to_lowercase() == "no") {
+  
+  if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
     whisper "A user sent the following anonymous tip: {{tip}}.

@@ -88,14 +88,14 @@ export const BroadcastForm = ({ bot }) => {
       >
         <Textarea autoresize {...register("safetyTips")} />
       </Field>
-      <Fieldset.Root label="FAQs" marginTop={4}>
+      <Fieldset.Root label="FAQ" marginTop={4}>
         <Stack>
-          <Fieldset.Legend>FAQs</Fieldset.Legend>
+          <Fieldset.Legend>FAQ</Fieldset.Legend>
           <Fieldset.HelperText>
-            If your channel needs FAQs, we recommend four (4) or fewer
-            question/answer combos. Start with your most asked question at the
-            top. Keep in mind Bitpart will automatically add an 'other' question
-            for a freeform ask from a user.
+            If your channel needs Frequently Asked Questions, we recommend four
+            (4) or fewer question/answer combos. Start with your most asked
+            question at the top. Keep in mind Bitpart will automatically add an
+            'other' question for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
         {faqFields.map((f, i) => {

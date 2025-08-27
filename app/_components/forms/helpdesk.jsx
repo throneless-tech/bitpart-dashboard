@@ -95,7 +95,7 @@ export const HelpdeskForm = ({ bot }) => {
           defaultValue={
             bot
               ? bot.privacyPolicy
-              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
+              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQ and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
           }
           {...register("privacyPolicy")}
         />
@@ -126,7 +126,7 @@ export const HelpdeskForm = ({ bot }) => {
                   errorText={errors.problems?.problem}
                 >
                   <Input
-                    placeholder="Problem"
+                    placeholder="Question"
                     {...register(`problems.${i}.problem`)}
                   />
                 </Field>
@@ -136,7 +136,7 @@ export const HelpdeskForm = ({ bot }) => {
                 >
                   <Textarea
                     autoresize
-                    placeholder="Steps to resolve"
+                    placeholder="Answer"
                     {...register(`problems.${i}.solution`)}
                   />
                 </Field>
@@ -159,7 +159,7 @@ export const HelpdeskForm = ({ bot }) => {
           variant="subtle"
           width={40}
         >
-          Add problem area
+          Add FAQ
         </Button>
       </Fieldset.Root>
     </>

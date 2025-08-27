@@ -182,14 +182,14 @@ export const VpnForm = ({ bot }) => {
           Add provider
         </Button>
       </Fieldset.Root> */}
-      <Fieldset.Root label="FAQs" marginTop={4}>
+      <Fieldset.Root label="FAQ" marginTop={4}>
         <Stack>
-          <Fieldset.Legend>FAQs</Fieldset.Legend>
+          <Fieldset.Legend>FAQ</Fieldset.Legend>
           <Fieldset.HelperText>
-            If you need FAQs, we recommend four (4) or fewer question/answer
-            combos. Start with your most asked question at the top. Keep in mind
-            Bitpart will automatically add an 'other' question for a freeform
-            ask from a user.
+            If you need Frequently Asked Questions, we recommend four (4) or
+            fewer question/answer combos. Start with your most asked question at
+            the top. Keep in mind Bitpart will automatically add an 'other'
+            question for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
         {faqFields.map((f, i) => {

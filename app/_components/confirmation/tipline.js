@@ -52,7 +52,7 @@ export const TiplineConfirmation = (props) => {
                 target="_blank"
                 variant="underline"
               >
-                FAQs
+                FAQ
               </Link>{" "}
               for more information on next steps.
             </Text>
