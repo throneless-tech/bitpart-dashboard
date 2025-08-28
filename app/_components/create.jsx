@@ -336,22 +336,43 @@ export default function CreateBotFlow({ username }) {
             >
               <Box border={`1px solid ${color}`} margin={8} padding={4}>
                 <Text>
-                  The Bitpart bot needs a{" "}
+                  The Bitpart bot connects to a Signal account to send and
+                  receive messages. (Learn more about{" "}
                   <Link
-                    href="https://signal.org/install"
+                    href="/faq#how-does-bitpart-work"
                     color={color}
                     textDecoration="underline"
                     target="_blank"
                     variant="underline"
                   >
-                    Signal account
-                  </Link>{" "}
-                  to send and receive messages.
+                    how Bitpart works
+                  </Link>
+                  .)
                 </Text>
                 <Text marginTop={4}>
-                  Set up a separate Signal account for your Bitpart bot and do
-                  not use your personal one. Once the bot is activated, any
-                  messages sent to that number trigger the bot.
+                  Set up a{" "}
+                  <Link
+                    href="https://support.signal.org/hc/en-us/articles/360007318691-Register-a-phone-number"
+                    color={color}
+                    textDecoration="underline"
+                    target="_blank"
+                    variant="underline"
+                  >
+                    separate Signal account
+                  </Link>
+                  . You may need a separate SIM card and device or an online
+                  number. Once the bot is activated, the bot responds to all
+                  messages sent to that Signal account.{" "}
+                  <Link
+                    href="https://support.signal.org/hc/en-us/articles/360007318691-Register-a-phone-number"
+                    color={color}
+                    textDecoration="underline"
+                    target="_blank"
+                    variant="underline"
+                  >
+                    Learn more about why
+                  </Link>{" "}
+                  we don't recommend using your personal account.
                 </Text>
               </Box>
               <Heading as="h2" marginTop={10} size="md">
@@ -411,59 +432,22 @@ export default function CreateBotFlow({ username }) {
                 Building {botType} bot
               </Heading> */}
               <BasicsForm />
-              <Heading as="h2" marginBottom={4} size="md">
-                Bot specifics
-              </Heading>
+              <Text fontSize="sm" marginY={8}>
+                Anyone who has consented to receive messages from your bot will
+                be able to request to see a menu, which offers them the option
+                to learn about the bot. Fill out these sections below to
+                customize the text.
+              </Text>
               {botType == "broadcast" ? (
-                <>
-                  <Text fontSize="sm" marginBottom={8}>
-                    Anyone who has signed up to receive messages from your bot
-                    will be able to request to see a menu, which offers them the
-                    option to learn about the bot. Fill out these sections below
-                    to customize the text.
-                  </Text>
-                  <BroadcastForm />
-                </>
+                <BroadcastForm />
               ) : botType == "esim" ? (
-                <>
-                  <Text fontSize="sm" marginBottom={8}>
-                    Anyone who has started a conversation with your bot will be
-                    able to request to see a menu, which offers them the option
-                    to learn about the bot. Fill out these sections below to
-                    customize the text.
-                  </Text>
-                  <EsimForm />
-                </>
+                <EsimForm />
               ) : botType == "helpdesk" ? (
-                <>
-                  <Text fontSize="sm" marginBottom={8}>
-                    Anyone who has started a conversation with your bot will be
-                    able to request to see a menu, which offers them the option
-                    to learn about the bot. Fill out these sections below to
-                    customize the text.
-                  </Text>
-                  <HelpdeskForm />
-                </>
+                <HelpdeskForm />
               ) : botType == "tipline" ? (
-                <>
-                  <Text fontSize="sm" marginBottom={8}>
-                    Anyone who has started a conversation with your bot will be
-                    able to request to see a menu, which offers them the option
-                    to learn about the bot. Fill out these sections below to
-                    customize the text.
-                  </Text>
-                  <TiplineForm />
-                </>
+                <TiplineForm />
               ) : botType == "vpn" ? (
-                <>
-                  <Text fontSize="sm" marginBottom={8}>
-                    Anyone who has started a conversation with your bot will be
-                    able to request to see a menu, which offers them the option
-                    to learn about the bot. Fill out these sections below to
-                    customize the text.
-                  </Text>
-                  <VpnForm />
-                </>
+                <VpnForm />
               ) : (
                 <>
                   <Text>
@@ -510,10 +494,7 @@ export default function CreateBotFlow({ username }) {
                   On your phone, open Signal and navigate to Signal Settings{" "}
                   {">"} Linked devices.
                 </List.Item>
-                <List.Item>
-                  Tap the Android + with blue circle (Android) or Link New
-                  Device (iOS)
-                </List.Item>
+                <List.Item>Tap the blue button: "Link a new device"</List.Item>
                 <List.Item>Use your phone to scan the QR code.</List.Item>
               </List.Root>
               <Text marginTop={4}>

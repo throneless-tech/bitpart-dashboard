@@ -2,7 +2,7 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
-import { Fieldset, Heading, Input, Separator, Stack } from "@chakra-ui/react";
+import { Input, Separator, Text } from "@chakra-ui/react";
 
 // component imports
 import { Button } from "@/app/_components/ui/button";
@@ -39,21 +39,19 @@ export const BasicsForm = ({ bot }) => {
 
   return (
     <>
-      <Heading as="h2" marginBottom={4} marginTop={4} size="md">
-        Bot basics
-      </Heading>
       <Field
         errorText={!!errors?.botName && errors.botName.message}
         helperText="Give your bot a name. (This is for you, and won't appear to your users. Note that special characters are not allowed.)"
         invalid={!!errors?.botName}
         label="Bot name"
         marginBottom={6}
+        marginTop={8}
         required
         width="320px"
       >
         <Input {...register("botName")} />
       </Field>
-      <Fieldset.Root marginTop={8}>
+      {/* <Fieldset.Root marginTop={8}>
         <Stack>
           <Fieldset.Legend>Bot phone number details (OPTIONAL)</Fieldset.Legend>
           <Fieldset.HelperText>
@@ -83,7 +81,7 @@ export const BasicsForm = ({ bot }) => {
             <Input {...register("phone")} />
           </Field>
         </Stack>
-      </Fieldset.Root>
+      </Fieldset.Root> */}
       {/* <Fieldset.Root
         label="Admin phone numbers"
         marginTop={4}
@@ -154,7 +152,6 @@ export const BasicsForm = ({ bot }) => {
           Add admin phone
         </Button>
       </Fieldset.Root> */}
-      <Separator marginBottom={8} marginTop={8} />
     </>
   );
 };

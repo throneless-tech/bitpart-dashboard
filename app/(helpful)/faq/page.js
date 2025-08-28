@@ -229,7 +229,7 @@ export default function FAQ() {
           </ClientOnly>
         </List.Root>
         <Heading as="h2" marginTop={12} size="2xl">
-          FAQs / help
+          FAQ / help
         </Heading>
         <Heading as="h3" marginTop={8} size="xl" textDecoration="underline">
           The basics
@@ -371,7 +371,7 @@ export default function FAQ() {
                 <br />
                 <br />
                 OPTIONAL: <br />
-                Safety tips, FAQs
+                Safety tips, FAQ
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -449,7 +449,7 @@ export default function FAQ() {
                 Public name; About; Data rights; Activation instructions; CSV
                 file with eSIM codes. <br />
                 <br />
-                OPTIONAL: FAQs
+                OPTIONAL: FAQ
               </Table.Cell>
             </Table.Row>
           </Table.Body>

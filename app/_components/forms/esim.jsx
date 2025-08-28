@@ -58,11 +58,11 @@ export const EsimForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input placeholder="eSIM distributor" {...register("name")} />
+        <Input placeholder="eSIM Distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Enter one sentence about what you do, or what this chatbot offers and to whom."
+        helperText="Enter one sentence describing your group or organization, why you distribute eSIMs or who the eSIM distribution is for. Also include locations where the eSIMs work."
         invalid={!!errors?.description}
         label="About"
         marginTop={4}

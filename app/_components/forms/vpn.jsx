@@ -68,11 +68,11 @@ export const VpnForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input placeholder="VPN Distribution Org" {...register("name")} />
+        <Input placeholder="VPN Distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Enter one sentence describing your group or organization, why you distribute VPNs or who the VPN distribution is for."
+        helperText="Enter one sentence describing your group or organization, why you distribute VPNs or who the VPN distribution is for. Also include locations where the VPN codes work."
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
@@ -182,14 +182,14 @@ export const VpnForm = ({ bot }) => {
           Add provider
         </Button>
       </Fieldset.Root> */}
-      <Fieldset.Root label="FAQs" marginTop={4}>
+      <Fieldset.Root label="FAQ" marginTop={4}>
         <Stack>
-          <Fieldset.Legend>FAQs</Fieldset.Legend>
+          <Fieldset.Legend>FAQ</Fieldset.Legend>
           <Fieldset.HelperText>
-            If you need FAQs, we recommend four (4) or fewer question/answer
-            combos. Start with your most asked question at the top. Keep in mind
-            Bitpart will automatically add an 'other' question for a freeform
-            ask from a user.
+            If you need Frequently Asked Questions, we recommend four (4) or
+            fewer question/answer combos. Start with your most asked question at
+            the top. Keep in mind Bitpart will automatically add an 'other'
+            question for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
         {faqFields.map((f, i) => {

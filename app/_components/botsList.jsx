@@ -25,8 +25,6 @@ export default function BotsList({ username }) {
   const fetchBots = useCallback(async () => {
     try {
       const fetched = await getUserBots(username);
-      console.log(fetched);
-
       setBots(fetched.bots);
       setConsentAgree(fetched.user.consent_agree);
     } catch (error) {
@@ -43,10 +41,13 @@ export default function BotsList({ username }) {
   async function handleDelete(id, phone, username) {
     setIsFetching(true);
     try {
-      alert(
-        "Are you sure you want to delete this bot? This action cannot be undone.",
-      );
-      await deleteBot(id, phone, username);
+      if (
+        confirm(
+          "Are you sure you want to delete this bot? This action cannot be undone.\n\nAfter deleting this bot, be sure to unlink it from your device. Check the FAQs to learn more.",
+        )
+      ) {
+        await deleteBot(id, phone, username);
+      }
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
@@ -94,6 +95,11 @@ export default function BotsList({ username }) {
                 />
               ))}
             </Stack>
+            <Text fontStyle="italic" marginTop={8}>
+              Tip: You can send the word "Admin" to your bot at any time to
+              enter the passcode and view your bot as an administrator in
+              Signal.
+            </Text>
           </>
         ) : (
           <Text>You do not have any bots. Click below to create one.</Text>

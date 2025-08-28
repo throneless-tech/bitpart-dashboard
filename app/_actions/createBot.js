@@ -165,7 +165,7 @@ export const createBotPrisma = async (data, bitpartId, username, passcode) => {
       data: {
         ...data,
         creatorId: user.id,
-        // countryCode: data.countryCode,
+        countryCode: data?.countryCode || "",
         // phone,
         // adminPhones: phones,
         passcode,
