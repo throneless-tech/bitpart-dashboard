@@ -238,7 +238,7 @@ Remember that if this is a sensitive conversation you can delete the conversatio
 human_support_step:
   say "We've understood that you have a question not covered here. A member of our helpdesk team will follow up as soon as they can to offer you support. We will aim to be in touch with you within [responseTime].
 
-Please share what you need help with and a member of our team will get back to you."
+Please share what you need help with and a member of our team will get back to you from another Signal account."
 
   hold
 
