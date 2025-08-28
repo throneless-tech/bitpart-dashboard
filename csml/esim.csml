@@ -179,7 +179,7 @@ Reply with 'End' to end this chat for today.")
     goto delete_data_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
-  } else if (event.to_lowercase() == "talk to a human") {
+  } else if (event.to_lowercase() == "talk to a human" || event.to_lowercase() == "human") {
     goto human_support_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
