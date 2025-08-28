@@ -25,8 +25,7 @@ export default function BotsList({ username }) {
   const fetchBots = useCallback(async () => {
     try {
       const fetched = await getUserBots(username);
-      console.log(fetched);
-
+      // console.log(fetched);
       setBots(fetched.bots);
       setConsentAgree(fetched.user.consent_agree);
     } catch (error) {
@@ -43,12 +42,18 @@ export default function BotsList({ username }) {
   async function handleDelete(id, phone, username) {
     setIsFetching(true);
     try {
-      alert(
-        "Are you sure you want to delete this bot? This action cannot be undone.",
-      );
-      await deleteBot(id, phone, username);
-      await fetchBots();
-      setIsFetching(false);
+      if (
+        confirm(
+          "Are you sure you want to delete this bot? This action cannot be undone.\n\nAfter deleting this bot, be sure to unlink it from your device. Check the FAQs to learn more.",
+        )
+      ) {
+        await deleteBot(id, phone, username);
+        await fetchBots();
+        setIsFetching(false);
+      } else {
+        await fetchBots();
+        setIsFetching(false);
+      }
     } catch (error) {
       console.log("error: ", error);
     }
