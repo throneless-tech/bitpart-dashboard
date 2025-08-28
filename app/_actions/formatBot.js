@@ -9,7 +9,7 @@ const schema = [
   // 'adminPhones',
   "botType",
   "botName",
-  // "countryCode",
+  "countryCode",
   "csv",
   "description",
   "faq",
@@ -17,7 +17,7 @@ const schema = [
   "locations",
   "maxCodes",
   "name",
-  // "phone",
+  "phone",
   // 'plans',
   "problems",
   "privacyPolicy",
@@ -161,22 +161,33 @@ export const formatCsml = async (data, passcode) => {
           let problems = "";
           let solutions = "";
 
-          data[field].map((f, i) => {
-            problems = problems + `\n${i + 1}. ${f.problem}`;
+          if (data[field].length) {
+            problems =
+              "FAQ\n\nHere are some frequently asked questions. Does your question fall under one of these?\n";
 
-            solutions =
-              solutions +
-              `
-              ${i === 0 ? "" : "else"} if (event == ${i + 1}) {
+            data[field].map((f, i) => {
+              if (f.problem.length) {
+                problems = problems + `${i + 1}. ${f.problem}\n`;
+              }
+
+              if (f.solution.length) {
+                solutions =
+                  solutions +
+                  `if (event == ${i + 1}) {
                 say "${f.solution}"
                 goto check_if_solved_step
+              } else `;
               }
-              `;
-          });
+            });
+
+            csml = csml.replaceAll(`[${field}.length]`, length + 1);
+            csml = csml.replaceAll(`[${field}.solutions]`, solutions);
+          } else {
+            problems = "Apologies, no FAQ have been entered for this bot.";
+            csml = csml.replace("[problems.solutions]", "");
+          }
 
           csml = csml.replaceAll(`[${field}]`, problems);
-          csml = csml.replaceAll(`[${field}.length]`, length + 1);
-          csml = csml.replaceAll(`[${field}.solutions]`, solutions);
         }
       } else {
         csml = csml.replaceAll(`[${field}]`, data[field]);

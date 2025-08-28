@@ -90,8 +90,10 @@ user_welcome_step:
     // conversation is triggered by a message from a user who says they have a tip
     // TODO Bitpart interprets incoming language. Response is in the same language
     say Text("Thank you for contacting [name].
+
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).  
     
-This is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
+This is a secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
     
 For more information at any time, including how to delete your data, send a message with the words 'My data'.
     
@@ -139,9 +141,7 @@ Reply with 'Delete' to delete your data.")
 
   // Agree and return to menu, disagree and delete data
   if (event.to_lowercase() == "agree") {
-    say "Even though this is a secure tipline, please do not share highly sensitive information here.
-    
-Please share your tip with us."
+    say "Please share your tip with us."
     hold
 
     remember tip = event  

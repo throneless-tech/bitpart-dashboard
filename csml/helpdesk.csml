@@ -92,6 +92,8 @@ user_welcome_step:
     // TODO Bitpart interprets incoming language. Response is in the same language
     say Text("Thank you for contacting [name]. [description] We use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.
 
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).  
+
 If you are in immediate physical danger contact [referral].")
 
     // TODO: user research needed about if we want bitpart to accept voice notes
@@ -200,17 +202,10 @@ menu_step:
     goto human_support_step
   }
   
-  say Text("FAQ
-
-What issue are you seeking help with?
-[problems]
-[problems.length]. Other
-
-Reply with the number.")
+  say Text("[problems]")
   hold
 
-  [problems.solutions]
-  else if (event == [problems.length]) {
+  [problems.solutions] if (event == [problems.length]) {
     goto human_support_step
   }
   else if (event.to_lowercase() == "faq") {

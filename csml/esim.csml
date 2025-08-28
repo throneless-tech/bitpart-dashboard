@@ -97,9 +97,13 @@ user_welcome_step:
   // TODO Bitpart interprets incoming language. Response is in the same language
   // TODO check if the user has contacted this line before
 
-  say Text("Thank you for contacting [name]. [description]
+  say Text("Thank you for contacting [name]. 
 
-We use an automated messaging system so you can get quicker responses, but you can always reach a human.")
+[description]
+
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).
+
+This is an automated messaging system so you can get quicker responses, but you can always reach a human.")
 
   goto menu_step
 
