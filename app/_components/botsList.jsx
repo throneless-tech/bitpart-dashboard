@@ -48,12 +48,9 @@ export default function BotsList({ username }) {
         )
       ) {
         await deleteBot(id, phone, username);
-        await fetchBots();
-        setIsFetching(false);
-      } else {
-        await fetchBots();
-        setIsFetching(false);
       }
+      await fetchBots();
+      setIsFetching(false);
     } catch (error) {
       console.log("error: ", error);
     }
