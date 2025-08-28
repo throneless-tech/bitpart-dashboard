@@ -115,7 +115,7 @@ Reply with 'Go back' to go back to the beginning.")
     goto delete_me_confirm_step
 
 confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
+  say "Your information has been deleted from the bot's system and you will no longer receive messages."
   delete
   goto end
 
