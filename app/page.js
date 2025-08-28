@@ -5,13 +5,14 @@ import React, { Suspense } from "react";
 import { useSession } from "next-auth/react";
 
 // fonts
-import { funnel } from "./fonts";
+import { funnel, geistMono } from "./fonts";
 
 // chakra ui imports
 import {
   Box,
   ClientOnly,
   Container,
+  Flex,
   Heading,
   Link,
   List,
@@ -39,82 +40,218 @@ export default function Home() {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <Container marginBottom={6} maxW="2xl">
-        <Heading
-          as="h1"
-          className={funnel.className}
-          marginTop={[2, 4, 8]}
-          size="6xl"
-          textAlign="center"
+      <Flex direction={["column", "column", "row"]}>
+        <Flex
+          gap={4}
+          justifyContent={["center"]}
+          marginLeft={[0, 4]}
+          position="relative"
         >
-          welcome to bitpart.
-        </Heading>
-        <Text marginTop={4}>
-          Bitpart is a messaging tool designed for human rights organizations,
-          activists, journalists and human rights defenders working in
-          repressive political environments at risk of surveillance.
-        </Text>
-        <Text marginTop={2}>
-          It enables you to send secure, automated messages to a particular
-          community over Signal by creating your own bot. The bot can operate
-          within five different communication formats, depending on your needs,
-          all while protecting the privacy of both the senders and recipients of
-          messages.
-        </Text>
-        <Text marginTop={2}>These formats include:</Text>
-        <List.Root marginLeft={8}>
-          <List.Item>
-            <Text as="span" fontWeight="bold">
-              Broadcasting:{" "}
-            </Text>
-            send alerts and other information to many recipients at once
-          </List.Item>
-          <List.Item>
-            <Text as="span" fontWeight="bold">
-              Tipline:{" "}
-            </Text>
-            set up a channel to receive tips from anonymous senders
-          </List.Item>
-          <List.Item>
-            <Text as="span" fontWeight="bold">
-              Helpdesk:{" "}
-            </Text>
-            set up a channel to receive questions and respond to them
-          </List.Item>
-          <List.Item>
-            <Text as="span" fontWeight="bold">
-              eSim distribution:{" "}
-            </Text>
-            distribute eSims to members of your community
-          </List.Item>
-          <List.Item>
-            <Text as="span" fontWeight="bold">
-              VPN distribution:{" "}
-            </Text>
-            distribute VPN codes to members of your community
-          </List.Item>
-        </List.Root>
-        <Box marginTop={8} textAlign="center">
-          <Text marginBottom={8}>Ready to go?</Text>
-          <Button
-            as="a"
-            color={color}
-            colorPalette="purple"
-            href="/signup"
-            marginTop={4}
+          <Box
+            position="relative"
+            height={[40, 40, "100%"]}
+            width={[14, 14, "44px"]}
+            _before={{
+              backgroundColor: "teal.400",
+              borderRadius: 8,
+              content: "''",
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+          />
+          <Box
+            position="relative"
+            height={[40, 40, "100%"]}
+            width={[14, 14, "44px"]}
+            _before={{
+              backgroundColor: "purple.600",
+              borderRadius: 8,
+              content: "''",
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+              zIndex: "-10",
+            }}
+          />
+          <Box
+            position="relative"
+            height={[40, 40, "100%"]}
+            width={[14, 14, "44px"]}
+            _before={{
+              backgroundColor: "yellow.300",
+              borderRadius: 8,
+              content: "''",
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+          />
+          <Box
+            position="relative"
+            height={[40, 40, "100%"]}
+            width={[14, 14, "44px"]}
+            _before={{
+              backgroundColor: "red.500",
+              borderRadius: 8,
+              content: "''",
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+              zIndex: "-10",
+            }}
+          />
+          <Box
+            bottom={0}
+            height={["160px", "160px", "100%"]}
+            left={[6, 200, 0]}
+            position="absolute"
+            width={["84px", "84px", "44px"]}
+            _after={{
+              backgroundImage: "url(/mushroom-1.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              content: "''",
+              display: "block",
+              height: ["160px", "100%"],
+              width: "100%",
+            }}
+          />
+          <Box
+            bottom={0}
+            height="100%"
+            left={[0, 200, 10]}
+            position="absolute"
+            // right={0}
+            // top={10}
+            width={["400px", "400px", "300px"]}
+            _after={{
+              backgroundImage: "url(/mushroom-2.png)",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              content: "''",
+              display: "block",
+              height: "100%",
+              position: "absolute",
+              width: "100%",
+              zIndex: "-5",
+            }}
+          />
+        </Flex>
+        <Container marginBottom={6} maxW="2xl">
+          <Heading
+            as="h1"
+            className={funnel.className}
+            marginTop={[2, 4, 8]}
+            size="6xl"
+            textAlign="center"
           >
-            Get started
-          </Button>
-          <Text marginTop={8} fontStyle="italic" textStyle="sm">
-            Contact us if you have questions or need a code:{" "}
-            <ClientOnly>
-              <Link color={color} href="mailto:contact@bitp.art">
-                contact [at] bitp.art
-              </Link>
-            </ClientOnly>
+            welcome to bitpart.
+          </Heading>
+          <Text marginTop={4}>
+            Bitpart is a messaging tool designed for human rights organizations,
+            activists, journalists and human rights defenders working in
+            repressive political environments at risk of surveillance.
           </Text>
-        </Box>
-      </Container>
+          <Text marginTop={2}>
+            It enables you to send secure, automated messages to a particular
+            community over Signal by creating your own bot. The bot can operate
+            within five different communication formats, depending on your
+            needs, all while protecting the privacy of both the senders and
+            recipients of messages.
+          </Text>
+          <Text marginTop={8}>These formats include:</Text>
+          <List.Root listStyle="none" marginTop={4}>
+            <List.Item>
+              <Text
+                as="span"
+                borderRight="1px solid black"
+                className={geistMono.className}
+                textTransform="uppercase"
+              >
+                Broadcasting{" "}
+              </Text>
+              <Text as="span" paddingLeft={3}>
+                Send alerts and other information to many recipients at once
+              </Text>
+            </List.Item>
+            <List.Item marginTop={4}>
+              <Text
+                as="span"
+                borderRight="1px solid black"
+                className={geistMono.className}
+                textTransform="uppercase"
+              >
+                Tipline{" "}
+              </Text>
+              <Text as="span" paddingLeft={3}>
+                Set up a channel to receive tips from anonymous senders
+              </Text>
+            </List.Item>
+            <List.Item marginTop={4}>
+              <Text
+                as="span"
+                borderRight="1px solid black"
+                className={geistMono.className}
+                textTransform="uppercase"
+              >
+                Helpdesk{" "}
+              </Text>
+              <Text as="span" paddingLeft={3}>
+                Set up a channel to receive questions and respond to them
+              </Text>
+            </List.Item>
+            <List.Item marginTop={4}>
+              <Text
+                as="span"
+                borderRight="1px solid black"
+                className={geistMono.className}
+                textTransform="uppercase"
+              >
+                eSim distribution{" "}
+              </Text>
+              <Text as="span" paddingLeft={3}>
+                Distribute eSims to members of your community
+              </Text>
+            </List.Item>
+            <List.Item marginTop={4}>
+              <Text
+                as="span"
+                borderRight="1px solid black"
+                className={geistMono.className}
+                textTransform="uppercase"
+              >
+                VPN distribution{" "}
+              </Text>
+              <Text as="span" paddingLeft={3}>
+                Distribute VPN codes to members of your community
+              </Text>
+            </List.Item>
+          </List.Root>
+          <Box marginTop={10} textAlign="center">
+            <Text marginBottom={4}>Ready to go?</Text>
+            <Button as="a" colorPalette="purple" href="/signup" marginTop={4}>
+              Get started
+            </Button>
+            <Text marginTop={8} fontStyle="italic" textStyle="sm">
+              Contact us if you have questions or need a code:{" "}
+              <ClientOnly>
+                <Link color={color} href="mailto:contact@bitp.art">
+                  contact [at] bitp.art
+                </Link>
+              </ClientOnly>
+            </Text>
+          </Box>
+        </Container>
+      </Flex>
     </Box>
   );
 }
