@@ -350,10 +350,23 @@ Reply with 'Menu' to return home.")
     goto check_if_solved_step
 
 submit_question_step:
-  say "We've understood that you have a question not covered by the FAQ. Please reach out to [referral] for support."
-  goto menu_step
+  say "We've understood that you have a question not covered by the FAQ. Please reach out to [referral] for support.
+  
+At any time, send 'Delete' to stop receiving messages and be removed from this channel."
+  remember count = 0
+  hold
 
+  if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
+      goto menu_step
+  } else if (event.to_lowercase() == "delete") {
+    goto consent_disagree_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
+  } 
+  else
+    say "Sorry, the bot did not understand 🤖"
 
+    goto submit_question_step
   // hold
 
   // remember problem = event
