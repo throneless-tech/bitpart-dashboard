@@ -240,7 +240,7 @@ export default function CreateBotFlow({ username }) {
 
       let emsData;
       if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = await parseCSV(
+        emsData = parseCSV(
           botBitpart.data.response.bot.id,
           data.botType,
           data.csv,

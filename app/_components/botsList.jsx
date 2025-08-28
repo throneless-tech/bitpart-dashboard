@@ -41,10 +41,13 @@ export default function BotsList({ username }) {
   async function handleDelete(id, phone, username) {
     setIsFetching(true);
     try {
-      alert(
-        "Are you sure you want to delete this bot? This action cannot be undone.",
-      );
-      await deleteBot(id, phone, username);
+      if (
+        confirm(
+          "Are you sure you want to delete this bot? This action cannot be undone.\n\nAfter deleting this bot, be sure to unlink it from your device. Check the FAQs to learn more.",
+        )
+      ) {
+        await deleteBot(id, phone, username);
+      }
       await fetchBots();
       setIsFetching(false);
     } catch (error) {

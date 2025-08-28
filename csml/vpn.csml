@@ -161,7 +161,7 @@ Reply with 'Back' to go back to the beginning.")
     goto delete_data_step
 
 confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
+  say "Your information has been deleted from the bot's system and you will no longer receive messages."
   delete
   goto end
 
@@ -252,7 +252,7 @@ Reply with the number of codes you would like to request, for a team member to m
 
 human_support_step:
   // send request to admin
-  say "Your request will be flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime]). Is there any additional information you would like to share? Please share now, or reply with 'No' if not."
+  say "Your request will be flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime]) through another Signal account. Is there any additional information you would like to share? Please share now, or reply with 'No' if not."
 
   hold
 

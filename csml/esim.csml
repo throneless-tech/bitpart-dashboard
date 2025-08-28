@@ -1,5 +1,12 @@
 // This is a template. It will not work before being processed by the system
-
+fn parse_codes(data) {
+  do codes_string = "Code: {{data.code}}
+Provider: {{data.provider}}
+SMDP Address: {{data.smdp_addr}}
+ICCID: {{data.iccid}}"
+  
+  return codes_string
+}
 
 start:
   // if bitpart receives passcode, set admin
@@ -118,7 +125,7 @@ Reply with 'Back' to go back to the beginning.")
     goto delete_me_confirm_step
 
 confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
+  say "Your information has been deleted from the bot's system and you will no longer receive messages."
   delete
   goto end
 
@@ -141,6 +148,9 @@ Enter the number")
   hold
 
   if (event == 1) {
+    // external app call to EMS to notify of locations; handle no locations match
+    remember providers = App("ems", method_id="GetProviders")
+    remember provider = providers[0]
     goto get_esim_1_step
   } else if (event == 2) {
     goto help_step
@@ -169,7 +179,7 @@ menu_options_step:
   
   say Text("What would you like to do now?
 
-Reply with 'Main menu' to go back to the main menu.
+Reply with 'Menu' to go back to the main menu.
 
 Reply with 'Help' to go back to the help menu.
 
@@ -178,7 +188,7 @@ Reply with 'Talk to a human' to get more support.
 Reply with 'End' to end this chat for today.")
   hold 
 
-  if (event.to_lowercase() == "main menu") {
+  if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "help") {
     goto help_step
@@ -188,6 +198,8 @@ Reply with 'End' to end this chat for today.")
     goto admin_passcode_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "talk to a human" || event.to_lowercase() == "human") {
+    goto human_support_step
   } else if (event.to_lowercase() == "end") {
     say "Please contact us again if you need us."
     
@@ -282,7 +294,7 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
 
 // Which of the following mobile networks do you see?
 
-// [locations]
+// {{providers}}
 
 // List all networks available separated by a comma  e.g. :
 // 1,2,5")
@@ -292,10 +304,7 @@ Would you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end 
 //     goto delete_data_step
 //   } 
 
-//   remember locations = event
-
-//   // external app call to EMS to notify of locations; handle no locations match
-//   remember providers = App("ems", method_id="GetProviders")
+  // remember provider = event
 
 //   goto get_esim_3_step
 
@@ -304,9 +313,14 @@ get_esim_3_step:
     goto human_support_step
   }
 
+  remember rawEsim = App("ems", method_id = "EsimData", provider=provider)
+  remember esim = parse_codes(rawEsim)
+
   say Text("Step 2:
 
-A code will follow with you unique eSIM.
+Here is a unique eSIM code for you:
+
+{{esim}}
 
 Here are the instructions for it to work:
 
@@ -315,10 +329,7 @@ Here are the instructions for it to work:
 If you can't get it to work, reply with 'Help'.")
   hold
 
-  // external app call to EMS for an esim code from 1 network
-  do esim = App("ems", method_id = "EsimData", provider=providers[0])
-
-  say "{{esim}}"
+  //TODO: what should the flow here be?
 
   if (event.to_lowercase() == "help") {
     goto help_step
@@ -340,8 +351,8 @@ help_step:
 
   say Text("Help
 
-1. How to activate an e-sim
-2. My e-sim isn't working
+1. How to activate an eSIM
+2. My eSIM isn't working
 3. Delete my eSIM
 4. Other")
   hold
