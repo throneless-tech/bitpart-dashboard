@@ -37,21 +37,25 @@ export const parseCSV = (botId, botType, fileList) => {
           });
         });
 
-        const updatedKeys = Object.keys(item);
+        return {
+          bot_id: botId,
+          ...item,
+        };
+        // const updatedKeys = Object.keys(item);
 
-        if (
-          (botType === "vpn" && compare(updatedKeys, VPN_HEADERS)) ||
-          (botType === "esim" && compare(updatedKeys, ESIM_HEADERS))
-        ) {
-          toReturn = {
-            bot_id: botId,
-            ...item,
-          };
-        } else {
-          throw new Error("Check your file headers.");
-        }
+        // if (
+        //   (botType === "vpn" && compare(updatedKeys, VPN_HEADERS)) ||
+        //   (botType === "esim" && compare(updatedKeys, ESIM_HEADERS))
+        // ) {
+        //   toReturn = {
+        //     bot_id: botId,
+        //     ...item,
+        //   };
+        // } else {
+        //   throw new Error("Check your file headers.");
+        // }
 
-        return toReturn;
+        // return toReturn;
       });
 
       sendToEMS(botId, botType, data);
