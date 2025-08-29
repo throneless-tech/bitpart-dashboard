@@ -190,8 +190,6 @@ menu_step:
 
   do safetyTips = "[safetyTips]"
   do tipsLength = safetyTips.length()
-  do testLength = "This is a random sentence"
-  do testLen = testLength.length()
   do faqLength = [faq.length]
 
   if (tipsLength > 0 && faqLength > 0) {
