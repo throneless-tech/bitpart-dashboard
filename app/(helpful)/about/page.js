@@ -7,26 +7,27 @@ import { useSession } from "next-auth/react";
 // chakra ui imports
 import {
   Box,
-  Button,
   ClientOnly,
   Container,
-  Flex,
   Heading,
-  HStack,
   Link,
   Text,
 } from "@chakra-ui/react";
 
 // component imports
-import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import Footer from "../../_components/footer";
 import Header from "../../_components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+
+// fonts
+import { funnel } from "@/app/fonts";
 
 export default function About() {
   // session
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
 
   return (
     <Box>
@@ -34,17 +35,19 @@ export default function About() {
         <Header session={session} />
       </Container>
       <Container maxW="3xl" py={6}>
-        <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
+        <Heading
+          as="h1"
+          className={funnel.className}
+          marginTop={8}
+          size="5xl"
+          textAlign="center"
+        >
           About us
         </Heading>
         <ClientOnly>
           <Text marginTop={6}>
             Bitpart is a project developed by{" "}
-            <Link
-              color={color}
-              href="https://throneless.tech"
-              variant="underline"
-            >
+            <Link color={color} href="https://throneless.tech">
               Throneless Tech
             </Link>
             , a technology worker-cooperative specialized in building technology
@@ -64,40 +67,32 @@ export default function About() {
             <Link
               color={color}
               href="https://www.opentech.fund/about/about-our-funding/"
-              variant="underline"
             >
               here
             </Link>
             . Many privacy-focused technologies have received funding from OTF,
             such as{" "}
-            <Link color={color} href="https://signal.org/" variant="underline">
+            <Link color={color} href="https://signal.org/">
               Signal
             </Link>
             ,{" "}
-            <Link color={color} href="https://tails.net/" variant="underline">
+            <Link color={color} href="https://tails.net/">
               Tails
             </Link>
             , and{" "}
-            <Link
-              color={color}
-              href="https://www.torproject.org/"
-              variant="underline"
-            >
+            <Link color={color} href="https://www.torproject.org/">
               Tor.
             </Link>
           </Text>
           <Text marginTop={2}>
             If you have any feedback, or want to know more, please contact us:{" "}
-            <Link
-              color={color}
-              href="mailto:contact@bitp.art"
-              variant="underline"
-            >
+            <Link color={color} href="mailto:contact@bitp.art">
               contact@bitp.art
             </Link>
           </Text>
         </ClientOnly>
       </Container>
+      <Footer color={color} />
     </Box>
   );
 }

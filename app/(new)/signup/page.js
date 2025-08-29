@@ -1,15 +1,20 @@
+"use client";
+
 // base imports
 import React from "react";
 
 // chakra ui imports
-import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Text } from "@chakra-ui/react";
 
 // components
-import { ColorModeButton } from "@/app/_components/ui/color-mode";
+import Footer from "@/app/_components/footer";
 import Header from "@/app/_components/header";
 import { SignupForm } from "@/app/_components/signup";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export default function Signup() {
+  const color = useColorModeValue("purple.600", "purple.400");
+
   return (
     <Box>
       <Container py={6}>
@@ -23,6 +28,7 @@ export default function Signup() {
         </Text>
         <SignupForm />
       </Container>
+      <Footer color={color} />
     </Box>
   );
 }

@@ -20,12 +20,16 @@ import {
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 import Header from "@/app/_components/header";
 
+// fonts
+import { funnel, geistMono } from "@/app/fonts";
+
 export default function About() {
   // session
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const borderColor = useColorModeValue("black", "white");
 
   return (
     <Box>
@@ -33,7 +37,7 @@ export default function About() {
         <Header session={session} />
       </Container>
       <Container maxW="3xl" py={6}>
-        <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
+        <Heading as="h1" className={funnel.className} size="4xl">
           Terms of Use & Privacy Policy
         </Heading>
         <ClientOnly>
@@ -48,7 +52,7 @@ export default function About() {
           </Text>
           <Text marginTop={2}>
             The{" "}
-            <Link color={color} href="#tou" variant="underline">
+            <Link color={color} href="#tou">
               Terms of Use
             </Link>{" "}
             sets out what we offer and what we expect from you if you would like
@@ -56,7 +60,7 @@ export default function About() {
           </Text>
           <Text marginTop={2}>
             The{" "}
-            <Link color={color} href="#privacy-policy" variant="underline">
+            <Link color={color} href="#privacy-policy">
               Privacy Policy
             </Link>{" "}
             outlines how we collect, use, and safeguard your personal
@@ -64,11 +68,7 @@ export default function About() {
           </Text>
           <Text fontWeight={700} marginTop={2}>
             Contact us at{" "}
-            <Link
-              color={color}
-              href="mailto:contact@bitp.art"
-              variant="underline"
-            >
+            <Link color={color} href="mailto:contact@bitp.art">
               contact@bitp.art
             </Link>{" "}
             if you have any questions. We welcome your feedback.
@@ -185,12 +185,27 @@ export default function About() {
               </Link>
             </List.Item>
           </List.Root>
-          <Heading as="h2" marginTop={8} size="2xl" id="tou">
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="tou"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Terms of Use
           </Heading>
-          <Text fontWeight={700} marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            marginTop={8}
+            size="xl"
+          >
             Definitions
-          </Text>
+          </Heading>
           <Text marginTop={2} fontStyle="italic">
             <Text as="em" fontWeight={700}>
               Bot Creators:
@@ -209,7 +224,13 @@ export default function About() {
             Bitpart (though it should be clear to them that they are interacting
             with a bot).
           </Text>
-          <Heading as="h3" id="tou-formats" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-formats"
+            marginTop={4}
+            size="xl"
+          >
             Formats
           </Heading>
           <List.Root marginLeft={4}>
@@ -234,7 +255,13 @@ export default function About() {
               if there is another format you would like to see.
             </List.Item>
           </List.Root>
-          <Heading as="h3" id="tou-acceptable-behavior" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-acceptable-behavior"
+            marginTop={4}
+            size="xl"
+          >
             Acceptable Behavior
           </Heading>
           <List.Root marginLeft={4}>
@@ -267,7 +294,13 @@ export default function About() {
               to report any misuse of Bitpart.
             </List.Item>
           </List.Root>
-          <Heading as="h3" id="tou-account" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-account"
+            marginTop={4}
+            size="xl"
+          >
             Account
           </Heading>
           <List.Root marginLeft={4}>
@@ -286,7 +319,13 @@ export default function About() {
               ).
             </List.Item>
           </List.Root>
-          <Heading as="h3" id="tou-data-processing" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-data-processing"
+            marginTop={4}
+            size="xl"
+          >
             Data Processing
           </Heading>
           <List.Root marginLeft={4}>
@@ -362,7 +401,13 @@ export default function About() {
               ).
             </List.Item>
           </List.Root>
-          <Heading as="h3" id="tou-data-security" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-data-security"
+            marginTop={4}
+            size="xl"
+          >
             Data Security
           </Heading>
           <List.Root marginLeft={4}>
@@ -388,7 +433,13 @@ export default function About() {
               if you would like more information.
             </List.Item>
           </List.Root>
-          <Heading as="h3" id="tou-service-availability" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-service-availability"
+            marginTop={4}
+            size="xl"
+          >
             Service Availability
           </Heading>
           <List.Root marginLeft={4}>
@@ -416,8 +467,10 @@ export default function About() {
           </List.Root>
           <Heading
             as="h3"
+            className={geistMono.className}
             id="tou-respecting-terms-messaging-platforms"
             marginTop={4}
+            size="xl"
           >
             Respecting the Terms of Messaging Platforms
           </Heading>
@@ -439,12 +492,27 @@ export default function About() {
               associated with the devices on which you use Signal.
             </List.Item>
           </List.Root>
-          <Heading as="h2" marginTop={8} size="2xl" id="privacy-policy">
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="privacy-policy"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Privacy Policy
           </Heading>
-          <Text fontWeight={700} marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            marginTop={4}
+            size="xl"
+          >
             Definitions
-          </Text>
+          </Heading>
           <Text marginTop={2} fontStyle="italic">
             <Text as="em" fontWeight={700}>
               Bot Creators:
@@ -469,10 +537,16 @@ export default function About() {
             initial interaction with the bot that they are engaging with an
             automated system, but they are likely not aware of Bitpart.
           </Text>
-          <Heading as="h3" id="privacy-policy-who-are-we" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-who-are-we"
+            marginTop={4}
+            size="xl"
+          >
             Who are we?
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             Throneless Tech is a technology worker-cooperative based in
             Washington, DC. We provide the Bitpart messaging tool. We can be
             reached at{" "}
@@ -485,10 +559,16 @@ export default function About() {
             </Link>
             .
           </Text>
-          <Heading as="h3" id="privacy-policy-why-collect-data" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-why-collect-data"
+            marginTop={4}
+            size="xl"
+          >
             Why Do We Collect Your Data?
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We practice privacy by design and collect as little data as
             possible. The information we do collect is used to provide Bitpart’s
             services and functionality, such as account data so that you save
@@ -496,10 +576,16 @@ export default function About() {
             messages are relayed by Bitpart; and any data you share when
             contacting us for support.
           </Text>
-          <Heading as="h3" id="privacy-policy-personal-data" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-personal-data"
+            marginTop={4}
+            size="xl"
+          >
             Personal Data That Bitpart Collects and Processes
           </Heading>
-          <Box border={`1px solid ${color}`} margin={4} padding={4}>
+          <Box borderColor={color} borderWidth={1} margin={4} padding={4}>
             <Text fontWeight={700}>
               Important notice on end-to-end encryption and message data
             </Text>
@@ -637,10 +723,16 @@ export default function About() {
             </Table.Body>
           </Table.Root>
           {/* </Table.ScrollArea> */}
-          <Heading as="h3" id="privacy-policy-when-shared-data" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-when-shared-data"
+            marginTop={4}
+            size="xl"
+          >
             When We Share Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We use a third party hosting service for the data repository for
             Bitpart, to process and store the data needed to run Bitpart (such
             as message data, randomly generated numbers used to identify unique
@@ -668,18 +760,30 @@ export default function About() {
             We may share personal data with additional third parties when we are
             legally required to do so.
           </Text>
-          <Heading as="h3" id="privacy-policy-data-retention" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-data-retention"
+            marginTop={4}
+            size="xl"
+          >
             How Long We Keep Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We seek to only ever ask for the minimum amount of data needed for
             any associated purpose, and we delete that data promptly once it is
             no longer required.
           </Text>
-          <Heading as="h3" id="privacy-policy-delete-your-data" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-delete-your-data"
+            marginTop={4}
+            size="xl"
+          >
             Delete Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We seek to protect your right to delete your personal information
             from our platform.
           </Text>
@@ -728,12 +832,14 @@ export default function About() {
           </Text>
           <Heading
             as="h3"
+            className={geistMono.className}
             id="privacy-policy-how-we-secure-your-data"
             marginTop={4}
+            size="xl"
           >
             How We Secure Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We use a combination of physical, technical, and administrative
             safeguards to protect the information we collect. We carefully
             choose our services and tools at Bitpart. It’s important that they
@@ -754,10 +860,16 @@ export default function About() {
             devices, and databases we operate or that are operated on our
             behalf.
           </Text>
-          <Heading as="h3" id="privacy-policy-signal" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-signal"
+            marginTop={4}
+            size="xl"
+          >
             Bitpart and Signal
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             As a tool designed to be used with Signal, Bitpart works to follow
             Signal’s privacy policies and standards while developing our own
             policies to better safeguard your data.
@@ -774,10 +886,16 @@ export default function About() {
             to understand how Signal handles the information you provide when
             using its applications and services.
           </Text>
-          <Heading as="h3" id="privacy-policy-your-data-rights" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-your-data-rights"
+            marginTop={4}
+            size="xl"
+          >
             Your Data Rights
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             Bitpart believes in upholding and protecting your data rights.
           </Text>
           <Text marginTop={4}>
@@ -825,7 +943,7 @@ export default function About() {
             </Link>
             .
           </Text>
-          <Text marginTop={4}>
+          <Text>
             Based on your jurisdiction, you may also have the right to lodge a
             complaint with your local supervisory authority, if you feel your
             rights have been infringed. You can find a list of the current
@@ -843,16 +961,32 @@ export default function About() {
             </Link>
             .
           </Text>
-          <Heading as="h3" id="privacy-policy-changes" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-changes"
+            marginTop={4}
+            size="xl"
+          >
             Changes to This Policy
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We may modify this Privacy Policy from time to time and will publish
             the most current version on our platform. If a modification
             meaningfully reduces your rights, we'll notify people whose personal
             data we hold and is affected.
           </Text>
-          <Heading as="h3" id="acknowledgements" marginTop={4}>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="acknowledgements"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Acknowledgements
           </Heading>
           <Text marginTop={4}>

@@ -15,7 +15,7 @@ import { Provider } from "@/app/_components/ui/provider";
 // });
 
 export const metadata = {
-  title: "FAQ ● Bitpart Dashboard",
+  title: "FAQ ● Bitpart",
   description: "A dashboard for interfacing with Bitpart.",
 };
 

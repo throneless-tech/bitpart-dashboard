@@ -15,7 +15,7 @@ import { Provider } from "@/app/_components/ui/provider";
 // });
 
 export const metadata = {
-  title: "Terms of Service and Privacy Policy ● Bitpart Dashboard",
+  title: "Terms of Service and Privacy Policy ● Bitpart",
   description: "A dashboard for interfacing with Bitpart.",
 };
 

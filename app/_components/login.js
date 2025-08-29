@@ -26,6 +26,9 @@ import { toaster } from "@/app/_components/ui/toaster";
 import { ToastSignUp } from "./toastalert";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
+// fonts
+import { geistMono } from "../fonts";
+
 function Submit() {
   const { pending } = useFormStatus();
   return (
@@ -81,11 +84,13 @@ export function LoginForm() {
         <Box marginLeft="auto" marginRight="auto" maxW={400}>
           <ToastSignUp />
           <Field.Root required>
-            <Field.Label>Username or email</Field.Label>
+            <Field.Label className={geistMono.className}>
+              Username or email
+            </Field.Label>
             <Input name="username" size="lg" />
           </Field.Root>
           <Field.Root marginTop={4} required>
-            <Field.Label>Password</Field.Label>
+            <Field.Label className={geistMono.className}>Password</Field.Label>
             <PasswordInput name="password" size="lg" />
           </Field.Root>
           <Submit />

@@ -89,7 +89,7 @@ export const deleteBot = async (botId, botName, username) => {
       throw new Error(
         err?.message
           ? err.message
-          : "Web socket connection was refused.Make sure the server is running.",
+          : "Web socket connection was refused. Make sure the server is running.",
       );
     });
 

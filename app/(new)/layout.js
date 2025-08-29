@@ -22,7 +22,7 @@ import { SessionProvider } from "next-auth/react";
 // });
 
 export const metadata = {
-  title: "Bitpart Dashboard",
+  title: "Bitpart",
   description: "A dashboard for interfacing with Bitpart.",
 };
 

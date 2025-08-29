@@ -72,132 +72,142 @@ export default function Header(props) {
       fontWeight={600}
       textTransform="uppercase"
     >
-      <ClientOnly>
-        <Flex gap={8} justify="space-between" width="100%">
-          <Heading as="h1">
-            <Link as="a" href="/" width={200}>
-              <VisuallyHidden>Bitpart</VisuallyHidden>
-              <LogoWordmark color={color} />
-            </Link>
-          </Heading>
-          <Flex gap={1}>
-            <ColorModeButton />
-            <Flex hideFrom="md">
-              <Menu.Root>
-                <Menu.Trigger asChild>
-                  <IconButton variant="none">
-                    <MenuIcon color={color} />
-                  </IconButton>
-                </Menu.Trigger>
-                <Portal>
-                  <Menu.Positioner>
-                    <Menu.Content
-                      className={geistMono.className}
-                      fontWeight={600}
-                      textTransform="uppercase"
-                    >
-                      {session ? (
-                        <>
+      <nav>
+        <ClientOnly>
+          <Flex gap={8} justify="space-between" width="100%">
+            <Box>
+              <Link as="a" href="/" width={200}>
+                <VisuallyHidden>Bitpart</VisuallyHidden>
+                <LogoWordmark color={color} />
+              </Link>
+            </Box>
+            <Flex gap={1}>
+              <ColorModeButton />
+              <Flex hideFrom="md">
+                <Menu.Root>
+                  <Menu.Trigger asChild>
+                    <IconButton variant="none">
+                      <MenuIcon color={color} />
+                    </IconButton>
+                  </Menu.Trigger>
+                  <Portal>
+                    <Menu.Positioner>
+                      <Menu.Content
+                        className={geistMono.className}
+                        fontWeight={600}
+                        textTransform="uppercase"
+                      >
+                        {session ? (
+                          <>
+                            <Menu.Item>
+                              <Link
+                                color={textColor}
+                                href="/bots"
+                                variant="plain"
+                              >
+                                My Bots
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                              <form action={onSubmit}>
+                                <Button
+                                  color={textColor}
+                                  type="submit"
+                                  variant="none"
+                                >
+                                  Logout
+                                </Button>
+                              </form>
+                            </Menu.Item>
+                          </>
+                        ) : (
                           <Menu.Item paddingY={2}>
                             <Link
                               color={textColor}
-                              href="/bots"
+                              href="/login"
                               variant="plain"
                             >
-                              My Bots
+                              Login
                             </Link>
                           </Menu.Item>
-                          <Menu.Item paddingY={2}>
-                            <form action={onSubmit}>
-                              <Button
-                                color={textColor}
-                                type="submit"
-                                variant="none"
-                              >
-                                Logout
-                              </Button>
-                            </form>
-                          </Menu.Item>
-                        </>
-                      ) : (
+                        )}
                         <Menu.Item paddingY={2}>
-                          <Link color={textColor} href="/login" variant="plain">
-                            Login
+                          <Link color={textColor} href="/about" variant="plain">
+                            About Us
                           </Link>
                         </Menu.Item>
-                      )}
-                      <Menu.Item paddingY={2}>
-                        <Link color={textColor} href="/about" variant="plain">
-                          About Us
-                        </Link>
-                      </Menu.Item>
-                      <Menu.Item paddingY={2}>
-                        <Link color={textColor} href="/faq" variant="plain">
-                          FAQ
-                        </Link>
-                      </Menu.Item>
-                      <Menu.Item paddingY={2}>
-                        <Link
-                          color={textColor}
-                          href="/tou-and-privacy"
-                          variant="plain"
-                        >
-                          Terms of Use and Privacy
-                        </Link>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <Link color={textColor} href="/login" variant="plain">
-                          Donate
-                        </Link>
-                      </Menu.Item>
-                    </Menu.Content>
-                  </Menu.Positioner>
-                </Portal>
-              </Menu.Root>
+                        <Menu.Item paddingY={2}>
+                          <Link color={textColor} href="/faq" variant="plain">
+                            FAQ
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item paddingY={2}>
+                          <Link
+                            color={textColor}
+                            href="/tou-and-privacy"
+                            variant="plain"
+                          >
+                            Terms of Use and Privacy
+                          </Link>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <Link color={textColor} href="/login" variant="plain">
+                            Donate
+                          </Link>
+                        </Menu.Item>
+                      </Menu.Content>
+                    </Menu.Positioner>
+                  </Portal>
+                </Menu.Root>
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
-        <Box hideBelow="md" marginTop={2}>
-          <Flex justifyContent="space-between">
-            <Flex gap={4}>
-              <ClientOnly>
-                {session && (
-                  <Link color={textColor} href="/bots" variant="plain">
-                    My Bots
+          <Box hideBelow="md" marginTop={2}>
+            <Flex justifyContent="space-between">
+              <Flex gap={4}>
+                <ClientOnly>
+                  {session && (
+                    <Link color={textColor} href="/bots" variant="plain">
+                      My Bots
+                    </Link>
+                  )}
+                  <Link color={textColor} href="/about" variant="plain">
+                    About Us
                   </Link>
-                )}
-                <Link color={textColor} href="/about" variant="plain">
-                  About Us
-                </Link>
-                <Link color={textColor} href="/faq" variant="plain">
-                  FAQ
-                </Link>
-                <Link color={textColor} href="/tou-and-privacy" variant="plain">
-                  Terms of Use and Privacy
-                </Link>
-              </ClientOnly>
-            </Flex>
-            <Flex gap={4}>
-              <Button as="a" colorPalette="purple" href="#">
-                Donate
-              </Button>
-              <ClientOnly>
-                {session ? (
-                  <form action={onSubmit}>
-                    <Button color={textColor} type="submit" variant="none">
-                      Logout
-                    </Button>
-                  </form>
-                ) : (
-                  <Link color={textColor} href="/login" variant="plain">
-                    Login
+                  <Link color={textColor} href="/faq" variant="plain">
+                    FAQ
                   </Link>
-                )}
-              </ClientOnly>
+                  <Link
+                    color={textColor}
+                    href="/tou-and-privacy"
+                    variant="plain"
+                  >
+                    Terms of Use and Privacy
+                  </Link>
+                </ClientOnly>
+              </Flex>
+              <Flex gap={4}>
+                <Button as="a" colorPalette="purple" href="#">
+                  Donate
+                </Button>
+                <ClientOnly>
+                  {session ? (
+                    <form action={onSubmit}>
+                      <Button color={textColor} type="submit" variant="none">
+                        Logout
+                      </Button>
+                    </form>
+                  ) : (
+                    <Link color={textColor} href="/login" variant="plain">
+                      Login
+                    </Link>
+                  )}
+                </ClientOnly>
+              </Flex>
             </Flex>
-          </Flex>
-        </Box>
-      </ClientOnly>
+          </Box>
+        </ClientOnly>
+      </nav>
     </Box>
   );
 }
