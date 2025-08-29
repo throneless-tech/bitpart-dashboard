@@ -13,6 +13,7 @@ import Header from "@/app/_components/header";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export default function Login() {
+  // color mode
   const color = useColorModeValue("purple.600", "purple.400");
 
   return (

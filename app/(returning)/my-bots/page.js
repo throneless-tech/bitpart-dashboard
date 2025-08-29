@@ -10,6 +10,9 @@ import Header from "@/app/_components/header";
 import BotsList from "@/app/_components/botsList";
 import NotAuthenticated from "@/app/_components/notAuthenticated";
 
+// fonts
+import { funnel } from "@/app/fonts";
+
 export default async function Dashboard() {
   const session = await auth();
 
@@ -21,7 +24,12 @@ export default async function Dashboard() {
         <Header session={session} />
       </Container>
       <Container marginY={3} maxW="2xl">
-        <Heading as="h1" size="3xl" marginBottom={8}>
+        <Heading
+          as="h1"
+          className={funnel.className}
+          marginBottom={8}
+          size="3xl"
+        >
           Welcome, {session?.user?.name}
         </Heading>
         <Box>
