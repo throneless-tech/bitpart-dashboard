@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 
 // components
+import Art from "@/app/_components/art";
 import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 import { ToastSignOut } from "./_components/toastalert";
@@ -40,119 +41,18 @@ export default function Home() {
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <Flex direction={["column", "column", "row"]}>
-        <Flex
-          gap={4}
-          justifyContent={["center"]}
-          marginLeft={[0, 4]}
-          position="relative"
-        >
-          <Box
-            position="relative"
-            height={[40, 40, "100%"]}
-            width={[14, 14, "44px"]}
-            _before={{
-              backgroundColor: "teal.400",
-              borderRadius: 8,
-              content: "''",
-              height: "100%",
-              left: 0,
-              position: "absolute",
-              top: 0,
-              width: "100%",
-            }}
-          />
-          <Box
-            position="relative"
-            height={[40, 40, "100%"]}
-            width={[14, 14, "44px"]}
-            _before={{
-              backgroundColor: "purple.600",
-              borderRadius: 8,
-              content: "''",
-              height: "100%",
-              left: 0,
-              position: "absolute",
-              top: 0,
-              width: "100%",
-              zIndex: "-10",
-            }}
-          />
-          <Box
-            position="relative"
-            height={[40, 40, "100%"]}
-            width={[14, 14, "44px"]}
-            _before={{
-              backgroundColor: "yellow.300",
-              borderRadius: 8,
-              content: "''",
-              height: "100%",
-              left: 0,
-              position: "absolute",
-              top: 0,
-              width: "100%",
-            }}
-          />
-          <Box
-            position="relative"
-            height={[40, 40, "100%"]}
-            width={[14, 14, "44px"]}
-            _before={{
-              backgroundColor: "red.500",
-              borderRadius: 8,
-              content: "''",
-              height: "100%",
-              left: 0,
-              position: "absolute",
-              top: 0,
-              width: "100%",
-              zIndex: "-10",
-            }}
-          />
-          <Box
-            bottom={0}
-            height={["160px", "160px", "100%"]}
-            left={[6, 200, 0]}
-            position="absolute"
-            width={["84px", "84px", "44px"]}
-            _after={{
-              backgroundImage: "url(/mushroom-1.png)",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              content: "''",
-              display: "block",
-              height: ["160px", "100%"],
-              width: "100%",
-            }}
-          />
-          <Box
-            bottom={0}
-            height="100%"
-            left={[0, 200, 10]}
-            position="absolute"
-            // right={0}
-            // top={10}
-            width={["400px", "400px", "300px"]}
-            _after={{
-              backgroundImage: "url(/mushroom-2.png)",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              content: "''",
-              display: "block",
-              height: "100%",
-              position: "absolute",
-              width: "100%",
-              zIndex: "-5",
-            }}
-          />
-        </Flex>
+      <Flex
+        direction={["column", "column", "row"]}
+        gap={2}
+        marginTop={[4, 4, 10]}
+      >
+        <Art />
         <Container marginBottom={6} maxW="2xl">
           <Heading
             as="h1"
             className={funnel.className}
-            marginTop={[2, 4, 8]}
+            marginTop={[2, 4, 0]}
             size="6xl"
-            textAlign="center"
           >
             welcome to bitpart.
           </Heading>
@@ -173,7 +73,7 @@ export default function Home() {
             <List.Item>
               <Text
                 as="span"
-                borderRight="1px solid black"
+                borderRight={`1px solid ${color}`}
                 className={geistMono.className}
                 textTransform="uppercase"
               >
@@ -186,7 +86,7 @@ export default function Home() {
             <List.Item marginTop={4}>
               <Text
                 as="span"
-                borderRight="1px solid black"
+                borderRight={`1px solid ${color}`}
                 className={geistMono.className}
                 textTransform="uppercase"
               >
@@ -199,7 +99,7 @@ export default function Home() {
             <List.Item marginTop={4}>
               <Text
                 as="span"
-                borderRight="1px solid black"
+                borderRight={`1px solid ${color}`}
                 className={geistMono.className}
                 textTransform="uppercase"
               >
@@ -212,7 +112,7 @@ export default function Home() {
             <List.Item marginTop={4}>
               <Text
                 as="span"
-                borderRight="1px solid black"
+                borderRight={`1px solid ${color}`}
                 className={geistMono.className}
                 textTransform="uppercase"
               >
@@ -225,7 +125,7 @@ export default function Home() {
             <List.Item marginTop={4}>
               <Text
                 as="span"
-                borderRight="1px solid black"
+                borderRight={`1px solid ${color}`}
                 className={geistMono.className}
                 textTransform="uppercase"
               >
