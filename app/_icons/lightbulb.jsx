@@ -1,8 +1,8 @@
 import { chakra } from "@chakra-ui/react";
 
-export default function Lightbulb() {
+export default function Lightbulb({ color }) {
   return (
-    <chakra.svg viewBox="0 0 24 24" fill="#FFF">
+    <chakra.svg viewBox="0 0 24 24" fill={color ? color : "currentColor"}>
       <rect x="2" y="1" width="1" height="1" />
       <rect x="3" y="2" width="1" height="1" />
       <rect x="4" y="3" width="1" height="1" />

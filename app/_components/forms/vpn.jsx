@@ -21,7 +21,8 @@ import { FiDownload } from "react-icons/fi";
 
 export const VpnForm = ({ bot }) => {
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const colorButton = useColorModeValue("black", "white");
 
   const {
     register,
@@ -218,7 +219,14 @@ export const VpnForm = ({ bot }) => {
                 </Field>
               </Stack>
               {i >= 0 && (
-                <Button onClick={() => faqRemove(i)} height={6} width={1}>
+                <Button
+                  onClick={() => faqRemove(i)}
+                  color={colorButton}
+                  height={6}
+                  noArrow
+                  variant="subtle"
+                  width={1}
+                >
                   X
                 </Button>
               )}
@@ -232,6 +240,8 @@ export const VpnForm = ({ bot }) => {
               answer: "",
             })
           }
+          color={colorButton}
+          noArrow
           variant="subtle"
           width={40}
         >

@@ -13,8 +13,13 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+
+// components imports
 import { Button } from "@/app/_components/ui/button";
 import { Field } from "@/app/_components/ui/field";
+
+// components imports
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const BroadcastForm = ({ bot }) => {
   const {
@@ -38,6 +43,9 @@ export const BroadcastForm = ({ bot }) => {
       faqReplace(bot.faq);
     }
   }, [bot]);
+
+  // color mode
+  const color = useColorModeValue("black", "white");
 
   return (
     <>
@@ -124,7 +132,14 @@ export const BroadcastForm = ({ bot }) => {
                 </Field>
               </Stack>
               {i >= 0 && (
-                <Button onClick={() => faqRemove(i)} height={6} width={1}>
+                <Button
+                  onClick={() => faqRemove(i)}
+                  color={color}
+                  height={6}
+                  noArrow
+                  variant="subtle"
+                  width={1}
+                >
                   X
                 </Button>
               )}
@@ -138,6 +153,8 @@ export const BroadcastForm = ({ bot }) => {
               answer: "",
             })
           }
+          color={color}
+          noArrow
           variant="subtle"
           width={40}
         >

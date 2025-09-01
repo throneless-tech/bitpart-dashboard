@@ -5,6 +5,11 @@ import {
 } from "@chakra-ui/react"
 
 const config = defineConfig({
+  globalCss: {
+    "div": {
+      fontSize: 20,
+    },
+  },
   theme: {
     tokens: {
       colors: {

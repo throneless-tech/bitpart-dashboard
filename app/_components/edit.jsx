@@ -13,7 +13,6 @@ import { schema } from "../_lib/forms";
 import {
   AbsoluteCenter,
   Box,
-  Button,
   Center,
   Container,
   Dialog,
@@ -27,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
+import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // form imports
@@ -166,7 +166,9 @@ export default function EditBotFlow({ botId, username }) {
   };
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const colorCancel = useColorModeValue("black", "white");
+  const colorSubmit = useColorModeValue("white", "black");
 
   useEffect(() => {}, [isFetching, notAllowed, watchAll]);
 
@@ -256,10 +258,17 @@ export default function EditBotFlow({ botId, username }) {
             <Spinner size="xl" />
           )}
           <HStack gap={4} marginTop={8}>
-            <Button as="a" href="/my-bots" size="sm" variant="outline">
+            <Button
+              as="a"
+              color={colorCancel}
+              href="/my-bots"
+              size="sm"
+              variant="outline"
+            >
               Cancel
             </Button>
             <Button
+              color={colorSubmit}
               disabled={isFetching}
               onClick={(e) => {
                 methods.setValue("botType", bot.botType, {

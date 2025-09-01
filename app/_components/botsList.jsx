@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 // chakra ui imports
-import { Box, Button, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spinner, Stack, Text } from "@chakra-ui/react";
 
 // actions
 import { deleteBot } from "@/app/_actions/deleteBot";
@@ -12,15 +12,26 @@ import { getUserBots } from "@/app/_actions/getUserBots";
 
 // components imports
 import BotCard from "@/app/_components/botCard";
+import { Button } from "@/app/_components/ui/button";
 import PrivacyConsent from "@/app/_components/privacyConsent";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // constants
 import { MAX_BOTS } from "@/app/constants";
+
+// icons
+import Info from "@/app/_icons/info";
+
+// fonts
+import { geistMono } from "@/app/fonts";
 
 export default function BotsList({ username }) {
   const [isFetching, setIsFetching] = useState(true);
   const [bots, setBots] = useState([]);
   const [consentAgree, setConsentAgree] = useState(false);
+
+  // color mode
+  const color = useColorModeValue("purple.600", "purple.400");
 
   const fetchBots = useCallback(async () => {
     try {
@@ -77,7 +88,12 @@ export default function BotsList({ username }) {
           </Box>
         ) : bots && bots.length ? (
           <>
-            <Heading as="h2" size="xl">
+            <Heading
+              as="h2"
+              className={geistMono.className}
+              size="xl"
+              textTransform="uppercase"
+            >
               My bots
             </Heading>
             <Stack
@@ -95,17 +111,23 @@ export default function BotsList({ username }) {
                 />
               ))}
             </Stack>
-            <Text fontStyle="italic" marginTop={8}>
-              Tip: You can send the word "Admin" to your bot at any time to
-              enter the passcode and view your bot as an administrator in
-              Signal.
-            </Text>
+            <Flex alignItems="center" direction="row" gap={1} marginTop={8}>
+              <Box width={6}>
+                <Info color={color} />
+              </Box>
+              <Text fontStyle="italic">
+                Tip: You can send the word "Admin" to your bot at any time to
+                enter the passcode and view your bot as an administrator in
+                Signal.
+              </Text>
+            </Flex>
           </>
         ) : (
           <Text>You do not have any bots. Click below to create one.</Text>
         )}
         <Button
           as="a"
+          colorPalette="purple"
           disabled={bots?.consent_agree === false || (bots && bots.length > 3)}
           href="/create"
           onClick={(e) => {

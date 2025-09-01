@@ -2,7 +2,7 @@
 import { Box, FileUpload, Icon } from "@chakra-ui/react";
 
 // icons
-import { LuUpload } from "react-icons/lu";
+import Upload from "@/app/_icons/upload";
 
 export const FileUploader = (props) => {
   const { register } = props;
@@ -11,9 +11,9 @@ export const FileUploader = (props) => {
     <FileUpload.Root accept={["text/csv"]} maxFiles={1}>
       <FileUpload.HiddenInput {...register} />
       <FileUpload.Dropzone>
-        <Icon size="md" color="fg.muted">
-          <LuUpload />
-        </Icon>
+        <Box width={8}>
+          <Upload />
+        </Box>
         <FileUpload.DropzoneContent>
           <Box>Drag and drop files or click here to upload</Box>
           <Box color="fg.muted">.csv only accepted</Box>

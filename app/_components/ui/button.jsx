@@ -10,7 +10,9 @@ import * as React from "react";
 import { geistMono } from "@/app/fonts";
 
 // icons
+import ArrowLeft from "@/app/_icons/arrowLeft";
 import ArrowRight from "@/app/_icons/arrowRight";
+import { Ultra } from "next/font/google";
 
 export const Button = React.forwardRef(function Button(props, ref) {
   const {
@@ -19,6 +21,8 @@ export const Button = React.forwardRef(function Button(props, ref) {
     loading,
     disabled,
     loadingText,
+    noArrow,
+    prev,
     variant,
     children,
     ...rest
@@ -36,7 +40,7 @@ export const Button = React.forwardRef(function Button(props, ref) {
       }}
       borderRadius={8}
       className={geistMono.className}
-      color={color ? color : "white"}
+      color={color ? color : variant == "solid" ? color : "white"}
       colorPalette={colorPalette}
       disabled={loading || disabled}
       fontSize={16}
@@ -54,7 +58,7 @@ export const Button = React.forwardRef(function Button(props, ref) {
             <Spinner size="inherit" color="inherit" />
           </AbsoluteCenter>
           <Span opacity={0}>{children}</Span>
-          <ArrowRight color={color} />
+          {!prev ? <ArrowRight color={color} /> : null}
         </>
       ) : loading && loadingText ? (
         <>
@@ -63,10 +67,11 @@ export const Button = React.forwardRef(function Button(props, ref) {
         </>
       ) : (
         <>
+          {prev ? <ArrowLeft color={colorPalette ? "white" : color} /> : null}
           {children}
-          {variant === "none" ? null : (
+          {!prev && !noArrow ? (
             <ArrowRight color={colorPalette ? "white" : color} />
-          )}
+          ) : null}
         </>
       )}
     </ChakraButton>

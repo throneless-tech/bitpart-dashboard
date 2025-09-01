@@ -14,9 +14,9 @@ import { schema } from "../_lib/forms";
 import {
   AbsoluteCenter,
   Box,
-  Button,
   Container,
   Dialog,
+  Flex,
   Group,
   Heading,
   Highlight,
@@ -32,6 +32,7 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
+import { Button } from "@/app/_components/ui/button";
 import { Checkbox } from "@/app/_components/ui/checkbox";
 import { LightMode, useColorModeValue } from "@/app/_components/ui/color-mode";
 import {
@@ -68,11 +69,12 @@ import { TiplineConfirmation } from "./confirmation/tipline";
 import { VpnConfirmation } from "./confirmation/vpn";
 
 // icons imports
-import { CgModem } from "react-icons/cg";
-import { FaSimCard } from "react-icons/fa";
-import { IoHelpBuoySharp } from "react-icons/io5";
-import { LuLightbulb } from "react-icons/lu";
-import { TbBuildingBroadcastTower } from "react-icons/tb";
+import Bullhorn from "@/app/_icons/bullhorn";
+import Chart from "@/app/_icons/chart";
+import Helpdesk from "@/app/_icons/helpdesk";
+import Info from "@/app/_icons/info";
+import Lightbulb from "@/app/_icons/lightbulb";
+import Phone from "@/app/_icons/phone";
 
 // actions
 import {
@@ -87,37 +89,40 @@ import { getUserBots } from "@/app/_actions/getUserBots";
 // constants
 import { MAX_BOTS } from "@/app/constants";
 
+// fonts
+import { funnel, geistMono } from "../fonts";
+
 const frameworks = [
   {
     value: "broadcast",
     title: "Broadcast",
     description:
       "Send messages to many recipients while protecting the privacy of both senders and recipients.",
-    icon: <TbBuildingBroadcastTower />,
+    icon: <Bullhorn />,
   },
   {
     value: "tipline",
     title: "Tipline",
     description: "Set up an automated system to receive tips.",
-    icon: <LuLightbulb />,
+    icon: <Lightbulb />,
   },
   {
     value: "helpdesk",
     title: "Helpdesk",
     description: "Set up an automated system to answer questions.",
-    icon: <IoHelpBuoySharp />,
+    icon: <Helpdesk />,
   },
   {
     value: "esim",
     title: "eSIM",
     description: "Distribute eSIMs to people who request codes.",
-    icon: <FaSimCard />,
+    icon: <Phone />,
   },
   {
     value: "vpn",
     title: "VPN",
     description: "Distribute VPN codes to people who request them.",
-    icon: <CgModem />,
+    icon: <Chart />,
   },
 ];
 
@@ -288,7 +293,8 @@ export default function CreateBotFlow({ username }) {
   };
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const colorSteps = useColorModeValue("black", "white");
 
   useEffect(() => {}, [createdBot, isFetching, stepCount, watchAll]);
 
@@ -314,7 +320,12 @@ export default function CreateBotFlow({ username }) {
   } else {
     return (
       <Container marginBottom={6} maxW="6xl">
-        <Heading as="h1" marginBottom={4} size="xl">
+        <Heading
+          as="h1"
+          className={funnel.className}
+          marginBottom={8}
+          size="3xl"
+        >
           Create a new bot
         </Heading>
         <FormProvider {...methods}>
@@ -334,7 +345,10 @@ export default function CreateBotFlow({ username }) {
               marginRight="auto"
               maxW={"2xl"}
             >
-              <Box border={`1px solid ${color}`} margin={8} padding={4}>
+              <Box borderColor={color} borderWidth={1} margin={8} padding={4}>
+                <Box display="inline-block" width={6}>
+                  <Info color={color} />
+                </Box>
                 <Text>
                   The Bitpart bot connects to a Signal account to send and
                   receive messages. (Learn more about{" "}
@@ -375,7 +389,12 @@ export default function CreateBotFlow({ username }) {
                   we don't recommend using your personal account.
                 </Text>
               </Box>
-              <Heading as="h2" marginTop={10} size="md">
+              <Heading
+                as="h2"
+                className={geistMono.className}
+                marginTop={10}
+                size="md"
+              >
                 What kind of bot do you want to create?
               </Heading>
               <RadioCardRoot
@@ -401,9 +420,9 @@ export default function CreateBotFlow({ username }) {
                       label={item.title}
                       description={item.description}
                       icon={
-                        <Icon fontSize="2xl" color="fg.subtle">
+                        <Box fill={color} width={6}>
                           {item.icon}
-                        </Icon>
+                        </Box>
                       }
                       indicator={false}
                       key={item.value}
@@ -432,12 +451,17 @@ export default function CreateBotFlow({ username }) {
                 Building {botType} bot
               </Heading> */}
               <BasicsForm />
-              <Text fontSize="sm" marginY={8}>
-                Anyone who has consented to receive messages from your bot will
-                be able to request to see a menu, which offers them the option
-                to learn about the bot. Fill out these sections below to
-                customize the text.
-              </Text>
+              <Flex direction="row" gap={2} marginY={8}>
+                <Box fill={color} marginTop="6px" width={10}>
+                  <Info />
+                </Box>
+                <Text fontSize="md">
+                  Anyone who has consented to receive messages from your bot
+                  will be able to request to see a menu, which offers them the
+                  option to learn about the bot. Fill out these sections below
+                  to customize the text.
+                </Text>
+              </Flex>
               {botType == "broadcast" ? (
                 <BroadcastForm />
               ) : botType == "esim" ? (
@@ -565,15 +589,17 @@ export default function CreateBotFlow({ username }) {
                 </>
               )}
             </StepsCompletedContent>
-            <Container maxWidth="2xl" padding={0}>
+            <Container maxWidth="2xl" marginY={6} padding={0}>
               <Group>
                 <StepsPrevTrigger asChild>
                   <Button
+                    color={colorSteps}
                     disabled={stepCount === 0 || stepCount === 3}
                     onClick={() => {
                       // updateStepCount(-1)
                       router.push(`?step=${stepCount - 1}`);
                     }}
+                    prev
                     size="sm"
                     variant="outline"
                   >
@@ -582,6 +608,7 @@ export default function CreateBotFlow({ username }) {
                 </StepsPrevTrigger>
                 <StepsNextTrigger asChild>
                   <Button
+                    color={colorSteps}
                     disabled={
                       isFetching || (stepCount === 1 && !formState.isValid)
                     }

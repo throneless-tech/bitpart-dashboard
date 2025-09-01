@@ -102,7 +102,7 @@ export default function Header(props) {
                             <Menu.Item>
                               <Link
                                 color={textColor}
-                                href="/bots"
+                                href="/my-bots"
                                 variant="plain"
                               >
                                 My Bots
@@ -167,7 +167,7 @@ export default function Header(props) {
               <Flex gap={4}>
                 <ClientOnly>
                   {session && (
-                    <Link color={textColor} href="/bots" variant="plain">
+                    <Link color={textColor} href="/my-bots" variant="plain">
                       My Bots
                     </Link>
                   )}

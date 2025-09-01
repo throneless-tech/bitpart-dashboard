@@ -4,6 +4,8 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
 import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
+
+// components imports
 import { Button } from "@/app/_components/ui/button";
 import { Field } from "@/app/_components/ui/field";
 import {
@@ -142,7 +144,14 @@ export const HelpdeskForm = ({ bot }) => {
                 </Field>
               </Stack>
               {i >= 0 && (
-                <Button onClick={() => remove(i)} height={6} width={1}>
+                <Button
+                  onClick={() => remove(i)}
+                  color={color}
+                  height={6}
+                  noArrow
+                  variant="subtle"
+                  width={1}
+                >
                   X
                 </Button>
               )}
@@ -156,6 +165,8 @@ export const HelpdeskForm = ({ bot }) => {
               solution: "",
             })
           }
+          color={color}
+          noArrow
           variant="subtle"
           width={40}
         >
