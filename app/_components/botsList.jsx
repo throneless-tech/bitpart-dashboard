@@ -31,7 +31,7 @@ export default function BotsList({ username }) {
   const [consentAgree, setConsentAgree] = useState(false);
 
   // color mode
-  const color = useColorModeValue("purple.600", "purple.400");
+  const color = useColorModeValue("black", "white");
 
   const fetchBots = useCallback(async () => {
     try {
@@ -111,14 +111,13 @@ export default function BotsList({ username }) {
                 />
               ))}
             </Stack>
-            <Flex alignItems="center" direction="row" gap={1} marginTop={8}>
-              <Box width={6}>
+            <Flex direction="row" gap={1} marginTop={8}>
+              <Box marginTop={1} width={6}>
                 <Info color={color} />
               </Box>
               <Text fontStyle="italic">
-                Tip: You can send the word "Admin" to your bot at any time to
-                enter the passcode and view your bot as an administrator in
-                Signal.
+                You can send the word "Admin" to your bot at any time to enter
+                the passcode and view your bot as an administrator in Signal.
               </Text>
             </Flex>
           </>

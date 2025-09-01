@@ -13,6 +13,7 @@ import {
   NumberInputLabel,
   NumberInputRoot,
 } from "@/app/_components/ui/number-input";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const HelpdeskForm = ({ bot }) => {
   const {
@@ -31,6 +32,9 @@ export const HelpdeskForm = ({ bot }) => {
       replace(bot.problems);
     }
   }, [bot]);
+
+  // color mode
+  const color = useColorModeValue("black", "white");
 
   return (
     <>

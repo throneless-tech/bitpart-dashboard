@@ -455,7 +455,7 @@ export default function CreateBotFlow({ username }) {
                 <Box fill={color} marginTop="6px" width={10}>
                   <Info />
                 </Box>
-                <Text fontSize="md">
+                <Text fontSize="md" fontStyle="italic">
                   Anyone who has consented to receive messages from your bot
                   will be able to request to see a menu, which offers them the
                   option to learn about the bot. Fill out these sections below
@@ -493,7 +493,7 @@ export default function CreateBotFlow({ username }) {
                 <Box marginTop={1} width={10}>
                   <Info />
                 </Box>
-                <Text>
+                <Text fontStyle="italic">
                   Does the above information look correct? If not, go back and
                   update it. If so, click "Submit" to create your bot. You will
                   be able to edit your bot again later if needed.
@@ -536,7 +536,7 @@ export default function CreateBotFlow({ username }) {
                 <Box width={6}>
                   <Info />
                 </Box>
-                <Text>
+                <Text fontStyle="italic">
                   You can find more information or troubleshoot by following{" "}
                   <Link
                     href="https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices"
