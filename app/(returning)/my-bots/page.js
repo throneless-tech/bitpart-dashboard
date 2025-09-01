@@ -1,43 +1,15 @@
-"use client";
-
 // base imports
 import React from "react";
-import { useSession } from "next-auth/react";
-
-// chakra ui imports
-import { Box, Container, Heading, Text } from "@chakra-ui/react";
+import { auth } from "@/auth";
 
 // components
-import BotsList from "@/app/_components/botsList";
-import Footer from "@/app/_components/footer";
-import Header from "@/app/_components/header";
+import Dashboard from "@/app/_components/dashboard";
 import NotAuthenticated from "@/app/_components/notAuthenticated";
-import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
-// fonts
-import { funnel } from "@/app/fonts";
-
-export default function Dashboard() {
-  const { data: session } = useSession();
-
-  // color mode
-  const color = useColorModeValue("purple.600", "purple.400");
+export default async function MyBots() {
+  const session = await auth();
 
   if (!session) return <NotAuthenticated />;
 
-  return (
-    <Box>
-      <Container py={6}>
-        <Header session={session} />
-        <Heading as="h1" className={funnel.className} marginY={8} size="3xl">
-          Welcome, {session?.user?.name}
-        </Heading>
-
-        <Box marginTop={12}>
-          <BotsList username={session?.user?.name} />
-        </Box>
-      </Container>
-      <Footer color={color} />
-    </Box>
-  );
+  return <Dashboard session={session} />;
 }

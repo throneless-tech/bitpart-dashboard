@@ -4,12 +4,15 @@ import React from "react";
 // chakra ui imports
 import { Box, Link, List, Text } from "@chakra-ui/react";
 
+// fonts
+import { geistMono } from "@/app/fonts";
+
 export const BroadcastConfirmation = (props) => {
   return (
     <>
       <Text marginTop={12}>Your broadcast channel has now been created!</Text>
       <Box border={`1px solid ${props?.color}`} margin={4} padding={4}>
-        <Text fontWeight={700} marginTop={4}>
+        <Text className={geistMono.className} fontWeight={700} marginTop={4}>
           What should I do now?
         </Text>
         <List.Root as="ol" marginLeft={4} marginTop={2}>

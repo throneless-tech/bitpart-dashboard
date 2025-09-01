@@ -22,8 +22,8 @@ import { Alert } from "@/app/_components/ui/alert";
 import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
-// icon imports
-import Edit from "@/app/_icons/edit";
+// fonts
+import { geistMono } from "@/app/fonts";
 
 export const Summary = ({ data, errors, botId, username }) => {
   const [bot, setBot] = useState(null);
@@ -130,7 +130,7 @@ export const Summary = ({ data, errors, botId, username }) => {
         {bot && Object.keys(bot).length != 0
           ? Object.keys(bot).map((key) => (
               <Text as="div" key={key} marginTop={4}>
-                <Text fontWeight="bold">
+                <Text className={geistMono.className} fontWeight="bold">
                   {bot[key] && bot[key].length
                     ? key === "botType"
                       ? "Bot type"
