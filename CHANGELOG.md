@@ -1,3 +1,14 @@
+## 0.3.0 (2025-09-02)
+
+### Feat
+
+- seo updates
+
+### Fix
+
+- buggy sessions returning to server side auth; more reskin
+- #11 #52 #61 and general reskin updates
+
 ## 0.2.0 (2025-08-29)
 
 ### Feat
