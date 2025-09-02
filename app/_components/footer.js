@@ -8,7 +8,7 @@ import Github from "@/app/_icons/github";
 export default function Footer({ color }) {
   return (
     <ClientOnly>
-      <Flex justifyContent="flex-end" position="absolute" bottom={0} right={0}>
+      <Flex justifyContent="flex-start" position="absolute" bottom={0} left={0}>
         <IconButton
           as="a"
           href="https://throneless.tech"

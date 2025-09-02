@@ -15,8 +15,9 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
-import Footer from "../../_components/footer";
-import Header from "../../_components/header";
+import ArtFooter from "@/app/_components/artFooter";
+import Footer from "@/app/_components/footer";
+import Header from "@/app/_components/header";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // fonts
@@ -92,6 +93,16 @@ export default function About() {
           </Text>
         </ClientOnly>
       </Container>
+      <Box
+        height={360}
+        marginLeft="auto"
+        marginRight={0}
+        marginTop={8}
+        paddingRight={8}
+        width={460}
+      >
+        <ArtFooter />
+      </Box>
       <Footer color={color} />
     </Box>
   );
