@@ -11,6 +11,7 @@ import { geist } from "./fonts";
 import { SessionProvider } from "next-auth/react";
 
 export const metadata = {
+  metadataBase: new URL("https://bitp.art"),
   title: "Bitpart",
   description:
     "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance.",

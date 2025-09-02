@@ -15,6 +15,7 @@ import { Provider } from "@/app/_components/ui/provider";
 // });
 
 export const metadata = {
+  metadataBase: new URL("https://bitp.art"),
   title: "Terms of Service and Privacy Policy ● Bitpart",
   description:
     "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance. It enables you to send and receive secure, automated messages to a particular community over Signal by creating your own bot.",
