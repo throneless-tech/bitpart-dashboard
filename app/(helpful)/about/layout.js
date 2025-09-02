@@ -16,7 +16,8 @@ import { Provider } from "@/app/_components/ui/provider";
 
 export const metadata = {
   title: "About us ● Bitpart",
-  description: "A dashboard for interfacing with Bitpart.",
+  description:
+    "Bitpart is a project developed by Throneless Tech, a technology worker-cooperative specialized in building technology and providing digital security trainings for social justice oriented community organizations, activist groups, and non-profits.",
 };
 
 export default function RootLayout({ children }) {

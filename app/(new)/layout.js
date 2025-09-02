@@ -23,7 +23,8 @@ import { SessionProvider } from "next-auth/react";
 
 export const metadata = {
   title: "Bitpart",
-  description: "A dashboard for interfacing with Bitpart.",
+  description:
+    "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance. It enables you to send and receive secure, automated messages to a particular community over Signal by creating your own bot.",
 };
 
 export default function RootLayout({ children }) {

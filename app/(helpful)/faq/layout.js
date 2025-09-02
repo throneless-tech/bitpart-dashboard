@@ -16,7 +16,8 @@ import { Provider } from "@/app/_components/ui/provider";
 
 export const metadata = {
   title: "FAQ ● Bitpart",
-  description: "A dashboard for interfacing with Bitpart.",
+  description:
+    "Bitpart is an automated messaging platform designed for activists, journalists, and human rights defenders in repressive environments, and the organisations that support them, to set up helpdesks, tiplines, distribute VPNs or e-sims, or broadcast messages.",
 };
 
 export default function RootLayout({ children }) {
