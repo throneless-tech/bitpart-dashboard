@@ -10,6 +10,15 @@ async function main() {
     ],
     skipDuplicates: true,
   })
+
+  const state = await prisma.state.upsert({
+    where: { name: "default" },
+    create: {
+      name: "default",
+      lastInstance: "default"
+    },
+    update: { lastInstance: "default" },
+  })
 }
 main()
   .then(async () => {

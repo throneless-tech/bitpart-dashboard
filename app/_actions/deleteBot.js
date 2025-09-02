@@ -64,7 +64,7 @@ class WSConnection {
   }
 }
 
-export const deleteBot = async (botId, botName, username) => {
+export const deleteBot = async (botId, botName, username, host) => {
   const jsonDeleteBot = {
     message_type: "DeleteBot",
     data: {
@@ -75,9 +75,7 @@ export const deleteBot = async (botId, botName, username) => {
   const jsonStringDeleteBot = JSON.stringify(jsonDeleteBot);
 
   // send info to bitpart server via websockets
-  const ws = new WSConnection(
-    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
-  );
+  const ws = new WSConnection(`ws://${host}/ws`);
 
   const response = ws
     .start()

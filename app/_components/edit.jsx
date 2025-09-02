@@ -115,6 +115,7 @@ export default function EditBotFlow({ botId, username }) {
         data,
         bot.bitpartId,
         bot.passcode,
+        bot.instance,
       );
 
       if (botBitpart?.message_type === "Error") {

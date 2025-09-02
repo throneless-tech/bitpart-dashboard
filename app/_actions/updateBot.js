@@ -70,7 +70,7 @@ class WSConnection {
 }
 
 // update the bot on the bitpart server
-export const updateBotBitpart = async (data, bitpartId, passcode) => {
+export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
   // format csml
   const formattedCsml = await formatCsml(data, passcode);
 
@@ -79,7 +79,7 @@ export const updateBotBitpart = async (data, bitpartId, passcode) => {
     data: {
       id: bitpartId,
       name: data.botName,
-      apps_endpoint: `http://${process.env.EMS_SERVER_URL}:${process.env.EMS_PORT}${process.env.EMS_ENDPOINT}`,
+      apps_endpoint: `http://${process.env.EMS_SERVER_HOST}/ems`,
       flows: [
         {
           id: "Default",
@@ -94,9 +94,7 @@ export const updateBotBitpart = async (data, bitpartId, passcode) => {
 
   const jsonStringUpdateBot = JSON.stringify(jsonUpdateBot);
 
-  const ws = new WSConnection(
-    `ws://${process.env.BITPART_SERVER_URL}:${process.env.BITPART_SERVER_PORT}/ws`,
-  );
+  const ws = new WSConnection(`ws://${host}/ws`);
 
   const response = ws
     .start()

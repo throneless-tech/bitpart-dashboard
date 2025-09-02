@@ -16,23 +16,16 @@ export async function sendToEMS(botId, botType, json) {
   }
 
   const endpoint =
-    botType === "esim"
-      ? process.env.ESIM_ENDPOINT
-      : botType === "vpn"
-        ? process.env.VPN_ENDPOINT
-        : "";
+    botType === "esim" ? "esim_codes" : botType === "vpn" ? "vpn_tokens" : "";
 
-  fetch(
-    `http://${process.env.EMS_SERVER_URL}:${process.env.EMS_PORT}${endpoint}`,
-    {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+  fetch(`http://${process.env.EMS_SERVER_HOST}/${endpoint}`, {
+    method: "post",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-  )
+    body: JSON.stringify(data),
+  })
     .then((res) => {
       return res;
     })

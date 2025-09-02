@@ -77,13 +77,8 @@ import Lightbulb from "@/app/_icons/lightbulb";
 import Phone from "@/app/_icons/phone";
 
 // actions
-import {
-  createBotBitpart,
-  createBotPrisma,
-  linkChannelBitpart,
-} from "@/app/_actions/createBot";
+import { createBot } from "@/app/_actions/createBot";
 import { createPasscode, formatBotName } from "@/app/_actions/formatBot";
-import { parseCSV } from "@/app/_actions/csv";
 import { getUserBots } from "@/app/_actions/getUserBots";
 
 // constants
@@ -237,37 +232,10 @@ export default function CreateBotFlow({ username }) {
       // format bot id for bitpart
       const bitpartId = await formatBotName(data.botName, username);
 
-      const botBitpart = await createBotBitpart(data, bitpartId, passcode);
+      const bot = await createBot(data, bitpartId, username, passcode);
 
-      if (botBitpart?.message_type === "Error") {
-        throw new Error(botBitpart.data.response);
-      }
-
-      let emsData;
-      if (data.botType === "esim" || data.botType === "vpn") {
-        emsData = parseCSV(
-          botBitpart.data.response.bot.id,
-          data.botType,
-          data.csv,
-        );
-      }
-
-      if (emsData?.error) {
-        throw new Error(emsData.error.message);
-      }
-
-      const channelBitpartLink = await linkChannelBitpart(
-        botBitpart.data.response.bot.id,
-      );
-
-      if (channelBitpartLink?.message_type === "Error") {
-        throw new Error(channelBitpartLink.data.response);
-      }
-
-      setQRLink(channelBitpartLink.data.response);
-      console.log(channelBitpartLink.data.response);
-
-      const bot = await createBotPrisma(data, bitpartId, username, passcode);
+      setQRLink(bot.qr);
+      console.log(bot.qr);
 
       setCreatedBot(bot);
       updateStepCount(1);
