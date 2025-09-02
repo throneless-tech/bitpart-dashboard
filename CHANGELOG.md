@@ -1,3 +1,9 @@
+## 0.4.1 (2025-09-02)
+
+### Fix
+
+- add metadatabase url for image
+
 ## 0.4.0 (2025-09-02)
 
 ### Feat
