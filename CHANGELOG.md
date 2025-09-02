@@ -1,3 +1,9 @@
+## 0.4.0 (2025-09-02)
+
+### Feat
+
+- seo updates including sitemap, robots.txt and manifest
+
 ## 0.3.0 (2025-09-02)
 
 ### Feat
