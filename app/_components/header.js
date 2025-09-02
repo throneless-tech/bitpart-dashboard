@@ -151,7 +151,12 @@ export default function Header(props) {
                           </Link>
                         </Menu.Item>
                         <Menu.Item>
-                          <Link color={textColor} href="/login" variant="plain">
+                          <Link
+                            color={textColor}
+                            href="https://www.paypal.com/donate/?hosted_button_id=757LCPWH64A6N"
+                            target="_blank"
+                            variant="plain"
+                          >
                             Donate
                           </Link>
                         </Menu.Item>
@@ -187,7 +192,12 @@ export default function Header(props) {
                 </ClientOnly>
               </Flex>
               <Flex gap={4}>
-                <Button as="a" colorPalette="purple" href="#">
+                <Button
+                  as="a"
+                  colorPalette="purple"
+                  href="https://www.paypal.com/donate/?hosted_button_id=757LCPWH64A6N"
+                  target="_blank"
+                >
                   Donate
                 </Button>
                 <ClientOnly>
