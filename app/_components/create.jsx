@@ -14,14 +14,12 @@ export default function Create({ session }) {
   const color = useColorModeValue("purple.600", "purple.400");
 
   return (
-    <Box>
+    <Box paddingBottom={16}>
       <Container py={6}>
         <Header session={session} />
       </Container>
       <CreateBotFlow username={session?.user?.name} />
-      <Box marginTop={12} position="relative">
-        <Footer color={color} />
-      </Box>
+      <Footer color={color} />
     </Box>
   );
 }

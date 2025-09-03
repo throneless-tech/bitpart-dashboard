@@ -95,11 +95,12 @@ export default function ArtFooter() {
         <Box
           position="relative"
           height="100%"
-          width={[140, 240, 240]}
+          width={["60%", 240, 240]}
           _after={{
             backgroundImage: "url(/flower-1.png)",
             backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            backgroundSize: "cover",
+            bottom: 0,
             content: "''",
             display: "block",
             height: "100%",

@@ -17,7 +17,7 @@ export default function Dashboard({ session }) {
   const color = useColorModeValue("purple.600", "purple.400");
 
   return (
-    <>
+    <Box paddingBottom={16}>
       <Container py={6}>
         <Header session={session} />
         <Heading as="h1" className={funnel.className} marginY={8} size="3xl">
@@ -29,6 +29,6 @@ export default function Dashboard({ session }) {
         </Box>
       </Container>
       <Footer color={color} />
-    </>
+    </Box>
   );
 }
