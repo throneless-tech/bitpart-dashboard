@@ -20,6 +20,8 @@ export const FileUploader = (props) => {
 
     if (e.acceptedFiles.length) {
       setProgress(100);
+    } else if (e.rejectedFiles.length) {
+      alert("The file was not accepted. Please try a different file.");
     } else {
       setProgress(null);
       setShow(false);
