@@ -18,9 +18,8 @@ export const parseCSV = (botId, botType, fileList) => {
 
   Papa.parse(file, {
     encoding: "utf-8",
-    complete: (results) => {
+    complete: async (results) => {
       let data = results.data;
-      console.log("DATA:", data);
       data = data.map((item) => {
         const keys = Object.keys(item);
 
@@ -37,28 +36,34 @@ export const parseCSV = (botId, botType, fileList) => {
           });
         });
 
-        return {
-          bot_id: botId,
-          ...item,
-        };
-        // const updatedKeys = Object.keys(item);
+        let toReturn;
 
-        // if (
-        //   (botType === "vpn" && compare(updatedKeys, VPN_HEADERS)) ||
-        //   (botType === "esim" && compare(updatedKeys, ESIM_HEADERS))
-        // ) {
-        //   toReturn = {
-        //     bot_id: botId,
-        //     ...item,
-        //   };
-        // } else {
-        //   throw new Error("Check your file headers.");
-        // }
+        const updatedKeys = Object.keys(item);
 
-        // return toReturn;
+        if (
+          (botType === "vpn" && compare(updatedKeys, VPN_HEADERS)) ||
+          (botType === "esim" && compare(updatedKeys, ESIM_HEADERS))
+        ) {
+          toReturn = {
+            bot_id: botId,
+            ...item,
+          };
+        } else {
+          throw new Error("Check your file headers.");
+        }
+
+        return toReturn;
       });
 
-      sendToEMS(botId, botType, data);
+      let result;
+
+      try {
+        result = await sendToEMS(botId, botType, data);
+      } catch (err) {
+        console.log("error: ", err);
+      }
+
+      return result;
     },
     header: true,
     // download: true,

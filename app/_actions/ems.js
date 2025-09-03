@@ -48,6 +48,8 @@ export async function sendToEMS(botId, botType, json) {
     } catch (err) {
       console.log("Encountered an error when processing the response: ", err);
     }
+
+    return text;
   }
 
   /**
