@@ -114,7 +114,7 @@ export default function BotCard(props) {
         </Button>
         <form
           action={async () =>
-            await handleDelete(bot.id, botName, username, bot.instance)
+            await handleDelete(bot.id, bot.bitpartId, username, bot.instance)
           }
         >
           <Button color={colorSubmit} type="submit" variant="solid">

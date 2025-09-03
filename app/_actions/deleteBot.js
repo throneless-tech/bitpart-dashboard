@@ -65,11 +65,11 @@ class WSConnection {
   }
 }
 
-const deleteBotBitpart = async (botId, botName, username, host) => {
+const deleteBotBitpart = async (botBitpartId, host) => {
   const jsonDeleteBot = {
     message_type: "DeleteBot",
     data: {
-      id: botName,
+      id: botBitpartId,
     },
   };
 
@@ -95,7 +95,7 @@ const deleteBotBitpart = async (botId, botName, username, host) => {
   return response;
 };
 
-export const deleteBot = async (botId, botName, username, host) => {
+export const deleteBot = async (botId, botBitpartId, username, host) => {
   const MAX_RETRIES = 5;
   let retries = 0;
 
@@ -105,12 +105,7 @@ export const deleteBot = async (botId, botName, username, host) => {
       result = await prisma.$transaction(
         async (tx) => {
           // delete bot from bitpart server
-          const deletedBitpartBot = await deleteBotBitpart(
-            botId,
-            botName,
-            username,
-            host,
-          );
+          const deletedBitpartBot = await deleteBotBitpart(botBitpartId, host);
 
           if (deletedBitpartBot?.message_type === "Error") {
             throw new Error(deletedBitpartBot.data.response);
