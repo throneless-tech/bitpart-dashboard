@@ -5,7 +5,7 @@ export default function ArtFooter() {
     <>
       <Box
         position="relative"
-        height={[40, 40, "24%"]}
+        height="24%"
         width="100%"
         _after={{
           backgroundImage: "url(/flower-1.png)",
@@ -34,7 +34,7 @@ export default function ArtFooter() {
         }}
       />
       <Flex
-        height="100%"
+        height={["50%", "50%", "100%"]}
         gap={4}
         justifyContent={["space-between"]}
         marginTop={4}
@@ -61,8 +61,8 @@ export default function ArtFooter() {
         >
           <Box
             position="relative"
-            height={[40, 40, "60%"]}
-            width={[14, 14, 160]}
+            height={[20, "60%", "60%"]}
+            width={[140, 180, 160]}
             _before={{
               backgroundColor: "red.500",
               borderRadius: 8,
@@ -77,8 +77,8 @@ export default function ArtFooter() {
           />
           <Box
             position="relative"
-            height={[40, 40, "60%"]}
-            width={[14, 14, "100%"]}
+            height={[20, "60%", "60%"]}
+            width="100%"
             _before={{
               backgroundColor: "purple.600",
               borderRadius: 8,
@@ -94,8 +94,8 @@ export default function ArtFooter() {
         </Flex>
         <Box
           position="relative"
-          height={[40, 40, "100%"]}
-          width={[14, 14, 240]}
+          height="100%"
+          width={[140, 240, 240]}
           _after={{
             backgroundImage: "url(/flower-1.png)",
             backgroundRepeat: "no-repeat",

@@ -99,7 +99,7 @@ export default function About() {
         marginRight={0}
         marginTop={8}
         paddingRight={8}
-        width={460}
+        width={["90%", 400, 460]}
       >
         <ArtFooter />
       </Box>
