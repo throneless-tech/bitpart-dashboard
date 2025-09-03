@@ -38,7 +38,11 @@ import { TiplineForm } from "@/app/_components/forms/tipline";
 import { VpnForm } from "@/app/_components/forms/vpn";
 
 // actions
-import { updateBotBitpart, updateBotPrisma } from "@/app/_actions/updateBot";
+import {
+  updateBot,
+  updateBotBitpart,
+  updateBotPrisma,
+} from "@/app/_actions/updateBot";
 import { parseCSV } from "@/app/_actions/csv";
 import { getBot } from "@/app/_actions/getUserBots";
 
@@ -111,39 +115,13 @@ export default function EditBotFlow({ botId, username }) {
 
     try {
       // format bot id for bitpart
-      const botBitpart = await updateBotBitpart(
-        data,
-        bot.bitpartId,
-        bot.passcode,
-        bot.instance,
-      );
-
-      if (botBitpart?.message_type === "Error") {
-        throw new Error(botBitpart.data.response);
-      }
-
-      let emsData;
-      if (
-        (data.botType === "esim" || data.botType === "vpn") &&
-        data?.csv?.length
-      ) {
-        emsData = await parseCSV(
-          botBitpart.data.response.bot.id,
-          data.botType,
-          data.csv,
-        );
-      }
-
-      if (emsData?.error) {
-        throw new Error(emsData.error.message);
-      }
-
-      await updateBotPrisma(
+      const updatedBot = await updateBot(
         data,
         bot.id,
         bot.bitpartId,
         username,
         bot.passcode,
+        bot.instance,
       );
 
       router.push(`/my-bots/view/${bot.id}`);

@@ -1,12 +1,14 @@
 "use server";
 
 // base imports
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import WebSocket from "ws";
 
 // actions
-import { formatCsml, formatPhone } from "./formatBot";
+import { formatCsml } from "./formatBot";
 import { getUser } from "./getUser";
+import { parseCSV } from "./csv";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -113,30 +115,76 @@ export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
   return response;
 };
 
-// update the bot in the prisma db
-export const updateBotPrisma = async (
+export const updateBot = async (
   data,
   botId,
   bitpartId,
   username,
   passcode,
+  host,
 ) => {
-  try {
-    delete data.csv; // we are not saving the codes here
-    const user = await getUser(username);
+  const MAX_RETRIES = 5;
+  let retries = 0;
 
-    const bot = await prisma.bot.update({
-      where: {
-        id: botId,
-        creatorId: user.id,
-      },
-      data: {
-        ...data,
-      },
-    });
+  let result;
+  while (retries < MAX_RETRIES) {
+    try {
+      result = await prisma.$transaction(
+        async (tx) => {
+          // update bot on bitpart server
+          const updatedBitpartBot = await updateBotBitpart(
+            data,
+            bitpartId,
+            passcode,
+            host,
+          );
 
-    return bot;
-  } catch (error) {
-    throw new Error(error.message);
+          if (updatedBitpartBot?.message_type === "Error") {
+            throw new Error(updatedBitpartBot.data.response);
+          }
+
+          // update data in the ems, if needed
+          let emsData;
+          if (
+            (data.botType === "esim" || data.botType === "vpn") &&
+            data?.csv?.length
+          ) {
+            emsData = parseCSV(
+              updatedBitpartBot.data.response.bot.id,
+              data.botType,
+              data.csv,
+            );
+          }
+
+          if (emsData?.error) {
+            throw new Error(emsData.error.message);
+          }
+
+          // find the user to attach the bot to
+          const user = await getUser(username);
+
+          // update the bot in the prisma db
+          const bot = await tx.bot.update({
+            where: {
+              id: botId,
+              creatorId: user.id,
+            },
+            data: {
+              ...data,
+            },
+          });
+        },
+        {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        },
+      );
+      break;
+    } catch (error) {
+      if (error.code === "P2034") {
+        retries++;
+        continue;
+      }
+      throw new Error(error.message);
+    }
   }
 };

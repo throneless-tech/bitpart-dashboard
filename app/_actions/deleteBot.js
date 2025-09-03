@@ -1,4 +1,5 @@
 "use server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import WebSocket from "ws";
 import { getUser } from "./getUser";
@@ -64,7 +65,7 @@ class WSConnection {
   }
 }
 
-export const deleteBot = async (botId, botName, username, host) => {
+const deleteBotBitpart = async (botId, botName, username, host) => {
   const jsonDeleteBot = {
     message_type: "DeleteBot",
     data: {
@@ -91,20 +92,56 @@ export const deleteBot = async (botId, botName, username, host) => {
       );
     });
 
-  try {
-    const user = await getUser(username);
-
-    const bot = await prisma.bot.delete({
-      where: {
-        id: botId,
-        creatorId: user.id,
-      },
-    });
-
-    return "deleted";
-  } catch (e) {
-    console.log(e);
-  }
-
   return response;
+};
+
+export const deleteBot = async (botId, botName, username, host) => {
+  const MAX_RETRIES = 5;
+  let retries = 0;
+
+  let result;
+  while (retries < MAX_RETRIES) {
+    try {
+      result = await prisma.$transaction(
+        async (tx) => {
+          // delete bot from bitpart server
+          const deletedBitpartBot = await deleteBotBitpart(
+            botId,
+            botName,
+            username,
+            host,
+          );
+
+          if (deletedBitpartBot?.message_type === "Error") {
+            throw new Error(deletedBitpartBot.data.response);
+          }
+
+          // TODO delete data from the EMS upon deletion
+
+          // find the user to attach the bot to
+          const user = await getUser(username);
+
+          // delete bot from prisma db
+          const bot = await prisma.bot.delete({
+            where: {
+              id: botId,
+              creatorId: user.id,
+            },
+          });
+
+          return "deleted";
+        },
+        {
+          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        },
+      );
+      break;
+    } catch (error) {
+      if (error.code === "P2034") {
+        retries++;
+        continue;
+      }
+      throw error;
+    }
+  }
 };

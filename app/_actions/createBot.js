@@ -205,7 +205,10 @@ export const createBot = async (data, bitpartId, username, passcode) => {
           }
 
           let emsData;
-          if (data.botType === "esim" || data.botType === "vpn") {
+          if (
+            (data.botType === "esim" || data.botType === "vpn") &&
+            data?.csv?.length
+          ) {
             emsData = parseCSV(
               bitpartBot.data.response.bot.id,
               data.botType,
