@@ -188,7 +188,12 @@ menu_step:
     goto submit_question_step
   }
 
-  say Text("Menu
+  do safetyTips = "[safetyTips]"
+  do tipsLength = safetyTips.length()
+  do faqLength = [faq.length]
+
+  if (tipsLength > 0 && faqLength > 0) {
+      say Text("Menu
 
 Reply with the corresponding number:
 
@@ -199,6 +204,39 @@ Reply with the corresponding number:
 You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
 
 Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength == 0 || tipsLength == Null) && faqLength > 0) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+2. Frequently asked questions (FAQ)
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength > 0) && (faqLength == 0 || faqLength == Null || faqLength == [null])) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+2. Safety tips
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength == 0) && (faqLength == Null || faqLength == 0 || faqLength == [null])) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  }
   hold
 
   if (event == 1) {
@@ -206,15 +244,15 @@ Send 'Menu' at any time to come back to this menu.")
     
 [description]"
     goto await_reply_step
-  } else if (event == 2) {
+  } else if (event == 2 && tipsLength > 0) {
     say Text("Safety tips
 
 [safetyTips]")
-
     goto await_reply_step
-
-  } else if (event == 3) {
-        goto faq_step
+  } else if (event == 2 && (tipsLength == 0 || tipsLength == Null) && faqLength > 0) {
+    goto faq_step
+  } else if (event == 3 && tipsLength > 0 && faqLength > 0) {
+    goto faq_step
   } else if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "delete") {
