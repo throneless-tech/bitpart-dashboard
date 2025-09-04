@@ -1,3 +1,9 @@
+## 1.0.4 (2025-09-04)
+
+### Fix
+
+- add data migration scripts
+
 ## 1.0.3 (2025-09-04)
 
 ### Fix
