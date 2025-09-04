@@ -1,3 +1,20 @@
+## 1.0.0 (2025-09-04)
+
+### BREAKING CHANGE
+
+- #109 #123 syncronizing bot deletion and adding flexibilty to connect to different server instances
+
+### Fix
+
+- update text across public pages and metadata
+- update privacy policy language
+- remove unnecessary fields from bot summary page
+- design and ux updates
+- #123 ensure bot deletion from server with bitpart bot id
+- #109 allow for only one instance in hosts list
+- responsive sizes for footer art
+- #109 allow for dashboard to connect to different instances of server; refactor create transaction
+
 ## 0.4.1 (2025-09-02)
 
 ### Fix
