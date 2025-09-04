@@ -72,6 +72,8 @@ DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-po
 EMS_SERVER_HOST=127.0.0.1:3005
 ```
 
+The `.env` is configured to be able to support multiple BITPART_SERVER_HOSTS for load balancing purposes. It will also work with one server host.
+
 ## Deployment
 
 The instructions above work for local deployment. However, if you'd like to use a container such as Docker, follow the commands below.
