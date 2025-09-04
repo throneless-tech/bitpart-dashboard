@@ -22,6 +22,7 @@ import Header from "@/app/_components/header";
 
 // fonts
 import { funnel, geistMono } from "@/app/fonts";
+import Footer from "@/app/_components/footer";
 
 export default function About() {
   // session
@@ -32,7 +33,7 @@ export default function About() {
   const borderColor = useColorModeValue("black", "white");
 
   return (
-    <Box>
+    <Box paddingBottom={16}>
       <Container py={6}>
         <Header session={session} />
       </Container>
@@ -1056,6 +1057,7 @@ export default function About() {
           </Text>
         </ClientOnly>
       </Container>
+      <Footer color={color} />
     </Box>
   );
 }

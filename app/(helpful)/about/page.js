@@ -9,6 +9,7 @@ import {
   Box,
   ClientOnly,
   Container,
+  Flex,
   Heading,
   Link,
   Text,
@@ -31,78 +32,82 @@ export default function About() {
   const color = useColorModeValue("purple.600", "purple.400");
 
   return (
-    <Box>
+    <Box paddingBottom={8}>
       <Container py={6}>
         <Header session={session} />
       </Container>
-      <Container maxW="3xl" py={6}>
-        <Heading
-          as="h1"
-          className={funnel.className}
-          marginTop={8}
-          size="5xl"
-          textAlign="center"
-        >
-          About us
-        </Heading>
-        <ClientOnly>
-          <Text marginTop={6}>
-            Bitpart is a project developed by{" "}
-            <Link color={color} href="https://throneless.tech">
-              Throneless Tech
-            </Link>
-            , a technology worker-cooperative specialized in building technology
-            and providing digital security trainings for social justice oriented
-            community organizations, activist groups, and non-profits.
-          </Text>
-          <Text marginTop={2}>
-            We were inspired to develop Bitpart by the need we saw for it within
-            communities we are a part of and work with. Dormant, similar
-            projects such as Ionosphere and Signalboost also brought us
-            inspiration.
-          </Text>
-          <Text marginTop={2}>
-            Bitpart has been made possible through a grant and support from the
-            Open Technology Fund (OTF), which in turn receives funding from the
-            US government. You can read more about OTF's funding{" "}
-            <Link
-              color={color}
-              href="https://www.opentech.fund/about/about-our-funding/"
+      <Container maxW="6xl" marginBottom={8}>
+        <Flex direction={["column-reverse", "column-reverse", "row"]} gap={8}>
+          <Box
+            height={[360, 360, 400]}
+            marginLeft="auto"
+            marginRight="auto"
+            marginTop={8}
+            width={["90%", 400, 460]}
+          >
+            <ArtFooter />
+          </Box>
+          <Box>
+            <Heading
+              as="h1"
+              className={funnel.className}
+              marginTop={[0, 0, 8]}
+              size="5xl"
             >
-              here
-            </Link>
-            . Many privacy-focused technologies have received funding from OTF,
-            such as{" "}
-            <Link color={color} href="https://signal.org/">
-              Signal
-            </Link>
-            ,{" "}
-            <Link color={color} href="https://tails.net/">
-              Tails
-            </Link>
-            , and{" "}
-            <Link color={color} href="https://www.torproject.org/">
-              Tor.
-            </Link>
-          </Text>
-          <Text marginTop={2}>
-            If you have any feedback, or want to know more, please contact us:{" "}
-            <Link color={color} href="mailto:contact@bitp.art">
-              contact@bitp.art
-            </Link>
-          </Text>
-        </ClientOnly>
+              About us
+            </Heading>
+            <ClientOnly>
+              <Text marginTop={6}>
+                Bitpart is a project developed by{" "}
+                <Link color={color} href="https://throneless.tech">
+                  Throneless Tech
+                </Link>
+                , a technology worker-cooperative specialized in building
+                technology and providing digital security trainings for social
+                justice oriented community organizations, activist groups, and
+                non-profits.
+              </Text>
+              <Text marginTop={2}>
+                We were inspired to develop Bitpart by the need we saw for it
+                within communities we are a part of and work with. Dormant,
+                similar projects such as Ionosphere and Signalboost also brought
+                us inspiration.
+              </Text>
+              <Text marginTop={2}>
+                Bitpart has been made possible through a grant and support from
+                the Open Technology Fund (OTF), which in turn receives funding
+                from the US government. You can read more about OTF's funding{" "}
+                <Link
+                  color={color}
+                  href="https://www.opentech.fund/about/about-our-funding/"
+                >
+                  here
+                </Link>
+                . Many privacy-focused technologies have received funding from
+                OTF, such as{" "}
+                <Link color={color} href="https://signal.org/">
+                  Signal
+                </Link>
+                ,{" "}
+                <Link color={color} href="https://tails.net/">
+                  Tails
+                </Link>
+                , and{" "}
+                <Link color={color} href="https://www.torproject.org/">
+                  Tor.
+                </Link>
+              </Text>
+              <Text marginTop={2}>
+                If you have any feedback, or want to know more, please contact
+                us:{" "}
+                <Link color={color} href="mailto:contact@bitp.art">
+                  contact@bitp.art
+                </Link>
+              </Text>
+            </ClientOnly>
+          </Box>
+        </Flex>
       </Container>
-      <Box
-        height={360}
-        marginLeft="auto"
-        marginRight={0}
-        marginTop={8}
-        paddingRight={8}
-        width={["90%", 400, 460]}
-      >
-        <ArtFooter />
-      </Box>
       <Footer color={color} />
     </Box>
   );
