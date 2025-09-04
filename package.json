@@ -10,7 +10,11 @@
     "lint:fix": "next lint --fix",
     "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
     "prettier": "prettier --write */**/*.{js,jsx,json,ts,css,md}",
-    "prepare": "husky"
+    "prepare": "husky",
+    "data-migration:add-instance": "npx tsx ./prisma/migrations/20250902173425_add_instance_to_settings_and_bot/data-migration.ts",
+    "data-migration:update-instance": "npx tsx ./prisma/migrations/20250902190702_update_current_instance_to_last_instance/data-migration.ts",
+    "data-migration:add-name-to-state": "npx tsx ./prisma/migrations/20250902192248_add_name_to_state/data-migration.ts",
+    "data-migration:add-unique-name-to-state": "npx tsx ./prisma/migrations/20250902192356_add_unique_to_name_state/data-migration.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
