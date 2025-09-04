@@ -36,7 +36,7 @@ export default function PrivacyConsent({ setConsentAgree, username }) {
     >
       <Dialog.Trigger asChild>
         <Button variant="outline" size="sm">
-          Agree to TOU and privacy policy here
+          Agree to Terms of Use and Privacy Policy here
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -45,51 +45,33 @@ export default function PrivacyConsent({ setConsentAgree, username }) {
           <Dialog.Content>
             <Dialog.Header>
               <Dialog.Title>
-                Consent to terms of use and privacy policy
+                Consent to Terms of Use and Privacy Policy
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <Text marginTop={4}>
-                In order to use Bitpart, we require active consent to our terms
-                of use and privacy policy.
+                In order to use Bitpart, we require active consent to our Terms
+                of Use and Privacy Policy.
               </Text>
               <Text marginTop={4}>
                 You can read the{" "}
                 <Link
                   color={color}
-                  href="/tou-and-privacy#tou"
+                  href="/tou-and-privacy"
                   target="_blank"
                   variant="underline"
                 >
-                  terms of use here
+                  Terms of Use and Privacy Policy
                 </Link>{" "}
-                and the{" "}
-                <Link
-                  color={color}
-                  href="/tou-and-privacy#privacy-policy"
-                  target="_blank"
-                  variant="underline"
-                >
-                  privacy policy here
-                </Link>
-                .
+                here.
               </Text>
               <Text marginTop={4}>
-                In addition, we store a small amount of information through
-                cookies. This is necessary for us to deliver login and logout
-                functionality. You can read more about{" "}
-                <Link
-                  color={color}
-                  href="/tou-and-privacy#privacy-policy-personal-data"
-                  target="_blank"
-                  variant="underline"
-                >
-                  what we use cookies for here
-                </Link>
-                .
+                In addition, we store login and logout information through
+                cookies, which includes your username. This is necessary for us
+                to deliver login and logout functionality.
               </Text>
-              <Text fontSize={16} fontWeight={700} marginTop={12}>
-                Do you agree to the terms of use and privacy policy?
+              <Text fontWeight={700} marginTop={12}>
+                Do you agree to the Terms of Use and Privacy Policy?
               </Text>
             </Dialog.Body>
             <Dialog.Footer>
