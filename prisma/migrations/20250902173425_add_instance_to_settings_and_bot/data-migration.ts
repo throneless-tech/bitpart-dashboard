@@ -4,12 +4,6 @@ const prisma = new PrismaClient()
 
 async function main() {
   await prisma.$transaction(async (tx) => {
-    const newState = await tx.state.create({
-      data: {
-        currentInstance: "default",
-      }
-    })
-
     const bots = await tx.bot.findMany()
     for (const bot of bots) {
       await tx.bot.update({

@@ -4,11 +4,14 @@ const prisma = new PrismaClient()
 
 async function main() {
   await prisma.$transaction(async (tx) => {
-    const thisState = await tx.state.findUnique({
+    const thisState = await tx.state.upsert({
       where: {
-        currentInstance: "default",
+        id: 1,
       },
-      data: {
+      update: {
+        name: "default"
+      },
+      create: {
         name: "default"
       }
     })
