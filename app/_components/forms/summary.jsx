@@ -165,7 +165,9 @@ export const Summary = ({ data, errors, botId, username }) => {
                                                     key === "createdAt" ||
                                                     key === "creatorId" ||
                                                     key === "id" ||
-                                                    key === "updatedAt"
+                                                    key === "updatedAt" ||
+                                                    key === "instance" ||
+                                                    key === "qrLink"
                                                   ? ""
                                                   : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
                     : null}
@@ -197,7 +199,9 @@ export const Summary = ({ data, errors, botId, username }) => {
                           key === "createdAt" ||
                           key === "creatorId" ||
                           key === "id" ||
-                          key === "updatedAt"
+                          key === "updatedAt" ||
+                          key === "instance" ||
+                          key === "qrLink"
                         ? ""
                         : bot[key]}
                   </Text>
