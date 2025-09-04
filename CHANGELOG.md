@@ -1,3 +1,9 @@
+## 1.0.1 (2025-09-04)
+
+### Fix
+
+- Use npx for running seed command.
+
 ## 1.0.0 (2025-09-04)
 
 ### BREAKING CHANGE
