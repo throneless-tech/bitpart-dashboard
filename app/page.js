@@ -147,7 +147,7 @@ export default function Home() {
                 Get started
               </Button>
               <Text marginTop={8} fontStyle="italic" textStyle="sm">
-                Contact us if you have questions or need a code:{" "}
+                Email us if you have questions:{" "}
                 <ClientOnly>
                   <Link color={iconColor} href="mailto:contact@bitp.art">
                     contact [at] bitp.art
