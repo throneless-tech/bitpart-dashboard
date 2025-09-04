@@ -104,6 +104,8 @@ Please share your tip with us.")
       goto privacy_policy_step
     } else if (event.to_lowercase() == "admin") {
       goto admin_passcode_step
+    }  else if (event.to_lowercase() == "delete") {
+      goto delete_data_step
     } else { 
       remember tip = event  
       
