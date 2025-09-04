@@ -60,17 +60,18 @@ export default function Home() {
               welcome to bitpart.
             </Heading>
             <Text marginTop={4}>
-              Bitpart is a messaging tool designed for human rights
-              organizations, activists, journalists and human rights defenders
-              working in repressive political environments at risk of
-              surveillance.
+              Bitpart is a one-to-many messaging tool that plugs into Signal. It
+              was designed with rights defenders, activists and journalists
+              operating in risky or repressive environments, and is intended for
+              anyone needing to communicate with a large network safely over
+              Signal.
             </Text>
             <Text marginTop={2}>
               It enables you to send secure, automated messages to a particular
-              community over Signal by creating your own bot. The bot can
-              operate within five different communication formats, depending on
-              your needs, all while protecting the privacy of both the senders
-              and recipients of messages.
+              community over Signal by creating your own bot. The bot can be
+              used for five different purposes, depending on your needs, all
+              while protecting the privacy of both the senders and recipients of
+              messages.
             </Text>
             <Text marginTop={8}>These formats include:</Text>
             <List.Root listStyle="none" marginTop={4}>
@@ -81,7 +82,7 @@ export default function Home() {
                   className={geistMono.className}
                   textTransform="uppercase"
                 >
-                  Broadcasting{" "}
+                  Broadcast channel{" "}
                 </Text>
                 <Text as="span" paddingLeft={3}>
                   Send alerts and other information to many recipients at once
@@ -123,7 +124,7 @@ export default function Home() {
                   eSim distribution{" "}
                 </Text>
                 <Text as="span" paddingLeft={3}>
-                  Distribute eSims to members of your community
+                  Distribute eSIMs to members of your community
                 </Text>
               </List.Item>
               <List.Item marginTop={4}>
@@ -148,9 +149,21 @@ export default function Home() {
               <Text marginTop={8} fontStyle="italic" textStyle="sm">
                 Contact us if you have questions or need a code:{" "}
                 <ClientOnly>
-                  <Link color={color} href="mailto:contact@bitp.art">
+                  <Link color={iconColor} href="mailto:contact@bitp.art">
                     contact [at] bitp.art
                   </Link>
+                </ClientOnly>
+              </Text>
+              <Text marginTop={8} fontStyle="italic" textStyle="sm">
+                Complete{" "}
+                <ClientOnly>
+                  <Link
+                    color={iconColor}
+                    href="https://nextcloud.throneless.tech/apps/forms/s/wKdHeWHooNZfMc3FmnG9KbPJ"
+                  >
+                    this form
+                  </Link>{" "}
+                  to request an invite code.
                 </ClientOnly>
               </Text>
             </Box>

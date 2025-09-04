@@ -18,7 +18,7 @@ export const metadata = {
   metadataBase: new URL("https://bitp.art"),
   title: "FAQ ● Bitpart",
   description:
-    "Bitpart is an automated messaging platform designed for activists, journalists, and human rights defenders in repressive environments, and the organisations that support them, to set up helpdesks, tiplines, distribute VPNs or e-sims, or broadcast messages.",
+    "Bitpart is a one-to-many messaging tool that plugs into Signal. It was designed with rights defenders, activists and journalists operating in risky or repressive environments, and is intended for anyone needing to communicate with a large network safely over Signal.",
 };
 
 export default function RootLayout({ children }) {

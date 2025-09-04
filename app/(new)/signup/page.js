@@ -4,7 +4,7 @@
 import React from "react";
 
 // chakra ui imports
-import { Box, Container, Text } from "@chakra-ui/react";
+import { Box, Container, Link, Text } from "@chakra-ui/react";
 
 // components
 import Footer from "@/app/_components/footer";
@@ -23,8 +23,10 @@ export default function Signup() {
       <Container py={12} maxW="lg">
         <Text marginBottom={12}>
           Choose a unique username and password, and store this somewhere safe.
-          Since we do not collect your email, we will not be able to send you a
-          password reset if you forget your credentials.
+          If you need to change your password, email us:{" "}
+          <Link color={color} href="mailto:contact@bitp.art">
+            contact@bitp.art
+          </Link>
         </Text>
         <SignupForm />
       </Container>
