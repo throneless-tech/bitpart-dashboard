@@ -342,8 +342,9 @@ If you can't get it to work, reply with 'Help'.")
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
   } else {
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
-    goto get_esim_3_step
+    goto help_step
   }
 
   goto menu_options_step

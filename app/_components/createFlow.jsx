@@ -261,7 +261,6 @@ export default function CreateBotFlow({ username }) {
       console.log(response.qr);
 
       setCreatedBot(response.bot);
-      updateStepCount(1);
     } catch (error) {
       console.log(error);
       alert(
@@ -624,12 +623,14 @@ export default function CreateBotFlow({ username }) {
                         router.push("/my-bots");
                       }
                       if (stepCount === 2) {
-                        updateStepCount(-1);
+                        // updateStepCount(-1);
                         methods.handleSubmit(onSubmit, onError)(e);
                       }
-                      if (!isFetching) {
-                        // updateStepCount(1);
-                      }
+                      // if (!isFetching) {
+                      //   updateStepCount(1);
+                      //   router.push(`?step=${stepCount + 1}`);
+                      // }
+                      updateStepCount(1);
                       router.push(`?step=${stepCount + 1}`);
                     }}
                     size="sm"
