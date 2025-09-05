@@ -161,8 +161,6 @@ export const createBot = async (data, bitpartId, username, passcode) => {
     try {
       result = await prisma.$transaction(
         async (tx) => {
-          delete data.csv; // we are not saving the codes here
-
           // configure which instance this bot should be attached to
           let host = "";
 
@@ -233,6 +231,8 @@ export const createBot = async (data, bitpartId, username, passcode) => {
 
           // find the user to attach the bot to
           const user = await getUser(username);
+
+          delete data.csv; // we are not saving the codes here
 
           // create the bot in the prisma db
           const bot = await tx.bot.create({

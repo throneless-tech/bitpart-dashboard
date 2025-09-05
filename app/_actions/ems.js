@@ -18,6 +18,8 @@ export async function sendToEMS(botId, botType, json) {
   const endpoint =
     botType === "esim" ? "esim_codes" : botType === "vpn" ? "vpn_tokens" : "";
 
+  console.log("Sending to EMS");
+
   fetch(`http://${process.env.EMS_SERVER_HOST}/${endpoint}`, {
     method: "post",
     headers: {
@@ -32,4 +34,17 @@ export async function sendToEMS(botId, botType, json) {
     .catch((err) => {
       throw new Error(err.message);
     });
+
+  let text;
+
+  if (res) {
+    try {
+      text = await res.text();
+      console.log("text =>", text);
+    } catch (err) {
+      console.log("Encountered an error when processing the response: ", err);
+    }
+  }
+
+  return text;
 }

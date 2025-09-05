@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import fs from "fs";
 import { sendToEMS } from "@/app/_actions/ems.js";
 
 // list of accepted column headers in the EMS database
@@ -14,7 +15,10 @@ export const parseCSV = (botId, botType, fileList) => {
     throw new Error("Only one csv file is allowed.");
   }
 
-  const file = fileList[0];
+  let file;
+
+  if (fileList.length && fileList[0])
+    file = fs.readFileSync(`./${fileList[0].name}`);
 
   Papa.parse(file, {
     encoding: "utf-8",
