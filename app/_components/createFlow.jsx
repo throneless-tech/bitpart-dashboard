@@ -247,7 +247,6 @@ export default function CreateBotFlow({ username }) {
             data.csv,
           );
         } catch (err) {
-          console.log("Error uploading codes: ", err);
           alert(
             "Failed to upload CSV file. After linking your device to the bot, edit the bot and upload a new CSV file with the correct headers as shown in the file template.",
           );

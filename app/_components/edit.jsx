@@ -126,17 +126,26 @@ export default function EditBotFlow({ botId, username }) {
 
       // update data in the ems, if needed
       let emsData;
-
       if (
         (data.botType === "esim" || data.botType === "vpn") &&
         data?.csv?.length
       ) {
-        emsData = parseCSV(response.bitpartId, response.botType, data.csv);
+        try {
+          emsData = await parseCSV(
+            response.bitpartId,
+            response.botType,
+            data.csv,
+          );
+        } catch (err) {
+          alert(
+            "Failed to upload CSV file. Upload a new CSV file with the correct headers as shown in the file template.",
+          );
+        }
       }
 
-      if (emsData?.error) {
-        throw new Error(emsData.error.message);
-      }
+      // if (emsData?.error) {
+      //   throw new Error(emsData.error.message);
+      // }
 
       router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
