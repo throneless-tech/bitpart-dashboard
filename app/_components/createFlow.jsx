@@ -240,16 +240,23 @@ export default function CreateBotFlow({ username }) {
         (data.botType === "esim" || data.botType === "vpn") &&
         data?.csv?.length
       ) {
-        emsData = parseCSV(
-          response.bot.bitpartId,
-          response.bot.botType,
-          data.csv,
-        );
+        try {
+          emsData = await parseCSV(
+            response.bot.bitpartId,
+            response.bot.botType,
+            data.csv,
+          );
+        } catch (err) {
+          console.log("Error uploading codes: ", err);
+          alert(
+            "Failed to upload CSV file. After linking your device to the bot, edit the bot and upload a new CSV file with the correct headers as shown in the file template.",
+          );
+        }
       }
 
-      if (emsData?.error) {
-        throw new Error(emsData.error.message);
-      }
+      // if (emsData?.error) {
+      //   throw new Error(emsData.error.message);
+      // }
 
       setQRLink(response.qr);
       console.log(response.qr);
