@@ -1,3 +1,12 @@
+## 1.0.7 (2025-09-05)
+
+### Fix
+
+- csv upload fixes for esim and vpn
+- more updates to FAQs text
+- more updates FAQ page text
+- update FAQ page text
+
 ## 1.0.6 (2025-09-05)
 
 ### Fix

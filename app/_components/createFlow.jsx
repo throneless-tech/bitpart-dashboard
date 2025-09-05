@@ -508,7 +508,7 @@ export default function CreateBotFlow({ username }) {
                 Connect Bitpart to Signal
               </Heading>
               <LightMode>
-                <Box backgroundColor="#fff" width={240}>
+                <Box backgroundColor="#fff" width={200}>
                   <QrCode.Root size="xl" value={qrLink}>
                     <QrCode.Frame>
                       <QrCode.Pattern />

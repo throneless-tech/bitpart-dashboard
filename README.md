@@ -84,7 +84,3 @@ Ensure your Bitpart, Bitpart EMS and Bitpart dashboard images are all running on
 ```
 podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_URL=127.0.0.1 -e BITPART_SERVER_PORT=5000 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_ENDPOINT="/ems" -e EMS_SERVER_URL=127.0.0.1 -e EMS_PORT=3005 -e ESIM_ENDPOINT="esim_codes" -e VPN_ENDPOINT="vpn_tokens" -e AUTH_TRUST_HOST=true -e NEXTAUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
 ```
-
-## Documentation
-
-Check out [the documentation](https://docs.bitp.art/) for more information on how to run all of Bitpart smoothly.

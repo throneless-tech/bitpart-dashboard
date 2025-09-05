@@ -163,7 +163,7 @@ export const formatCsml = async (data, passcode) => {
 
           if (data[field].length) {
             problems =
-              "FAQ\n\nHere are some frequently asked questions. Does your question fall under one of these?\n";
+              "FAQ\n\nHere are some frequently asked questions. Does your question fall under one of these? If so, please enter the number:\n\n";
 
             data[field].map((f, i) => {
               if (f.problem.length) {

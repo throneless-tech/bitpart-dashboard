@@ -27,6 +27,9 @@ export async function sendToEMS(botId, botType, json) {
     body: JSON.stringify(data),
   })
     .then((res) => {
+      return res.json();
+    })
+    .then((res) => {
       return res;
     })
     .catch((err) => {

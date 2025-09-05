@@ -2,12 +2,17 @@
 
 fn parse_codes(c) {
   do codes_string = ""
-  foreach (item) in c {
-    do codes_string = codes_string + "Provider: {{item.provider}}
+
+  if (!c || c.length < 1) {
+    do codes_string = "Apologies, we have run out of codes. Please contact an administrator."
+  }
+  else
+    foreach (item) in c {
+      do codes_string = codes_string + "Provider: {{item.provider}}
 Code: {{item.secret}}
 =====
 "
-  }
+    }
 
   return codes_string
 }
@@ -209,7 +214,7 @@ share_codes_step:
 
   say "If you need further support please type 'Help'
 
-Otherwise, please send us a message next time you need VPN codes."
+Otherwise, please wait at least 1 day and message next time you need VPN codes."
   hold
 
   // TODO figure out how to timeout wait for reply OR update response list to end convo
