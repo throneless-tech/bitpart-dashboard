@@ -380,7 +380,9 @@ Reply with 'Menu' to return home.")
     goto submit_question_step
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
-  } 
+  } else if (event.to_lowercase() == "delete") {
+      goto consent_disagree_step 
+  }
   else
     say "Sorry, the bot did not understand 🤖"
     hold
