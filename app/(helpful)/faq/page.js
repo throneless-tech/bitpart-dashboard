@@ -354,9 +354,21 @@ export default function FAQ() {
         <List.Root as="ol" marginLeft={4}>
           <ClientOnly>
             <List.Item>
-              <Link color={color} href="#broadcast-channel-receive">
-                How can people receive the messages I send from my broadcast
+              <Link color={color} href="#broadcast-channel-contacts">
+                Do I need to upload a list of contacts to create my broadcast
                 channel?
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#broadcast-channel-who-is-using-it">
+                How can I see who is using my bot? How can I see who subscribed
+                to my broadcast channel?
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#broadcast-channel-remove">
+                How can I remove someone who has signed up to receive messages
+                from my broadcast channel?
               </Link>
             </List.Item>
           </ClientOnly>
@@ -1606,7 +1618,7 @@ export default function FAQ() {
         <Heading
           as="h3"
           className={geistMono.className}
-          id="how-can-i-edit-text"
+          id="can-i-use-my-device"
           marginTop={8}
           size="xl"
         >
@@ -1659,6 +1671,78 @@ export default function FAQ() {
             it is how you can delete conversations and block users.
           </List.Item>
         </List.Root>
+        {/* RUNNING A BROADCAST CHANNEL */}
+        <ClientOnly>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="broacast-channel"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
+            Running a broadcast channel
+          </Heading>
+        </ClientOnly>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="broadcast-channel-contacts"
+          marginTop={8}
+          size="xl"
+        >
+          Do I need to upload a list of contacts to create my broadcast channel?
+        </Heading>
+        <Text marginTop={4}>
+          You cannot upload a list of contacts to the broadcast bot. Instead,
+          you will have to share the Signal username or phone number to which
+          your bot is connected, and individuals must actively opt in to your
+          broadcast channel. Bitpart is designed this way to better protect your
+          privacy, and that of your channel subscribers.
+        </Text>
+        <Text marginTop={4}>
+          You cannot see who is subscribed to your broadcast channel in the form
+          of a 'list,' and Bitpart does not collect or store this data. You are
+          able to see all conversations on the primary device (where you set up
+          the Signal account you use for your bot) and any other linked devices.
+        </Text>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="broadcast-channel-who-is-using-it"
+          marginTop={8}
+          size="xl"
+        >
+          How can I see who is using my bot? How can I see who subscribed to my
+          broadcast channel?
+        </Heading>
+        <Text marginTop={4}>
+          You are able to see all bot conversations on the primary device (where
+          you set up the Signal account you use for your bot) and any other
+          linked devices. The conversations are not visible on the Bitpart site.
+          There is no list of users (as Bitpart does not collect or store this
+          information). The best way to see who has interacted with your bot is
+          by checking the Signal account your bot uses on the primary device
+          (i.e. a phone) or any other linked devices.
+        </Text>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="broadcast-channel-remove"
+          marginTop={8}
+          size="xl"
+        >
+          How can I remove someone who has signed up to receive messages from my
+          broadcast channel?
+        </Heading>
+        <Text marginTop={4}>
+          The only way to do this currently would be to use functionalities
+          within Signal, such as blocking an account you do not want to receive
+          messages from you.
+        </Text>
         {/* TROUBLESHOOTING */}
         <ClientOnly>
           <Heading
