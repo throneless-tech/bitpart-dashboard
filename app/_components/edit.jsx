@@ -115,7 +115,7 @@ export default function EditBotFlow({ botId, username }) {
 
     try {
       // format bot id for bitpart
-      const updatedBot = await updateBot(
+      const response = await updateBot(
         data,
         bot.id,
         bot.bitpartId,
@@ -123,6 +123,20 @@ export default function EditBotFlow({ botId, username }) {
         bot.passcode,
         bot.instance,
       );
+
+      // update data in the ems, if needed
+      let emsData;
+
+      if (
+        (data.botType === "esim" || data.botType === "vpn") &&
+        data?.csv?.length
+      ) {
+        emsData = parseCSV(response.bitpartId, response.botType, data.csv);
+      }
+
+      if (emsData?.error) {
+        throw new Error(emsData.error.message);
+      }
 
       router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
