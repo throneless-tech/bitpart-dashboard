@@ -11,9 +11,9 @@ export const parseCSV = (botId, botType, fileList) => {
 
   const file = fileList[0];
 
-  Papa.parse(file, {
+  const parsed = Papa.parse(file, {
     encoding: "utf-8",
-    complete: (results) => {
+    complete: async (results) => {
       let data = results.data;
 
       data = data.map((item) => {
@@ -38,10 +38,13 @@ export const parseCSV = (botId, botType, fileList) => {
         };
       });
 
-      sendToEMS(botId, botType, data);
+      const response = await sendToEMS(botId, botType, data);
+
+      return response;
     },
     header: true,
     // download: true,
     skipEmptyLines: "greedy",
   });
+  return parsed;
 };

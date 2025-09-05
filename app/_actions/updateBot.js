@@ -131,6 +131,8 @@ export const updateBot = async (
     try {
       result = await prisma.$transaction(
         async (tx) => {
+          delete data.csv; // we are not saving the codes here
+
           // update bot on bitpart server
           const updatedBitpartBot = await updateBotBitpart(
             data,
@@ -141,23 +143,6 @@ export const updateBot = async (
 
           if (updatedBitpartBot?.message_type === "Error") {
             throw new Error(updatedBitpartBot.data.response);
-          }
-
-          // update data in the ems, if needed
-          let emsData;
-          if (
-            (data.botType === "esim" || data.botType === "vpn") &&
-            data?.csv?.length
-          ) {
-            emsData = parseCSV(
-              updatedBitpartBot.data.response.bot.id,
-              data.botType,
-              data.csv,
-            );
-          }
-
-          if (emsData?.error) {
-            throw new Error(emsData.error.message);
           }
 
           // find the user to attach the bot to
@@ -173,12 +158,14 @@ export const updateBot = async (
               ...data,
             },
           });
+
+          return bot;
         },
         {
           isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
         },
       );
-      break;
+      return result;
     } catch (error) {
       if (error.code === "P2034") {
         retries++;
