@@ -8,7 +8,6 @@ import WebSocket from "ws";
 // actions
 import { formatCsml } from "./formatBot";
 import { getUser } from "./getUser";
-import { parseCSV } from "./csv";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -204,22 +203,6 @@ export const createBot = async (data, bitpartId, username, passcode) => {
 
           if (bitpartBot?.message_type === "Error") {
             throw new Error(bitpartBot.data.response);
-          }
-
-          let emsData;
-          if (
-            (data.botType === "esim" || data.botType === "vpn") &&
-            data?.csv?.length
-          ) {
-            emsData = parseCSV(
-              bitpartBot.data.response.bot.id,
-              data.botType,
-              data.csv,
-            );
-          }
-
-          if (emsData?.error) {
-            throw new Error(emsData.error.message);
           }
 
           const channelLink = await linkChannelBitpart(

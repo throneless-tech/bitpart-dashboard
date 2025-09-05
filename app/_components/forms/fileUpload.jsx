@@ -15,7 +15,6 @@ export const FileUploader = (props) => {
   const [show, setShow] = useState(false);
 
   const handleFileChange = (e) => {
-    console.log(e);
     setShow(true);
 
     if (e.acceptedFiles.length) {

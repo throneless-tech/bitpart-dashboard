@@ -80,6 +80,7 @@ import Phone from "@/app/_icons/phone";
 import { createBot } from "@/app/_actions/createBot";
 import { createPasscode, formatBotName } from "@/app/_actions/formatBot";
 import { getUserBots } from "@/app/_actions/getUserBots";
+import { parseCSV } from "@/app/_actions/csv";
 
 // constants
 import { MAX_BOTS } from "@/app/constants";
@@ -232,12 +233,28 @@ export default function CreateBotFlow({ username }) {
       // format bot id for bitpart
       const bitpartId = await formatBotName(data.botName, username);
 
-      const bot = await createBot(data, bitpartId, username, passcode);
+      const response = await createBot(data, bitpartId, username, passcode);
 
-      setQRLink(bot.qr);
-      console.log(bot.qr);
+      let emsData;
+      if (
+        (data.botType === "esim" || data.botType === "vpn") &&
+        data?.csv?.length
+      ) {
+        emsData = parseCSV(
+          response.bot.bitpartId,
+          response.bot.botType,
+          data.csv,
+        );
+      }
 
-      setCreatedBot(bot);
+      if (emsData?.error) {
+        throw new Error(emsData.error.message);
+      }
+
+      setQRLink(response.qr);
+      console.log(response.qr);
+
+      setCreatedBot(response.bot);
       updateStepCount(1);
     } catch (error) {
       console.log(error);
