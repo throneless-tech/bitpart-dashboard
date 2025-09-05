@@ -178,8 +178,8 @@ export const createBot = async (data, bitpartId, username, passcode) => {
 
           if (hosts.length === 1) {
             host = hosts[0];
-          } else if (hosts.includes(lastHost.lastInstance)) {
-            const index = hosts.indexOf(lastHost.lastInstance);
+          } else if (hosts.includes(lastHost?.lastInstance)) {
+            const index = hosts.indexOf(lastHost?.lastInstance);
 
             if (index === 0) {
               host = hosts[1];
