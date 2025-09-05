@@ -1,3 +1,73 @@
+## 1.0.4 (2025-09-04)
+
+### Fix
+
+- add data migration scripts
+
+## 1.0.3 (2025-09-04)
+
+### Fix
+
+- update data migrations for instances specifically.
+
+## 1.0.2 (2025-09-04)
+
+### Fix
+
+- update migrations
+
+## 1.0.1 (2025-09-04)
+
+### Fix
+
+- Use npx for running seed command.
+
+## 1.0.0 (2025-09-04)
+
+### BREAKING CHANGE
+
+- #109 #123 syncronizing bot deletion and adding flexibilty to connect to different server instances
+
+### Fix
+
+- update text across public pages and metadata
+- update privacy policy language
+- remove unnecessary fields from bot summary page
+- design and ux updates
+- #123 ensure bot deletion from server with bitpart bot id
+- #109 allow for only one instance in hosts list
+- responsive sizes for footer art
+- #109 allow for dashboard to connect to different instances of server; refactor create transaction
+
+## 0.4.1 (2025-09-02)
+
+### Fix
+
+- add metadatabase url for image
+
+## 0.4.0 (2025-09-02)
+
+### Feat
+
+- seo updates including sitemap, robots.txt and manifest
+
+## 0.3.0 (2025-09-02)
+
+### Feat
+
+- seo updates
+
+### Fix
+
+- buggy sessions returning to server side auth; more reskin
+- #11 #52 #61 and general reskin updates
+
+## 0.2.0 (2025-08-29)
+
+### Feat
+
+- website reskin
+
 ## 0.1.11 (2025-06-16)
 
 ### Fix

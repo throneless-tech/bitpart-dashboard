@@ -22,8 +22,10 @@ import { SessionProvider } from "next-auth/react";
 // });
 
 export const metadata = {
-  title: "Bitpart Dashboard",
-  description: "A dashboard for interfacing with Bitpart.",
+  metadataBase: new URL("https://bitp.art"),
+  title: "Bitpart",
+  description:
+    "Bitpart is a one-to-many messaging tool that plugs into Signal. It was designed with rights defenders, activists and journalists operating in risky or repressive environments, and is intended for anyone needing to communicate with a large network safely over Signal.",
 };
 
 export default function RootLayout({ children }) {

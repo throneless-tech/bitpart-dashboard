@@ -4,12 +4,15 @@ import React from "react";
 // chakra ui imports
 import { Box, Link, List, Text } from "@chakra-ui/react";
 
+// fonts
+import { geistMono } from "@/app/fonts";
+
 export const HelpdeskConfirmation = (props) => {
   return (
     <>
       <Text marginTop={12}>Your helpdesk bot has now been created!</Text>
       <Box border={`1px solid ${props?.color}`} margin={4} padding={4}>
-        <Text fontWeight={700} marginTop={4}>
+        <Text className={geistMono.className} fontWeight={700} marginTop={4}>
           What should I do now?
         </Text>
         <List.Root as="ol" marginLeft={4} marginTop={2}>
@@ -19,6 +22,10 @@ export const HelpdeskConfirmation = (props) => {
             <Text as="span" fontSize="xl">
               {props?.passcode}
             </Text>
+          </List.Item>
+          <List.Item>
+            Message your bot with the word "Admin" at any time to enter your
+            passcode.
           </List.Item>
           <List.Item>
             Test your bot by using a different number to send a Signal message

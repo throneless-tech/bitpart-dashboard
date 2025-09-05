@@ -20,20 +20,25 @@ import {
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 import Header from "@/app/_components/header";
 
+// fonts
+import { funnel, geistMono } from "@/app/fonts";
+import Footer from "@/app/_components/footer";
+
 export default function About() {
   // session
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const borderColor = useColorModeValue("black", "white");
 
   return (
-    <Box>
+    <Box paddingBottom={16}>
       <Container py={6}>
         <Header session={session} />
       </Container>
       <Container maxW="3xl" py={6}>
-        <Heading as="h1" marginTop={8} size="3xl" textAlign="center">
+        <Heading as="h1" className={funnel.className} size="4xl">
           Terms of Use & Privacy Policy
         </Heading>
         <ClientOnly>
@@ -42,13 +47,13 @@ export default function About() {
             activists, journalists and human rights defenders working in
             repressive political environments at risk of surveillance. It
             enables you to send and receive secure, automated messages to a
-            particular constituency over Signal by creating your own bot. These
-            can be used for broadcast messaging, helpdesks, tiplines, and
+            particular community over Signal by creating your own bot. These can
+            be used for broadcast messaging, helpdesks, tiplines, and
             distributing eSIMs or VPNs.
           </Text>
           <Text marginTop={2}>
             The{" "}
-            <Link color={color} href="#tou" variant="underline">
+            <Link color={color} href="#tou">
               Terms of Use
             </Link>{" "}
             sets out what we offer and what we expect from you if you would like
@@ -56,7 +61,7 @@ export default function About() {
           </Text>
           <Text marginTop={2}>
             The{" "}
-            <Link color={color} href="#privacy-policy" variant="underline">
+            <Link color={color} href="#privacy-policy">
               Privacy Policy
             </Link>{" "}
             outlines how we collect, use, and safeguard your personal
@@ -64,34 +69,169 @@ export default function About() {
           </Text>
           <Text fontWeight={700} marginTop={2}>
             Contact us at{" "}
-            <Link
-              color={color}
-              href="mailto:contact@bitp.art"
-              variant="underline"
-            >
+            <Link color={color} href="mailto:contact@bitp.art">
               contact@bitp.art
             </Link>{" "}
             if you have any questions. We welcome your feedback.
           </Text>
-          <Heading as="h2" marginTop={8} size="2xl" id="tou">
+          <List.Root marginLeft={4} marginTop={8}>
+            <List.Item>
+              <Link color={color} href="#tou">
+                Terms of Use
+              </Link>
+              <List.Root marginLeft={4}>
+                <List.Item>
+                  <Link color={color} href="#tou-formats">
+                    Formats
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link color={color} href="#tou-acceptable-behavior">
+                    Acceptable Behavior
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link color={color} href="#tou-account">
+                    Account
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link color={color} href="#tou-data-processing">
+                    Data Processing
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link color={color} href="#tou-data-security">
+                    Data Security
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link color={color} href="#tou-service-availability">
+                    Service Availability
+                  </Link>
+                </List.Item>
+                <List.Item>
+                  <Link
+                    color={color}
+                    href="#tou-respecting-terms-messaging-platforms"
+                  >
+                    Respecting the Terms of Messaging Platforms
+                  </Link>
+                </List.Item>
+              </List.Root>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#privacy-policy">
+                Privacy Policy
+              </Link>
+            </List.Item>
+            <List.Root marginLeft={4}>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-who-are-we">
+                  Who are we?
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-why-collect-data">
+                  Why Do We Collect Your Data?
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-personal-data">
+                  Personal Data That Bitpart Collects and Processes
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-when-shared-data">
+                  When We Share Your Data
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-data-retention">
+                  How Long We Keep Your Data
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-delete-your-data">
+                  Delete Your Data
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link
+                  color={color}
+                  href="#privacy-policy-how-we-secure-your-data"
+                >
+                  How We Secure Your Data
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-signal">
+                  Bitpart and Signal
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-your-data-rights">
+                  Your Data Rights
+                </Link>
+              </List.Item>
+              <List.Item>
+                <Link color={color} href="#privacy-policy-changes">
+                  Changes to This Policy
+                </Link>
+              </List.Item>
+            </List.Root>
+            <List.Item>
+              <Link color={color} href="#acknowledgements">
+                Acknowledgements
+              </Link>
+            </List.Item>
+          </List.Root>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="tou"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Terms of Use
           </Heading>
-          <Text fontWeight={700} marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            marginTop={8}
+            size="xl"
+          >
             Definitions
+          </Heading>
+          <Text marginTop={2} fontStyle="italic">
+            <Text as="em" fontWeight={700}>
+              Bot Creators:
+            </Text>{" "}
+            An individual, group or organization who have set up an account and
+            create chatbots using Bitpart.
           </Text>
           <Text marginTop={2} fontStyle="italic">
-            Bot Creators: An individual, group or organization who have set up
-            an account and create chatbots using Bitpart.
+            <Text as="em" fontWeight={700}>
+              Bot Users:
+            </Text>{" "}
+            The people who engage with a bot created by a Bitpart bot creator
+            (for instance, they join a broadcast line, seek help from a
+            helpdesk, report a tip to a tipline, seek to download eSIMs or VPNs
+            distributed by a particular service). Bot Users may not be aware of
+            Bitpart (though it should be clear to them that they are interacting
+            with a bot).
           </Text>
-          <Text marginTop={2} fontStyle="italic">
-            Constituents: The people who engage with a bot created by a Bitpart
-            bot creator (for instance, they join a broadcast line, seek help
-            from a helpdesk, report a tip to a tipline, seek to download eSIMs
-            or VPNs distributed by a particular service). Constituents may not
-            be aware of Bitpart (though it should be clear to them that they are
-            interacting with a bot).
-          </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-formats"
+            marginTop={4}
+            size="xl"
+          >
             Formats
           </Heading>
           <List.Root marginLeft={4}>
@@ -116,8 +256,14 @@ export default function About() {
               if there is another format you would like to see.
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
-            Acceptable Behaviour
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-acceptable-behavior"
+            marginTop={4}
+            size="xl"
+          >
+            Acceptable Behavior
           </Heading>
           <List.Root marginLeft={4}>
             <List.Item>
@@ -149,15 +295,21 @@ export default function About() {
               to report any misuse of Bitpart.
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-account"
+            marginTop={4}
+            size="xl"
+          >
             Account
           </Heading>
           <List.Root marginLeft={4}>
             <List.Item>
               You need to create an account in order to use Bitpart. We ask you
-              for username/ email/ and password. You can delete chatbots you
-              have created in the dashboard of your account, and delete your
-              account at any time by emailing us (
+              for username and password, with the option to add an email. You
+              can delete chatbots you have created in the dashboard of your
+              account, and delete your account at any time by emailing us (
               <Link
                 color={color}
                 href="mailto:contact@bitp.art"
@@ -168,7 +320,13 @@ export default function About() {
               ).
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-data-processing"
+            marginTop={4}
+            size="xl"
+          >
             Data Processing
           </Heading>
           <List.Root marginLeft={4}>
@@ -181,7 +339,7 @@ export default function About() {
               bot creators is what the person chooses to make visible in their
               Signal account. Bitpart does not store Signal profile information
               and instead works by assigning random identification numbers to
-              each Constituent.
+              each Bot User.
             </List.Item>
             <List.Item>
               Bitpart is designed to never store any message content. Bitpart
@@ -193,9 +351,9 @@ export default function About() {
               The server receives a message via Signal, and relays it from
               someone using your Bitpart chatbot to the creator of the Bitpart
               chatbot, or vice versa. In the moment that it is received by the
-              server and relayed on, the encrypted message content is briefly
-              stored to allow for the transmission of information. It is
-              subsequently deleted and not stored further.
+              server and relayed on, the encrypted message content is
+              momentarily stored to allow for the transmission of information.
+              It is subsequently deleted and not stored further.
             </List.Item>
             <List.Item>
               We have designed Bitpart so that we do not access and read message
@@ -203,27 +361,27 @@ export default function About() {
               team members have access).
             </List.Item>
             <List.Item>
-              Within each conversation with a Bitpart bot, a Constituent is able
-              to opt whether to agree to Bitpart’s data policy or delete their
-              data by sending “Delete” to the bot. Selecting to delete their
-              data will end the conversation and the bot will delete the
-              Constituent’s data from Bitpart’s server.
+              Within each conversation with a Bitpart bot, a Bot User is able to
+              opt whether to agree to Bitpart’s data policy or delete their data
+              by sending “Delete” to the bot. Selecting to delete their data
+              will end the conversation and the bot will delete the Bot User’s
+              data from Bitpart’s server.
             </List.Item>
             <List.Item>
               While Bitpart can delete records that a conversation took place
-              between a Constituent and a Bitpart chatbot, it is not able to
+              between a Bot User and a Bitpart chatbot, it is not able to
               control what data a Bot Creator’s device collects and processes
               (such as all conversations and message content), where and how a
               Bot Creator stores data, or to delete data from a Bot Creator’s
               device.
             </List.Item>
             <List.Item>
-              We recommend that Bot Creators provide Constituents with
-              information on any additional processing of their personal data,
-              carried out outside of and independently from the Bitpart tool.
+              We recommend that Bot Creators provide Bot Users with information
+              on any additional processing of their personal data, carried out
+              outside of and independently from the Bitpart tool.
             </List.Item>
             <List.Item>
-              We recommend that Bot Creators and Constituents take measures to
+              We recommend that Bot Creators and Bot Users take measures to
               minimise risks and protect their privacy within Signal, such as{" "}
               <Link
                 color={color}
@@ -244,7 +402,13 @@ export default function About() {
               ).
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-data-security"
+            marginTop={4}
+            size="xl"
+          >
             Data Security
           </Heading>
           <List.Root marginLeft={4}>
@@ -270,7 +434,13 @@ export default function About() {
               if you would like more information.
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-service-availability"
+            marginTop={4}
+            size="xl"
+          >
             Service Availability
           </Heading>
           <List.Root marginLeft={4}>
@@ -296,7 +466,13 @@ export default function About() {
               alternative options.
             </List.Item>
           </List.Root>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="tou-respecting-terms-messaging-platforms"
+            marginTop={4}
+            size="xl"
+          >
             Respecting the Terms of Messaging Platforms
           </Heading>
           <List.Root marginLeft={4}>
@@ -317,50 +493,100 @@ export default function About() {
               associated with the devices on which you use Signal.
             </List.Item>
           </List.Root>
-          <Heading as="h2" marginTop={8} size="2xl" id="privacy-policy">
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="privacy-policy"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Privacy Policy
           </Heading>
-          <Text fontWeight={700} marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            marginTop={4}
+            size="xl"
+          >
             Definitions
+          </Heading>
+          <Text marginTop={2} fontStyle="italic">
+            <Text as="em" fontWeight={700}>
+              Bot Creators:
+            </Text>{" "}
+            An individual, group or organization who set up a Bitpart account
+            and create chatbots using Bitpart.
           </Text>
           <Text marginTop={2} fontStyle="italic">
-            Bot creators: An individual, group or organization who set up a
-            Bitpart account and create chatbots using Bitpart.
+            <Text as="em" fontWeight={700}>
+              Administrators:
+            </Text>{" "}
+            Additional users who are able to send messages
           </Text>
           <Text marginTop={2} fontStyle="italic">
-            Administrators: Additional users who are able to send messages
+            <Text as="em" fontWeight={700}>
+              Bot Users:
+            </Text>{" "}
+            The people who engage with a bot created by a Bitpart Bot Creator
+            (for instance, they join a broadcast line, seek help from a
+            helpdesk, report a tip to a tipline, seek to download eSIMs or VPNs
+            distributed by a particular service). They should be told in their
+            initial interaction with the bot that they are engaging with an
+            automated system, but they are likely not aware of Bitpart.
           </Text>
-          <Text marginTop={2} fontStyle="italic">
-            Constituents: The people who engage with a bot created by a Bitpart
-            Bot Creator (for instance, they join a broadcast line, seek help
-            from a helpdesk, report a tip to a tipline, seek to download eSIMs
-            or VPNs distributed by a particular service). They should be told in
-            their initial interaction with the bot that they are engaging with
-            an automated system, but they are likely not aware of Bitpart.
-          </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-who-are-we"
+            marginTop={4}
+            size="xl"
+          >
             Who are we?
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             Throneless Tech is a technology worker-cooperative based in
-            Washington, DC registered as Throneless LLC. We provide the Bitpart
-            messaging tool.
+            Washington, DC. We provide the Bitpart messaging tool. We can be
+            reached at{" "}
+            <Link
+              color={color}
+              href="mailto:contact@bitp.art"
+              variant="underline"
+            >
+              contact@bitp.art
+            </Link>
+            .
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-why-collect-data"
+            marginTop={4}
+            size="xl"
+          >
             Why Do We Collect Your Data?
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We practice privacy by design and collect as little data as
             possible. The information we do collect is used to provide Bitpart’s
             services and functionality, such as account data so that you save
-            and come back to chatbot you create; message data so that messages
-            are relayed by Bitpart; and any data you share when contacting us
-            for support.
+            and come back to the chatbot you create; message data so that
+            messages are relayed by Bitpart; and any data you share when
+            contacting us for support.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-personal-data"
+            marginTop={4}
+            size="xl"
+          >
             Personal Data That Bitpart Collects and Processes
           </Heading>
-          <Box border={`1px solid ${color}`} margin={4} padding={4}>
+          <Box borderColor={color} borderWidth={1} margin={4} padding={4}>
             <Text fontWeight={700}>
               Important notice on end-to-end encryption and message data
             </Text>
@@ -379,15 +605,15 @@ export default function About() {
           <Text marginTop={4}>
             When you use Bitpart, we collect the following information:
           </Text>
-          <Text marginTop={4}>Bot creators:</Text>
+          <Text marginTop={4}>Bot Creators:</Text>
           <List.Root marginLeft={4}>
             <List.Item>
-              Account information, including username, and possibly email
-              address TBD.
+              Account information, including username, and an (optional) email
+              address.
             </List.Item>
             <List.Item>
-              An optional Phone number associated with a bot (i.e. the number a
-              Constituent will message).
+              An optional phone number associated with a bot (i.e. the number a
+              Bot User will message).
             </List.Item>
             <List.Item>
               Messages from end-to-end encrypted conversations in Signal
@@ -402,21 +628,15 @@ export default function About() {
               are initiated and closed.
             </List.Item>
           </List.Root>
-          <Text marginTop={4}>Constituents:</Text>
+          <Text marginTop={4}>Bot Users:</Text>
           <List.Root marginLeft={4}>
             <List.Item>
-              Messages, (collected and processed, but not stored).
+              Messages (collected and processed, but not stored).
             </List.Item>
             <List.Item>
               Metadata associated with conversations, such as when conversations
               are initiated and closed.
             </List.Item>
-          </List.Root>
-          <Text marginTop={4}>
-            We may incidentally collect the following information:
-          </Text>
-          <List.Root marginLeft={4}>
-            <List.Item>N.B if account sign up uses email magic link.</List.Item>
           </List.Root>
           <Text marginTop={4}>
             The following table explains in more detail the types of data we
@@ -438,8 +658,7 @@ export default function About() {
               <Table.Row>
                 <Table.Cell>Signing up as an Bot Creator</Table.Cell>
                 <Table.Cell>
-                  username, password, phone / email address (TBD depending on AB
-                  testing).
+                  Username, password, email address (optional).
                 </Table.Cell>
                 <Table.Cell>
                   Contract - This is necessary for us to identify you correctly
@@ -448,10 +667,10 @@ export default function About() {
               </Table.Row>
               <Table.Row>
                 <Table.Cell>
-                  Connect Bitpart to the phone number that will be associated
+                  Connect Bitpart to the Signal account that will be associated
                   with a bot
                 </Table.Cell>
-                <Table.Cell>Phone number</Table.Cell>
+                <Table.Cell>Signal account</Table.Cell>
                 <Table.Cell>
                   Contract - This is necessary for us to connect the bot you are
                   creating to a Signal account, in order for your bot to
@@ -459,24 +678,11 @@ export default function About() {
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
-                <Table.Cell>
-                  Identify which incoming messages are from a Bot creator or an
-                  administrator, so that they can send messages to broadcast
-                  lists
-                </Table.Cell>
-                <Table.Cell>Phone number</Table.Cell>
-                <Table.Cell>
-                  Contract - This is necessary for functionality. We store phone
-                  numbers used by Bot creators (and any team members they
-                  designate), so that Bitpart can differentiate between
-                  Constituents and Bot creators.
-                </Table.Cell>
-              </Table.Row>
-              <Table.Row>
                 <Table.Cell>To relay messages to and from Signal</Table.Cell>
                 <Table.Cell>Message content</Table.Cell>
                 <Table.Cell>
-                  Contract - This is necessary for Bitpart to function
+                  This is necessary for Bitpart to function (i.e. relay the
+                  messages) but is not stored
                 </Table.Cell>
               </Table.Row>
               <Table.Row>
@@ -497,13 +703,17 @@ export default function About() {
                   Metadata e.g. associated with conversations, such as when
                   conversations are initiated and closed
                 </Table.Cell>
-                <Table.Cell>Contract -</Table.Cell>
+                <Table.Cell>
+                  Contract - We store a small amount of metadata in our
+                  database, such as timestamps, in order for Bitpart to function
+                  correctly.
+                </Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>Contacting us for technical support</Table.Cell>
                 <Table.Cell>
                   Email, message, any personal data you choose to share like
-                  name, country, etc.
+                  name, etc.
                 </Table.Cell>
                 <Table.Cell>
                   Legitimate interests - It is necessary for us to read and
@@ -514,15 +724,20 @@ export default function About() {
             </Table.Body>
           </Table.Root>
           {/* </Table.ScrollArea> */}
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-when-shared-data"
+            marginTop={4}
+            size="xl"
+          >
             When We Share Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We use a third party hosting service for the data repository for
             Bitpart, to process and store the data needed to run Bitpart (such
             as message data, randomly generated numbers used to identify unique
-            constituents interacting with a bot, metadata from conversations,
-            etc).
+            Bot Users interacting with a bot, metadata from conversations, etc).
           </Text>
           <Text marginTop={4}>
             We use another third party hosting service for our email server, to
@@ -546,26 +761,38 @@ export default function About() {
             We may share personal data with additional third parties when we are
             legally required to do so.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-data-retention"
+            marginTop={4}
+            size="xl"
+          >
             How Long We Keep Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We seek to only ever ask for the minimum amount of data needed for
             any associated purpose, and we delete that data promptly once it is
             no longer required.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-delete-your-data"
+            marginTop={4}
+            size="xl"
+          >
             Delete Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We seek to protect your right to delete your personal information
             from our platform.
           </Text>
           <Text marginTop={4}>
             Bot Creators on Bitpart can delete the bots they create at any time
             by navigating to the dashboard and deleting their chatbots. In order
-            to delta an account after it has been made, Bot Creators can contact
-            us via{" "}
+            to delete an account after it has been made, Bot Creators can
+            contact us via{" "}
             <Link
               color={color}
               href="mailto:contact@bitp.art"
@@ -577,11 +804,11 @@ export default function About() {
             services and servers within two working days.
           </Text>
           <Text marginTop={4}>
-            Each chatbot flow includes information about how to delete your data
-            (often using a keyword like “delete my data”) Once a constituent has
-            completed the data deletion chatbot flow, their data will be
-            automatically deleted from our services and servers. You may also
-            contact us via{" "}
+            Each chatbot flow includes information about how a Bot User can
+            delete their data from Bitpart (often by using a keyword like
+            "Delete my data"). Once a Bot User has completed the data deletion
+            flow in the chatbot, their data will be automatically deleted from
+            our services and servers. You may also contact us via{" "}
             <Link
               color={color}
               href="mailto:contact@bitp.art"
@@ -595,31 +822,37 @@ export default function About() {
             <Text as="span" fontWeight={700}>
               Important note:
             </Text>{" "}
-            As Bitpart relays messages between Bot Creators and Constituents,
-            data will be present in the Signal applications and any connected
-            devices that they are using to engage with or run a Bitpart bot.
-            Bitpart can delete from its servers that a conversation took place
-            between a Constituent and a Bitpart chatbot. However, Bitpart is not
-            able to control what data a Bot Creator’s device collects and
-            processes, where and how a Bot Creator stores data, or to delete
-            data from a Bot Creator’s device.
+            As Bitpart relays messages between Bot Creators and Bot Users, data
+            will be present in the Signal applications and any connected devices
+            that they are using to engage with or run a Bitpart bot. Bitpart can
+            delete from its servers that a conversation took place between a Bot
+            User and a Bitpart chatbot. However, Bitpart is not able to control
+            what data a Bot Creator’s device collects and processes, where and
+            how a Bot Creator stores data, or to delete data from a Bot
+            Creator’s device.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-how-we-secure-your-data"
+            marginTop={4}
+            size="xl"
+          >
             How We Secure Your Data
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We use a combination of physical, technical, and administrative
             safeguards to protect the information we collect. We carefully
             choose our services and tools at Bitpart. It’s important that they
             follow good security practices, like HTTPS, two-factor
             authentication and the ability to set a strong password. We've
             reviewed the privacy policies and security practices of everything
-            we use, such as the hosting service.
+            we use, such as the hosting services.
           </Text>
           <Text marginTop={4}>
             Bitpart is run by a worker cooperative and has not had any personnel
             changes. If a new team member joins, we explain best practices for
-            keeping their devices secure, and maintaining the security of their
+            keeping their devices secure and maintaining the security of their
             online accounts.
           </Text>
           <Text marginTop={4}>
@@ -628,10 +861,16 @@ export default function About() {
             devices, and databases we operate or that are operated on our
             behalf.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-signal"
+            marginTop={4}
+            size="xl"
+          >
             Bitpart and Signal
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             As a tool designed to be used with Signal, Bitpart works to follow
             Signal’s privacy policies and standards while developing our own
             policies to better safeguard your data.
@@ -648,10 +887,16 @@ export default function About() {
             to understand how Signal handles the information you provide when
             using its applications and services.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-your-data-rights"
+            marginTop={4}
+            size="xl"
+          >
             Your Data Rights
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             Bitpart believes in upholding and protecting your data rights.
           </Text>
           <Text marginTop={4}>
@@ -699,7 +944,7 @@ export default function About() {
             </Link>
             .
           </Text>
-          <Text marginTop={4}>
+          <Text>
             Based on your jurisdiction, you may also have the right to lodge a
             complaint with your local supervisory authority, if you feel your
             rights have been infringed. You can find a list of the current
@@ -717,16 +962,32 @@ export default function About() {
             </Link>
             .
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h3"
+            className={geistMono.className}
+            id="privacy-policy-changes"
+            marginTop={4}
+            size="xl"
+          >
             Changes to This Policy
           </Heading>
-          <Text marginTop={4}>
+          <Text>
             We may modify this Privacy Policy from time to time and will publish
             the most current version on our platform. If a modification
             meaningfully reduces your rights, we'll notify people whose personal
             data we hold and is affected.
           </Text>
-          <Heading as="h3" marginTop={4}>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="acknowledgements"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
             Acknowledgements
           </Heading>
           <Text marginTop={4}>
@@ -762,7 +1023,7 @@ export default function About() {
               href="https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md"
               variant="underline"
             >
-              the Contributer Covenent
+              Contributor Covenant
             </Link>
             ,{" "}
             <Link color={color} href="https://iapp.org/" variant="underline">
@@ -796,6 +1057,7 @@ export default function About() {
           </Text>
         </ClientOnly>
       </Container>
+      <Footer color={color} />
     </Box>
   );
 }

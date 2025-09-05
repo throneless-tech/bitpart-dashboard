@@ -19,9 +19,13 @@ import {
 } from "@/app/_components/ui/drawer";
 import PrivacyPolicyText from "@/app/_components/drawer/privacyPolicy";
 import SafetyTipsText from "@/app/_components/drawer/safetyTips";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // icons
-import { LuInfo } from "react-icons/lu";
+import Info from "@/app/_icons/info";
+
+// fonts
+import { geistMono } from "@/app/fonts";
 
 export const Field = React.forwardRef(function Field(props, ref) {
   const {
@@ -36,10 +40,13 @@ export const Field = React.forwardRef(function Field(props, ref) {
 
   const [open, setOpen] = React.useState(false);
 
+  // color mode
+  const color = useColorModeValue("black", "white");
+
   return (
     <ChakraField.Root ref={ref} {...rest}>
       {label && (
-        <ChakraField.Label>
+        <ChakraField.Label className={geistMono.className} fontSize={18}>
           {label}
           <ChakraField.RequiredIndicator fallback={optionalText} />
           {info ? (
@@ -51,7 +58,7 @@ export const Field = React.forwardRef(function Field(props, ref) {
               <DrawerBackdrop />
               <DrawerTrigger asChild>
                 <IconButton aria-label="See info and examples" variant="ghost">
-                  <LuInfo />
+                  <Info color={color} />
                 </IconButton>
               </DrawerTrigger>
               <DrawerContent>
@@ -108,7 +115,9 @@ export const Field = React.forwardRef(function Field(props, ref) {
       )}
       {children}
       {helperText && (
-        <ChakraField.HelperText>{helperText}</ChakraField.HelperText>
+        <ChakraField.HelperText fontSize={16}>
+          {helperText}
+        </ChakraField.HelperText>
       )}
       {errorText && <ChakraField.ErrorText>{errorText}</ChakraField.ErrorText>}
     </ChakraField.Root>

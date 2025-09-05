@@ -2,66 +2,115 @@
 
 
 start:
-// if bitpart receives passcode, set admin
+  // if bitpart receives passcode, set admin
+  remember attempt = 0
+  remember count = 0
   do passcode = event.to_uppercase()
+
+  // if _whisperable is set, user is already an admin
+  if (_whisperable == true) {
+    goto admin_interface_step
+  }
 
   if (passcode.contains("[passcode]")) {
     // set _whisperable var in memory in a separate step FIXME
     remember _whisperable = true
 
     say "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
-    hold
+    
+    goto admin_interface_step
 
-    if (event.to_lowercase() == "help") {
-      goto admin_interface_step
-    }
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   }
-  // if _whisperable is set, user is already an admin
-  if (_whisperable == true) {
+
+  else
+    if (count >= 3) {
+      goto submit_question_step
+    }
+
+    goto user_welcome_step
+
+admin_passcode_step:
+  say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
+  
+  hold
+  
+  do passcode = event.to_uppercase()
+
+  if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    
+    goto admin_interface_step
+  } else if (event.to_lowercase() == "exit") {
+      remember _whisperable = false
+      
+      goto user_welcome_step
+  } else if (attempt >= 3) {
+    // TODO set flagged on bitpart server
+    remember _whisperable = false
+    
+    say "You have tried to login too many times. Please contact an administrator for help."
+
+    goto user_welcome_step
+  } else {
+    say "Incorrect passcode."
+
+    remember attempt = attempt + 1
+
+    goto admin_passcode_step
+  }
+
+admin_interface_step:
+  say Text("What would you like to do? Enter a number:
+
+1. Exit this conversation and interact as a bot user
+2. Delete my data
+
+You do not need to do anything else to receive messages.")
+  hold
+
+  if (event == 1) {
+    say "You can send a message that says 'Admin' at any time to return to this menu."
+    remember _whisperable = false
+    goto user_welcome_step
+  } else if (event == 2) {
+    goto delete_me_confirm_step
+  } else if (event.to_lowercase() == "help") {
+    goto admin_interface_step
+  } else {
+    say "Sorry, the bot did not understand 🤖"
+
     goto admin_interface_step
   }
-  else 
+
+user_welcome_step:
     // conversation is triggered by a message from a user who says they have a tip
     // TODO Bitpart interprets incoming language. Response is in the same language
     say Text("Thank you for contacting [name].
-    
-This is our secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
-    
-For more information at any time, including how to delete your data, send a message with the words 'My data'.")
 
-    say Text("Even though this is a secure tipline, please do not share highly sensitive information here.
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).  
+    
+This is a secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.
+    
+For more information at any time, including how to delete your data, send a message with the words 'My data'.
     
 Please share your tip with us.")
     hold
 
     if (event.to_lowercase() == "my data") {
       goto privacy_policy_step
+    } else if (event.to_lowercase() == "admin") {
+      goto admin_passcode_step
+    }  else if (event.to_lowercase() == "delete") {
+      goto delete_data_step
     } else { 
       remember tip = event  
       
       goto tip_reply_step
     }
-
-admin_interface_step:
-  say Text("What would you like to do? Enter a number:
-
-1. Exit this conversation
-2. Delete my data")
-  hold
-
-  if (event == 1) {
-    say "I am now closing this conversation. Please send a message again if you need me."
-
-    goto end
-  } else if (event == 2) {
-    goto delete_me_confirm_step
-  } else if (event.to_lowercase() == "help") {
-    goto admin_interface_step
-  } else {
-    say "Sorry, I did not get that. Please select an option from the list."
-
-    goto admin_interface_step
-  }
 
 delete_me_confirm_step:
   say Text("You have asked that you be removed from the conversation and all your data be deleted from the system.
@@ -70,15 +119,17 @@ Once this happens, you will no longer be able to receive messages from this numb
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto admin_interface_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto delete_me_confirm_step
 
 privacy_policy_step:
@@ -92,9 +143,7 @@ Reply with 'Delete' to delete your data.")
 
   // Agree and return to menu, disagree and delete data
   if (event.to_lowercase() == "agree") {
-    say "Even though this is a secure tipline, please do not share highly sensitive information here.
-    
-Please share your tip with us."
+    say "Please share your tip with us."
     hold
 
     remember tip = event  
@@ -103,8 +152,10 @@ Please share your tip with us."
 
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto privacy_policy_step
 
 delete_data_step:
@@ -114,26 +165,28 @@ Once this happens, you will no longer receive messages from this number, unless 
   
 Reply with 'Delete' to confirm.
   
-Reply with 'Go back' to go back to the data rights.")
+Reply with 'Back' to go back to the data rights.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto privacy_policy_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto delete_data_step
 
 confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
+  say "Your information has been deleted from the bot's system and you will no longer receive messages."
   delete
   goto end
 
 tip_reply_step:
   say "Thank you. Our team will look into your tip and assess its suitability for our outlet.
   
-We may want to follow up with you. Do you give permission for one of our journalists to contact you? You can reply with yes or no."
+We may want to follow up with you. Do you give permission for one of our team to contact you? You can reply with yes or no."
   hold
 
   if (event.to_lowercase() == "yes") {
@@ -151,13 +204,17 @@ They did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
-    say "Sorry, our system didn't understand what you meant. Please try again."
+    say "Sorry, the bot did not understand 🤖"
     goto tip_reply_step
   }
 
 contact_method_step:
-  say ("Thank you. How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
+  say ("Thank you. When you provide contact information, please note that if we have forwarding set up, it will be forwarded to team members' Signal accounts. 
+
+How do you prefer we contact you? Please choose the number that corresponds with your preferred method.
   
 1. Signal call
 2. Signal text message
@@ -175,14 +232,20 @@ contact_method_step:
   } else if (event == 3) {
     remember contact_preference = "phone call"
     goto record_number_step    
-  } else if (event == 4 || event == 5) {
-    goto confirm_contact_method_step
+  } else if (event == 4) {
+    remember contact_preference = "any method"
+    goto record_number_step
+  } else if (event == 5) {
+    remember contact_preference = event
+    goto confirm_no_contact_step
   } else if (event.to_lowercase() == "my data") {
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
-    say "Sorry, I did not get that. Please choose a number from the list."
+    say "Sorry, the bot did not understand 🤖"
     goto contact_method_step
   }
 
@@ -200,23 +263,14 @@ Here is the tip they provided: {{tip}}"
 
   goto end
 
-confirm_contact_method_step:
-  say Text("Reply 'Yes' to confirm we can use any method to contact you.
-  
-Reply 'Back' to go to the previous menu of options
-    
-Reply 'No' if you prefer to not be contacted.")
+confirm_no_contact_step:
+  say Text("Reply 'No' to confirm we will not contact you.
+
+Reply 'Back' to go to the previous menu of options")
+
   hold
-
-  if (event.to_lowercase() == "yes") {
-    say "Thank you. Your preference is noted."
-
-    whisper "A user sent a tip and provided the following contact information: Via any method, contact {{contact_number}}.
-    
-Here is the tip they provided: {{tip}}"
-
-    // TODO SACHA do we accept another message after this?
-  } else if (event.to_lowercase() == "no") {
+  
+  if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
     whisper "A user sent the following anonymous tip: {{tip}}.
@@ -231,8 +285,10 @@ They did not wish to be contacted."
     goto privacy_policy_step
   } else if (event.to_lowercase() == "delete") {
     goto delete_data_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     goto confirm_contact_method_step
   }
 

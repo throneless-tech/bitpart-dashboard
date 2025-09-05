@@ -13,7 +13,6 @@ import { schema } from "../_lib/forms";
 import {
   AbsoluteCenter,
   Box,
-  Button,
   Center,
   Container,
   Dialog,
@@ -27,6 +26,7 @@ import {
 } from "@chakra-ui/react";
 
 // component imports
+import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // form imports
@@ -38,7 +38,11 @@ import { TiplineForm } from "@/app/_components/forms/tipline";
 import { VpnForm } from "@/app/_components/forms/vpn";
 
 // actions
-import { updateBotBitpart, updateBotPrisma } from "@/app/_actions/updateBot";
+import {
+  updateBot,
+  updateBotBitpart,
+  updateBotPrisma,
+} from "@/app/_actions/updateBot";
 import { parseCSV } from "@/app/_actions/csv";
 import { getBot } from "@/app/_actions/getUserBots";
 
@@ -111,41 +115,13 @@ export default function EditBotFlow({ botId, username }) {
 
     try {
       // format bot id for bitpart
-      const botBitpart = await updateBotBitpart(
-        data,
-        bot.bitpartId,
-        bot.passcode,
-      );
-
-      if (botBitpart?.message_type === "Error") {
-        throw new Error(botBitpart.data.response);
-      }
-
-      let emsData;
-      if (
-        (data.botType === "esim" || data.botType === "vpn") &&
-        data?.csv?.length
-      ) {
-        emsData = parseCSV(
-          botBitpart.data.response.bot.id,
-          data.botType,
-          data.csv,
-        );
-      }
-
-      console.log("EMS DATA!!!", emsData);
-
-      if (emsData?.error) {
-        console.log("ems data has errored");
-        throw new Error(emsData.error.message);
-      }
-
-      await updateBotPrisma(
+      const updatedBot = await updateBot(
         data,
         bot.id,
         bot.bitpartId,
         username,
         bot.passcode,
+        bot.instance,
       );
 
       router.push(`/my-bots/view/${bot.id}`);
@@ -169,7 +145,9 @@ export default function EditBotFlow({ botId, username }) {
   };
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const colorCancel = useColorModeValue("black", "white");
+  const colorSubmit = useColorModeValue("white", "black");
 
   useEffect(() => {}, [isFetching, notAllowed, watchAll]);
 
@@ -259,10 +237,17 @@ export default function EditBotFlow({ botId, username }) {
             <Spinner size="xl" />
           )}
           <HStack gap={4} marginTop={8}>
-            <Button as="a" href="/my-bots" size="sm" variant="outline">
+            <Button
+              as="a"
+              color={colorCancel}
+              href="/my-bots"
+              size="sm"
+              variant="outline"
+            >
               Cancel
             </Button>
             <Button
+              color={colorSubmit}
               disabled={isFetching}
               onClick={(e) => {
                 methods.setValue("botType", bot.botType, {

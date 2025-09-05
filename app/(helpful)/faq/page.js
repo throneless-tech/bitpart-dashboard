@@ -18,84 +18,91 @@ import {
 } from "@chakra-ui/react";
 
 // components imports
-import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import Footer from "@/app/_components/footer";
 import Header from "../../_components/header";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
+
+// fonts
+import { funnel, geistMono } from "@/app/fonts";
 
 export default function FAQ() {
   // session
   const { data: session } = useSession();
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const borderColor = useColorModeValue("black", "white");
 
   return (
-    <Box>
+    <Box paddingBottom={8}>
       <Container py={6}>
         <Header session={session} />
       </Container>
       <Container marginBottom={20} marginTop={8} maxW="3xl">
-        <Heading as="h1" size="2xl">
+        <Heading as="h1" className={funnel.className} size="4xl">
           Help / Frequently Asked Questions
         </Heading>
-        <Text fontSize="xl" marginTop={4} textDecoration="underline">
-          The basics
+        <Text
+          className={geistMono.className}
+          fontSize="xl"
+          marginTop={4}
+          textDecoration="underline"
+          textTransform="
+        uppercase"
+        >
+          <ClientOnly>
+            <Link color={color} href="#basics">
+              The basics
+            </Link>
+          </ClientOnly>
         </Text>
         <List.Root marginLeft={4}>
           <ClientOnly>
             <List.Item>
-              <Link color={color} href="#what-is-bitpart" variant="underline">
+              <Link color={color} href="#what-is-bitpart">
                 What is Bitpart?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-does-bitpart-work"
-                variant="underline"
-              >
+              <Link color={color} href="#how-does-bitpart-work">
                 How does Bitpart work?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-does-bitpart-connect-to-signal"
-                variant="underline"
-              >
+              <Link color={color} href="#how-does-bitpart-connect-to-signal">
                 How does Bitpart connect to Signal?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#what-bot-formats-are-there"
-                variant="underline"
-              >
+              <Link color={color} href="#what-bot-formats-are-there">
                 What bot formats are there?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#what-language-does-bitpart-come-in"
-                variant="underline"
-              >
+              <Link color={color} href="#what-language-does-bitpart-come-in">
                 What languages does Bitpart come in?
               </Link>
             </List.Item>
           </ClientOnly>
         </List.Root>
-        <Text fontSize="xl" marginTop={4} textDecoration="underline">
-          Security
+        <Text
+          className={geistMono.className}
+          fontSize="xl"
+          marginTop={4}
+          textDecoration="underline"
+          textTransform="
+        uppercase"
+        >
+          <ClientOnly>
+            <Link color={color} href="#security">
+              Security
+            </Link>
+          </ClientOnly>
         </Text>
         <List.Root marginLeft={4}>
           <ClientOnly>
             <List.Item>
-              <Link
-                color={color}
-                href="#is-bitpart-encrypted"
-                variant="underline"
-              >
+              <Link color={color} href="#is-bitpart-encrypted">
                 Is Bitpart encrypted?
               </Link>
             </List.Item>
@@ -103,138 +110,130 @@ export default function FAQ() {
               <Link
                 color={color}
                 href="#how-do-you-make-sure-bad-actors-dont-use-bitpart"
-                variant="underline"
               >
                 How do you make sure bad actors don't use Bitpart?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#where-do-you-store-data"
-                variant="underline"
-              >
+              <Link color={color} href="#where-do-you-store-data">
                 Where do you store data?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-do-i-know-i-can-trust-bitpart"
-                variant="underline"
-              >
+              <Link color={color} href="#how-do-i-know-i-can-trust-bitpart">
                 How do I know I can trust Bitpart?
               </Link>
             </List.Item>
           </ClientOnly>
         </List.Root>
-        <Text fontSize="xl" marginTop={4} textDecoration="underline">
-          Using Bitpart
+        <Text
+          className={geistMono.className}
+          fontSize="xl"
+          marginTop={4}
+          textDecoration="underline"
+          textTransform="
+        uppercase"
+        >
+          <ClientOnly>
+            <Link color={color} href="#using-bitpart">
+              Using Bitpart
+            </Link>
+          </ClientOnly>
         </Text>
         <List.Root marginLeft={4}>
           <ClientOnly>
             <List.Item>
-              <Link
-                color={color}
-                href="#why-cant-i-use-my-personal-number"
-                variant="underline"
-              >
+              <Link color={color} href="#why-cant-i-use-my-personal-number">
                 Why can't I use my personal number/personal Signal account for
                 the bot?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#where-can-i-see-who-is-interacting"
-                variant="underline"
-              >
+              <Link color={color} href="#where-can-i-see-who-is-interacting">
                 Where can I see who is interacting with my bot? / How can I see
                 who is using my bot? / How can I see who is on my broadcast
                 bot's distribution list?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-can-i-remove-someone"
-                variant="underline"
-              >
+              <Link color={color} href="#how-can-i-remove-someone">
                 How can I remove someone who has signed up to receive messages
                 from my broadcast bot?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-can-i-delete-conversations"
-                variant="underline"
-              >
+              <Link color={color} href="#how-can-i-delete-conversations">
                 How can I delete conversations?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-can-i-edit-the-text"
-                variant="underline"
-              >
+              <Link color={color} href="#how-can-i-edit-the-text">
                 How can I edit the text in my bot?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#my-bot-is-getting-spammed"
-                variant="underline"
-              >
+              <Link color={color} href="#my-bot-is-getting-spammed">
                 My bot is getting spammed what can I do?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#what-is-a-passcode"
-                variant="underline"
-              >
+              <Link color={color} href="#what-is-a-passcode">
                 What is a passcode? What is forwarding?
               </Link>
             </List.Item>
           </ClientOnly>
         </List.Root>
-        <Text fontSize="xl" marginTop={4} textDecoration="underline">
-          Troubleshooting
+        <Text
+          className={geistMono.className}
+          fontSize="xl"
+          marginTop={4}
+          textDecoration="underline"
+          textTransform="
+        uppercase"
+        >
+          <ClientOnly>
+            <Link color={color} href="#troubleshooting">
+              Troubleshooting
+            </Link>
+          </ClientOnly>
         </Text>
         <List.Root marginLeft={4}>
           <ClientOnly>
             <List.Item>
-              <Link
-                color={color}
-                href="#why-do-i-get-an-error-message"
-                variant="underline"
-              >
+              <Link color={color} href="#why-do-i-get-an-error-message">
                 Why do I get an error message when I try to connect my bot to
                 the Signal account?
               </Link>
             </List.Item>
             <List.Item>
-              <Link
-                color={color}
-                href="#how-can-i-contact-you"
-                variant="underline"
-              >
+              <Link color={color} href="#how-can-i-contact-you">
                 I have another issue or question, how can I contact you?
               </Link>
             </List.Item>
           </ClientOnly>
         </List.Root>
-        <Heading as="h2" marginTop={12} size="2xl">
-          FAQs / help
-        </Heading>
-        <Heading as="h3" marginTop={8} size="xl" textDecoration="underline">
-          The basics
-        </Heading>
-        <Heading id="what-is-bitpart" marginTop={8} size="lg">
+        <ClientOnly>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="basics"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
+            The basics
+          </Heading>
+        </ClientOnly>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="what-is-bitpart"
+          marginTop={8}
+          size="xl"
+        >
           What is Bitpart?
         </Heading>
         <Text marginTop={4}>
@@ -258,7 +257,13 @@ export default function FAQ() {
           </ClientOnly>
           , so bot creators can host data on their own servers.
         </Text>
-        <Heading id="how-does-bitpart-work" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-does-bitpart-work"
+          marginTop={8}
+          size="xl"
+        >
           How does Bitpart work?
         </Heading>
         <Text marginTop={4}>
@@ -306,9 +311,11 @@ export default function FAQ() {
           for more information on passcodes.
         </Text>
         <Heading
+          as="h3"
+          className={geistMono.className}
           id="how-does-bitpart-connect-to-signal"
           marginTop={8}
-          size="lg"
+          size="xl"
         >
           How does Bitpart connect to Signal?
         </Heading>
@@ -323,7 +330,13 @@ export default function FAQ() {
           bot -- which is why we don't recommend using your personal Signal
           account.
         </Text>
-        <Heading id="what-bot-formats-are-there" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="what-bot-formats-are-there"
+          marginTop={8}
+          size="xl"
+        >
           What bot formats are available?
         </Heading>
         <Text marginTop={4}>
@@ -340,15 +353,11 @@ export default function FAQ() {
         >
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader minW="200px">Bot format</Table.ColumnHeader>
-              <Table.ColumnHeader minW="200px">How it works</Table.ColumnHeader>
-              <Table.ColumnHeader minW="200px">
-                Direction of messages
-              </Table.ColumnHeader>
-              <Table.ColumnHeader minW="200px">
-                Human in the loop?
-              </Table.ColumnHeader>
-              <Table.ColumnHeader minW="200px">
+              <Table.ColumnHeader>Bot format</Table.ColumnHeader>
+              <Table.ColumnHeader>How it works</Table.ColumnHeader>
+              <Table.ColumnHeader>Direction of messages</Table.ColumnHeader>
+              <Table.ColumnHeader>Human in the loop?</Table.ColumnHeader>
+              <Table.ColumnHeader>
                 Information a Bot Creator needs to provide to make a bot
               </Table.ColumnHeader>
             </Table.Row>
@@ -371,7 +380,7 @@ export default function FAQ() {
                 <br />
                 <br />
                 OPTIONAL: <br />
-                Safety tips, FAQs
+                Safety tips, FAQ
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -449,7 +458,7 @@ export default function FAQ() {
                 Public name; About; Data rights; Activation instructions; CSV
                 file with eSIM codes. <br />
                 <br />
-                OPTIONAL: FAQs
+                OPTIONAL: FAQ
               </Table.Cell>
             </Table.Row>
           </Table.Body>
@@ -464,9 +473,11 @@ export default function FAQ() {
           receiving information (tipline); or answering questions (helpdesk).
         </Text>
         <Heading
+          as="h3"
+          className={geistMono.className}
           id="what-language-does-bitpart-come-in"
           marginTop={8}
-          size="lg"
+          size="xl"
         >
           What languages does Bitpart come in?
         </Heading>
@@ -489,10 +500,28 @@ export default function FAQ() {
           </ClientOnly>
           ).
         </Text>
-        <Heading as="h3" marginTop={8} size="xl" textDecoration="underline">
-          Security
-        </Heading>
-        <Heading id="is-bitpart-encrypted" marginTop={8} size="lg">
+        <ClientOnly>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="security"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
+            Security
+          </Heading>
+        </ClientOnly>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="is-bitpart-encrypted"
+          marginTop={8}
+          size="xl"
+        >
           Is Bitpart encrypted?
         </Heading>
         <Text marginTop={4}>
@@ -505,9 +534,11 @@ export default function FAQ() {
           messages, but we don’t expose that functionality).
         </Text>
         <Heading
+          as="h3"
+          className={geistMono.className}
           id="how-do-you-make-sure-bad-actors-dont-use-bitpart"
           marginTop={8}
-          size="lg"
+          size="xl"
         >
           How do you make sure bad actors don’t use Bitpart?
         </Heading>
@@ -560,7 +591,13 @@ export default function FAQ() {
           </ClientOnly>
           .
         </Text>
-        <Heading id="where-do-you-store-data" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="where-do-you-store-data"
+          marginTop={8}
+          size="xl"
+        >
           Where do you store data?
         </Heading>
         <Text marginTop={4}>
@@ -575,7 +612,13 @@ export default function FAQ() {
           </ClientOnly>
           .
         </Text>
-        <Heading id="how-do-i-know-i-can-trust-bitpart" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-do-i-know-i-can-trust-bitpart"
+          marginTop={8}
+          size="xl"
+        >
           How do I know I can trust Bitpart?
         </Heading>
         <Text marginTop={4}>
@@ -628,10 +671,28 @@ export default function FAQ() {
           </ClientOnly>
           , for those who wish to examine it.
         </Text>
-        <Heading as="h3" marginTop={8} size="xl" textDecoration="underline">
-          Using Bitpart
-        </Heading>
-        <Heading id="why-cant-i-use-my-personal-number" marginTop={8} size="lg">
+        <ClientOnly>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="using-bitpart"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
+            Using Bitpart
+          </Heading>
+        </ClientOnly>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="why-cant-i-use-my-personal-number"
+          marginTop={8}
+          size="xl"
+        >
           Why can't I use my personal number/personal Signal account for the
           bot?
         </Heading>
@@ -641,7 +702,13 @@ export default function FAQ() {
           number or account, anyone messaging you will receive messages from the
           bot.
         </Text>
-        <Heading id="what-is-a-passcode" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="what-is-a-passcode"
+          marginTop={8}
+          size="xl"
+        >
           What is a passcode? What is forwarding?
         </Heading>
         <Text marginTop={4}>
@@ -668,11 +735,16 @@ export default function FAQ() {
           flag support requests. Forwarding may be particularly useful if you
           have multiple team members or if your bot has many people using it.
         </Text>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           How to set up forwarding/passcode:
-        </Text>
+        </Heading>
         <List.Root as="ol" marginLeft={4}>
-          <List.Item>
+          <List.Item marginTop={2}>
             Find the passcode by navigating to your{" "}
             <ClientOnly>
               <Link color={color} href="/my-bots" variant="underline">
@@ -680,13 +752,13 @@ export default function FAQ() {
               </Link>
             </ClientOnly>{" "}
             and identifying your bot.
-            <Image src="/screenshot-1.png" />
+            <Image marginTop={2} src="/screenshot-1.png" />
           </List.Item>
-          <List.Item marginTop={2}>
+          <List.Item marginTop={4}>
             Send a message over Signal to the Bot, with just the password.
-            <Image src="/screenshot-2.png" />
+            <Image marginTop={2} src="/screenshot-2.png" />
           </List.Item>
-          <List.Item marginTop={2}>
+          <List.Item marginTop={4}>
             You should receive a confirmation from the bot.
           </List.Item>
         </List.Root>
@@ -711,9 +783,14 @@ export default function FAQ() {
             forwarded to the Signal account
           </List.Item>
         </List.Root>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           Alternatives to passcode: linking devices
-        </Text>
+        </Heading>
         <Text marginTop={4}>
           Alternatively, if you want multiple people on a team to view bot
           messages but don't necessarily want messages forwarded, you may want
@@ -735,44 +812,64 @@ export default function FAQ() {
           </ClientOnly>
           .
         </Text>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           How to remove forwarding / passcode:
-        </Text>
+        </Heading>
         <List.Root as="ol" marginLeft={4}>
-          <List.Item>
+          <List.Item marginTop={2}>
             From a Signal account that previously sent a passcode to the bot,
             send a message to the bot saying "Help".
-            <Image src="/screenshot-3.png" />
+            <Image marginTop={2} src="/screenshot-3.png" />
           </List.Item>
-          <List.Item marginTop={2}>
+          <List.Item marginTop={4}>
             Follow instructions to Delete the conversation with the bot.
           </List.Item>
-          <List.Item marginTop={2}>
+          <List.Item marginTop={4}>
             Deleting the conversation history deletes the passcode and Bitpart's
             recognition of this Signal account as an admin.
           </List.Item>
         </List.Root>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           How many accounts can use the passcode?
-        </Text>
+        </Heading>
         <Text marginTop={4}>
           There are no limits on how many times a passcode can be used.
           Depending on your risk model, you may want multiple people to use the
           passcode (for instance if you have a broadcast bot that you are using
           for an action and you anticipate that organizers may be detained).
         </Text>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           How can I change the passcode?
-        </Text>
+        </Heading>
         <Text marginTop={4}>
           Unfortunately at this time you cannot reset or change a passcode.
           Remember -- the passcode gives someone access to send out (broadcast
           bot) or receive (tipline, helpdesk, VPN & eSIM bots) messages from
           people using your bot. Please keep your passcode safe and private.
         </Text>
-        <Text fontWeight={700} marginTop={4}>
+        <Heading
+          as="h4"
+          className={geistMono.className}
+          marginTop={8}
+          size="md"
+        >
           How can I tell who has the passcode?
-        </Text>
+        </Heading>
         <Text marginTop={4}>
           Unfortunately at this time you cannot tell who has the passcode,
           beyond know who you as a Bot Creator have distributed it to. We
@@ -792,9 +889,11 @@ export default function FAQ() {
           devices are linked through the Signal account.
         </Text>
         <Heading
+          as="h3"
+          className={geistMono.className}
           id="where-can-i-see-who-is-interacting"
           marginTop={8}
-          size="lg"
+          size="xl"
         >
           Where can I see who is interacting with my bot? / How can I see who is
           using my bot? / How can I see who is on my broadcast bot's
@@ -809,7 +908,13 @@ export default function FAQ() {
           by checking the Signal account your bot uses on the primary device
           (i.e. a phone) or any other linked devices.
         </Text>
-        <Heading id="how-can-i-remove-someone" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-can-i-remove-someone"
+          marginTop={8}
+          size="xl"
+        >
           How can I remove someone who has signed up to receive messages from my
           broadcast bot?
         </Heading>
@@ -818,7 +923,13 @@ export default function FAQ() {
           within Signal, such as blocking an account you do not want to receive
           messages from you.
         </Text>
-        <Heading id="how-can-i-delete-conversations" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-can-i-delete-conversations"
+          marginTop={8}
+          size="xl"
+        >
           How can I delete conversations?
         </Heading>
         <Text marginTop={4}>
@@ -844,7 +955,13 @@ export default function FAQ() {
           </ClientOnly>
           .
         </Text>
-        <Heading id="how-can-i-edit-the-text" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-can-i-edit-the-text"
+          marginTop={8}
+          size="xl"
+        >
           How can I edit the text in my bot?
         </Heading>
         <Text marginTop={4}>
@@ -854,7 +971,13 @@ export default function FAQ() {
           creating the bot. Change the information you would like ot edit, then
           confirm by pressing "Edit."
         </Text>
-        <Heading id="my-bot-is-getting-spammed" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="my-bot-is-getting-spammed"
+          marginTop={8}
+          size="xl"
+        >
           My bot is getting spammed, what can I do?
         </Heading>
         <Text marginTop={4}>
@@ -863,10 +986,28 @@ export default function FAQ() {
           instance you may want to block the account that is spamming your bot;
           or block and report it.
         </Text>
-        <Heading as="h3" marginTop={8} size="xl" textDecoration="underline">
-          Troubleshooting
-        </Heading>
-        <Heading id="why-do-i-get-an-error-message" marginTop={8} size="lg">
+        <ClientOnly>
+          <Heading
+            as="h2"
+            borderBottom={`1px solid ${borderColor}`}
+            className={geistMono.className}
+            id="troubleshooting"
+            marginBottom={2}
+            marginTop={8}
+            paddingBottom={2}
+            size="2xl"
+            textTransform="uppercase"
+          >
+            Troubleshooting
+          </Heading>
+        </ClientOnly>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="why-do-i-get-an-error-message"
+          marginTop={8}
+          size="xl"
+        >
           Why do I get an error message when I try to connect my bot to the
           Signal account?
         </Heading>
@@ -878,7 +1019,13 @@ export default function FAQ() {
           trying to use by messaging it. You can only use a Signal account for
           one bot at a time.
         </Text>
-        <Heading id="how-can-i-contact-you" marginTop={8} size="lg">
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="how-can-i-contact-you"
+          marginTop={8}
+          size="xl"
+        >
           I have another issue or question, how can I contact you?
         </Heading>
         <Text marginTop={4}>
@@ -896,6 +1043,7 @@ export default function FAQ() {
           faster.
         </Text>
       </Container>
+      <Footer color={color} />
     </Box>
   );
 }

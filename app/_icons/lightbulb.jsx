@@ -1,0 +1,24 @@
+import { chakra } from "@chakra-ui/react";
+
+export default function Lightbulb({ color }) {
+  return (
+    <chakra.svg viewBox="0 0 24 24" fill={color ? color : "currentColor"}>
+      <rect x="2" y="1" width="1" height="1" />
+      <rect x="3" y="2" width="1" height="1" />
+      <rect x="4" y="3" width="1" height="1" />
+      <rect x="1" y="16" width="1" height="1" />
+      <rect x="2" y="15" width="1" height="1" />
+      <rect x="3" y="14" width="1" height="1" />
+      <rect x="22" y="16" width="1" height="1" />
+      <rect x="21" y="15" width="1" height="1" />
+      <rect x="20" y="14" width="1" height="1" />
+      <rect x="21" y="1" width="1" height="1" />
+      <rect x="20" y="2" width="1" height="1" />
+      <rect x="19" y="3" width="1" height="1" />
+      <rect x="1" y="8" width="2" height="1" />
+      <polygon points="15 18 15 21 14 21 14 22 13 22 13 23 11 23 11 22 10 22 10 21 9 21 9 18 15 18" />
+      <path d="m19,5h-1v-1h-1v-1h-1v-1h-2v-1h-4v1h-2v1h-1v1h-1v1h-1v2h-1v4h1v2h1v1h1v1h1v1h1v1h6v-1h1v-1h1v-1h1v-1h1v-2h1v-4h-1v-2Zm-12,2h1v-1h1v-1h1v-1h3v1h-3v1h-1v1h-1v2h-1v-2Z" />
+      <rect x="21" y="8" width="2" height="1" />
+    </chakra.svg>
+  );
+}

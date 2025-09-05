@@ -4,6 +4,8 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
 import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
+
+// components imports
 import { Button } from "@/app/_components/ui/button";
 import { Field } from "@/app/_components/ui/field";
 import {
@@ -11,6 +13,7 @@ import {
   NumberInputLabel,
   NumberInputRoot,
 } from "@/app/_components/ui/number-input";
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const HelpdeskForm = ({ bot }) => {
   const {
@@ -30,13 +33,16 @@ export const HelpdeskForm = ({ bot }) => {
     }
   }, [bot]);
 
+  // color mode
+  const color = useColorModeValue("black", "white");
+
   return (
     <>
       <Field
         errorText={!!errors?.name && errors.name.message}
         helperText="Name your helpdesk. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
-        label="Helpdesk name"
+        label="Public name"
         required
       >
         <Input {...register("name")} />
@@ -95,7 +101,7 @@ export const HelpdeskForm = ({ bot }) => {
           defaultValue={
             bot
               ? bot.privacyPolicy
-              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQs and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
+              : `The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\n\nIf what you need support with is not covered by the FAQ and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.`
           }
           {...register("privacyPolicy")}
         />
@@ -126,7 +132,7 @@ export const HelpdeskForm = ({ bot }) => {
                   errorText={errors.problems?.problem}
                 >
                   <Input
-                    placeholder="Problem"
+                    placeholder="Question"
                     {...register(`problems.${i}.problem`)}
                   />
                 </Field>
@@ -136,13 +142,20 @@ export const HelpdeskForm = ({ bot }) => {
                 >
                   <Textarea
                     autoresize
-                    placeholder="Steps to resolve"
+                    placeholder="Answer"
                     {...register(`problems.${i}.solution`)}
                   />
                 </Field>
               </Stack>
               {i >= 0 && (
-                <Button onClick={() => remove(i)} height={6} width={1}>
+                <Button
+                  onClick={() => remove(i)}
+                  color={color}
+                  height={6}
+                  noArrow
+                  variant="subtle"
+                  width={1}
+                >
                   X
                 </Button>
               )}
@@ -156,10 +169,12 @@ export const HelpdeskForm = ({ bot }) => {
               solution: "",
             })
           }
+          color={color}
+          noArrow
           variant="subtle"
           width={40}
         >
-          Add problem area
+          Add FAQ
         </Button>
       </Fieldset.Root>
     </>

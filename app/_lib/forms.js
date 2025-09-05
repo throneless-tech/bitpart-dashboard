@@ -7,11 +7,11 @@ const phoneRegExp =
 export const schema = yup.object({
   botType: yup.string().required("Choose a bot type"),
   botName: yup.string().required("Bot name is required"),
-  phone: yup.string().matches(phoneRegExp, {
-    message: "Phone number is not valid",
-    excludeEmptyString: true,
-  }),
-  countryCode: yup.string().optional(),
+  // phone: yup.string().matches(phoneRegExp, {
+  //   message: "Phone number is not valid",
+  //   excludeEmptyString: true,
+  // }),
+  // countryCode: yup.string().optional(),
   name: yup.string().required("Name is required"),
   description: yup.string().when("botType", {
     is: "broadcast" || "helpdesk" || "esim" || "vpn",

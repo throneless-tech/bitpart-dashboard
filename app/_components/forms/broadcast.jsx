@@ -5,9 +5,21 @@ import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
-import { Fieldset, Input, Stack, Textarea } from "@chakra-ui/react";
+import {
+  Fieldset,
+  Input,
+  Separator,
+  Stack,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
+
+// components imports
 import { Button } from "@/app/_components/ui/button";
 import { Field } from "@/app/_components/ui/field";
+
+// components imports
+import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 export const BroadcastForm = ({ bot }) => {
   const {
@@ -32,16 +44,19 @@ export const BroadcastForm = ({ bot }) => {
     }
   }, [bot]);
 
+  // color mode
+  const color = useColorModeValue("black", "white");
+
   return (
     <>
       <Field
         errorText={!!errors?.name && errors.name.message}
-        helperText="Name your list. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
+        helperText="Name your channel. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different."
         invalid={!!errors?.name}
         label="Public name"
         required
       >
-        <Input placeholder="Broadcast list" {...register("name")} />
+        <Input placeholder="Broadcast channel" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
@@ -73,7 +88,7 @@ export const BroadcastForm = ({ bot }) => {
       </Field>
       <Field
         errorText={!!errors?.safetyTips && errors.safetyTips.message}
-        helperText="Include safety tips for the list recipients, such as what to do in an emergency or best practices for digital security hygiene."
+        helperText="Include safety tips for the recipients, such as what to do in an emergency or best practices for digital security hygiene."
         info="safetyTips"
         invalid={!!errors?.safetyTips}
         label="Safety tips"
@@ -81,14 +96,14 @@ export const BroadcastForm = ({ bot }) => {
       >
         <Textarea autoresize {...register("safetyTips")} />
       </Field>
-      <Fieldset.Root label="FAQs" marginTop={4}>
+      <Fieldset.Root label="FAQ" marginTop={4}>
         <Stack>
-          <Fieldset.Legend>FAQs</Fieldset.Legend>
+          <Fieldset.Legend>FAQ</Fieldset.Legend>
           <Fieldset.HelperText>
-            If your list needs FAQs, we recommend four (4) or fewer
-            question/answer combos. Start with your most asked question at the
-            top. Keep in mind Bitpart will automatically add an 'other' question
-            for a freeform ask from a user.
+            If your channel needs Frequently Asked Questions, we recommend four
+            (4) or fewer question/answer combos. Start with your most asked
+            question at the top. Keep in mind Bitpart will automatically add an
+            'other' question for a freeform ask from a user.
           </Fieldset.HelperText>
         </Stack>
         {faqFields.map((f, i) => {
@@ -117,7 +132,14 @@ export const BroadcastForm = ({ bot }) => {
                 </Field>
               </Stack>
               {i >= 0 && (
-                <Button onClick={() => faqRemove(i)} height={6} width={1}>
+                <Button
+                  onClick={() => faqRemove(i)}
+                  color={color}
+                  height={6}
+                  noArrow
+                  variant="subtle"
+                  width={1}
+                >
                   X
                 </Button>
               )}
@@ -131,6 +153,8 @@ export const BroadcastForm = ({ bot }) => {
               answer: "",
             })
           }
+          color={color}
+          noArrow
           variant="subtle"
           width={40}
         >

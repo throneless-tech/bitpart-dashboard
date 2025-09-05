@@ -64,19 +64,15 @@ Add to your `.env` file the following:
 AUTH_DEBUG=true
 AUTH_TRUST_HOST=false # true for production build
 
-BITPART_SERVER_URL=127.0.0.1
-BITPART_SERVER_PORT=5000
+BITPART_SERVER_HOSTS=127.0.0.1:5000,127.0.0.1:5005,127.0.0.1:5010
 BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
 
-EMS_SERVER_URL=127.0.0.1
-EMS_PORT=3005
-EMS_ENDPOINT="/ems"
-
-ESIM_ENDPOINT="/esim_codes"
-VPN_ENDPOINT="/vpn_tokens"
-
 DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
+
+EMS_SERVER_HOST=127.0.0.1:3005
 ```
+
+The `.env` is configured to be able to support multiple BITPART_SERVER_HOSTS for load balancing purposes. It will also work with one server host.
 
 ## Deployment
 

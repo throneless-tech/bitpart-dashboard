@@ -15,7 +15,7 @@ start:
     // set _whisperable var in memory
     remember _whisperable = true
 
-    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    say "Welcome, you are now set up as a bot administrator for [name]. You can now send broadcast messages."
     
     goto admin_interface_step
   } else if (event.to_lowercase() == "admin") {
@@ -29,13 +29,23 @@ start:
     goto user_welcome_step
 
 admin_passcode_step:
-  remember attempt = attempt + 1
-
   say "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode."
   
   hold
+  
+  do passcode = event.to_uppercase()
 
-  if (attempt >= 3) {
+  if (passcode.contains("[passcode]")) {
+    remember _whisperable = true
+
+    say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    
+    goto admin_interface_step
+  } else if (event.to_lowercase() == "exit") {
+      remember _whisperable = false
+      
+      goto user_welcome_step
+  } else if (attempt >= 3) {
     // TODO set flagged on bitpart server
     remember _whisperable = false
     
@@ -43,32 +53,18 @@ admin_passcode_step:
 
     goto user_welcome_step
   } else {
-    do passcode = event.to_uppercase()
+    say "Incorrect passcode."
 
-    if (event.to_lowercase() == "exit") {
-      remember _whisperable = false
-      
-      goto user_welcome_step
-    } else if (passcode.contains("[passcode]")) {
-      remember _whisperable = true
+    remember attempt = attempt + 1
 
-      say "Welcome, you are now set up as a bot administrator who can send broadcast messages."
-      
-      goto admin_interface_step
-    } else {
-      say "Incorrect passcode."
-
-      do attempt = attempt + 1
-
-      goto admin_passcode_step
-    }
+    goto admin_passcode_step
   }
 
 admin_interface_step:
   say Text("What would you like to do? Enter a number:
 
 1. Broadcast a message
-2. Return to user interface
+2. Exit this conversation and interact as a bot user
 3. Delete my data")
   hold
 
@@ -82,27 +78,29 @@ admin_interface_step:
 
     goto admin_interface_step
   } else if (event == 2) {
-    say "I am now closing this conversation. Please send a message that says 'Admin' again if you need me."
+    say "You can send a message that says 'Admin' at any time to return to this menu."
     remember _whisperable = false
-    goto user_welcome_step    
+    goto user_welcome_step
   } else if (event == 3) {
     goto delete_me_confirm_step
   } else {
-    say "Sorry, I did not get that. Please select an option from the list."
+    say "Sorry, the bot did not understand 🤖"
 
     goto admin_interface_step
   }
 
 user_welcome_step:
-  say Text("Hi. You have found the distribution list [name].
+  say Text("Hi. You have found the broadcast channel [name].
 
-You can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages.
+We use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).  
 
-You can disagree, and your contact number will be deleted automatically from the list.")
+You can agree, and receive periodic messages.   
 
-  say Text("Agree - I want to be added to the distribution list and consent to receiving messages.
-    
-Disagree - please remove me from the list.
+You can disagree, and end the conversation.")
+
+  say Text("Agree - I want to be added to the broadcast channel and consent to receiving messages
+
+Disagree - please remove me from the broadcast channel
 
 Reply with 'Agree' or 'Disagree'.")
 
@@ -118,7 +116,7 @@ Reply with 'Agree' or 'Disagree'.")
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I do not understand."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto start
   }
@@ -130,17 +128,17 @@ Once this happens, you will no longer be able to receive messages from this numb
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
+  } else if (event.to_lowercase() == "back") {
     goto admin_interface_step
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
   } else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto delete_me_confirm_step
   }
@@ -156,26 +154,26 @@ Once this happens, you will no longer be able to receive messages from this numb
 
 Reply with 'Delete' to confirm.
 
-Reply with 'Go back' to go back to the beginning.")
+Reply with 'Back' to go back to the beginning.")
   hold
 
   if (event.to_lowercase() == "delete") {
     goto confirm_delete_step
-  } else if (event.to_lowercase() == "go back") {
-    goto question_consent_step
+  } else if (event.to_lowercase() == "back") {
+    goto user_welcome_step
   } else if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto consent_disagree_step
   }
 
 confirm_delete_step:
-  say "All your data will now be deleted and you will no longer receive messages."
+  say "Your information has been deleted from the bot's system and you will no longer receive messages."
   delete
   goto end
 
@@ -190,17 +188,55 @@ menu_step:
     goto submit_question_step
   }
 
-  say Text("Menu
+  do safetyTips = "[safetyTips]"
+  do tipsLength = safetyTips.length()
+  do faqLength = [faq.length]
+
+  if (tipsLength > 0 && faqLength > 0) {
+      say Text("Menu
 
 Reply with the corresponding number:
 
 1. About this channel
 2. Safety tips
-3. Frequently asked questions (FAQs)
+3. Frequently asked questions (FAQ)
 
 You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
 
 Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength == 0 || tipsLength == Null) && faqLength > 0) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+2. Frequently asked questions (FAQ)
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength > 0) && (faqLength == 0 || faqLength == Null || faqLength == [null])) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+2. Safety tips
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  } else if ((tipsLength == 0) && (faqLength == Null || faqLength == 0 || faqLength == [null])) {
+    say Text("Menu
+
+Reply with the corresponding number:
+
+1. About this channel
+
+You have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.
+
+Send 'Menu' at any time to come back to this menu.")
+  }
   hold
 
   if (event == 1) {
@@ -208,15 +244,15 @@ Send 'Menu' at any time to come back to this menu.")
     
 [description]"
     goto await_reply_step
-  } else if (event == 2) {
+  } else if (event == 2 && tipsLength > 0) {
     say Text("Safety tips
 
 [safetyTips]")
-
     goto await_reply_step
-
-  } else if (event == 3) {
-        goto faq_step
+  } else if (event == 2 && (tipsLength == 0 || tipsLength == Null) && faqLength > 0) {
+    goto faq_step
+  } else if (event == 3 && tipsLength > 0 && faqLength > 0) {
+    goto faq_step
   } else if (event.to_lowercase() == "menu") {
     goto menu_step
   } else if (event.to_lowercase() == "delete") {
@@ -225,7 +261,7 @@ Send 'Menu' at any time to come back to this menu.")
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto menu_step
   }
@@ -259,7 +295,7 @@ await_reply_step:
     goto admin_passcode_step
   }
   else {
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     goto menu_step
   }
@@ -283,14 +319,14 @@ faq_step:
     goto admin_passcode_step
   } 
   else 
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
 
   say Text("Reply with 'FAQ' to see the list of questions.
   
 Reply with 'Menu' to return home.")
   hold
 
-  if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
+  if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faq") {
     goto faq_step
   } else if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
     goto menu_step
@@ -300,7 +336,7 @@ Reply with 'Menu' to return home.")
     goto admin_passcode_step
   } 
   else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     remember count = count + 1
     if (count >= 3) {
       goto submit_question_step
@@ -326,7 +362,7 @@ Reply Yes or No."
 Reply with 'Menu' to return home.")
     hold
 
-    if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faqs") {
+    if (event.to_lowercase() == "faq" ||  event.to_lowercase() == "faq") {
       goto faq_step
     } else if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
       goto menu_step
@@ -336,7 +372,7 @@ Reply with 'Menu' to return home.")
       goto admin_passcode_step
     } 
     else
-      say "Sorry, I did not get that."
+      say "Sorry, the bot did not understand 🤖"
       hold
       remember count = count + 1
       goto check_if_solved_step
@@ -344,18 +380,33 @@ Reply with 'Menu' to return home.")
     goto submit_question_step
   } else if (event.to_lowercase() == "admin") {
     goto admin_passcode_step
-  } 
+  } else if (event.to_lowercase() == "delete") {
+      goto consent_disagree_step 
+  }
   else
-    say "Sorry, I did not get that."
+    say "Sorry, the bot did not understand 🤖"
     hold
     remember count = count + 1
     goto check_if_solved_step
 
 submit_question_step:
-  say "We've understood that you have a question not covered by the FAQs. Please reach out to [referral] for support."
-  goto menu_step
+  say "We've understood that you have a question not covered by the FAQ. Please reach out to [referral] for support.
+  
+At any time, send 'Delete' to stop receiving messages and be removed from this channel."
+  remember count = 0
+  hold
 
+  if (event.to_lowercase() == "main menu" ||  event.to_lowercase() == "menu") {
+      goto menu_step
+  } else if (event.to_lowercase() == "delete") {
+    goto consent_disagree_step
+  } else if (event.to_lowercase() == "admin") {
+    goto admin_passcode_step
+  } 
+  else
+    say "Sorry, the bot did not understand 🤖"
 
+    goto submit_question_step
   // hold
 
   // remember problem = event

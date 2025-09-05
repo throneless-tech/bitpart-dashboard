@@ -4,14 +4,26 @@
 import { useCallback, useEffect, useState } from "react";
 
 // chakra ui imports
-import { Box, Container, Link, List, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Link,
+  List,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
 // actions imports
 import { getBot } from "@/app/_actions/getUserBots";
 
 // components imports
 import { Alert } from "@/app/_components/ui/alert";
+import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
+
+// fonts
+import { geistMono } from "@/app/fonts";
 
 export const Summary = ({ data, errors, botId, username }) => {
   const [bot, setBot] = useState(null);
@@ -44,7 +56,9 @@ export const Summary = ({ data, errors, botId, username }) => {
   }, [data]);
 
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
+  const colorEdit = useColorModeValue("black", "white");
+  const colorDone = useColorModeValue("white", "black");
 
   useEffect(() => {}, [bot, isFetching, notAllowed]);
 
@@ -69,6 +83,33 @@ export const Summary = ({ data, errors, botId, username }) => {
   } else {
     return (
       <>
+        {botId ? (
+          <Stack
+            alignItems={["flex-start", "center", "center"]}
+            direction={["column", "row"]}
+            justifyContent="space-between"
+          >
+            <Text>Here is your bot summary:</Text>
+            <Stack direction="row">
+              <Button
+                as="a"
+                color={colorEdit}
+                href={`/my-bots/edit/${botId}`}
+                variant="outline"
+              >
+                <Text as="span">Edit</Text>
+              </Button>
+              <Button
+                as="a"
+                color={colorDone}
+                href={`/my-bots`}
+                variant="solid"
+              >
+                Done
+              </Button>
+            </Stack>
+          </Stack>
+        ) : null}
         {errors && Object.keys(errors).length !== 0 ? (
           <>
             <Box marginY={6}>
@@ -89,7 +130,7 @@ export const Summary = ({ data, errors, botId, username }) => {
         {bot && Object.keys(bot).length != 0
           ? Object.keys(bot).map((key) => (
               <Text as="div" key={key} marginTop={4}>
-                <Text fontWeight="bold">
+                <Text className={geistMono.className} fontWeight="bold">
                   {bot[key] && bot[key].length
                     ? key === "botType"
                       ? "Bot type"
@@ -117,14 +158,18 @@ export const Summary = ({ data, errors, botId, username }) => {
                                             ? "List of codes"
                                             : key === "locations"
                                               ? "Network/Provider"
-                                              : key === "bitpartId" ||
-                                                  key === "countryCode" ||
-                                                  key === "createdAt" ||
-                                                  key === "creatorId" ||
-                                                  key === "id" ||
-                                                  key === "updatedAt"
-                                                ? ""
-                                                : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+                                              : key === "description"
+                                                ? "About"
+                                                : key === "bitpartId" ||
+                                                    key === "countryCode" ||
+                                                    key === "createdAt" ||
+                                                    key === "creatorId" ||
+                                                    key === "id" ||
+                                                    key === "updatedAt" ||
+                                                    key === "instance" ||
+                                                    key === "qrLink"
+                                                  ? ""
+                                                  : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
                     : null}
                 </Text>
                 {!!bot[key] &&
@@ -154,7 +199,9 @@ export const Summary = ({ data, errors, botId, username }) => {
                           key === "createdAt" ||
                           key === "creatorId" ||
                           key === "id" ||
-                          key === "updatedAt"
+                          key === "updatedAt" ||
+                          key === "instance" ||
+                          key === "qrLink"
                         ? ""
                         : bot[key]}
                   </Text>

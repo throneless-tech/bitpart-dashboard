@@ -7,8 +7,14 @@ import React, { useActionState, useEffect } from "react";
 import { register } from "@/app/_actions/register";
 
 // chakra ui imports
-import { Button, Container, Field, Input } from "@chakra-ui/react";
+import { Container, Field, Input } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/_components/ui/password-input";
+
+// components
+import { Button } from "@/app/_components/ui/button";
+
+// fonts
+import { geistMono } from "../fonts";
 
 const initialState = {
   error: "",
@@ -21,7 +27,9 @@ export function SignupForm() {
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
         <Field.Root invalid={state?.error} required>
-          <Field.Label>Enter your invite code</Field.Label>
+          <Field.Label className={geistMono.className}>
+            Enter your invite code
+          </Field.Label>
           <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
           {state?.error ? (
             <Field.ErrorText>
@@ -30,7 +38,9 @@ export function SignupForm() {
           ) : null}
         </Field.Root>
         <Field.Root invalid={state?.error?.username} marginTop={12}>
-          <Field.Label>Enter your email address</Field.Label>
+          <Field.Label className={geistMono.className}>
+            Enter your email address
+          </Field.Label>
           <Input name="email" placeholder="email@mail.org" size="lg" />
           <Field.HelperText>
             This field is optional. You may include an email for password
@@ -42,14 +52,18 @@ export function SignupForm() {
           ) : null}
         </Field.Root>
         <Field.Root invalid={state?.error?.username} marginTop={12} required>
-          <Field.Label>Choose a username</Field.Label>
+          <Field.Label className={geistMono.className}>
+            Choose a username
+          </Field.Label>
           <Input name="username" placeholder="username.here" size="lg" />
           {state?.error?.username ? (
             <Field.ErrorText>{state.error.username}</Field.ErrorText>
           ) : null}
         </Field.Root>
         <Field.Root invalid={state?.error?.password} marginTop={4} required>
-          <Field.Label>Choose a password</Field.Label>
+          <Field.Label className={geistMono.className}>
+            Choose a password
+          </Field.Label>
           <PasswordInput
             name="password"
             placeholder="AVeryGoodPassword"
@@ -64,7 +78,9 @@ export function SignupForm() {
           marginTop={4}
           required
         >
-          <Field.Label>Confirm password</Field.Label>
+          <Field.Label className={geistMono.className}>
+            Confirm password
+          </Field.Label>
           <PasswordInput
             name="passwordConfirm"
             placeholder="AVeryGoodPassword"
@@ -74,7 +90,14 @@ export function SignupForm() {
             <Field.ErrorText>{state.error.passwordConfirm}</Field.ErrorText>
           ) : null}
         </Field.Root>
-        <Button disabled={pending} marginTop={8} type="submit" width={120}>
+        <Button
+          color="white"
+          colorPalette="purple"
+          disabled={pending}
+          marginTop={8}
+          type="submit"
+          width={120}
+        >
           Sign up
         </Button>
       </Container>

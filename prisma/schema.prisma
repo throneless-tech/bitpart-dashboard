@@ -85,6 +85,8 @@ model Bot {
   storageAccess          String?
   problems               Json[]
   vpnName                String?
+  instance               String
+  qrLink                 String
   creatorId              String
   creator                User     @relation(fields: [creatorId], references: [id])
 
@@ -96,4 +98,10 @@ model InviteCode {
   id   Int     @id @default(autoincrement())
   code String  @unique
   used Boolean @default(false)
+}
+
+model State {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique @default("default")
+  lastInstance String?
 }

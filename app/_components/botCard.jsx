@@ -3,33 +3,31 @@
 import { useEffect, useState } from "react";
 
 // chakra ui imports
-import {
-  Box,
-  Button,
-  Card,
-  ClientOnly,
-  Stack,
-  Switch,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Card, ClientOnly, Stack, Switch, Text } from "@chakra-ui/react";
 
 // components imports
+import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // icons imports
-import { CgModem } from "react-icons/cg";
-import { FaSimCard } from "react-icons/fa";
-import { IoHelpBuoySharp } from "react-icons/io5";
-import { LuLightbulb } from "react-icons/lu";
-import { TbBuildingBroadcastTower } from "react-icons/tb";
+import Bullhorn from "@/app/_icons/bullhorn";
+import Chart from "@/app/_icons/chart";
+import Helpdesk from "@/app/_icons/helpdesk";
+import Lightbulb from "@/app/_icons/lightbulb";
+import Phone from "@/app/_icons/phone";
+
+// actions
 import { formatBotName, formatPhone } from "../_actions/formatBot";
 
+// fonts
+import { geistMono } from "@/app/fonts";
+
 const botTypes = {
-  broadcast: <TbBuildingBroadcastTower />,
-  tipline: <LuLightbulb />,
-  helpdesk: <IoHelpBuoySharp />,
-  esim: <FaSimCard />,
-  vpn: <CgModem />,
+  broadcast: <Bullhorn />,
+  tipline: <Lightbulb />,
+  helpdesk: <Helpdesk />,
+  esim: <Phone />,
+  vpn: <Chart />,
 };
 
 export default function BotCard(props) {
@@ -63,15 +61,20 @@ export default function BotCard(props) {
   useEffect(() => {}, [bot, botName, botPhone]);
 
   // color mode
-  const color = useColorModeValue("gray.600", "gray.400");
+  const color = useColorModeValue("black", "white");
+  const colorSubmit = useColorModeValue("white", "black");
 
   return (
-    <Card.Root width={300}>
+    <Card.Root width={400}>
       <Card.Body gap="2">
-        {botTypes[bot.botType]}
-        <Card.Title mt="2">{bot.botName}</Card.Title>
+        <Box fill={color} width={6}>
+          {botTypes[bot.botType]}
+        </Box>
+        <Card.Title className={geistMono.className} mt="2">
+          {bot.botName}
+        </Card.Title>
         <ClientOnly>
-          <Box color={color}>
+          <Box>
             {botPhone ? <Text>{botPhone}</Text> : null}
             <Stack alignItems="flex-start" direction="row" marginTop={2}>
               <Text>View passcode </Text>
@@ -86,21 +89,37 @@ export default function BotCard(props) {
                 <Switch.Label />
               </Switch.Root>
             </Stack>
-            <Text>{checked ? bot.passcode : "●●●●●●●●"}</Text>
+            <Text className={geistMono.className}>
+              {checked ? bot.passcode : "●●●●●●●●"}
+            </Text>
           </Box>
         </ClientOnly>
       </Card.Body>
       <Card.Footer justifyContent="center">
-        <Button as="a" href={`/my-bots/view/${bot.id}`} variant="outline">
+        <Button
+          as="a"
+          color={color}
+          href={`/my-bots/view/${bot.id}`}
+          variant="outline"
+        >
           View
         </Button>
-        <Button as="a" href={`/my-bots/edit/${bot.id}`} variant="outline">
+        <Button
+          as="a"
+          color={color}
+          href={`/my-bots/edit/${bot.id}`}
+          variant="outline"
+        >
           Edit
         </Button>
         <form
-          action={async () => await handleDelete(bot.id, botName, username)}
+          action={async () =>
+            await handleDelete(bot.id, bot.bitpartId, username, bot.instance)
+          }
         >
-          <Button type="submit">Delete</Button>
+          <Button color={colorSubmit} type="submit" variant="solid">
+            Delete
+          </Button>
         </form>
       </Card.Footer>
     </Card.Root>

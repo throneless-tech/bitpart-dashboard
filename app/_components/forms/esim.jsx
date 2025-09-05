@@ -4,26 +4,29 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 
 // chakra imports
 import {
+  Box,
   Fieldset,
-  HStack,
   Input,
   Link,
   Stack,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
-import { Button } from "@/app/_components/ui/button";
-import { Field } from "@/app/_components/ui/field";
 
-// components
+// components imports
+import { Field } from "@/app/_components/ui/field";
 import { FileUploader } from "@/app/_components/forms/fileUpload";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // icons
-import { FiDownload } from "react-icons/fi";
+import Download from "@/app/_icons/download";
+
+// fonts
+import { geistMono } from "@/app/fonts";
 
 export const EsimForm = ({ bot }) => {
   // color mode
-  const color = useColorModeValue("maroon", "yellow");
+  const color = useColorModeValue("purple.600", "purple.400");
 
   const {
     register,
@@ -58,11 +61,11 @@ export const EsimForm = ({ bot }) => {
         label="Public name"
         required
       >
-        <Input placeholder="eSIM distributor" {...register("name")} />
+        <Input placeholder="eSIM Distributor" {...register("name")} />
       </Field>
       <Field
         errorText={!!errors?.description && errors.description.message}
-        helperText="Enter one sentence about what you do, or what this chatbot offers and to whom."
+        helperText="Enter one sentence describing your group or organization, why you distribute eSIMs or who the eSIM distribution is for. Also include locations where the eSIMs work."
         invalid={!!errors?.description}
         label="About"
         marginTop={4}
@@ -241,7 +244,9 @@ export const EsimForm = ({ bot }) => {
       </Fieldset.Root> */}
       <Fieldset.Root marginTop={6}>
         <Stack>
-          <Fieldset.Legend>Upload eSIM codes</Fieldset.Legend>
+          <Fieldset.Legend className={geistMono.className} fontSize={18}>
+            Upload eSIM codes
+          </Fieldset.Legend>
           <Fieldset.HelperText>
             Please provide a CSV file of your eSIM codes for use. Note that the
             list should only include the mobile network and the code. You must
@@ -249,8 +254,10 @@ export const EsimForm = ({ bot }) => {
             upload it here. Do not make any changes to the header row.
           </Fieldset.HelperText>
           <Link color={color} href="/esim-template.csv" fontSize="sm">
-            Download template
-            <FiDownload />
+            <Text as="span">Download template</Text>
+            <Box as="span" width={6}>
+              <Download />
+            </Box>
           </Link>
         </Stack>
         <Fieldset.Content>

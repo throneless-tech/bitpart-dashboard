@@ -2,32 +2,14 @@
 import React from "react";
 import { auth } from "@/auth";
 
-// chakra ui imports
-import { Box, Container, Heading, Text } from "@chakra-ui/react";
-
 // components
-import Header from "@/app/_components/header";
-import BotsList from "@/app/_components/botsList";
+import Dashboard from "@/app/_components/dashboard";
 import NotAuthenticated from "@/app/_components/notAuthenticated";
 
-export default async function Dashboard() {
+export default async function MyBots() {
   const session = await auth();
 
   if (!session) return <NotAuthenticated />;
 
-  return (
-    <Box>
-      <Container py={6}>
-        <Header session={session} />
-      </Container>
-      <Container marginY={3} maxW="2xl">
-        <Heading as="h1" size="3xl" marginBottom={8}>
-          Welcome, {session?.user?.name}
-        </Heading>
-        <Box>
-          <BotsList username={session?.user?.name} />
-        </Box>
-      </Container>
-    </Box>
-  );
+  return <Dashboard session={session} />;
 }

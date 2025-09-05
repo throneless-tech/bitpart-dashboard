@@ -15,8 +15,10 @@ import { Provider } from "@/app/_components/ui/provider";
 // });
 
 export const metadata = {
-  title: "Terms of Service and Privacy Policy ● Bitpart Dashboard",
-  description: "A dashboard for interfacing with Bitpart.",
+  metadataBase: new URL("https://bitp.art"),
+  title: "Terms of Service and Privacy Policy ● Bitpart",
+  description:
+    "Bitpart is a one-to-many messaging tool that plugs into Signal. It was designed with rights defenders, activists and journalists operating in risky or repressive environments, and is intended for anyone needing to communicate with a large network safely over Signal.",
 };
 
 export default function RootLayout({ children }) {
