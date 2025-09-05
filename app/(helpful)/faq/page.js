@@ -199,19 +199,13 @@ export default function FAQ() {
               </Link>
             </List.Item>
             <List.Item>
-              <Link color={color} href="#separate-signal-account">
-                How do I set up a second Signal account?
-              </Link>
-            </List.Item>
-            <List.Item>
-              <Link color={color} href="#types-of-bots">
-                What types of bots are available?
+              <Link color={color} href="#what-can-i-use-bitpart-for">
+                What can I use a Bitpart bot for?
               </Link>
             </List.Item>
             <List.Item>
               <Link color={color} href="#is-separate-software-needed">
-                Do I need to download software or an app to create a bot using
-                Bitpart?
+                Do I need to download software or an app to use Bitpart?
               </Link>
             </List.Item>
             <List.Item>
@@ -352,6 +346,30 @@ export default function FAQ() {
         uppercase"
         >
           <ClientOnly>
+            <Link color={color} href="#broacast-channel">
+              Running a broadcast channel
+            </Link>
+          </ClientOnly>
+        </Text>
+        <List.Root as="ol" marginLeft={4}>
+          <ClientOnly>
+            <List.Item>
+              <Link color={color} href="#broadcast-channel-receive">
+                How can people receive the messages I send from my broadcast
+                channel?
+              </Link>
+            </List.Item>
+          </ClientOnly>
+        </List.Root>
+        <Text
+          className={geistMono.className}
+          fontSize="xl"
+          marginTop={4}
+          textDecoration="underline"
+          textTransform="
+        uppercase"
+        >
+          <ClientOnly>
             <Link color={color} href="#troubleshooting">
               Troubleshooting
             </Link>
@@ -363,6 +381,11 @@ export default function FAQ() {
               <Link color={color} href="#why-do-i-get-an-error-message">
                 Why do I get an error message when I try to connect my bot to
                 the Signal account?
+              </Link>
+            </List.Item>
+            <List.Item>
+              <Link color={color} href="#can-i-reset-password">
+                Can I reset my password?
               </Link>
             </List.Item>
             <List.Item>
@@ -545,10 +568,27 @@ export default function FAQ() {
           Can a Bitpart bot be managed by multiple members of my team?
         </Heading>
         <Text marginTop={4}>
-          Yes. Bitpart offers the functionality of 'forwarding' messages to and
-          from ‘Admins.’ A team member can become an Admin by using a passcode,
-          generated during the bot creation process, which the Bot Creator can
-          share.
+          Accounts on the Bitpart platform are intended for individuals. There
+          is currently no way to connect accounts and share bots across a team
+          (though this is something we are considering for the future).
+        </Text>
+        <Text marginTop={4}>
+          Bitpart offers the ability for Admins to help manage bots, using
+          passcodes. Admins do not need access to your Bot Creator account on
+          this platform. Bitpart generates a unique passcode for each bot at the
+          end of the “Create your bot" process. Bot Creators can share this
+          passcode with members of their team. Messaging the bot one time with
+          the passcode means that the sender is recognized by Bitpart as an
+          Admin. An Admin will be able to send messages to the channel
+          (broadcast bot) or receive select messages that Bitpart forwards, such
+          as tips (tipline bot) or requests for human support (helpdesk, VPN,
+          eSIM).{" "}
+          <ClientOnly>
+            <Link color={color} href="#multiple-admins-2" variant="underline">
+              Please see more about multiple Admins here.
+            </Link>
+          </ClientOnly>{" "}
+          Soon you will be able to change passcodes for greater security.
         </Text>
         <Heading
           as="h4"
@@ -640,26 +680,11 @@ export default function FAQ() {
         <Heading
           as="h3"
           className={geistMono.className}
-          id="separate-signal-account"
+          id="what-can-i-use-bitpart-for"
           marginTop={8}
           size="xl"
         >
-          How do I set up a second Signal account?
-        </Heading>
-        <Text marginTop={4}>
-          There are a few different ways you can set up a second Signal account.
-          The easiest is to use another SIM card / phone number in a second
-          mobile device. (You can also use a virtual number, but this requires
-          some technical know-how).
-        </Text>
-        <Heading
-          as="h3"
-          className={geistMono.className}
-          id="types-of-bots"
-          marginTop={8}
-          size="xl"
-        >
-          What types of bots are available?
+          What can I use a Bitpart bot for?
         </Heading>
         <Text marginTop={4}>
           Bitpart currently offers 5 different bots: broadcast channel,
@@ -811,8 +836,7 @@ export default function FAQ() {
           marginTop={8}
           size="xl"
         >
-          Do I need to download software or an app to create a bot using
-          Bitpart?
+          Do I need to download software or an app to use Bitpart?
         </Heading>
         <Text marginTop={4}>
           No. A Bitpart bot operates via the messenging platform, Signal, and
@@ -1143,7 +1167,7 @@ export default function FAQ() {
           .
         </Text>
         <Text marginTop={4}>
-          The code for Bitpart is also available on{" "}
+          The code for Bitpart is also{" "}
           <ClientOnly>
             <Link
               color={color}
@@ -1151,7 +1175,7 @@ export default function FAQ() {
               target="_blank"
               variant="underline"
             >
-              Github
+              available on Github
             </Link>
           </ClientOnly>
           , for those who wish to examine it.
@@ -1663,9 +1687,36 @@ export default function FAQ() {
         </Heading>
         <Text marginTop={4}>
           This error can occur if the Signal account you are using is already
-          connected to a bot. Go to your dashboard to view your existing bots.
-          You can also check the Signal account you are trying to use by
-          messaging it. You can only use a Signal account for one bot at a time.
+          connected to a bot. You can only use a Signal account for one bot at a
+          time. Go to your dashboard to view your existing bots. Alternatively
+          you can check the Signal account you are trying to use by messaging
+          it.
+        </Text>
+        <Text marginTop={4}>
+          Check the number of linked devices to the Signal account you want to
+          use for the bot, to ensure you haven't reached the maximum.
+        </Text>
+        <Heading
+          as="h3"
+          className={geistMono.className}
+          id="can-i-reset-password"
+          marginTop={8}
+          size="xl"
+        >
+          Can I reset my password?
+        </Heading>
+        <Text marginTop={4}>
+          No. Please email us at{" "}
+          <ClientOnly>
+            <Link
+              color={color}
+              href="mailto:contact@bitp.art"
+              variant="underline"
+            >
+              contact@bitp.art
+            </Link>
+          </ClientOnly>{" "}
+          if you need ot reset your password.
         </Text>
         <Heading
           as="h3"
@@ -1767,7 +1818,9 @@ export default function FAQ() {
           You can delete a bot, and set up a new bot which uses the same number
           and Signal username. Please be mindful of who you might have already
           shared the number and Signal username with previously. Please note
-          that when you delete a bot, it deletes all past conversations.
+          that when you delete a bot, it deletes all past conversations on the
+          Bitpart server but not on the Signal account and device, unless you do
+          this manually.
         </Text>
         <ClientOnly>
           <Heading
