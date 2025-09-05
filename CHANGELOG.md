@@ -1,3 +1,10 @@
+## 1.0.5 (2025-09-05)
+
+### Fix
+
+- #34 handle rejected files as well
+- #34 add better file upload UX for bot creators
+
 ## 1.0.4 (2025-09-04)
 
 ### Fix
