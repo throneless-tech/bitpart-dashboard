@@ -1,3 +1,14 @@
+## 1.0.8 (2025-09-05)
+
+### Fix
+
+- prevent extraneous re-render on submit bot creation
+- refactor edit flow to allow for correct csv parsing
+- remove seo indexing from robots
+- update readme
+- update size of qr box in dark mode
+- fix update function after refactor of create/update transactions, csml fixes for vpn
+
 ## 1.0.7 (2025-09-05)
 
 ### Fix
