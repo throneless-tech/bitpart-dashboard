@@ -63,9 +63,7 @@ export const Summary = ({ data, errors, botId, username }) => {
   const colorEdit = useColorModeValue("black", "white");
   const colorDone = useColorModeValue("white", "black");
 
-  useEffect(() => {
-    console.log(bot);
-  }, [bot, isFetching, notAllowed]);
+  useEffect(() => {}, [bot, isFetching, notAllowed]);
 
   if (isFetching) {
     return <Spinner />;
