@@ -14,6 +14,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+// custom css
+import "@/app/globals.css";
+
 // actions imports
 import { getBot } from "@/app/_actions/getUserBots";
 
@@ -60,7 +63,9 @@ export const Summary = ({ data, errors, botId, username }) => {
   const colorEdit = useColorModeValue("black", "white");
   const colorDone = useColorModeValue("white", "black");
 
-  useEffect(() => {}, [bot, isFetching, notAllowed]);
+  useEffect(() => {
+    console.log(bot);
+  }, [bot, isFetching, notAllowed]);
 
   if (isFetching) {
     return <Spinner />;
@@ -178,12 +183,22 @@ export const Summary = ({ data, errors, botId, username }) => {
                 key !== "csv" ? (
                   bot[key].map((d, ind) => (
                     <Box key={`innerdata-${ind}`}>
-                      {Object.keys(d).map((k, i) => (
-                        <Box key={`${k}-${i}`}>
-                          {/* <Text fontWeight="bold">{`${k.charAt(0).toUpperCase()}${k.slice(1)}`}</Text> */}
-                          <Text>{d[k]}</Text>
-                        </Box>
-                      ))}
+                      {Object.keys(d).map((k, i) => {
+                        const text = d[k].replace(/\n/g, "\n");
+
+                        return (
+                          <Box key={`${k}-${i}`}>
+                            {/* <Text fontWeight="bold">{`${k.charAt(0).toUpperCase()}${k.slice(1)}`}</Text> */}
+                            <Text
+                              as="div"
+                              className="display-linebreak"
+                              marginBottom={4}
+                            >
+                              {text}
+                            </Text>
+                          </Box>
+                        );
+                      })}
                     </Box>
                   ))
                 ) : bot[key] && key === "csv" ? (
@@ -191,7 +206,7 @@ export const Summary = ({ data, errors, botId, username }) => {
                     <Box key={`csv-${i}`}>(Uploaded)</Box>
                   ))
                 ) : (
-                  <Text>
+                  <Text as="div" className="display-linebreak" marginBottom={4}>
                     {key === "phone" && bot[key] && bot[key].length
                       ? `+${bot["countryCode"]} ${bot[key]}`
                       : key === "bitpartId" ||

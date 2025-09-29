@@ -8,7 +8,9 @@ import WebSocket from "ws";
 // actions
 import { formatCsml } from "./formatBot";
 import { getUser } from "./getUser";
-import { parseCSV } from "./csv";
+
+// utils
+import { escapeSpecials } from "@/app/_utils/escapeSpecials";
 
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
@@ -133,13 +135,24 @@ export const updateBot = async (
         async (tx) => {
           delete data.csv; // we are not saving the codes here
 
+          console.log("*****************************");
+          console.log(data.privacyPolicy);
+
+          console.log("*****************************");
+
+          const formattedData = escapeSpecials(data);
+
           // update bot on bitpart server
           const updatedBitpartBot = await updateBotBitpart(
-            data,
+            formattedData,
             bitpartId,
             passcode,
             host,
           );
+
+          console.log("+++++++++++++++++++++++++++++++");
+          console.log(data.privacyPolicy);
+          console.log("+++++++++++++++++++++++++++++++");
 
           if (updatedBitpartBot?.message_type === "Error") {
             throw new Error(updatedBitpartBot.data.response);

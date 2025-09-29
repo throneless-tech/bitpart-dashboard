@@ -5,7 +5,7 @@ import React from "react";
 import { auth } from "@/auth";
 
 // chakra ui imports
-import { Box, Button, Container, Stack, Text } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 // component imports
 import Header from "@/app/_components/header";

@@ -9,6 +9,9 @@ import WebSocket from "ws";
 import { formatCsml } from "./formatBot";
 import { getUser } from "./getUser";
 
+// utils
+import { escapeSpecials } from "@/app/_utils/escapeSpecials";
+
 // inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
 class WSConnection {
   _socket = null;
@@ -193,9 +196,11 @@ export const createBot = async (data, bitpartId, username, passcode) => {
             host = hosts[0];
           }
 
+          const formattedData = escapeSpecials(data);
+
           // create the bot in the bitpart server
           const bitpartBot = await createBotBitpart(
-            data,
+            formattedData,
             bitpartId,
             passcode,
             host,
