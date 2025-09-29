@@ -135,11 +135,6 @@ export const updateBot = async (
         async (tx) => {
           delete data.csv; // we are not saving the codes here
 
-          console.log("*****************************");
-          console.log(data.privacyPolicy);
-
-          console.log("*****************************");
-
           const formattedData = escapeSpecials(data);
 
           // update bot on bitpart server
@@ -149,10 +144,6 @@ export const updateBot = async (
             passcode,
             host,
           );
-
-          console.log("+++++++++++++++++++++++++++++++");
-          console.log(data.privacyPolicy);
-          console.log("+++++++++++++++++++++++++++++++");
 
           if (updatedBitpartBot?.message_type === "Error") {
             throw new Error(updatedBitpartBot.data.response);
