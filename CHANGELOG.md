@@ -1,3 +1,10 @@
+## 1.0.9 (2025-09-29)
+
+### Fix
+
+- remove extraneous console logs
+- add escape characters to prevent erroring on double quotes
+
 ## 1.0.8 (2025-09-05)
 
 ### Fix
