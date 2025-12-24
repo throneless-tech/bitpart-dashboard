@@ -46,11 +46,11 @@
     ],
     "cta": "Ready to go?",
     "button": "Get started",
-    "contact": "Email us if you have questions: contact [at] bitp.art\nComplete this form to request an invite code."
+    "contact": "Email us if you have questions: {contactLink}\nComplete this form to request an invite code."
   },
   "about": {
     "title": "About us",
-    "description": "Bitpart is a project developed by Throneless Tech, a technology worker-cooperative specialized in building technology and providing digital security trainings for social justice oriented community organizations, activist groups, and non-profits.\nWe were inspired to develop Bitpart by the need we saw for it within communities we are a part of and work with. Dormant, similar projects such as Ionosphere and Signalboost also brought us inspiration.\nBitpart has been made possible through a grant and support from the Open Technology Fund (OTF), which in turn receives funding from the US government. You can read more about OTF's funding here. Many privacy-focused technologies have received funding from OTF, such as Signal, Tails, and Tor.\nIf you have any feedback, or want to know more, please contact us: contact@bitp.art"
+    "description": "Bitpart is a project developed by <a href=\"https://throneless.tech/\">Throneless Tech</a>, a technology worker-cooperative specialized in building technology and providing digital security trainings for social justice oriented community organizations, activist groups, and non-profits.\nWe were inspired to develop Bitpart by the need we saw for it within communities we are a part of and work with. Dormant, similar projects such as Ionosphere and Signalboost also brought us inspiration.\nBitpart has been made possible through a grant and support from the Open Technology Fund (OTF), which in turn receives funding from the US government. You can read more about OTF's funding <a href='https://www.opentech.fund/about/about-our-funding/'>here</a>. Many privacy-focused technologies have received funding from OTF, such as <a href='https://signal.org/'>Signal</a>, <a href='https://tails.net/'>Tails</a>, and <a href='https://www.torproject.org/'>Tor</a>.\nIf you have any feedback, or want to know more, please contact us: {contactLink}"
   },
   "faq": {
     "title": "Frequently asked questions",
@@ -63,7 +63,7 @@
         },
         {
           "title": "Bot Creator",
-          "description": "An individual who has an account on bitp.art and can create, edit, and delete bots."
+          "description": "An individual who has an account on <a href='https://bitp.art/'>bitp.art</a> and can create, edit, and delete bots."
         },
         {
           "title": "Admin",
@@ -122,13 +122,13 @@
                 "Distribute eSIMs to Signal accounts",
                 "Distribute VPN codes to Signal accounts"
               ],
-              "text_ii": "Each bot is set up by creating an account on bitp.art. Once the bot is set up, all interactions take place over Signal."
+              "text_ii": "Each bot is set up by creating an account on <a href='https://bitp.art/'>bitp.art</a>. Once the bot is set up, all interactions take place over Signal."
             }
           },
           {
             "question": "Can a Bitpart bot be managed by multiple members of my team?",
             "answer": {
-              "text_i": "Accounts on the Bitpart platform are intended for individuals. There is currently no way to connect accounts and share bots across a team (though this is something we are considering for the future).\nBitpart offers the ability for Admins to help manage bots, using passcodes. Admins do not need access to your Bot Creator account on this platform. Bitpart generates a unique passcode for each bot at the end of the \"Create your bot\" process. Bot Creators can share this passcode with members of their team. Messaging the bot one time with the passcode means that the sender is recognized by Bitpart as an Admin. An Admin will be able to send messages to the channel (broadcast bot) or receive select messages that Bitpart forwards, such as tips (tipline bot) or requests for human support (helpdesk, VPN, eSIM). Please see more about multiple Admins here. Soon you will be able to change passcodes for greater security.",
+              "text_i": "Accounts on the Bitpart platform are intended for individuals. There is currently no way to connect accounts and share bots across a team (though this is something we are considering for the future).\nBitpart offers the ability for Admins to help manage bots, using passcodes. Admins do not need access to your Bot Creator account on this platform. Bitpart generates a unique passcode for each bot at the end of the \"Create your bot\" process. Bot Creators can share this passcode with members of their team. Messaging the bot one time with the passcode means that the sender is recognized by Bitpart as an Admin. An Admin will be able to send messages to the channel (broadcast bot) or receive select messages that Bitpart forwards, such as tips (tipline bot) or requests for human support (helpdesk, VPN, eSIM). <a href='#multiple-admins-2'>Please see more about multiple Admins here</a>. Soon you will be able to change passcodes for greater security.",
               "types": [
                 {
                   "title": "Broadcast channel",
@@ -140,7 +140,7 @@
                 },
                 {
                   "title": "Helpdesk, VPN, eSIM",
-                  "text": "For these bots, a Bot Creator can set up message forwarding to receive alerts when someone using the bot needs additional support. Sending a passcode via Signal to the bot allows for Bitpartit to recognize those Signal aAccounts as Admins. Bitpart will then immediately forward any requests for human support to Admins. This 'flags' support requests which might otherwise get lost in the conversations, especially if there are many people engaging with your bot or if the bot's Signal account is not closely monitored.\nSee below for more information on passcodes."
+                  "text": "For these bots, a Bot Creator can set up message forwarding to receive alerts when someone using the bot needs additional support. Sending a passcode via Signal to the bot allows for Bitpartit to recognize those Signal aAccounts as Admins. Bitpart will then immediately forward any requests for human support to Admins. This 'flags' support requests which might otherwise get lost in the conversations, especially if there are many people engaging with your bot or if the bot's Signal account is not closely monitored.\n<a href='#forwarding-and-passcodes'>See below for more information on passcodes.</a>"
                 }
               ]
             }
@@ -208,11 +208,11 @@
           },
           {
             "question": "What languages does Bitpart come in?",
-            "answer": "Currently Bitpart is only in English. Adding more languages is a priority.\nIf there's a language in which you would like to build your bot, please email us, as we will prioritize languages based on need. (contact@bitp.art)"
+            "answer": "Currently Bitpart is only in English. Adding more languages is a priority.\nIf there's a language in which you would like to build your bot, please email us, as we will prioritize languages based on need. ({contactLink})"
           },
           {
             "question": "What does it cost to use Bitpart?",
-            "answer": "Bitpart is free to use. We appreciate your support to help us run Bitpart.\nPlease note that you need a separate Signal account to run Bitpart, and this will likely have costs (such as the cost of a phone number and device)."
+            "answer": "Bitpart is free to use. <a href='https://www.paypal.com/donate/?hosted_button_id=757LCPWH64A6N'>We appreciate your support</a> to help us run Bitpart.\nPlease note that you need a separate Signal account to run Bitpart, and this will likely have costs (such as the cost of a phone number and device)."
           }
         ]
       },
@@ -230,7 +230,7 @@
                 "bold": "The Bitpart server acts as an “end” in Signal’s end-to-end encryption.",
                 "regular": "Messages are encrypted between your bot and anyone who messages it (as all Signal messages are). In order for Bitpart to work, the bot connects to your Signal account as a linked device."
               },
-              "text_ii": "In the moment that the encrypted message is received by the server, the content is briefly stored to allow for the transmission of information. The messages are deleted almost instantly and are not ever saved in the database. We (Throneless Tech, the team that runs Bitpart) cannot access or read any of your messages, but you should be aware that they do briefly pass through Bitpart's servers in order for automation or broadcasting functionality.\nData that is stored on the server is encrypted at rest in the database using AES256 encryption from the SQLCipher Project.\nWe’re taking all precautions, but there are some inherent risks. Depending on your privacy needs, context, and technological capacity, you may want to consider setting up your own instance of Bitpart using open source code available on Github, which would allow you to host data on your own servers."
+              "text_ii": "In the moment that the encrypted message is received by the server, the content is briefly stored to allow for the transmission of information. The messages are deleted almost instantly and are not ever saved in the database. We (Throneless Tech, the team that runs Bitpart) cannot access or read any of your messages, but you should be aware that they do briefly pass through Bitpart's servers in order for automation or broadcasting functionality.\nData that is stored on the server is encrypted at rest in the database using AES256 encryption from the SQLCipher Project.\nWe’re taking all precautions, but there are some inherent risks. Depending on your privacy needs, context, and technological capacity, you may want to consider setting up your own instance of Bitpart using <a href='https://github.com/throneless-tech/bitpart'>open source code available on Github</a>, which would allow you to host data on your own servers."
             }
           },
           {
@@ -247,12 +247,12 @@
                 "undergoing a Threat Modeling & Risk Assessment from a trusted third-party organization.",
                 "undergoing a Security Audit from a trusted third-party organization."
               ],
-              "text_ii": "We have tried our best to balance potential abuse without compromising user privacy.\nBitpart’s repository is open source, and like all open source projects, we cannot guarantee that it won’t be used by bad actors.\nIf you have any concerns of suspicious activity, please notify us: contact@bitp.art."
+              "text_ii": "We have tried our best to balance potential abuse without compromising user privacy.\nBitpart’s repository is open source, and like all open source projects, we cannot guarantee that it won’t be used by bad actors.\nIf you have any concerns of suspicious activity, please notify us: {contactLink}."
             }
           },
           {
             "question": "Is Bitpart open source?",
-            "answer": "The code for Bitpart is open source and can be found on Github. Bot Creators can host data on their own servers."
+            "answer": "The code for Bitpart is open source and <a href='https://github.com/throneless-tech/bitpart'>can be found on Github</a>. Bot Creators can host data on their own servers."
           },
           {
             "question": "Can Bitpart see my messages?",
@@ -260,11 +260,11 @@
           },
           {
             "question": "Where does Bitpart store my data?",
-            "answer": "Data for Bitpart is hosted on a secure server in a European country and is therefore in a jurisdiction under the General Data Protection Regulation (GDPR). For more information on what data is stored and where, please see our Privacy Policy."
+            "answer": "Data for Bitpart is hosted on a secure server in a European country and is therefore in a jurisdiction under the General Data Protection Regulation (GDPR). For more information on what data is stored and where, please see our <a href='/tou-and-privacy'>Privacy Policy</a>."
           },
           {
             "question": "How do I know I can trust Bitpart?",
-            "answer": "We understand that using Bitpart requires trust - especially this hosted platform.\nOne of the reasons why Bitpart is built on Signal is because it is a messaging platform that focuses on privacy. Many activists, human rights defenders and journalists already use Signal for this reason.\nThe team behind Bitpart, Throneless Tech, is a technology worker-cooperative specialized in building technology and providing digital security trainings for social justice oriented community organizations, activist groups, and non-profits.\nIn building Bitpart, we have taken safety measures we have taken safety measures and measures to prevent malicious use.\nThe code for Bitpart is also available on Github, for those who wish to examine it."
+            "answer": "We understand that using Bitpart requires trust - especially this hosted platform.\nOne of the reasons why Bitpart is built on Signal is because it is a messaging platform that focuses on privacy. Many activists, human rights defenders and journalists already use Signal for this reason.\nThe team behind Bitpart, <a href='https://throneless.tech/'>Throneless Tech</a>, is a technology worker-cooperative specialized in building technology and providing digital security trainings for social justice oriented community organizations, activist groups, and non-profits.\nIn building Bitpart, <a href='#is-bitpart-safe'>we have taken safety measures</a> and <a href='#can-bitpart-be-used-maliciously'>measures to prevent malicious use</a>.\nThe code for Bitpart is also <a href='https://github.com/throneless-tech/bitpart'>available on Github</a>, for those who wish to examine it."
           }
         ]
       },
@@ -282,11 +282,11 @@
               "types": [
                 {
                   "title": "Option 1: SIM card and mobile phone.",
-                  "text": "We recommend getting a new phone number by purchasing a physical SIM card or eSIM which can receive SMS messages. The Signal app only works with one phone number at a time, so you will need a mobile device to run the Signal app on.\nFollow Signal's instructions to register your new phone number and create a new Signal account."
+                  "text": "We recommend getting a new phone number by purchasing a physical SIM card or eSIM which can receive SMS messages. The Signal app only works with one phone number at a time, so you will need a mobile device to run the Signal app on.\n<a href='https://support.signal.org/hc/en-us/articles/360007318691-Register-a-phone-number'>Follow Signal's instructions</a> to register your new phone number and create a new Signal account."
                 },
                 {
                   "title": "Option 2: Commandline interface (CLI) and a phone number.",
-                  "text": "With this method, you can use a virtual (VoIP) number, so long as it receives SMS or calls. Setting up the CLI does require some technical capacity and familiarity with the terminal. The commandline interface and documentation are available on Github.\nOption 1 is straightforward and relatively easy to set up. Because some countries require sim SIM cards to be registered with an identity document, it depends on your context and threat model if this is suitable for you.\nOption 2 requires more technical know-how. If you do not have the technical capacity to set up a new Signal account using the CLI but Option 1, using a physical SIM card, would place you at great risk, please get in touch with our team at contact@bitp.art to see if we're able to help."
+                  "text": "With this method, you can use a virtual (VoIP) number, so long as it receives SMS or calls. Setting up the CLI does require some technical capacity and familiarity with the terminal. The commandline interface and documentation are <a href='https://github.com/AsamK/signal-cli'>available on Github</a>.\nOption 1 is straightforward and relatively easy to set up. Because some countries require sim SIM cards to be registered with an identity document, it depends on your context and threat model if this is suitable for you.\nOption 2 requires more technical know-how. If you do not have the technical capacity to set up a new Signal account using the CLI but Option 1, using a physical SIM card, would place you at great risk, please get in touch with our team at {contactLink} to see if we're able to help."
                 }
               ]
             }
@@ -311,7 +311,7 @@
             "question": "How can I set up forwarding? How do I use the passcode?",
             "answer": {
               "steps": [
-                "Find the passcode by navigating to your dashboard and identifying your bot.",
+                "Find the passcode by navigating to <a href='/my-bots'>your dashboard</a> and identifying your bot.",
                 "Send a message over Signal to the Bot, with just the password.",
                 "You should receive a confirmation from the bot."
               ],
@@ -343,18 +343,18 @@
                 },
                 {
                   "question": "How can I tell who has the passcode?",
-                  "answer": "Unfortunately, at this time you cannot tell who has the passcode, beyond who you know you as a Bot Creator have distributed it to. We recommend erring on the side of caution and understanding the risks for your specific situation before sharing the passcode. Consider linking devices (see below) rather than using the passcode, as this will allow you to see which devices are linked through the Signal account."
+                  "answer": "Unfortunately, at this time you cannot tell who has the passcode, beyond who you know you as a Bot Creator have distributed it to. We recommend erring on the side of caution and understanding the risks for your specific situation before sharing the passcode. Consider linking devices <a href='#alternatives-to-passcode'>(see below)</a> rather than using the passcode, as this will allow you to see which devices are linked through the Signal account."
                 },
                 {
                   "question": "Alternatives to passcode: linking devices",
-                  "answer": "Alternatively, if you want multiple people on a team to view bot messages but don't necessarily want messages forwarded, you may want to consider linking a desktop or iPad version of Signal instead of using the passcode. This would involve using the linked device to see the messages that are being sent and received by the bot. You will then be able to see which devices are linked to the primary device in the Signal account settings, giving greater overview. Guidance on how to link a device can be found in Signal's support pages: support.signal.org/hc/en-us/articles/360007320551-Linked-Devices."
+                  "answer": "Alternatively, if you want multiple people on a team to view bot messages but don't necessarily want messages forwarded, you may want to consider linking a desktop or iPad version of Signal instead of using the passcode. This would involve using the linked device to see the messages that are being sent and received by the bot. You will then be able to see which devices are linked to the primary device in the Signal account settings, giving greater overview. Guidance on how to link a device can be found in Signal's support pages: <a href='https://support.signal.org/hc/en-us/articles/360007320551-Linked-Devices'>support.signal.org/hc/en-us/articles/360007320551-Linked-Devices</a>."
                 }
               ]
             }
           },
           {
             "question": "How can I delete conversations?",
-            "answer": "A person receiving messages from a Bitpart bot can delete conversations from Bitpart by entering \"Delete\" at any time and following the instructions (typically, they will simply be asked to confirm and enter \"Delete\" again). This deletes the record of there being a conversation from Bitpart's servers, but does not delete any data from either the bot's Signal account or the recipient's Signal account.\nTo completely delete all records of the conversation, a recipient and a Bot Creator will both need to delete messages within their Signal accounts. If you're not sure how to do this, Signal has instructions here on how to Delete messages or chats."
+            "answer": "A person receiving messages from a Bitpart bot can delete conversations from Bitpart by entering \"Delete\" at any time and following the instructions (typically, they will simply be asked to confirm and enter \"Delete\" again). This deletes the record of there being a conversation from Bitpart's servers, but does not delete any data from either the bot's Signal account or the recipient's Signal account.\nTo completely delete all records of the conversation, a recipient and a Bot Creator will both need to delete messages within their Signal accounts. If you're not sure how to do this, <a href='https://support.signal.org/hc/en-us/articles/360007320491-Delete-messages-alerts-or-chats'>Signal has instructions here</a> on how to Delete messages or chats."
           },
           {
             "question": "How can I edit the text in my bot?",
@@ -362,16 +362,16 @@
           },
           {
             "question": "How can I change the bot name?",
-            "answer": "Follow the instructions above on how to edit my bot to edit the name of your bot.\nRemember that the profile name and profile picture on the Signal account that you use for you bot will be visible to everyone who interacts with it. Within the Signal app itself, you can edit your profile."
+            "answer": "Follow <a href='#how-can-i-edit-text'>the instructions above</a> on how to edit my bot to edit the name of your bot.\nRemember that the profile name and profile picture on the Signal account that you use for you bot will be visible to everyone who interacts with it. Within the Signal app itself, <a href='https://support.signal.org/hc/en-us/articles/360007059952-Edit-my-Profile'>you can edit your profile</a>."
           },
           {
             "question": "My bot is getting spammed. What can I do?",
-            "answer": "Just as you would if someone is spamming a Signal account, take actions within the Signal account that is connected to your bot. For instance, you may want to block the account that is spamming your bot, or block and report it.\nIf you are concerned about any suspicious activity, please contact Bitpart’s support team at contact@bitp.art."
+            "answer": "Just as you would if someone is spamming a Signal account, take actions within the Signal account that is connected to your bot. For instance, you may want to block the account that is spamming your bot, or block and report it.\nIf you are concerned about any suspicious activity, please contact Bitpart’s support team at {contactLink}."
           },
           {
             "question": "Can I use my own device to run a Bitpart bot that has been set up on a different device?",
             "answer": {
-              "text_i": "Yes. Your Bitpart bot will continue to work even if the device that the Signal account your bot is connected to is turned off. We recommend turning on your device at least once every 30 days to make sure that the Signal account running your bot is working. For better responsiveness and management, you may also wish to frequently check the Signal account your bot is connected to.\nAfter connecting the Signal account to your bot when creating your bot, you will use passcodes to send out broadcast messages from your own Signal account (in the case of a broadcast bot) or receive tips and support requests that Bitpart will forward to your own Signal account. (Please see how to use passcodes.)\nThis means that during a protest or other action, the device with the Signal account that the bot is connected to can be left in a safe place - you do not need to take it with you.\nUsing the Signal account and device to which your bot is connected may be important for a number of reasons:",
+              "text_i": "Yes. Your Bitpart bot will continue to work even if the device that the Signal account your bot is connected to is turned off. We recommend turning on your device at least once every 30 days to make sure that the Signal account running your bot is working. For better responsiveness and management, you may also wish to frequently check the Signal account your bot is connected to.\nAfter connecting the Signal account to your bot when creating your bot, you will use passcodes to send out broadcast messages from your own Signal account (in the case of a broadcast bot) or receive tips and support requests that Bitpart will forward to your own Signal account. <a href='#forwarding-and-passcodes'>(Please see how to use passcodes.)</a>\nThis means that during a protest or other action, the device with the Signal account that the bot is connected to can be left in a safe place - you do not need to take it with you.\nUsing the Signal account and device to which your bot is connected may be important for a number of reasons:",
               "list": [
                 "it is the only complete way to see who is engaging with your bot (such as who has opted in to receive your broadcasts, for example).",
                 "it is the only way to manage your Signal account's settings, such as profile and disappearing messages.",
@@ -407,11 +407,11 @@
           },
           {
             "question": "Can I reset my password?",
-            "answer": "No. Please email us at contact@bitp.art if you need ot reset your password."
+            "answer": "No. Please email us at {contactLink} if you need ot reset your password."
           },
           {
             "question": "I have another issue or question, how can I contact you?",
-            "answer": "Please email us at contact@bitp.art. We will respond within 48 hours on weekdays and aim to respond faster."
+            "answer": "Please email us at {contactLink}. We will respond within 48 hours on weekdays and aim to respond faster."
           }
         ]
       },
@@ -424,7 +424,7 @@
           },
           {
             "question": "How can I delete my bot?",
-            "answer": "First, navigate to \"My Bots.\"\nThen go to the Signal profile on the device which your bot was linked to. Navigate to \"Settings\", then \"linked devices\" and click on the bot and \"unlink device\". See detailed instructions on how to do this from Signal:support.signal.org/hc/en-us/articles/360007321111-Unlinking-devices."
+            "answer": "First, navigate to <a href='https://bitp.art/my-bots'>\"My Bots.\"</a>\nThen go to the Signal profile on the device which your bot was linked to. Navigate to \"Settings\", then \"linked devices\" and click on the bot and \"unlink device\". See detailed instructions on how to do this from Signal: <a href='https://support.signal.org/hc/en-us/articles/360007321111-Unlinking-devices'>support.signal.org/hc/en-us/articles/360007321111-Unlinking-devices</a>."
           },
           {
             "question": "Can I build a new bot on a Signal account I had previously used for a bot?",
@@ -437,11 +437,11 @@
         "questions": [
           {
             "question": "Can we collaborate on building Bitpart?",
-            "answer": "Bitpart is an open source project and we welcome contributions. You can findBitpart on Github."
+            "answer": "Bitpart is an open source project and we welcome contributions. You can find <a href='https://github.com/throneless-tech/bitpart'>Bitpart on Github</a>."
           },
           {
             "question": "I’ve reviewed Bitpart’s code and have an idea / a report / a question. How can I contact you?",
-            "answer": "Please email us at contact@bitp.art."
+            "answer": "Please email us at {contactLink}."
           }
         ]
       }
@@ -450,8 +450,8 @@
   "tos": {
     "title": "Terms of Use & Privacy Policy",
     "description": {
-      "regular": "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance. It enables you to send and receive secure, automated messages to a particular community over Signal by creating your own bot. These can be used for broadcast messaging, helpdesks, tiplines, and distributing eSIMs or VPNs.\nThe Terms of Use sets out what we offer and what we expect from you if you would like to use Bitpart.\nThe Privacy Policy outlines how we collect, use, and safeguard your personal information when you interact with our organization and services.",
-      "bold": "Contact us at contact@bitp.art if you have any questions. We welcome your feedback."
+      "regular": "Bitpart is a messaging tool designed for human rights organizations, activists, journalists and human rights defenders working in repressive political environments at risk of surveillance. It enables you to send and receive secure, automated messages to a particular community over Signal by creating your own bot. These can be used for broadcast messaging, helpdesks, tiplines, and distributing eSIMs or VPNs.\nThe <a href='#tou'>Terms of Use</a> sets out what we offer and what we expect from you if you would like to use Bitpart.\nThe <a href='#privacy-policy'>Privacy Policy</a> outlines how we collect, use, and safeguard your personal information when you interact with our organization and services.",
+      "bold": "Contact us at {contactLink} if you have any questions. We welcome your feedback."
     },
     "sections": [
       {
@@ -474,7 +474,7 @@
             "title": "Formats",
             "list": [
               "Bitpart is a tool to help support organizers, journalists, and human rights defenders. Bitpart should only be used for the 5 formats it has been created for: broadcasting messages for organizing purposes; tiplines; helpdesks; distributing eSIMs; distributing VPNs.",
-              "We created these formats to prevent misuse of Bitpart. You do not have permission to use Bitpart for another use, and if you do so we can remove your account. Please email us contact@bitp.art if there is another format you would like to see."
+              "We created these formats to prevent misuse of Bitpart. You do not have permission to use Bitpart for another use, and if you do so we can remove your account. Please email us {contactLink} if there is another format you would like to see."
             ]
           },
           {
@@ -483,17 +483,305 @@
               "We expect you to use Bitpart in ways that create a positive environment for the people using the chatbots you create on Bitpart. Please use Bitpart in a way that is kind and empathetic.",
               "By using Bitpart you promise not to send spam, infringing, obscene, threatening, libelous, or otherwise illegal material through Bitpart's services. For instance this includes: sexualized language or images and sexual attention or advances of any kind; trolling, insulting or derogatory comments; harassment; publishing others' private information, such as a physical or email address, without their explicit permission.",
               "If you violate acceptable behaviour we can remove your account.",
-              "Please email us contact@bitp.art to report any misuse of Bitpart."
+              "Please email us {contactLink} to report any misuse of Bitpart."
             ]
           },
           {
             "title": "Account",
             "list": [
-              "You need to create an account in order to use Bitpart. We ask you for username and password, with the option to add an email. You can delete chatbots you have created in the dashboard of your account, and delete your account at any time by emailing us (contact@bitp.art)."
+              "You need to create an account in order to use Bitpart. We ask you for username and password, with the option to add an email. You can delete chatbots you have created in the dashboard of your account, and delete your account at any time by emailing us ({contactLink})."
+            ]
+          },
+          {
+            "title": "Data Processing",
+            "list": [
+              "Minimal data is collected on people engaging with chatbots created using Bitpart.",
+              "The Signal profile information that is processed by Bitpart and bot creators is what the person chooses to make visible in their Signal account. Bitpart does not store Signal profile information and instead works by assigning random identification numbers to each Bot User.",
+              {
+                "text_i": "Bitpart is designed to never store any message content. Bitpart works over Signal, which is end-to-end encrypted. ",
+                "bold": "In order for Bitpart to work, the Bitpart server acts as an “end” in Signal’s end-to-end encryption. ",
+                "text_ii": "The server receives a message via Signal, and relays it from someone using your Bitpart chatbot to the creator of the Bitpart chatbot, or vice versa. In the moment that it is received by the server and relayed on, the encrypted message content is momentarily stored to allow for the transmission of information. It is subsequently deleted and not stored further."
+              },
+              "We have designed Bitpart so that we do not access and read message content. Access to the server is tightly controlled (only four team members have access).",
+              "Within each conversation with a Bitpart bot, a Bot User is able to opt whether to agree to Bitpart’s data policy or delete their data by sending “Delete” to the bot. Selecting to delete their data will end the conversation and the bot will delete the Bot User’s data from Bitpart’s server.",
+              "While Bitpart can delete records that a conversation took place between a Bot User and a Bitpart chatbot, it is not able to control what data a Bot Creator’s device collects and processes (such as all conversations and message content), where and how a Bot Creator stores data, or to delete data from a Bot Creator’s device.",
+              "We recommend that Bot Creators provide Bot Users with information on any additional processing of their personal data, carried out outside of and independently from the Bitpart tool.",
+              "We recommend that Bot Creators and Bot Users take measures to minimise risks and protect their privacy within Signal, such as <a href='https://support.signal.org/hc/en-us/articles/360007320771-Set-and-manage-disappearing-messages'>setting disappearing message timers</a> on conversations; and considering using a pseudonym as your Signal name (see how to <a href='https://support.signal.org/hc/en-us/articles/360007059952-Edit-my-Profile'>edit your Profile settings</a> )."
+            ]
+          },
+          {
+            "title": "Data Security",
+            "list": [
+              "We use robust and state of the art security measures to ensure that data on the Bitpart website and server cannot be hacked, but there is always a chance. Please bear this in mind when using Bitpart.",
+              "If there was a data breach, we would inform you within 48 hours of discovery.",
+              "Bitpart has been security audited. Please email us {contactLink} if you would like more information."
+            ]
+          },
+          {
+            "title": "Service Availability",
+            "list": [
+              "We will do our best to keep Bitpart working smoothly. In some instances there may be delays or outages for reasons beyond our control (like emergencies, network problems, third party services, etc.) If the issue lies with Bitpart, we will inform you and get things working again as soon as possible.",
+              "Bitpart is offered free of charge. We do not seek to profit from Bitpart, and want it to be as accessible as possible to activists, journalists and human rights defenders. So far, Bitpart has been funded through grants. In order to cover maintenance costs we may need to charge for Bitpart in future, and if so, we would aim to still have a free option and be accessible to activists, journalists and human rights defenders in repressive contexts.",
+              "If for any reason we were to \"sunset\" Bitpart, we would let you know with as much advance notice as possible, and seek to share alternative options."
+            ]
+          },
+          {
+            "title": "Respecting the Terms of Messaging Platforms",
+            "list": [
+              "Bitpart is a tool which relays messages that are sent using Signal. Please bear in mind that when you are using Bitpart, you are also using Signal. Please adhere to <a href='https://signal.org/legal/#terms-of-service'>Signal's Terms of Service</a>. This includes being at least 13 years old (may be older in some countries); registering for a Signal account using a phone number; and being responsible for data and mobile carrier fees and taxes associated with the devices on which you use Signal."
             ]
           }
         ]
+      },
+      {
+        "title": "Privacy Policy",
+        "definitions": {
+          "title": "Definitions",
+          "words": [
+            {
+              "title": "Bot Creators",
+              "description": "An individual, group or organization who set up a Bitpart account and create chatbots using Bitpart."
+            },
+            {
+              "title": "Administrators",
+              "description": "Additional users who are able to send messages"
+            },
+            {
+              "title": "Bot Users",
+              "description": "The people who engage with a bot created by a Bitpart Bot Creator (for instance, they join a broadcast line, seek help from a helpdesk, report a tip to a tipline, seek to download eSIMs or VPNs distributed by a particular service). They should be told in their initial interaction with the bot that they are engaging with an automated system, but they are likely not aware of Bitpart."
+            }
+          ]
+        },
+        "subsections": [
+          {
+            "title": "Who are we?",
+            "content": "Throneless Tech is a technology worker-cooperative based in Washington, DC. We provide the Bitpart messaging tool. We can be reached at {contactLink}."
+          },
+          {
+            "title": "Why Do We Collect Your Data?",
+            "content": "We practice privacy by design and collect as little data as possible. The information we do collect is used to provide Bitpart’s services and functionality, such as account data so that you save and come back to the chatbot you create; message data so that messages are relayed by Bitpart; and any data you share when contacting us for support."
+          },
+          {
+            "title": "Personal Data That Bitpart Collects and Processes",
+            "standout": {
+              "title": "Important notice on end-to-end encryption and message data",
+              "content": "Bitpart allows people to create bots over Signal. One of the benefits of Signal is end-to-end encryption, so that message content is secured and only visible to the sender and receiver. Bitpart works by relaying messages. It acts as an “end” point. When a message is sent by a person on Signal using a Bitpart chatbot, it is received by Bitpart, before relaying the message on. Message contents are therefore ‘opened’ by the Bitpart server. This is momentary, as once the message is relayed on, the message content is not stored."
+            },
+            "text_i": "When you use Bitpart, we collect the following information:",
+            "text_ii": "Bot Creators:",
+            "list_i": [
+              "Account information, including username, and an (optional) email address.",
+              "An optional phone number associated with a bot (i.e. the number a Bot User will message).",
+              "Messages from end-to-end encrypted conversations in Signal (collected and processed, then deleted and not stored further).",
+              "Personal data shared when contacting Bitpart for technical support through email.",
+              "Metadata associated with conversations, such as when conversations are initiated and closed."
+            ],
+            "text_iii": "Bot Users:",
+            "list_ii": [
+              "Messages (collected and processed, but not stored).",
+              "Metadata associated with conversations, such as when conversations are initiated and closed."
+            ],
+            "text_iv": "The following table explains in more detail the types of data we collect and the legal basis, under current data protection legislation, on which this data is processed.",
+            "table": {
+              "headers": ["Purpose", "Data (key elements)", "Basis"],
+              "body": [
+                {
+                  "purpose": "Signing up as an Bot Creator",
+                  "data": "Username, password, email address (optional).",
+                  "basis": "Contract - This is necessary for us to identify you correctly so that you can return to the bots that you have created."
+                },
+                {
+                  "purpose": "Connect Bitpart to the Signal account that will be associated with a bot",
+                  "data": "Signal account",
+                  "basis": "Contract - This is necessary for us to connect the bot you are creating to a Signal account, in order for your bot to function."
+                },
+                {
+                  "purpose": "To relay messages to and from Signal",
+                  "data": "Message content",
+                  "basis": "This is necessary for Bitpart to function (i.e. relay the messages) but is not stored"
+                },
+                {
+                  "purpose": "Website (dashboard) functionality",
+                  "data": "Website login/out collected through cookies",
+                  "basis": "Contract - We store a small amount of information through cookies. This is necessary for us to deliver login and logout functionality, to ensure a Bot Creator is able to access the correct data."
+                },
+                {
+                  "purpose": "Operation of the service",
+                  "data": "Metadata e.g. associated with conversations, such as when conversations are initiated and closed",
+                  "basis": "Contract - We store a small amount of metadata in our database, such as timestamps, in order for Bitpart to function correctly."
+                },
+                {
+                  "purpose": "Contacting us for technical support",
+                  "data": "Email, message, any personal data you choose to share like name, etc.",
+                  "basis": "Legitimate interests - It is necessary for us to read and store your message so that we can respond in the way that you would expect."
+                }
+              ]
+            }
+          },
+          {
+            "title": "When We Share Your Data",
+            "content": "We use a third party hosting service for the data repository for Bitpart, to process and store the data needed to run Bitpart (such as message data, randomly generated numbers used to identify unique Bot Users interacting with a bot, metadata from conversations, etc).\nWe use another third party hosting service for our email server, to process and store data that is needed to support users of Bitpart make enquiries or seek help over email.\nBoth servers are in European jurisdictions and we will only pass data to third parties outside of these jurisdictions where appropriate safeguards are in place as defined by applicable data protection laws.\nWe are using the abovementioned third parties purely for the purposes of providing the service. Such third parties process data on our behalf and only under our instructions, and we have in place data processing agreements that fulfil our legal obligations in relation to the use of third party data processors.\nWe may share personal data with additional third parties when we are legally required to do so."
+          },
+          {
+            "title": "How Long We Keep Your Data",
+            "content": "We seek to only ever ask for the minimum amount of data needed for any associated purpose, and we delete that data promptly once it is no longer required."
+          },
+          {
+            "title": "Delete Your Data",
+            "content": "We seek to protect your right to delete your personal information from our platform.\nBot Creators on Bitpart can delete the bots they create at any time by navigating to the dashboard and deleting their chatbots. In order to delete an account after it has been made, Bot Creators can contact us via {contactLink} . We aim to delete your account and any associated data from our services and servers within two working days.\nEach chatbot flow includes information about how a Bot User can delete their data from Bitpart (often by using a keyword like \"Delete my data\"). Once a Bot User has completed the data deletion flow in the chatbot, their data will be automatically deleted from our services and servers. You may also contact us via {contactLink} at any time to delete your data.\nImportant note: As Bitpart relays messages between Bot Creators and Bot Users, data will be present in the Signal applications and any connected devices that they are using to engage with or run a Bitpart bot. Bitpart can delete from its servers that a conversation took place between a Bot User and a Bitpart chatbot. However, Bitpart is not able to control what data a Bot Creator’s device collects and processes, where and how a Bot Creator stores data, or to delete data from a Bot Creator’s device."
+          },
+          {
+            "title": "How We Secure Your Data",
+            "content": "We use a combination of physical, technical, and administrative safeguards to protect the information we collect. We carefully choose our services and tools at Bitpart. It’s important that they follow good security practices, like HTTPS, two-factor authentication and the ability to set a strong password. We've reviewed the privacy policies and security practices of everything we use, such as the hosting services.\nBitpart is run by a worker cooperative and has not had any personnel changes. If a new team member joins, we explain best practices for keeping their devices secure and maintaining the security of their online accounts.\nWhile we use these precautions to safeguard your information, we cannot guarantee the security of the networks, systems, servers, devices, and databases we operate or that are operated on our behalf."
+          },
+          {
+            "title": "Bitpart and Signal",
+            "content": "As a tool designed to be used with Signal, Bitpart works to follow Signal’s privacy policies and standards while developing our own policies to better safeguard your data.\nPlease refer to Signal’s full <a href='https://signal.org/legal/#privacy-policy'>Privacy Policy</a> to understand how Signal handles the information you provide when using its applications and services."
+          },
+          {
+            "title": "Your Data Rights",
+            "content": {
+              "text_i": "Bitpart believes in upholding and protecting your data rights.\nYou have a range of rights over your data, which include the following:",
+              "list": [
+                "You have the right to ask for rectification and/or deletion of your information.",
+                "You have the right of access to your information.",
+                "You have the right to have the processing of your personal data restricted.",
+                "You have the right to object to the processing of your personal data."
+              ],
+              "text_ii": "The UK Information Commissioner’s Office (ICO) website provides guidance on these rights: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights\nIf you would like to access the rights listed above, or any other legal rights you have over your data under current legislation, please get in touch with us at {contactLink}.\nBased on your jurisdiction, you may also have the right to lodge a complaint with your local supervisory authority, if you feel your rights have been infringed. You can find a list of the current EU/EEA supervisory authorities here: https: //www.edpb.europa.eu/about-edpb/about-edpb/members_en and the UK authority here: https://ico.org.uk."
+            }
+          },
+          {
+            "title": "Changes to This Policy",
+            "content": "We may modify this Privacy Policy from time to time and will publish the most current version on our platform. If a modification meaningfully reduces your rights, we'll notify people whose personal data we hold and is affected."
+          }
+        ]
+      },
+      {
+        "title": "Acknowledgements",
+        "content": "We used a variety of different resources and inspirations to draft the above Terms and Privacy Policy. We would like to acknowledge and thank <a href='https://www.grit-gbv.org/copy-of-donate'>Gender Rights in Tech</a>, <a href='https://termsweservewith.org/'>Terms-we-Serve-With</a>, <a href='https://www.tunnelbear.com/terms-of-service'>Tunnel Bear</a>, <a href='https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md'>Contributor Covenant</a>, <a href='https://iapp.org/'>IAPP</a>, <a href='https://whitefuse.com/blog/privacy-policy-notice-template/#upgrade'>White Fuse</a>, and <a href='https://github.com/projectsbyif/how-if-uses-data/blob/main/how-if-uses-data.md'>Projects By If</a> for their examples. We would also like to thank <a href='https://superbloom.design/'>Superbloom</a> for their support in drafting the Privacy Policy."
       }
     ]
-  }
+  },
+  "login": {
+    "user": "Username or email",
+    "password": "Password",
+    "signin": "Sign in",
+    "signup": "Don't have an account? Create one with an invite code <a href=\"/signup\">here</a>."
+  },
+  "signup": {
+    "instructions": "Choose a unique username and password, and store this somewhere safe. If you need to change your password, email us: {contactLink}",
+    "label_code": "Enter your invite code",
+    "code": "invite-code-here",
+    "label_email": "Enter your email address",
+    "email": "email@mail.org",
+    "helper_email": "This field is optional. You may include an email for password recovery. Password recovery will not be possible without an email address.",
+    "label_username": "Choose a username",
+    "username": "username.here",
+    "password_label": "Choose a password",
+    "password": "A Very Good Password",
+    "passwordConfirm_label": "Confirm password",
+    "passwordConfirm": "A Very Good Password",
+    "signup": "Sign up"
+  },
+  "my_bots": {
+    "welcome": "Welcome",
+    "my_bots": "My Bots",
+    "view_passcode": "View passcode",
+    "info": "You can send the word \"Admin\" to your bot at any time to enter the passcode and view your bot as an administrator in Signal.",
+    "create": "Create a new bot"
+  },
+  "globals": {
+    "summary": "Here is your bot summary:",
+    "edit": "Edit",
+    "done": "Done",
+    "view": "View",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
+  "create": {
+    "info": "The Bitpart bot connects to a Signal account to send and receive messages. (Learn more about <a href='/faq#how-does-bitpart-work'>how Bitpart works</a>.)\nSet up a <a href='https://support.signal.org/hc/en-us/articles/360007318691-Register-a-phone-number'>separate Signal account</a>. You may need a separate SIM card and device or an online number. Once the bot is activated, the bot responds to all messages sent to that Signal account. <a href='/faq#why-shouldnt-i-use-my-personal-number'>Learn more about why we don't recommend using your personal account.",
+    "bot_type_label": "What kind of bot do you want to create?",
+    "bot_type_helper": "Choose your bot type",
+    "bot_type": "Bot type",
+    "bot_types": [
+      {
+        "type": "Broacast",
+        "description": "Send messages to many recipients while protecting the privacy of both senders and recipients."
+      },
+      {
+        "type": "Tipline",
+        "description": "Set up an automated system to receive tips."
+      },
+      {
+        "type": "Helpdesk",
+        "description": "Set up an automated system to answer questions."
+      },
+      {
+        "type": "eSIM",
+        "description": "Distribute eSIMs to people who request codes."
+      },
+      {
+        "type": "VPN",
+        "description": "Distribute VPN codes to people who request them."
+      }
+    ],
+    "back": "Previous",
+    "forward": "Next",
+    "submit": "Submit",
+    "bot_name": "Bot name",
+    "bot_name_label": "Give your bot a name. (This is for you, and won't appear to your users. Note that special characters are not allowed.)",
+    "menu_info": "Anyone who has consented to receive messages from your bot will be able to request to see a menu, which offers them the option to learn about the bot. Fill out these sections below to customize the text.",
+    "public_name": "Public name",
+    "public_name_helper": "Name your channel. This is the name that is visible to your users. It can mirror the bot name, organization name, or be different.",
+    "summary": "Here is your new bot summary:",
+    "summary_info": "Does the above information look correct? If not, go back and update it. If so, click \"Submit\" to create your bot. You will be able to edit your bot again later if needed.",
+    "faq_add": "Add FAQ",
+    "faq_question": "Question",
+    "faq_answer": "Answer"
+  },
+  "edit": {
+    "specifics": "Bot specifics",
+    "info": "Anyone who has started a conversation with your bot will be able to request to see a menu, which offers them the option to learn about the bot. Fill out these sections below to customize the text.",
+    "passcode": "Passcode",
+    "bot_name": "Bot name",
+    "name": "Name"
+  },
+  "broadcast": {
+    "public_name_placeholder": "Broacast channel",
+    "about": "About",
+    "about_placeholder": "Here you'll receive messages about <ADD TOPIC> from <WHO? (OPTIONAL)>. We use this channel so that we are not in a group, which can potentially compromise everyone in the group. We promise not to spam you, but you can leave at any time. If you reply to this number, we won't receive it. So if you want to contact us, please message <ADD SIGNAL USERNAME / EMAIL> who runs this group.",
+    "about_helper": "Offer a short description of why you set up this broadcast channel, who manages it, and why messages will be sent.",
+    "contact": "Contact",
+    "contact_helper": "Add a phone number, Signal username, or email that a person should contact if they need assistance with an issue not covered in the menu or FAQ.",
+    "safety_tips": "Safety tips",
+    "safety_tips_info": "Help\nHere, you might want to encourage best digital safety practices that are best for your situation, context, and audience.\nFor instance, you might want to remind people that they can set a short disappearing message timer in Signal on the messages from this conversation, and direct them to how to do it: https://support.signal.org/hc/en-us/articles/360007320771-Set-and-manage-disappearing-messages Or, that they can use a pseudonym as their profile name on Signal.\nIf you are planning an upcoming action, you may want to remind people to leave their phone at home if possible. If they must bring their phone, to delete photos you do not want others to see, delete messages and chats; delete apps; and set disappearing message times to 1 hour.",
+    "safety_tips_helper": "Include safety tips for the recipients, such as what to do in an emergency or best practices for digital security hygiene.",
+    "faq": "FAQ",
+    "faq_helper": "If your channel needs Frequently Asked Questions, we recommend four (4) or fewer question/answer combos. Start with your most asked question at the top. Keep in mind Bitpart will automatically add an 'other' question for a freeform ask from a user."
+  },
+  "tipline": {
+    "data_rights": "Data rights",
+    "data_rights_placeholder": "This tipline does not ask you for any personal data if you want to share a tip.\nPersonal data attached to your tip is any information that is visible on your Signal profile (e.g. your profile name, your phone number or username if visible).\nRemember, you can adjust your Signal profile settings such as your profile name and image, to give you more anonymity.\nAfter sharing a tip, you will be asked if you would like to be contacted, which you can refuse.\nIf you would like to be contacted you have the option to share your Signal username or phone number.\nTips are recorded & stored <WHERE?>.\nWe delete tips every <TIMEFRAME?>.",
+    "data_rights_helper": "Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy."
+  },
+  "helpdesk": {
+    "contact": "Emergency support contact",
+    "contact_helper": "Add a phone number, Signal username, or link to a service that a person should contact if they need emergency assistance. For example, this could be emergency services or your work phone. It depends on your helpdesk as to what is appropriate.",
+    "about": "About",
+    "about_helper": "Enter one sentence about who you are and what this helpline offers. This information will be shared in the first message, after the name of the helpdesk.",
+    "response_time": "Response time",
+    "response_time_helper": "How long your users can expect to have to wait for a reply from a human, eg., \"24 hours\" or \"2 days\" or \"1 week.\"",
+    "data_retention": "Data retention policy",
+    "data_retention_helper": "How long the users' information will be stored by your team, and who will have access to the information stored.",
+    "data_rights": "Data rights",
+    "data_rights_placeholder": "The automated system we use for this helpdesk, Bitpart, does not ask you for any personal data.\nIf what you need support with is not covered by the FAQ and you need to speak to a member of our team, we may ask intake questions and questions about the issue you are facing in order to support you. You can refuse to answer these at any time, but we may not be able to provide you with support.",
+    "data_rights_info": "Help\nThe people who will use your chatbot have rights over their data. They have:\n\ta right to privacy;\n\ta right to edit and access their own information;\n\tand a right to be forgotten (i.e. to erase their data).\nEveryone who uses Bitpart will have access to this data rights policy by messaging the bot with \"My data.\" This message contains 2 sections: space for your data policy, and information about Bitpart's Privacy policy. See below for our recommendations:\n1. Your data policy\nIf you are part of an organization that has a privacy policy or data policy, include a brief few lines summarising it in plain language and link to the full policy.\nIf you do not have a privacy policy, now is the time to think about data for the chatbot you are building.\n\t1. What information is being collected? (For instance are your recording usernames and phone numbers? What are you doing with the contents of messages?)\n\t2. How long will information be stored and used? (What if someone accesses the information you are collecting, who isn't meant to? It's better to minimise what you have, and one way to do this is to regularly delete data.)\n\t3. What happens after this period? (For instance you may wish to delete data that is more than 6 months old; and set reminders so that you actually do so.)\n\t4. How is it processed? (What will you do with the data you collect? How will you be storing it or using it?)\n\t5. An explanation of why collecting any personal data is required.\n\t6. What is the minimum data needed in order for us to provide the service (Such as helpdesk support or to send an eSIM?)\n\t7. How can someone using your bot edit or delete their data? (For instance this may be asking you to delete it.)\nSome top tips:\n\tUse simple language\n\tUpdate it regularly and inform the people using your service of any changes\n\tIf you have a full privacy policy, we recommend linking to it at the end of your message\n\tIf possible, provide a way for people to contact you, like an email or phone number\n2. Bitpart's data policy\n\tThis bot or automated messaging system is built using a tool called Bitpart.\n\tSignal offers' end-to-end encryption and it is important you know that Bitpart acts as an \"end.\" Bitpart works by relaying messages between senders and receivers. In order for that to happen, message content is visible to our server momentarily, but we <b>do not store it</b>.\n\tBitpart seeks to minimize the amount of personal information that is collected from you and works to promptly delete that data once it is no longer required. For instance, after you finish a conversation [after X days] we will delete your data from our system.\n\tFor our full terms of use and privacy policy, see here.\n\tContact us at {contactLink} with any questions",
+    "data_rights_helper": "Anyone interacting or using your bot will be able to send the bot 'My data' to access this information. Customize the above text to reflect your organization's data rights policy.",
+    "faq": "What do people need help with?",
+    "faq_label": "This is what your helpdesk will help people with. Keep in mind this will appear as a text message, so we recommend four (4) or fewer question/answer combos."
+  },
+  "esim": {},
+  "vpn": {}
 }
