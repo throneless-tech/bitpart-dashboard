@@ -1,6 +1,82 @@
 {
-  "welcome": {
-    "admin": "Welcome, you are now set up as a bot administrator who can send broadcast messages.",
-    "user": "Hi. You have found the distribution list [name]. \nYou can agree, and receive periodic messages. You number will be stored on the secure system in order to receive messages. \nYou can disagree, and your contact number will be deleted automatically from the list."
+  "global": {
+    "misunderstood": "Sorry, the bot did not understand",
+    "agree": "agree",
+    "disagree": "disagree",
+    "menu": "menu",
+    "admin": "admin",
+    "delete": "delete",
+    "back": "back",
+    "yes": "yes",
+    "no": "no",
+    "help": "help",
+    "exit": "exit",
+    "admin_passcode": "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode.",
+    "login_attempts": "You have tried to login too many times. Please contact an administrator for help.",
+    "wrong_pw": "Incorrect passcode.",
+    "admin_return": "You can send a message that says 'Admin' at any time to return to this menu."
+  },
+  "broadcast": {
+    "start": {
+      "step_1": "Welcome, you are now set up as a bot administrator for {name}. You can now send broadcast messages."
+    },
+    "admin_passcode_step": {
+      "step_1": "Welcome, you are now set up as a bot administrator who can send broadcast messages."
+    },
+    "admin_interface_step": {
+      "step_1": "What would you like to do? Enter a number:\n1. Broadcast a message\n2. Exit this conversation and interact as a bot user\n3. Delete my data",
+      "step_2": "Please send me your message now.",
+      "step_3": "Your message has been sent."
+    },
+    "user_welcome_step": {
+      "step_1": "Hi. You have found the broadcast channel {name}.\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nYou can agree, and receive periodic messages.\nYou can disagree, and end the conversation.",
+      "step_2": "Agree - I want to be added to the broadcast channel and consent to receiving messages\nDisagree - please remove me from the broadcast channel\nReply with 'Agree' or 'Disagree'."
+    },
+    "delete_me_confirm_step": {
+      "step_1": "You have asked that you be removed from the conversation and all your data be deleted from the system\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning."
+    },
+    "consent_disagree_step": {
+      "step_1": "You have asked that you be removed from the channel and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning."
+    },
+    "confirm_delete_step": {
+      "step_1": "Your information has been deleted from the bot's system and you will no longer receive messages."
+    },
+    "consent_agree_step": {
+      "step_1": "Confirmed, we've added you to the channel.\nWelcome!"
+    },
+    "menu_step": {
+      "step_1": "Menu\nReply with the corresponding number:\n1. About this channel\n2. Safety tips\n3. Frequently asked questions (FAQ)\n\nYou have the right to be forgotten. At any time, send 'Delete' to stop receiving messages and be removed from this channel.\nSend 'Menu' at any time to come back to this menu.",
+      "step_2": "This is a way to receive messages without being in a group (which can potentially compromise everyone in the group)\n{description}.",
+      "step_3": "Safety tips\n{safetyTips}"
+    },
+    "faq_step": {
+      "step_1": "Reply with 'FAQ' to see the list of questions.\nReply with 'Menu' to return home."
+    },
+    "check_if_solved_step": {
+      "step_1": "Did that solve your problem?\nReply Yes or No."
+    },
+    "submit_question_step": {
+      "step_1": "We've understood that you have a question not covered by the FAQ. Please reach out to {referral} for support.\nAt any time, send 'Delete' to stop receiving messages and be removed from this channel.",
+      "step_2": "A user asked the following question of the broadcast list, which they were unable to solve: {problem}. They can be contacted at {event.content.client.user_id}",
+      "step_3": "Thank you. The list owner will continue this conversation. Please note that it might take some time for them to get in touch.",
+      "step_4": "We will contact you again the next time an admin broadcasts a message."
+    }
+  },
+  "esim": {
+    "codes": {
+      "code": "Code",
+      "provider": "Provider",
+      "smdp": "SMDP Address",
+      "iccid": "ICCID"
+    },
+    "start": {
+      "step_1": "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data."
+    },
+    "admin_interface_step": {
+      "step_1": "What would you like to do? Enter a number:\n1. Exit this conversation and interact as a bot user\n2. Delete my data\nYou do not need to do anything else to receive messages."
+    },
+    "user_welcome_step": {
+      "step_1": "Thank you for contacting {name}. {description}\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nThis is an automated messaging system so you can get quicker responses, but you can always reach a human."
+    }
   }
 }
