@@ -5,16 +5,27 @@
     "disagree": "disagree",
     "menu": "menu",
     "admin": "admin",
+    "my_data": "my data",
+    "human": "talk to a human",
+    "human_2": "human",
     "delete": "delete",
     "back": "back",
     "yes": "yes",
     "no": "no",
     "help": "help",
     "exit": "exit",
+    "end": "end",
+    "end_confirm": "Please contact us again if you need us.",
     "admin_passcode": "Please enter your admin passcode now, or reply with 'Exit' to exit administrator mode.",
     "login_attempts": "You have tried to login too many times. Please contact an administrator for help.",
     "wrong_pw": "Incorrect passcode.",
-    "admin_return": "You can send a message that says 'Admin' at any time to return to this menu."
+    "admin_return": "You can send a message that says 'Admin' at any time to return to this menu.",
+    "delete_me_confirm_step": "You have asked that you be removed from the conversation and all your data be deleted from the system\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning.",
+    "confirm_delete_step": "Your information has been deleted from the bot's system and you will no longer receive messages.",
+    "delete_data_step": "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the menu.",
+    "check_if_solved_step": "Did that solve your problem?\nReply Yes or No.",
+    "contact_method_step": "Thank you. When you provide contact information, please note that if we have forwarding set up, it will be forwarded to team members' Signal accounts. \nHow do you prefer we contact you? Please choose the number that corresponds with your preferred method.\n1. Signal call\n2. Signal text message\n3. Phone call\n4. Any\n5. None, don't contact me",
+    "admin_interface_step": "What would you like to do? Enter a number:\n1. Exit this conversation and interact as a bot user\n2. Delete my data\nYou do not need to do anything else to receive messages."
   },
   "broadcast": {
     "start": {
@@ -32,14 +43,8 @@
       "step_1": "Hi. You have found the broadcast channel {name}.\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nYou can agree, and receive periodic messages.\nYou can disagree, and end the conversation.",
       "step_2": "Agree - I want to be added to the broadcast channel and consent to receiving messages\nDisagree - please remove me from the broadcast channel\nReply with 'Agree' or 'Disagree'."
     },
-    "delete_me_confirm_step": {
-      "step_1": "You have asked that you be removed from the conversation and all your data be deleted from the system\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning."
-    },
     "consent_disagree_step": {
       "step_1": "You have asked that you be removed from the channel and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning."
-    },
-    "confirm_delete_step": {
-      "step_1": "Your information has been deleted from the bot's system and you will no longer receive messages."
     },
     "consent_agree_step": {
       "step_1": "Confirmed, we've added you to the channel.\nWelcome!"
@@ -51,9 +56,6 @@
     },
     "faq_step": {
       "step_1": "Reply with 'FAQ' to see the list of questions.\nReply with 'Menu' to return home."
-    },
-    "check_if_solved_step": {
-      "step_1": "Did that solve your problem?\nReply Yes or No."
     },
     "submit_question_step": {
       "step_1": "We've understood that you have a question not covered by the FAQ. Please reach out to {referral} for support.\nAt any time, send 'Delete' to stop receiving messages and be removed from this channel.",
@@ -72,11 +74,159 @@
     "start": {
       "step_1": "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data."
     },
-    "admin_interface_step": {
-      "step_1": "What would you like to do? Enter a number:\n1. Exit this conversation and interact as a bot user\n2. Delete my data\nYou do not need to do anything else to receive messages."
-    },
     "user_welcome_step": {
       "step_1": "Thank you for contacting {name}. {description}\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nThis is an automated messaging system so you can get quicker responses, but you can always reach a human."
+    },
+    "delete_me_confirm_step": {
+      "step_1": "You have asked that you be removed from the conversation and all your data be deleted from the system.\nOnce this happens, you will no longer be able to receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the beginning."
+    },
+    "confirm_delete_step": {
+      "step_1": "Your information has been deleted from the bot's system and you will no longer receive messages."
+    },
+    "menu_step": {
+      "step_1": "Menu\nWhat would you like to do?\n1. Get an eSIM\n2. Get help with my eSIM\n3. My data rights\n4. About us\nEnter the number"
+    },
+    "menu_options_step": {
+      "step_1": "What would you like to do now?\nReply with 'Menu' to go back to the main menu.\nReply with 'Help' to go back to the help menu.\nReply with 'Talk to a human' to get more support.\nReply with 'End' to end this chat for today."
+    },
+    "get_esim_1_step": {
+      "step_1": "STEP 1:\nFirst, you need to make sure that your phone is compatible.\nTo do this, please go to your phone's Settings > Connections or SIM Manager. If your device is eSIM compatible you should be able to see if you have the option to add an eSIM.\nAlternatively open your phone app, dial *#06# and press the call button. If your device is eSIM compatible you should be able to see an EID number.\nIs your device e-sim compatible? Reply with 'Yes' or 'No'.",
+      "step_2": "Sorry, an eSIM won't work for your device.\nWould you like to flag this to our team? Reply with 'Yes' if so, or 'No' to end this conversation.",
+      "step_3": "Please contact us again if you need us."
+    },
+    "get_esim_2_step": {
+      "step_1": "Step 2:\nWhich networks are available where you are?\nTo find out, go to Settings > Local SIM Settings > Network Selection > Toggle Automatic Network Selection\nWhich of the following mobile networks do you see?\n{providers}\nList all networks available separated by a comma  e.g. :\n1,2,5"
+    },
+    "get_esim_3_step": {
+      "step_1": "Step 2:\nHere is a unique eSIM code for you:\n{esim}\nHere are the instructions for it to work:\n{activationInstructions}\nIf you can't get it to work, reply with 'Help'."
+    },
+    "help_step": {
+      "step_1": "Help\n1. How to activate an eSIM\n2. My eSIM isn't working\n3. Delete my eSIM\n4. Other",
+      "step_2": "eSIM Activation:\n{activationInstructions}",
+      "step_3": "eSIM Troubleshooting:\n{helpInstructions}",
+      "step_4": "DELETE eSIM\nStep 1: Open your phone's Settings.\n2. Tap on 'Connections' (Android)\n3. Then, choose 'SIM card manager.'\n4. Pick the eSIM plan you want to delete.\n5. Turn off the eSIM by toggling the switch. Finally, tap on 'Remove'."
+    },
+    "follow_up_step": {
+      "step_1": "What would you like to do now?\nReply with 'Help' to go back to the help menu\nReply with 'Human' to get more support\nReply with 'End' to end this chat for today.",
+      "step_2": "Thanks for using this service, we hope your eSIM helps."
+    },
+    "human_support_step": {
+      "step_1": "We've understood that you have a question not covered by the help section.\nPlease note that if we have forwarding set up, your question will be forwarded to team members' Signal accounts.\nPlease type your question:",
+      "step_2": "Please contact us again if you need us."
+    },
+    "record_number_step": {
+      "step_1": "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable.",
+      "step_2": "A user had a problem not covered in the help section of the eSIM distribution, and provided the following contact information: Via {contact_preference}, contact {contact_number}.\nHere is the problem they experienced: {problem}",
+      "step_3": "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+    },
+    "confirm_no_contact_step": {
+      "step_1": "Reply 'No' to confirm we will not contact you.\nReply 'Back' to go to the previous menu of options",
+      "step_2": "Ok, we will not contact you.",
+      "step_3": "A user had the following problem not covered in the help section of the eSIM distribution: {{problem}}.\nThey sent this problem anonymously and did not wish to be contacted."
+    }
+  },
+  "helpdesk": {
+    "start": {
+      "step_1": "Welcome, you are now set up as a bot administrator who can receive helpdesk messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'Help' at any time to exit the conversation or delete your data."
+    },
+    "user_welcome_step": {
+      "step_1": "Thank you for contacting {name}. {description}\nWe use a secure automated messaging system so you can get quicker answers to problems, and our team is on hand to help.\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nIf you are in immediate physical danger contact {referral}.",
+      "step_2": "Our helpdesk will ask you to select the problem you're experiencing.\n{storageAccess}\nWe will not ask you for personal information.\nFor more information at any time, including how to delete your data, you can reply with 'My data'.\nTo continue, reply with 'Agree'.\nTo disagree and end the conversation, reply with 'End'."
+    },
+    "privacy_policy_step": {
+      "step_1": "My data:\n{privacyPolicy}",
+      "step_2": "Reply with 'Agree' and continue to the main menu.\nReply with 'Delete' to delete your data."
+    },
+    "menu_options_step": {
+      "step_1": "Glad that helped.\nReply with 'FAQ' to return to ask further questions.\nReply with 'Delete' to delete your data from our system.\nReply with 'End' to end this conversation.\nRemember that if this is a sensitive conversation you can delete the conversation from the Signal app."
+    },
+    "human_support_step": {
+      "step_1": "We've understood that you have a question not covered above.\nPlease note that if we have forwarding set up, your question will be forwarded to team members' Signal accounts.\nPlease type your question:"
+    },
+    "record_number_step": {
+      "step_1": "Thank you. Your preference is noted. Please share your preferred phone number or Signal username, if applicable.",
+      "step_2": "A user had a problem not covered by the helpdesk, and provided the following contact information: Via {contact_preference}, contact {contact_number}.\nHere is the problem they experienced: {problem}",
+      "step_3": "Thank you. An admin will continue this conversation. They will aim to be in touch with you within [responseTime]."
+    },
+    "confirm_no_contact_step": {
+      "step_1": "Reply 'No' to confirm we will not contact you.\nReply 'Back' to go to the previous menu of options",
+      "step_2": "Ok, we will not contact you.",
+      "step_3": "A user had a problem not covered by the helpdesk: {{problem}}.\nThey sent this problem anonymously and did not wish to be contacted."
+    }
+  },
+  "tipline": {
+    "start": {
+      "step_1": "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    },
+    "admin_passcode_step": {
+      "step_1": "Welcome, you are now set up as a bot administrator who will receive tips. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    },
+    "user_welcome_step": {
+      "step_1": "Thank you for contacting {name}.\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients).\nThis is a secure tipline. Messages are visible to our staff. Any information you share is stored on our systems.\nFor more information at any time, including how to delete your data, send a message with the words 'My data'.\nPlease share your tip with us."
+    },
+    "delete_data_step": {
+      "step_1": "You have asked that all your data be deleted from the system.\nOnce this happens, you will no longer receive messages from this number, unless you send a message to it again.\nReply with 'Delete' to confirm.\nReply with 'Back' to go back to the data rights."
+    },
+    "tip_reply_step": {
+      "step_1": "Thank you. Our team will look into your tip and assess its suitability for our outlet.\nWe may want to follow up with you. Do you give permission for one of our team to contact you? You can reply with yes or no.",
+      "step_2": "Ok, we will not contact you. Thanks again for the tip.",
+      "step_3": "A user sent the following anonymous tip: {tip}.\nThey did not wish to be contacted."
+    },
+    "record_number_step": {
+      "step_1": "Thanks, we will send your information to our team. Please message us again if you have another tip.",
+      "step_2": "A user sent a tip and provided the following contact information: Via {contact_preference}, contact {contact_number}.\nHere is the tip they provided: {tip}"
+    },
+    "confirm_no_contact_step": {
+      "step_1": "Ok, we will not contact you. Thanks again for the tip.",
+      "step_2": "A user sent the following anonymous tip: {tip}.\nThey did not wish to be contacted."
+    }
+  },
+  "vpn": {
+    "codes": {
+      "null": "Apologies, we have run out of codes. Please contact an administrator.",
+      "code": "Provider:\nCode:"
+    },
+    "start": {
+      "step_1": "Welcome, you are now set up as a bot administrator who can receive messages from people who have asked for human support. You will receive messages from bot users as they come in. Otherwise, send a message that says 'help' at any time to exit the conversation or delete your data."
+    },
+    "user_welcome_step": {
+      "step_1": "Thank you for contacting {name}. {description}\nWe use a service called Bitpart to relay messages, which collects the same information as the Signal app does (namely the public key information associated with each account that is needed to encrypt messages between recipients)."
+    },
+    "menu_step": {
+      "step_1": "How many codes do you need? (Note that admin approval is needed for a request higher than {maxCodes}and will take longer.) Please enter the amount:"
+    },
+    "request_step": {
+      "step_1": "You have asked for {event} codes. The limit is {maxCodes}. Please enter a lower number."
+    },
+    "share_codes_step": {
+      "step_1": "You have asked for {codesNumber} codes.",
+      "step_2": "Here is the list of VPN codes: {codes}",
+      "step_3": "Here are instructions on how to activate the VPN codes.\n{activationInstructions}",
+      "step_4": "If you need further support please type 'Help'\nOtherwise, please wait at least 1 day and message next time you need VPN codes."
+    },
+    "over_limit_step": {
+      "step_1": "Sorry, your request is higher than the available limit of codes.\nYou can either:\nSend a number lower than {maxCodes}\nor\nReply with the number of codes you would like to request, for a team member to meet your request manually."
+    },
+    "human_support_step": {
+      "step_1": "Your request will be flagged with the team, who will be in touch as soon as possible (this may take up to [responseTime]) through another Signal account. Is there any additional information you would like to share? Please share now, or reply with 'No' if not."
+    },
+    "i_dont_understand_step": {
+      "step_1": "If you want to contact the team directly, reply with 'Human'."
+    },
+    "help_step": {
+      "step_1": "We hope this answers your question.\nReply with 'Other' if your question was not answered.\nReply with 'Help' to go back to the list of questions.\nReply with 'End' to end the conversation for now."
+    },
+    "other_help_step": {
+      "step_1": "We've understood that you have a question not covered by the help section.\nPlease note that if we have forwarding set up, your question will be forwarded to team members' Signal accounts.\nPlease type your question:"
+    },
+    "record_number_step": {
+      "step_1": "A user had a problem not covered by the help section, and provided the following contact information: Via {contact_preference}, contact {contact_number}.\nHere is the information they shared: {problem}",
+      "step_2": "They requested {request} VPN codes.",
+      "step_3": "Thank you. An admin will continue this conversation. Please note that it might take some time for them to get in touch."
+    },
+    "confirm_no_contact_step": {
+      "step_1": "A user had a problem not covered by the help section: {problem}.\nThey sent this problem anonymously and did not wish to be contacted.",
+      "step_2": "They requested {{request}} VPN codes."
     }
   }
 }
