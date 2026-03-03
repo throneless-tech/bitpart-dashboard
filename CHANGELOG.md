@@ -1,3 +1,9 @@
+## 1.0.10 (2026-03-03)
+
+### Fix
+
+- Update dependencies for security fixes.
+
 ## 1.0.9 (2025-09-29)
 
 ### Fix
