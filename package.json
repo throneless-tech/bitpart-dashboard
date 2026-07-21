@@ -1,11 +1,13 @@
 {
   "name": "bitpart-dashboard",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
@@ -57,7 +59,8 @@
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "prisma": "^6.4.1",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "vitest": "^4.1.8"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.9"

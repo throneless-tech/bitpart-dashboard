@@ -17,7 +17,7 @@ Run `npx auth secret` to create a random value for Auth.js. See [their docs](htt
 Add the following to your `.env.local` file (remember, you will also have a separate `.env` file with other vars):
 
 ```
-NEXTAUTH_SECRET="thisisarandomsecret0123456789="
+AUTH_SECRET="thisisarandomsecret0123456789="
 ```
 
 ### Attach the databse
@@ -82,5 +82,5 @@ The instructions above work for local deployment. However, if you'd like to use 
 
 Ensure your Bitpart, Bitpart EMS and Bitpart dashboard images are all running on the same network. To run the dashboard, customize the following command:
 ```
-podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_URL=127.0.0.1 -e BITPART_SERVER_PORT=5000 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_ENDPOINT="/ems" -e EMS_SERVER_URL=127.0.0.1 -e EMS_PORT=3005 -e ESIM_ENDPOINT="esim_codes" -e VPN_ENDPOINT="vpn_tokens" -e AUTH_TRUST_HOST=true -e NEXTAUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
+podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_HOSTS=127.0.0.1:5000,127.0.0.1:5005,127.0.0.1:5010 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_SERVER_HOST=127.0.0.1:3005 -e AUTH_TRUST_HOST=true -e AUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
 ```

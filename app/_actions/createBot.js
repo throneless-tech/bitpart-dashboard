@@ -22,6 +22,10 @@ class WSConnection {
   }
 
   start(json) {
+    if (!process.env.BITPART_SERVER_TOKEN) {
+      throw new Error("BITPART_SERVER_TOKEN is not configured.");
+    }
+
     this._socket = new WebSocket(this.url, {
       headers: {
         Authorization: process.env.BITPART_SERVER_TOKEN,
@@ -75,6 +79,10 @@ class WSConnection {
 
 // create the bot on the bitpart server
 export const createBotBitpart = async (data, bitpartId, passcode, host) => {
+  if (!process.env.EMS_SERVER_HOST) {
+    throw new Error("EMS_SERVER_HOST is not configured.");
+  }
+
   // format csml
   const formattedCsml = await formatCsml(data, passcode);
 
@@ -169,6 +177,10 @@ export const createBot = async (data, bitpartId, username, passcode) => {
           let host = "";
 
           const hostsList = process.env.BITPART_SERVER_HOSTS;
+
+          if (!hostsList) {
+            throw new Error("BITPART_SERVER_HOSTS is not configured.");
+          }
 
           const hosts = hostsList.split(",");
 

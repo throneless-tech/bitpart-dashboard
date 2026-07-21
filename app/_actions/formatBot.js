@@ -49,7 +49,6 @@ export const formatCsml = async (data, passcode) => {
   const file = `./csml/${data.botType}.csml`;
   let csml = "";
   let formattedCsml = "";
-  const phones = [];
 
   const template = await fs.readFile(file, "utf8", (err, data) => {
     if (err) {
@@ -62,27 +61,6 @@ export const formatCsml = async (data, passcode) => {
   csml = template;
 
   schema.map((field) => {
-    // format admin phone numbers
-    if (field === "adminPhones") {
-      let adminPhoneOptions = "";
-
-      data[field].map((p, i) => {
-        let phone = p.code + p.number;
-        phone = phone.replace(/^(\+)|\D/g, "$1");
-        phone = `+${phone}`;
-        phones.push(phone);
-
-        if (i === 0) {
-          adminPhoneOptions += `"${phone}"`;
-        } else {
-          adminPhoneOptions += ` || event.client.user_id == "${phone}"`;
-        }
-      });
-
-      csml = csml.replace(`[${field}]`, adminPhoneOptions);
-      csml = csml.replace(`[${field}.array]`, phones); // TODO need correct parsing
-    }
-
     // fill in csml template with data
     if (csml.includes(`[${field}]`)) {
       let length = 0;
@@ -111,8 +89,9 @@ export const formatCsml = async (data, passcode) => {
             data[field].map((f, i) => {
               if (i === data[field].length - 1) {
                 places = places + `${f.place}`;
+              } else {
+                places = places + `${f.place}, `;
               }
-              places = places + `${f.place}, `;
             });
 
             csml = csml.replace(`[${field}]`, places);

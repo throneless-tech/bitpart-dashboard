@@ -11,7 +11,9 @@ export const register = async (prevState, formData) => {
   const password = formData.get("password");
   const passwordConfirm = formData.get("passwordConfirm");
   const username = formData.get("username");
-  const email = formData.get("email");
+  // email is optional; normalize a blank field to null so it doesn't collide
+  // on the unique constraint or match other email-less accounts
+  const email = formData.get("email") || null;
 
   try {
     // validate form fields
@@ -35,7 +37,7 @@ export const register = async (prevState, formData) => {
 
     const userFound = await prisma.user.findFirst({
       where: {
-        OR: [{ email }, { username }],
+        OR: [{ username }, ...(email ? [{ email }] : [])],
       },
     });
 
@@ -67,7 +69,7 @@ export const register = async (prevState, formData) => {
       };
     }
 
-    const updateInviteCode = await prisma.inviteCode.update({
+    await prisma.inviteCode.update({
       where: {
         code: inviteCode.code,
       },

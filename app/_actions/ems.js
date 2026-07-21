@@ -18,6 +18,10 @@ export async function sendToEMS(botId, botType, json) {
   const endpoint =
     botType === "esim" ? "esim_codes" : botType === "vpn" ? "vpn_tokens" : "";
 
+  if (!process.env.EMS_SERVER_HOST) {
+    throw new Error("EMS_SERVER_HOST is not configured.");
+  }
+
   fetch(`http://${process.env.EMS_SERVER_HOST}/${endpoint}`, {
     method: "post",
     headers: {
@@ -35,4 +39,9 @@ export async function sendToEMS(botId, botType, json) {
     .catch((err) => {
       throw new Error(err.message);
     });
+}
+
+// STUB: removes a bot's codes/tokens from the EMS on deletion.
+export async function deleteFromEMS(_botId, _botType) {
+  return;
 }
