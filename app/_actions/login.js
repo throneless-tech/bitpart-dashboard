@@ -1,6 +1,6 @@
 "use server";
 import { AuthError } from "next-auth";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { unstable_rethrow } from "next/navigation";
 import { signIn } from "@/auth";
 
 export const login = async (formData) => {
@@ -22,9 +22,7 @@ export const login = async (formData) => {
     // if (error instanceof AuthError) {
     //   return redirect(`/error?error=${error.type}`);
     // }
-    if (isRedirectError(error)) {
-      return { success: false, message: formatError(error) };
-    }
+    unstable_rethrow(error);
     return { success: false, message: error.type };
   }
 };

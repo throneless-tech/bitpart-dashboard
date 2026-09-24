@@ -1,4 +1,5 @@
 "use server";
+import { emsUrl } from "@/app/_lib/bitpart";
 
 export async function sendToEMS(botId, botType, json) {
   let data = {};
@@ -18,11 +19,7 @@ export async function sendToEMS(botId, botType, json) {
   const endpoint =
     botType === "esim" ? "esim_codes" : botType === "vpn" ? "vpn_tokens" : "";
 
-  if (!process.env.EMS_SERVER_HOST) {
-    throw new Error("EMS_SERVER_HOST is not configured.");
-  }
-
-  fetch(`http://${process.env.EMS_SERVER_HOST}/${endpoint}`, {
+  fetch(emsUrl(endpoint), {
     method: "post",
     headers: {
       Accept: "application/json",
