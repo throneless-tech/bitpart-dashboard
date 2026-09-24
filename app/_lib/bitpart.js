@@ -84,6 +84,35 @@ export const sendBitpartMessage = async (host, message) => {
     });
 };
 
+export const readBotBitpart = async (bitpartId, host) =>
+  sendBitpartMessage(host, {
+    message_type: "ReadBot",
+    data: {
+      id: bitpartId,
+    },
+  });
+
+// status of the bot's signal channel from a ReadBot response: "linked",
+// "unlinked" or "failing". an unrecognised channel status is treated as
+// failing, and "unknown" means the status couldn't be read at all.
+export const signalChannelStatus = (readBotResponse) => {
+  const channels = readBotResponse?.data?.response?.channels;
+
+  if (readBotResponse?.message_type === "Error" || !Array.isArray(channels)) {
+    return "unknown";
+  }
+
+  const signal = channels.find((c) => c.channel_id === "signal");
+
+  if (!signal) {
+    return "unlinked";
+  }
+
+  return signal.status === "linked" || signal.status === "unlinked"
+    ? signal.status
+    : "failing";
+};
+
 export const emsUrl = (path) => {
   if (!process.env.EMS_SERVER_HOST) {
     throw new Error("EMS_SERVER_HOST is not configured.");

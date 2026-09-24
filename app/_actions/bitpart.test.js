@@ -54,6 +54,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { createBotBitpart, linkChannelBitpart } from "./createBot";
+import { readBotBitpart } from "@/app/_lib/bitpart";
 import { updateBotBitpart } from "./updateBot";
 import { deleteBot } from "./deleteBot";
 
@@ -146,6 +147,17 @@ describe("linkChannelBitpart", () => {
           expire_timer: 604800,
         },
       },
+    ]);
+  });
+});
+
+describe("readBotBitpart", () => {
+  it("sends a ReadBot message with the bot id", async () => {
+    await readBotBitpart("bot-1", "bp:5000");
+
+    expect(lastSocket().url).toBe("ws://bp:5000/ws");
+    expect(lastSocket().sent).toEqual([
+      { message_type: "ReadBot", data: { id: "bot-1" } },
     ]);
   });
 });
