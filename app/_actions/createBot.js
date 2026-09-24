@@ -11,6 +11,7 @@ import { getUser } from "./getUser";
 // utils
 import { escapeSpecials } from "@/app/_utils/escapeSpecials";
 import { emsUrl, sendBitpartMessage } from "@/app/_lib/bitpart";
+import { expireTimerSeconds } from "@/app/_lib/expireTimer";
 
 // create the bot on the bitpart server
 export const createBotBitpart = async (data, bitpartId, passcode, host) => {
@@ -23,7 +24,6 @@ export const createBotBitpart = async (data, bitpartId, passcode, host) => {
     message_type: "CreateBot",
     data: {
       id: bitpartId,
-      name: data.botName,
       apps_endpoint: appsEndpoint,
       flows: [
         {
@@ -40,13 +40,20 @@ export const createBotBitpart = async (data, bitpartId, passcode, host) => {
   return sendBitpartMessage(host, jsonCreateBot);
 };
 
-export const linkChannelBitpart = async (botId, host) => {
+export const linkChannelBitpart = async (
+  botId,
+  host,
+  profileName,
+  expireTimer,
+) => {
   const jsonLinkChannel = {
     message_type: "LinkChannel",
     data: {
       id: "signal",
       bot_id: botId,
       device_name: "bitpart",
+      profile_name: profileName,
+      expire_timer: expireTimer,
     },
   };
 
@@ -63,6 +70,16 @@ export const createBot = async (data, bitpartId, username, passcode) => {
       result = await prisma.$transaction(
         async (tx) => {
           delete data.csv; // we are not saving the codes here
+
+          const expireTimer = expireTimerSeconds(data);
+
+          if (expireTimer === null) {
+            throw new Error("Invalid disappearing messages timer.");
+          }
+
+          delete data.expireTimerCustomValue;
+          delete data.expireTimerCustomUnit;
+          data.expireTimer = expireTimer;
 
           // configure which instance this bot should be attached to
           let host = "";
@@ -116,6 +133,8 @@ export const createBot = async (data, bitpartId, username, passcode) => {
           const channelLink = await linkChannelBitpart(
             bitpartBot.data.response.bot.id,
             host,
+            data.botName,
+            expireTimer,
           );
 
           if (channelLink?.message_type === "Error") {
@@ -143,7 +162,7 @@ export const createBot = async (data, bitpartId, username, passcode) => {
             },
           });
 
-          const thisHost = await tx.state.update({
+          await tx.state.update({
             where: {
               name: "default",
             },

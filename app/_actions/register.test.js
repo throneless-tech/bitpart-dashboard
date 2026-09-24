@@ -96,6 +96,38 @@ describe("register email normalization", () => {
     expect(where.OR).toContainEqual({ username: "alice" });
   });
 
+  it("treats a whitespace-only email as null", async () => {
+    await register(
+      undefined,
+      buildFormData({
+        username: "alice",
+        password: "password123",
+        email: "   ",
+        code: "INVITE",
+      }),
+    );
+
+    expect(mocks.createUser.mock.calls[0][0].data.email).toBeNull();
+    const where = mocks.findFirst.mock.calls[0][0].where;
+    expect(where.OR).toEqual([{ username: "alice" }]);
+  });
+
+  it("trims surrounding whitespace from the email", async () => {
+    await register(
+      undefined,
+      buildFormData({
+        username: "alice",
+        password: "password123",
+        email: " alice@mail.org ",
+        code: "INVITE",
+      }),
+    );
+
+    expect(mocks.createUser.mock.calls[0][0].data.email).toBe("alice@mail.org");
+    const where = mocks.findFirst.mock.calls[0][0].where;
+    expect(where.OR).toContainEqual({ email: "alice@mail.org" });
+  });
+
   it("succeeds with a blank email even if other email-less accounts exist", async () => {
     // the duplicate check must not match on a shared-blank email
     const result = await register(

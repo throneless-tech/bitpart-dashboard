@@ -13,7 +13,7 @@ export const register = async (prevState, formData) => {
   const username = formData.get("username");
   // email is optional; normalize a blank field to null so it doesn't collide
   // on the unique constraint or match other email-less accounts
-  const email = formData.get("email") || null;
+  const email = formData.get("email")?.trim() || null;
 
   try {
     // validate form fields
@@ -80,7 +80,7 @@ export const register = async (prevState, formData) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email,
         username,

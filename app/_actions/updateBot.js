@@ -23,7 +23,6 @@ export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
     message_type: "CreateBot",
     data: {
       id: bitpartId,
-      name: data.botName,
       apps_endpoint: appsEndpoint,
       flows: [
         {
@@ -57,6 +56,11 @@ export const updateBot = async (
       result = await prisma.$transaction(
         async (tx) => {
           delete data.csv; // we are not saving the codes here
+
+          // the disappearing messages timer is only set when linking
+          delete data.expireTimer;
+          delete data.expireTimerCustomValue;
+          delete data.expireTimerCustomUnit;
 
           const formattedData = escapeSpecials(data);
 

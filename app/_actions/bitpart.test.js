@@ -89,7 +89,6 @@ describe("createBotBitpart", () => {
         message_type: "CreateBot",
         data: {
           id: "bot-1",
-          name: "Acme",
           apps_endpoint: "http://ems:3005/ems",
           flows: [
             {
@@ -132,14 +131,20 @@ describe("createBotBitpart", () => {
 });
 
 describe("linkChannelBitpart", () => {
-  it("sends a LinkChannel message for the signal channel", async () => {
-    await linkChannelBitpart("bot-1", "bp:5000");
+  it("sends the profile name and expire timer in LinkChannel", async () => {
+    await linkChannelBitpart("bot-1", "bp:5000", "Acme", 604800);
 
     expect(lastSocket().url).toBe("ws://bp:5000/ws");
     expect(lastSocket().sent).toEqual([
       {
         message_type: "LinkChannel",
-        data: { id: "signal", bot_id: "bot-1", device_name: "bitpart" },
+        data: {
+          id: "signal",
+          bot_id: "bot-1",
+          device_name: "bitpart",
+          profile_name: "Acme",
+          expire_timer: 604800,
+        },
       },
     ]);
   });
@@ -153,6 +158,7 @@ describe("updateBotBitpart", () => {
     expect(message.message_type).toBe("CreateBot");
     expect(message.data.id).toBe("bot-1");
     expect(message.data.apps_endpoint).toBe("http://ems:3005/ems");
+    expect(message.data).not.toHaveProperty("name");
   });
 
   it("throws when EMS_SERVER_HOST is not configured", async () => {

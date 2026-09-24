@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Bot" ADD COLUMN     "expireTimer" INTEGER NOT NULL DEFAULT 0;

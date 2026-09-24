@@ -1,7 +1,7 @@
 "use client";
 
 // react imports
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState } from "react";
 
 // actions imports
 import { register } from "@/app/_actions/register";
@@ -26,18 +26,21 @@ export function SignupForm() {
   return (
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
-        <Field.Root invalid={state?.error} required>
+        <Field.Root
+          invalid={state?.error?.general || state?.error?.code}
+          required
+        >
           <Field.Label className={geistMono.className}>
             Enter your invite code
           </Field.Label>
           <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
-          {state?.error ? (
+          {state?.error?.general || state?.error?.code ? (
             <Field.ErrorText>
               {state?.error?.general || state?.error?.code}
             </Field.ErrorText>
           ) : null}
         </Field.Root>
-        <Field.Root invalid={state?.error?.username} marginTop={12}>
+        <Field.Root invalid={state?.error?.email} marginTop={12}>
           <Field.Label className={geistMono.className}>
             Enter your email address
           </Field.Label>

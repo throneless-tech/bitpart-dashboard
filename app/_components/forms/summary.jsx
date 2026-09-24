@@ -25,6 +25,9 @@ import { Alert } from "@/app/_components/ui/alert";
 import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
+// disappearing messages
+import { expireTimerSeconds, formatExpireTimer } from "@/app/_lib/expireTimer";
+
 // fonts
 import { geistMono } from "@/app/fonts";
 
@@ -134,7 +137,7 @@ export const Summary = ({ data, errors, botId, username }) => {
           ? Object.keys(bot).map((key) => (
               <Text as="div" key={key} marginTop={4}>
                 <Text className={geistMono.className} fontWeight="bold">
-                  {bot[key] && bot[key].length
+                  {(bot[key] && bot[key].length) || key === "expireTimer"
                     ? key === "botType"
                       ? "Bot type"
                       : key === "botName"
@@ -163,16 +166,22 @@ export const Summary = ({ data, errors, botId, username }) => {
                                               ? "Network/Provider"
                                               : key === "description"
                                                 ? "About"
-                                                : key === "bitpartId" ||
-                                                    key === "countryCode" ||
-                                                    key === "createdAt" ||
-                                                    key === "creatorId" ||
-                                                    key === "id" ||
-                                                    key === "updatedAt" ||
-                                                    key === "instance" ||
-                                                    key === "qrLink"
-                                                  ? ""
-                                                  : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+                                                : key === "expireTimer"
+                                                  ? "Disappearing messages"
+                                                  : key === "bitpartId" ||
+                                                      key === "countryCode" ||
+                                                      key === "createdAt" ||
+                                                      key === "creatorId" ||
+                                                      key === "id" ||
+                                                      key === "updatedAt" ||
+                                                      key === "instance" ||
+                                                      key === "qrLink" ||
+                                                      key ===
+                                                        "expireTimerCustomValue" ||
+                                                      key ===
+                                                        "expireTimerCustomUnit"
+                                                    ? ""
+                                                    : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
                     : null}
                 </Text>
                 {!!bot[key] &&
@@ -207,16 +216,22 @@ export const Summary = ({ data, errors, botId, username }) => {
                   <Text as="div" className="display-linebreak" marginBottom={4}>
                     {key === "phone" && bot[key] && bot[key].length
                       ? `+${bot["countryCode"]} ${bot[key]}`
-                      : key === "bitpartId" ||
-                          key === "countryCode" ||
-                          key === "createdAt" ||
-                          key === "creatorId" ||
-                          key === "id" ||
-                          key === "updatedAt" ||
-                          key === "instance" ||
-                          key === "qrLink"
-                        ? ""
-                        : bot[key]}
+                      : key === "expireTimer"
+                        ? bot[key] === "custom"
+                          ? formatExpireTimer(expireTimerSeconds(bot) ?? 0)
+                          : formatExpireTimer(bot[key])
+                        : key === "bitpartId" ||
+                            key === "countryCode" ||
+                            key === "createdAt" ||
+                            key === "creatorId" ||
+                            key === "id" ||
+                            key === "updatedAt" ||
+                            key === "instance" ||
+                            key === "qrLink" ||
+                            key === "expireTimerCustomValue" ||
+                            key === "expireTimerCustomUnit"
+                          ? ""
+                          : bot[key]}
                   </Text>
                 )}
               </Text>
