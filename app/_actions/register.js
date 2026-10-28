@@ -1,9 +1,16 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { LoginSchema } from "../_lib/definitions";
+import { sendVerificationEmail } from "@/app/_lib/accountEmails";
+import {
+  clientIp,
+  recordSignup,
+  signupAllowed,
+} from "@/app/_lib/signupRateLimit";
 
 export const register = async (prevState, formData) => {
   let redirectPath = null;
@@ -35,9 +42,28 @@ export const register = async (prevState, formData) => {
       };
     }
 
+    const ip = clientIp(await headers());
+
+    if (!(await signupAllowed(ip))) {
+      return {
+        error: {
+          general:
+            "Too many accounts have been created from your network recently. Please try again later.",
+        },
+      };
+    }
+
     const userFound = await prisma.user.findFirst({
       where: {
-        OR: [{ username }, ...(email ? [{ email }] : [])],
+        OR: [
+          { username },
+          ...(email
+            ? [
+                { email: { equals: email, mode: "insensitive" } },
+                { pendingEmail: { equals: email, mode: "insensitive" } },
+              ]
+            : []),
+        ],
       },
     });
 
@@ -49,44 +75,26 @@ export const register = async (prevState, formData) => {
       };
     }
 
-    const inviteCode = await prisma.inviteCode.findUnique({
-      where: {
-        code: formData.get("code"),
-      },
-    });
-
-    if (!inviteCode) {
-      return {
-        error: {
-          code: "Invite code is not valid. Please try again.",
-        },
-      };
-    } else if (inviteCode.used) {
-      return {
-        error: {
-          code: "Invite code has already been used. Please enter a different code or contact an administrator.",
-        },
-      };
-    }
-
-    await prisma.inviteCode.update({
-      where: {
-        code: inviteCode.code,
-      },
-      data: {
-        used: true,
-      },
-    });
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email,
         username,
         password: hashedPassword,
       },
     });
+
+    await recordSignup(ip);
+
+    if (email) {
+      try {
+        await sendVerificationEmail(user);
+      } catch (error) {
+        // the account is created either way; they can resend from settings
+        console.error("Failed to send confirmation email", error);
+      }
+    }
 
     redirectPath = "/login?message=SignUpSuccess";
   } catch (e) {

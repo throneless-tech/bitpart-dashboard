@@ -34,25 +34,31 @@ export const ToastSignOut = () => {
   );
 };
 
+const loginMessages = {
+  SignUpSuccess: "Account created successfully. Please login.",
+  PasswordResetSuccess:
+    "Your password has been reset. Please login with your new password.",
+  PasswordChangeSuccess:
+    "Your password has been changed and you've been logged out everywhere. Please login with your new password.",
+};
+
 export const ToastSignUp = () => {
   const params = useSearchParams();
-  const [show, setShow] = useState(false);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    if (params.get("message") === "SignUpSuccess") {
-      setShow(true);
-    }
+    setMessage(loginMessages[params.get("message")] ?? null);
   }, []);
 
   useEffect(() => {
-    if (show) {
+    if (message) {
       toaster.create({
         duration: 10000,
-        title: "Account created successfully. Please login.",
+        title: message,
         type: "success",
       });
     }
-  }, [show]);
+  }, [message]);
 
   return (
     <>

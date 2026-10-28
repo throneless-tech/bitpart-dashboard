@@ -1016,8 +1016,8 @@ export default function FAQ() {
             within them.
           </List.Item>
           <List.Item>
-            only offering access to Bitpart via invite codes (during th launch
-            period).
+            limiting how many accounts can be created from the same network in a
+            short period of time.
           </List.Item>
           <List.Item>
             designing the bots in such a way that they cannot initiate
@@ -1790,7 +1790,18 @@ export default function FAQ() {
           Can I reset my password?
         </Heading>
         <Text marginTop={4}>
-          No. Please email us at{" "}
+          Yes, if your account has an email address. Use the{" "}
+          <Link color={color} href="/forgot-password" variant="underline">
+            Forgot your password?
+          </Link>{" "}
+          link on the login page and we'll email you a link to choose a new
+          password. Once you've confirmed an email address, reset links are only
+          sent to that confirmed address. You can add or change your email
+          address from your Settings page while logged in.
+        </Text>
+        <Text marginTop={4}>
+          If your account doesn't have an email address, we can't reset your
+          password. Please email us at{" "}
           <ClientOnly>
             <Link
               color={color}
@@ -1800,7 +1811,7 @@ export default function FAQ() {
               contact@bitp.art
             </Link>
           </ClientOnly>{" "}
-          if you need ot reset your password.
+          if you need help.
         </Text>
         <Heading
           as="h3"

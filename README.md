@@ -28,13 +28,17 @@ Add the url to the database as your `DATABASE_URL` in your `.env` file.
 
 Run `npx prisma migrate dev` in development or `npx prisma migrate deploy` in production to apply the migrations.
 
-### Seed the database with invite codes
+### Seed the database
 
-Users may only sign up for a Bitpart dashboard account with an invite code. **An invite code may only be used once per user, so do not plan to use the same invite codes for multiple users.** To create 100 random invite codes, run `node create-codes.mjs` from the root directory. This will create a file called `codes.json` that will contain your randomized invite codes to add to the database.
+Navigate to the `prisma/seed.ts.example` file. Duplicate this file within the prisma directory and name it `seed.ts`. It sets up the default state record used to assign new bots to Bitpart servers. Note that the `seed.ts` file will NOT be committed to your version history.
 
-Navigate to the `prisma/seed.ts.example` file. Duplicate this file within the prisma directory and name it `seed.ts`. Here, you will see where you can enter the invite codes you've created. Replace the example codes with your unique invite codes. Note that that `seed.ts` file will NOT be committed to your version history to keep your codes safe.
+To seed the database, run `npx prisma db seed` in your terminal.
 
-Finally, to seed the database, run `npx prisma db seed` in your terminal.
+### Sign-ups
+
+Anyone can create a Bitpart dashboard account. To limit abuse, sign-ups are rate limited per IP address: by default, at most 5 accounts per IP address per hour. Change this with `SIGNUP_RATE_LIMIT_MAX` and `SIGNUP_RATE_LIMIT_WINDOW_MINUTES`. Only a keyed hash of each IP address is stored, and records are deleted once they're older than the window.
+
+The client IP address is read from the `X-Forwarded-For` header, so the dashboard must run behind a reverse proxy that sets it (for example nginx with `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`). Set `TRUSTED_PROXY_HOPS` to the number of proxies in front of the dashboard (default 1). Without a proxy, a client can supply its own `X-Forwarded-For` header and get around the limit.
 
 You can also run `npx prisma studio` to view the database info at [http://localhost:5555](http://localhost:5555).
 
@@ -70,7 +74,18 @@ BITPART_SERVER_TOKEN="YOURLONGSECRETHERE"
 DATABASE_URL="postgresql://postgres:password@127.0.0.1:5432/bitpart-dashboard-postgres-instance?schema=public"
 
 EMS_SERVER_HOST=127.0.0.1:3005
+
+APP_URL=http://localhost:3000
+
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=
+SMTP_PASSWORD=
+MAIL_FROM=no-reply@bitp.art
 ```
+
+`APP_URL` is the public address of the dashboard, used for links in password reset and email confirmation emails. The `SMTP_*` and `MAIL_FROM` settings configure outgoing email; set `SMTP_SECURE=true` for SMTPS (implicit TLS, usually port 465), otherwise STARTTLS is used when the server offers it. See `.env.example` for all settings.
 
 The `.env` is configured to be able to support multiple BITPART_SERVER_HOSTS for load balancing purposes. It will also work with one server host.
 
@@ -82,5 +97,5 @@ The instructions above work for local deployment. However, if you'd like to use 
 
 Ensure your Bitpart, Bitpart EMS and Bitpart dashboard images are all running on the same network. To run the dashboard, customize the following command:
 ```
-podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_HOSTS=127.0.0.1:5000,127.0.0.1:5005,127.0.0.1:5010 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_SERVER_HOST=127.0.0.1:3005 -e AUTH_TRUST_HOST=true -e AUTH_SECRET="thisisarandomsecret0123456789=" -p 4000:3000 --network bitpart bitpart-dashboard:latest
+podman run -d --name bitpart-dashboard -e AUTH_DEBUG=true -e BITPART_SERVER_HOSTS=127.0.0.1:5000,127.0.0.1:5005,127.0.0.1:5010 -e BITPART_SERVER_TOKEN="YOURLONGSECRETHERE" -e DATABASE_URL="postgresql://postgres:password@bitpart-dashboard-postgres:5432/bitpart-dashboard?schema=public" -e EMS_SERVER_HOST=127.0.0.1:3005 -e AUTH_TRUST_HOST=true -e AUTH_SECRET="thisisarandomsecret0123456789=" -e APP_URL="https://dashboard.example.com" -e SMTP_HOST="smtp.example.com" -e SMTP_PORT=465 -e SMTP_SECURE=true -e SMTP_USER="mailer" -e SMTP_PASSWORD="YOURSMTPPASSWORD" -e MAIL_FROM="no-reply@bitp.art" -p 4000:3000 --network bitpart bitpart-dashboard:latest
 ```

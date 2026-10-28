@@ -7,7 +7,7 @@ import React, { useActionState } from "react";
 import { register } from "@/app/_actions/register";
 
 // chakra ui imports
-import { Container, Field, Input } from "@chakra-ui/react";
+import { Container, Field, Input, Text } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/_components/ui/password-input";
 
 // components
@@ -26,21 +26,12 @@ export function SignupForm() {
   return (
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
-        <Field.Root
-          invalid={state?.error?.general || state?.error?.code}
-          required
-        >
-          <Field.Label className={geistMono.className}>
-            Enter your invite code
-          </Field.Label>
-          <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
-          {state?.error?.general || state?.error?.code ? (
-            <Field.ErrorText>
-              {state?.error?.general || state?.error?.code}
-            </Field.ErrorText>
-          ) : null}
-        </Field.Root>
-        <Field.Root invalid={state?.error?.email} marginTop={12}>
+        {state?.error?.general ? (
+          <Text color="red.500" marginBottom={8} role="alert">
+            {state.error.general}
+          </Text>
+        ) : null}
+        <Field.Root invalid={state?.error?.email}>
           <Field.Label className={geistMono.className}>
             Enter your email address
           </Field.Label>

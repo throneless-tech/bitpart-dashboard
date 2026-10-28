@@ -154,18 +154,6 @@ export default function Home() {
                   </Link>
                 </ClientOnly>
               </Text>
-              <Text marginTop={8} fontStyle="italic" textStyle="sm">
-                Complete{" "}
-                <ClientOnly>
-                  <Link
-                    color={iconColor}
-                    href="https://nextcloud.throneless.tech/apps/forms/s/wKdHeWHooNZfMc3FmnG9KbPJ"
-                  >
-                    this form
-                  </Link>{" "}
-                  to request an invite code.
-                </ClientOnly>
-              </Text>
             </Box>
           </Container>
         </Flex>

@@ -3,9 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   findFirst: vi.fn(),
   createUser: vi.fn(),
-  findInviteCode: vi.fn(),
-  updateInviteCode: vi.fn(),
+  signupAllowed: vi.fn(),
+  recordSignup: vi.fn(),
   redirect: vi.fn((path) => path),
+  sendVerificationEmail: vi.fn(),
 }));
 
 vi.mock("@/lib/prisma", () => ({
@@ -14,10 +15,6 @@ vi.mock("@/lib/prisma", () => ({
       findFirst: mocks.findFirst,
       create: mocks.createUser,
     },
-    inviteCode: {
-      findUnique: mocks.findInviteCode,
-      update: mocks.updateInviteCode,
-    },
   },
 }));
 
@@ -25,23 +22,35 @@ vi.mock("next/navigation", () => ({
   redirect: mocks.redirect,
 }));
 
+vi.mock("next/headers", () => ({
+  headers: async () => new Headers({ "x-forwarded-for": "203.0.113.7" }),
+}));
+
+vi.mock("@/app/_lib/signupRateLimit", async (importOriginal) => ({
+  clientIp: (await importOriginal()).clientIp,
+  signupAllowed: mocks.signupAllowed,
+  recordSignup: mocks.recordSignup,
+}));
+
+vi.mock("@/app/_lib/accountEmails", () => ({
+  sendVerificationEmail: mocks.sendVerificationEmail,
+}));
+
 import { register } from "./register";
 
-const buildFormData = ({ username, password, email, code }) => {
+const buildFormData = ({ username, password, email }) => {
   const formData = new FormData();
   formData.set("username", username ?? "");
   formData.set("password", password ?? "");
   formData.set("passwordConfirm", password ?? "");
   formData.set("email", email ?? "");
-  formData.set("code", code ?? "");
   return formData;
 };
 
 beforeEach(() => {
-  // no existing user, valid unused invite code, successful writes by default
+  // no existing user, under the rate limit, successful writes by default
   mocks.findFirst.mockResolvedValue(null);
-  mocks.findInviteCode.mockResolvedValue({ code: "INVITE", used: false });
-  mocks.updateInviteCode.mockResolvedValue({ code: "INVITE", used: true });
+  mocks.signupAllowed.mockResolvedValue(true);
   mocks.createUser.mockResolvedValue({ id: "user-1" });
 });
 
@@ -57,7 +66,6 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: "",
-        code: "INVITE",
       }),
     );
 
@@ -72,7 +80,6 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: "",
-        code: "INVITE",
       }),
     );
 
@@ -87,12 +94,13 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: "alice@mail.org",
-        code: "INVITE",
       }),
     );
 
     const where = mocks.findFirst.mock.calls[0][0].where;
-    expect(where.OR).toContainEqual({ email: "alice@mail.org" });
+    expect(where.OR).toContainEqual({
+      email: { equals: "alice@mail.org", mode: "insensitive" },
+    });
     expect(where.OR).toContainEqual({ username: "alice" });
   });
 
@@ -103,7 +111,6 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: "   ",
-        code: "INVITE",
       }),
     );
 
@@ -119,13 +126,14 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: " alice@mail.org ",
-        code: "INVITE",
       }),
     );
 
     expect(mocks.createUser.mock.calls[0][0].data.email).toBe("alice@mail.org");
     const where = mocks.findFirst.mock.calls[0][0].where;
-    expect(where.OR).toContainEqual({ email: "alice@mail.org" });
+    expect(where.OR).toContainEqual({
+      email: { equals: "alice@mail.org", mode: "insensitive" },
+    });
   });
 
   it("succeeds with a blank email even if other email-less accounts exist", async () => {
@@ -136,7 +144,6 @@ describe("register email normalization", () => {
         username: "bob",
         password: "password123",
         email: "",
-        code: "INVITE",
       }),
     );
 
@@ -153,7 +160,6 @@ describe("register email normalization", () => {
         username: "alice",
         password: "password123",
         email: "",
-        code: "INVITE",
       }),
     );
 
@@ -161,5 +167,89 @@ describe("register email normalization", () => {
       "A user with these credentials already exists.",
     );
     expect(mocks.createUser).not.toHaveBeenCalled();
+  });
+});
+
+describe("register confirmation email", () => {
+  it("sends a confirmation email when an email is given", async () => {
+    mocks.createUser.mockResolvedValue({
+      id: "user-1",
+      username: "alice",
+      email: "alice@mail.org",
+    });
+
+    await register(
+      undefined,
+      buildFormData({
+        username: "alice",
+        password: "password123",
+        email: "alice@mail.org",
+      }),
+    );
+
+    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "user-1", email: "alice@mail.org" }),
+    );
+  });
+
+  it("sends nothing without an email", async () => {
+    await register(
+      undefined,
+      buildFormData({
+        username: "alice",
+        password: "password123",
+        email: "",
+      }),
+    );
+
+    expect(mocks.sendVerificationEmail).not.toHaveBeenCalled();
+  });
+
+  it("still creates the account if the email can't be sent", async () => {
+    mocks.sendVerificationEmail.mockRejectedValue(new Error("smtp down"));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const result = await register(
+      undefined,
+      buildFormData({
+        username: "alice",
+        password: "password123",
+        email: "alice@mail.org",
+      }),
+    );
+
+    expect(result).toBe("/login?message=SignUpSuccess");
+  });
+});
+
+describe("register rate limit", () => {
+  const signUp = () =>
+    register(
+      undefined,
+      buildFormData({ username: "alice", password: "password123" }),
+    );
+
+  it("checks and records the client IP", async () => {
+    expect(await signUp()).toBe("/login?message=SignUpSuccess");
+    expect(mocks.signupAllowed).toHaveBeenCalledWith("203.0.113.7");
+    expect(mocks.recordSignup).toHaveBeenCalledWith("203.0.113.7");
+  });
+
+  it("refuses the sign-up when the IP is over the limit", async () => {
+    mocks.signupAllowed.mockResolvedValue(false);
+
+    const result = await signUp();
+
+    expect(result.error.general).toMatch(/Too many accounts/);
+    expect(mocks.createUser).not.toHaveBeenCalled();
+    expect(mocks.recordSignup).not.toHaveBeenCalled();
+  });
+
+  it("doesn't count failed sign-ups against the limit", async () => {
+    mocks.findFirst.mockResolvedValue({ id: "existing" });
+
+    await signUp();
+
+    expect(mocks.recordSignup).not.toHaveBeenCalled();
   });
 });
