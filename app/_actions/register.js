@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { LoginSchema } from "../_lib/definitions";
+import { SignupSchema } from "../_lib/definitions";
 import { sendVerificationEmail } from "@/app/_lib/accountEmails";
 import {
   clientIp,
@@ -24,12 +24,13 @@ export const register = async (prevState, formData) => {
 
   try {
     // validate form fields
-    const validatedFields = await LoginSchema.validate({ username, password });
-
-    // If any form fields are invalid, return early
-    if (!validatedFields.username || !validatedFields.password) {
+    try {
+      await SignupSchema.validate({ username, password });
+    } catch (validationError) {
       return {
-        error: validatedFields,
+        error: {
+          [validationError.path ?? "general"]: validationError.message,
+        },
       };
     }
 

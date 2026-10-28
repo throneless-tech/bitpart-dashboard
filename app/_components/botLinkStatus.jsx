@@ -110,6 +110,19 @@ export default function BotLinkStatus({ bot, username }) {
           Re-link this bot
         </Button>
       ) : null}
+      {bot.lastSendStatus === "challenge_required" ? (
+        <Button
+          as="a"
+          color={colorButton}
+          href={`/my-bots/challenge/${bot.id}`}
+          marginTop={2}
+          size="sm"
+          variant="outline"
+          width="fit-content"
+        >
+          Solve captcha
+        </Button>
+      ) : null}
       <Dialog.Root lazyMount open={open} onOpenChange={handleOpenChange}>
         <Portal>
           <Dialog.Backdrop />

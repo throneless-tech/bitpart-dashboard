@@ -16,6 +16,8 @@ import { useColorModeValue } from "@/app/_components/ui/color-mode";
 // fonts
 import { geistMono } from "@/app/fonts";
 
+import { MIN_PASSWORD_LENGTH } from "@/app/_lib/definitions";
+
 export function ResetPasswordForm({ token }) {
   const [state, formAction, pending] = useActionState(resetPassword, {});
   const color = useColorModeValue("purple.600", "purple.400");
@@ -49,6 +51,9 @@ export function ResetPasswordForm({ token }) {
           Choose a new password
         </Field.Label>
         <PasswordInput name="password" size="lg" />
+        <Field.HelperText>
+          At least {MIN_PASSWORD_LENGTH} characters.
+        </Field.HelperText>
         {state?.error?.password ? (
           <Field.ErrorText>{state.error.password}</Field.ErrorText>
         ) : null}

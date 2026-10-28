@@ -85,6 +85,7 @@ import {
   removeEmail,
   requestPasswordReset,
   resetPassword,
+  setBotIssueNotifications,
   verifyEmail,
 } from "./account";
 
@@ -115,6 +116,7 @@ beforeEach(async () => {
     pendingEmail: null,
     password: await bcrypt.hash("old-password", 4),
     sessionVersion: 0,
+    notifyBotIssues: true,
   };
   mocks.users.length = 0;
   mocks.users.push(alice, {
@@ -189,28 +191,32 @@ describe("resetPassword", () => {
   it("sets the new password, signs out sessions and redirects", async () => {
     mocks.consumeToken.mockResolvedValue("user-1");
 
-    expect(await redirectOf(reset("new-password"))).toBe(
+    expect(await redirectOf(reset("a-long-new-password"))).toBe(
       "/login?message=PasswordResetSuccess",
     );
     expect(mocks.consumeToken).toHaveBeenCalledWith("reset-password", "tok");
-    expect(await bcrypt.compare("new-password", alice.password)).toBe(true);
+    expect(await bcrypt.compare("a-long-new-password", alice.password)).toBe(
+      true,
+    );
     expect(alice.sessionVersion).toBe(1);
   });
 
   it("rejects an invalid or expired token", async () => {
     mocks.consumeToken.mockResolvedValue(null);
 
-    const result = await reset("new-password");
+    const result = await reset("a-long-new-password");
 
     expect(result.error.general).toMatch(/invalid or has expired/);
     expect(alice.sessionVersion).toBe(0);
   });
 
   it("checks the password before using up the token", async () => {
-    expect((await reset("short")).error.password).toMatch(/at least 8/);
-    expect((await reset("new-password", "other")).error.password).toMatch(
-      /do not match/,
+    expect((await reset("fourteen-chars")).error.password).toMatch(
+      /at least 15/,
     );
+    expect(
+      (await reset("a-long-new-password", "other")).error.password,
+    ).toMatch(/do not match/);
     expect(mocks.consumeToken).not.toHaveBeenCalled();
   });
 });
@@ -335,8 +341,8 @@ describe("changePassword", () => {
       form({
         username: "alice",
         currentPassword: "old-password",
-        password: "new-password",
-        passwordConfirm: "new-password",
+        password: "a-long-new-password",
+        passwordConfirm: "a-long-new-password",
         ...fields,
       }),
     );
@@ -352,19 +358,56 @@ describe("changePassword", () => {
     expect(await redirectOf(change({}))).toBe(
       "/login?message=PasswordChangeSuccess",
     );
-    expect(alice.password).not.toBe("new-password");
-    expect(await bcrypt.compare("new-password", alice.password)).toBe(true);
+    expect(alice.password).not.toBe("a-long-new-password");
+    expect(await bcrypt.compare("a-long-new-password", alice.password)).toBe(
+      true,
+    );
     expect(alice.sessionVersion).toBe(1);
     expect(mocks.sendPasswordChangedNotice).toHaveBeenCalled();
   });
 
   it("checks the new password", async () => {
     expect(
-      (await change({ password: "short", passwordConfirm: "short" })).error
-        .password,
-    ).toMatch(/at least 8/);
+      (
+        await change({
+          password: "fourteen-chars",
+          passwordConfirm: "fourteen-chars",
+        })
+      ).error.password,
+    ).toMatch(/at least 15/);
     expect(
       (await change({ passwordConfirm: "different" })).error.password,
     ).toMatch(/do not match/);
+  });
+});
+
+describe("setBotIssueNotifications", () => {
+  it("turns notifications off and back on", async () => {
+    expect((await setBotIssueNotifications("alice", false)).success).toMatch(
+      /turned off/,
+    );
+    expect(alice.notifyBotIssues).toBe(false);
+
+    await setBotIssueNotifications("alice", true);
+    expect(alice.notifyBotIssues).toBe(true);
+  });
+
+  it("can't be turned on without an email", async () => {
+    alice.email = null;
+    alice.notifyBotIssues = false;
+
+    expect((await setBotIssueNotifications("alice", true)).error).toMatch(
+      /Add an email/,
+    );
+    expect(alice.notifyBotIssues).toBe(false);
+  });
+
+  it("refuses when not logged in as that user", async () => {
+    mocks.getUser.mockResolvedValue(null);
+
+    expect((await setBotIssueNotifications("alice", false)).error).toMatch(
+      /logged in/,
+    );
+    expect(alice.notifyBotIssues).toBe(true);
   });
 });

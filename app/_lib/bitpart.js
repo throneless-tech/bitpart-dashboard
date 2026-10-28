@@ -113,6 +113,52 @@ export const signalChannelStatus = (readBotResponse) => {
     : "failing";
 };
 
+export const SEND_STATUSES = [
+  "ok",
+  "failed",
+  "challenge_required",
+  "rate_limited",
+];
+
+// the signal channel's link status plus the result of the bot's most recent
+// attempt to send a message. sendStatus is null when bitpart didn't report
+// one we recognise.
+export const signalChannelHealth = (readBotResponse) => {
+  const status = signalChannelStatus(readBotResponse);
+  const signal = readBotResponse?.data?.response?.channels?.find?.(
+    (c) => c.channel_id === "signal",
+  );
+  const sendStatus = SEND_STATUSES.includes(signal?.send_status)
+    ? signal.send_status
+    : null;
+
+  return {
+    status,
+    sendStatus,
+    challengeToken:
+      sendStatus === "challenge_required"
+        ? (signal.challenge_token ?? null)
+        : null,
+    retryAt:
+      sendStatus === "rate_limited" && signal.retry_at
+        ? new Date(signal.retry_at)
+        : null,
+  };
+};
+
+// submit a solved signal captcha. without a token, bitpart uses the challenge
+// token it last reported for the channel.
+export const submitChallengeBitpart = async (host, { botId, captcha, token }) =>
+  sendBitpartMessage(host, {
+    message_type: "SubmitChallenge",
+    data: {
+      id: "signal",
+      bot_id: botId,
+      captcha,
+      ...(token ? { token } : {}),
+    },
+  });
+
 export const emsUrl = (path) => {
   if (!process.env.EMS_SERVER_HOST) {
     throw new Error("EMS_SERVER_HOST is not configured.");

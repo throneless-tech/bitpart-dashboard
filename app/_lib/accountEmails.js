@@ -68,6 +68,56 @@ The email address on your Bitpart account was changed to ${newEmail}. This addre
 If you didn't make this change, please contact us at contact@bitp.art.`,
   });
 
+const alertFooter = () =>
+  `You're getting this because bot problem emails are turned on for your Bitpart account. You can turn them off on your settings page:\n\n${appUrl("/settings")}`;
+
+const botAlertBodies = {
+  unlinked: ({ bot }) => ({
+    subject: `Your Bitpart bot "${bot.botName}" is no longer linked to Signal`,
+    text: `Your bot "${bot.botName}" has stopped being linked to its Signal account, so it can't send or receive messages.
+
+To fix this, open My Bots and choose "Re-link this bot" on the bot's card, then scan the QR code with Signal:
+
+${appUrl("/my-bots")}`,
+  }),
+  failed: ({ bot }) => ({
+    subject: `Your Bitpart bot "${bot.botName}" couldn't send a message`,
+    text: `Your bot "${bot.botName}" failed the last time it tried to send a message on Signal.
+
+If this keeps happening, check the bot's status on My Bots, and try re-linking it:
+
+${appUrl("/my-bots")}`,
+  }),
+  challenge_required: ({ bot }) => ({
+    subject: `Your Bitpart bot "${bot.botName}" needs a captcha solved`,
+    text: `Signal is asking your bot "${bot.botName}" to solve a captcha before it can send more messages. Until it's solved, the bot can't send messages.
+
+Open the link below for instructions:
+
+${appUrl(`/my-bots/challenge/${bot.id}`)}`,
+  }),
+  rate_limited: ({ bot, retryAt }) => ({
+    subject: `Your Bitpart bot "${bot.botName}" is being rate limited by Signal`,
+    text: `Signal is temporarily limiting how many messages your bot "${bot.botName}" can send.${
+      retryAt ? ` The bot will try again after ${retryAt.toUTCString()}.` : ""
+    }
+
+You don't need to do anything; this usually clears up by itself. If it keeps happening, the bot may be sending too many messages too quickly.`,
+  }),
+};
+
+export const BOT_ALERT_KINDS = Object.keys(botAlertBodies);
+
+export const sendBotAlert = async ({ user, bot, kind, retryAt }) => {
+  const { subject, text } = botAlertBodies[kind]({ bot, retryAt });
+
+  return sendMail({
+    to: user.email,
+    subject,
+    text: `Hi ${user.username},\n\n${text}\n\n${alertFooter()}`,
+  });
+};
+
 export const sendPasswordChangedNotice = async (user) =>
   sendMail({
     to: user.email,

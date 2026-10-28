@@ -2,7 +2,12 @@
 import { prisma } from "@/lib/prisma";
 import { getUser } from "./getUser";
 import { linkChannelBitpart } from "./createBot";
-import { readBotBitpart, signalChannelStatus } from "@/app/_lib/bitpart";
+import {
+  readBotBitpart,
+  signalChannelHealth,
+  signalChannelStatus,
+  submitChallengeBitpart,
+} from "@/app/_lib/bitpart";
 
 // find a bot owned by the logged in user
 const getOwnedBot = async (botId, username) => {
@@ -37,6 +42,78 @@ export const getBotStatus = async (botId, username) => {
     console.error("ReadBot failed for bot", bot.bitpartId, error);
     return "unknown";
   }
+};
+
+// whether the bot currently needs a signal captcha solved
+export const getBotChallenge = async (botId, username) => {
+  const bot = await getOwnedBot(botId, username);
+
+  let health = null;
+  try {
+    health = signalChannelHealth(
+      await readBotBitpart(bot.bitpartId, bot.instance),
+    );
+  } catch (error) {
+    console.error("ReadBot failed for bot", bot.bitpartId, error);
+  }
+
+  return {
+    botName: bot.botName,
+    required: health
+      ? health.sendStatus === "challenge_required"
+      : bot.lastSendStatus === "challenge_required",
+    reachable: !!health,
+  };
+};
+
+// signal captcha results look like signalcaptcha://<token>
+const CAPTCHA_PATTERN = /^signalcaptcha:\/\/\S+$/;
+
+export const submitBotChallenge = async (prevState, formData) => {
+  const captcha = formData.get("captcha")?.trim();
+
+  if (!captcha || !CAPTCHA_PATTERN.test(captcha)) {
+    return {
+      error:
+        'Paste the whole link from the "Open Signal" button. It starts with signalcaptcha://',
+    };
+  }
+
+  let bot;
+  try {
+    bot = await getOwnedBot(formData.get("botId"), formData.get("username"));
+  } catch (error) {
+    return { error: error.message };
+  }
+
+  try {
+    const response = await submitChallengeBitpart(bot.instance, {
+      botId: bot.bitpartId,
+      captcha,
+    });
+
+    if (response?.message_type === "Error") {
+      return {
+        error: `Signal didn't accept that captcha: ${response.data?.response ?? "unknown error"}. Solve a new one and try again.`,
+      };
+    }
+  } catch (error) {
+    console.error("SubmitChallenge failed for bot", bot.bitpartId, error);
+    return {
+      error:
+        "We couldn't reach the Bitpart server. Please try again in a few minutes.",
+    };
+  }
+
+  await prisma.bot.update({
+    where: { id: bot.id, creatorId: bot.creatorId },
+    data: { challengeToken: null },
+  });
+
+  return {
+    success:
+      "Captcha submitted. Your bot should be able to send messages again shortly.",
+  };
 };
 
 // send a new LinkChannel, which replaces the bot's existing signal channel

@@ -12,6 +12,7 @@ import {
   Input,
   Separator,
   Stack,
+  Switch,
   Text,
 } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/_components/ui/password-input";
@@ -23,6 +24,7 @@ import {
   changePassword,
   removeEmail,
   resendVerificationEmail,
+  setBotIssueNotifications,
 } from "@/app/_actions/account";
 
 // components
@@ -31,6 +33,8 @@ import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // fonts
 import { geistMono } from "@/app/fonts";
+
+import { MIN_PASSWORD_LENGTH } from "@/app/_lib/definitions";
 
 const Section = ({ children, title }) => (
   <Box marginTop={10}>
@@ -67,6 +71,8 @@ export default function Settings({ account }) {
   const router = useRouter();
   const colorButton = useColorModeValue("black", "white");
   const [notice, setNotice] = useState(null);
+  const [notify, setNotify] = useState(account.notifyBotIssues);
+  const [notifyNotice, setNotifyNotice] = useState(null);
 
   // reload the account details after a change
   const withRefresh = (action) => async (prevState, formData) => {
@@ -97,6 +103,15 @@ export default function Settings({ account }) {
     const result = await cancelEmailChange(account.username);
     setNotice(result);
     router.refresh();
+  };
+
+  const handleNotifyChange = async (enabled) => {
+    setNotify(enabled);
+    const result = await setBotIssueNotifications(account.username, enabled);
+    if (result?.error) setNotify(!enabled);
+    setNotifyNotice(
+      result?.error ? { error: { general: result.error } } : result,
+    );
   };
 
   const noticeState = notice?.error
@@ -212,6 +227,28 @@ export default function Settings({ account }) {
         ) : null}
       </Section>
 
+      <Section title="Notifications">
+        <Switch.Root
+          checked={!!account.email && notify}
+          disabled={!account.email}
+          onCheckedChange={(e) => handleNotifyChange(e.checked)}
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label>
+            Email me when one of my bots has a problem
+          </Switch.Label>
+        </Switch.Root>
+        <Text color="fg.muted" fontSize="sm" marginTop={2}>
+          {account.email
+            ? "For example, if a bot is unlinked from Signal, needs a captcha solved, or can't send messages. You'll get at most one email per problem every few hours."
+            : "Add an email address above to get notified when one of your bots has a problem."}
+        </Text>
+        <Message state={notifyNotice} />
+      </Section>
+
       <Section title="Password">
         <form action={passwordAction}>
           <input name="username" type="hidden" value={account.username} />
@@ -225,6 +262,9 @@ export default function Settings({ account }) {
               New password
             </Field.Label>
             <PasswordInput name="password" size="lg" />
+            <Field.HelperText>
+              At least {MIN_PASSWORD_LENGTH} characters.
+            </Field.HelperText>
             {passwordState?.error?.password ? (
               <Field.ErrorText>{passwordState.error.password}</Field.ErrorText>
             ) : null}

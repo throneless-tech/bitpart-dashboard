@@ -10,8 +10,10 @@ import {
   sendPasswordResetEmail,
   sendVerificationEmail,
 } from "@/app/_lib/accountEmails";
-
-const MIN_PASSWORD_LENGTH = 15;
+import {
+  MIN_PASSWORD_LENGTH,
+  PASSWORD_LENGTH_MESSAGE,
+} from "@/app/_lib/definitions";
 
 const RESET_REQUESTED_MESSAGE =
   "If an account with an email address matches, we've sent it a link to reset the password. The link expires in 1 hour.";
@@ -23,7 +25,7 @@ const emailIs = (email) => ({ equals: email, mode: "insensitive" });
 
 const checkNewPassword = (password, passwordConfirm) => {
   if (!password || password.length < MIN_PASSWORD_LENGTH) {
-    return `Password must contain at least ${MIN_PASSWORD_LENGTH} characters`;
+    return PASSWORD_LENGTH_MESSAGE;
   }
 
   if (password !== passwordConfirm) {
@@ -85,6 +87,30 @@ export const getAccountSettings = async (username) => {
     email: user.email,
     emailVerified: !!user.emailVerified,
     pendingEmail: user.pendingEmail,
+    notifyBotIssues: user.notifyBotIssues,
+  };
+};
+
+export const setBotIssueNotifications = async (username, enabled) => {
+  const user = await getUser(username);
+
+  if (!user) {
+    return { error: "You must be logged in to do this." };
+  }
+
+  if (enabled && !user.email) {
+    return { error: "Add an email address to turn on notifications." };
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { notifyBotIssues: !!enabled },
+  });
+
+  return {
+    success: enabled
+      ? "You'll get an email when one of your bots has a problem."
+      : "Bot problem emails are turned off.",
   };
 };
 

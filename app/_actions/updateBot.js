@@ -62,6 +62,11 @@ export const updateBot = async (
           delete data.expireTimerCustomValue;
           delete data.expireTimerCustomUnit;
 
+          // maintained by the alert poller, not the edit form
+          delete data.lastLinkStatus;
+          delete data.lastSendStatus;
+          delete data.challengeToken;
+
           const formattedData = escapeSpecials(data);
 
           // update bot on bitpart server

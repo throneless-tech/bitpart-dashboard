@@ -179,7 +179,12 @@ export const Summary = ({ data, errors, botId, username }) => {
                                                       key ===
                                                         "expireTimerCustomValue" ||
                                                       key ===
-                                                        "expireTimerCustomUnit"
+                                                        "expireTimerCustomUnit" ||
+                                                      key ===
+                                                        "lastLinkStatus" ||
+                                                      key ===
+                                                        "lastSendStatus" ||
+                                                      key === "challengeToken"
                                                     ? ""
                                                     : `${key.charAt(0).toUpperCase()}${key.slice(1)}`
                     : null}
@@ -229,7 +234,10 @@ export const Summary = ({ data, errors, botId, username }) => {
                             key === "instance" ||
                             key === "qrLink" ||
                             key === "expireTimerCustomValue" ||
-                            key === "expireTimerCustomUnit"
+                            key === "expireTimerCustomUnit" ||
+                            key === "lastLinkStatus" ||
+                            key === "lastSendStatus" ||
+                            key === "challengeToken"
                           ? ""
                           : bot[key]}
                   </Text>

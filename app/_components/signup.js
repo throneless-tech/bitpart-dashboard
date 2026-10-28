@@ -16,6 +16,8 @@ import { Button } from "@/app/_components/ui/button";
 // fonts
 import { geistMono } from "../fonts";
 
+import { MIN_PASSWORD_LENGTH } from "@/app/_lib/definitions";
+
 const initialState = {
   error: "",
 };
@@ -63,6 +65,10 @@ export function SignupForm() {
             placeholder="AVeryGoodPassword"
             size="lg"
           />
+          <Field.HelperText>
+            At least {MIN_PASSWORD_LENGTH} characters. A few random words strung
+            together make a strong password that's easy to remember.
+          </Field.HelperText>
           {state?.error?.password ? (
             <Field.ErrorText>{state.error.password}</Field.ErrorText>
           ) : null}

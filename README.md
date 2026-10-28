@@ -34,6 +34,19 @@ Navigate to the `prisma/seed.ts.example` file. Duplicate this file within the pr
 
 To seed the database, run `npx prisma db seed` in your terminal.
 
+### Bot problem alerts
+
+The dashboard checks every bot with Bitpart's `ReadBot` message in the background and emails the bot's owner when:
+
+- a bot that was linked to Signal becomes unlinked or starts failing,
+- the bot's last attempt to send a message `failed`,
+- Signal asks for a captcha (`challenge_required`); the email links to a page in the dashboard with instructions and a form to submit the solution,
+- Signal is rate limiting the bot (`rate_limited`); the email includes when it will try again.
+
+Owners get at most one email per problem per bot every `BOT_ALERT_COOLDOWN_HOURS` (default 6). Once a problem clears, the next occurrence is emailed straight away. Owners can turn alerts off on their settings page; they're on by default for accounts with an email address.
+
+Each bot is checked once every `BOT_ALERT_POLL_SECONDS` (default 300), at a random point in that interval, so Bitpart sees a steady trickle of requests rather than a burst. At most `BOT_ALERT_CONCURRENCY` checks (default 5) run at once. When several dashboard instances run against the same database, they share a lease in the database so only one of them polls at a time; if that instance stops, another takes over once the lease expires. Set `BOT_ALERT_POLLING_ENABLED=false` to stop an instance from polling.
+
 ### Sign-ups
 
 Anyone can create a Bitpart dashboard account. To limit abuse, sign-ups are rate limited per IP address: by default, at most 5 accounts per IP address per hour. Change this with `SIGNUP_RATE_LIMIT_MAX` and `SIGNUP_RATE_LIMIT_WINDOW_MINUTES`. Only a keyed hash of each IP address is stored, and records are deleted once they're older than the window.

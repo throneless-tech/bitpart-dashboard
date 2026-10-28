@@ -64,7 +64,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "",
       }),
     );
@@ -78,7 +78,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "",
       }),
     );
@@ -92,7 +92,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "alice@mail.org",
       }),
     );
@@ -109,7 +109,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "   ",
       }),
     );
@@ -124,7 +124,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: " alice@mail.org ",
       }),
     );
@@ -142,7 +142,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "bob",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "",
       }),
     );
@@ -158,7 +158,7 @@ describe("register email normalization", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "",
       }),
     );
@@ -182,7 +182,7 @@ describe("register confirmation email", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "alice@mail.org",
       }),
     );
@@ -197,7 +197,7 @@ describe("register confirmation email", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "",
       }),
     );
@@ -213,7 +213,7 @@ describe("register confirmation email", () => {
       undefined,
       buildFormData({
         username: "alice",
-        password: "password123",
+        password: "a-long-enough-password",
         email: "alice@mail.org",
       }),
     );
@@ -226,7 +226,7 @@ describe("register rate limit", () => {
   const signUp = () =>
     register(
       undefined,
-      buildFormData({ username: "alice", password: "password123" }),
+      buildFormData({ username: "alice", password: "a-long-enough-password" }),
     );
 
   it("checks and records the client IP", async () => {
@@ -251,5 +251,34 @@ describe("register rate limit", () => {
     await signUp();
 
     expect(mocks.recordSignup).not.toHaveBeenCalled();
+  });
+});
+
+describe("register password length", () => {
+  const signUp = (password) =>
+    register(undefined, buildFormData({ username: "alice", password }));
+
+  it("requires at least 15 characters", async () => {
+    const result = await signUp("fourteen-chars");
+
+    expect(result.error.password).toBe(
+      "Password must contain at least 15 characters",
+    );
+    expect(mocks.createUser).not.toHaveBeenCalled();
+  });
+
+  it("accepts exactly 15 characters", async () => {
+    expect(await signUp("fifteen-chars!!")).toBe(
+      "/login?message=SignUpSuccess",
+    );
+  });
+
+  it("requires a username", async () => {
+    const result = await register(
+      undefined,
+      buildFormData({ username: "", password: "a-long-enough-password" }),
+    );
+
+    expect(result.error.username).toBe("Enter your username");
   });
 });

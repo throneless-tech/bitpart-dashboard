@@ -54,7 +54,7 @@ vi.mock("@/lib/prisma", () => ({
 }));
 
 import { createBotBitpart, linkChannelBitpart } from "./createBot";
-import { readBotBitpart } from "@/app/_lib/bitpart";
+import { readBotBitpart, submitChallengeBitpart } from "@/app/_lib/bitpart";
 import { updateBotBitpart } from "./updateBot";
 import { deleteBot } from "./deleteBot";
 
@@ -159,6 +159,33 @@ describe("readBotBitpart", () => {
     expect(lastSocket().sent).toEqual([
       { message_type: "ReadBot", data: { id: "bot-1" } },
     ]);
+  });
+});
+
+describe("submitChallengeBitpart", () => {
+  it("sends the captcha for the bot's signal channel", async () => {
+    await submitChallengeBitpart("bp:5000", {
+      botId: "bot-1",
+      captcha: "signalcaptcha://abc",
+    });
+
+    expect(lastSocket().url).toBe("ws://bp:5000/ws");
+    expect(lastSocket().sent).toEqual([
+      {
+        message_type: "SubmitChallenge",
+        data: { id: "signal", bot_id: "bot-1", captcha: "signalcaptcha://abc" },
+      },
+    ]);
+  });
+
+  it("includes the challenge token only when given", async () => {
+    await submitChallengeBitpart("bp:5000", {
+      botId: "bot-1",
+      captcha: "signalcaptcha://abc",
+      token: "tok-1",
+    });
+
+    expect(lastSocket().sent[0].data.token).toBe("tok-1");
   });
 });
 
