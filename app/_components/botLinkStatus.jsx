@@ -60,6 +60,7 @@ export default function BotLinkStatus({ bot, username }) {
     try {
       const response = await relinkBot(bot.id, username);
       setQRLink(response.qr);
+      console.log(response.qr);
     } catch (error) {
       console.log(error);
       setLinkError(
