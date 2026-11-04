@@ -129,14 +129,17 @@ export const checkBot = async (bot, { cooldownMs }) => {
 
   const { alerts, cleared } = evaluateBot(bot, health);
 
-  await prisma.bot.update({
-    where: { id: bot.id },
-    data: {
-      lastLinkStatus: health.status,
-      lastSendStatus: health.sendStatus,
-      challengeToken: health.challengeToken,
-    },
-  });
+  const status = {
+    lastLinkStatus: health.status,
+    lastSendStatus: health.sendStatus,
+    challengeToken: health.challengeToken,
+  };
+
+  if (
+    Object.entries(status).some(([k, v]) => (bot[k] ?? null) !== (v ?? null))
+  ) {
+    await prisma.bot.update({ where: { id: bot.id }, data: status });
+  }
 
   // a cleared problem resets its cooldown, so the next incident alerts at once
   if (cleared.length) {
@@ -183,6 +186,8 @@ export const pollOnce = async (
       instance: true,
       botName: true,
       lastLinkStatus: true,
+      lastSendStatus: true,
+      challengeToken: true,
       creator: {
         select: { username: true, email: true, notifyBotIssues: true },
       },

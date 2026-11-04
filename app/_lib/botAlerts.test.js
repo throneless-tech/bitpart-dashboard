@@ -288,6 +288,29 @@ describe("checkBot", () => {
     expect(bot.lastLinkStatus).toBe("linked");
   });
 
+  it("only writes the bot when its status changes", async () => {
+    const bot = newBot();
+    mocks.db.bots.push(bot);
+
+    await check(bot, { send_status: "ok" });
+    await check(bot, { send_status: "ok" });
+    await check(bot, { send_status: "ok" });
+
+    expect(mocks.prisma.bot.update).toHaveBeenCalledTimes(1);
+
+    await check(bot, {
+      send_status: "challenge_required",
+      challenge_token: "tok",
+    });
+    await check(bot, {
+      send_status: "challenge_required",
+      challenge_token: "tok2",
+    });
+
+    expect(mocks.prisma.bot.update).toHaveBeenCalledTimes(3);
+    expect(bot.challengeToken).toBe("tok2");
+  });
+
   it("retries an alert on the next poll if the email fails", async () => {
     const bot = newBot();
     mocks.db.bots.push(bot);
@@ -338,7 +361,7 @@ describe("pollOnce", () => {
       newBot({ id: "b", bitpartId: "bot-b" }),
     );
     mocks.prisma.bot.update.mockRejectedValueOnce(new Error("db hiccup"));
-    mocks.readBotBitpart.mockResolvedValue(readBot({ send_status: "ok" }));
+    mocks.readBotBitpart.mockResolvedValue(readBot({ send_status: "failed" }));
 
     await pollOnce(
       { intervalMs: 1000, cooldownMs: COOLDOWN, concurrency: 2 },
