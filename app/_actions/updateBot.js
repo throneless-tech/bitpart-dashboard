@@ -57,7 +57,7 @@ export const updateBot = async (
         async (tx) => {
           delete data.csv; // we are not saving the codes here
 
-          // the disappearing messages timer is only set when linking
+          // the disappearing messages timer is only set when the bot is created
           delete data.expireTimer;
           delete data.expireTimerCustomValue;
           delete data.expireTimerCustomUnit;

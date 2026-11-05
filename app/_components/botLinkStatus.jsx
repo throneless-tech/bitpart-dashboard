@@ -36,7 +36,6 @@ export default function BotLinkStatus({ bot, username }) {
   const [linkError, setLinkError] = useState("");
 
   const color = useColorModeValue("purple.600", "purple.400");
-  const colorButton = useColorModeValue("black", "white");
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -101,7 +100,7 @@ export default function BotLinkStatus({ bot, username }) {
       </Stack>
       {status === "failing" || status === "unlinked" ? (
         <Button
-          color={colorButton}
+          color="fg"
           marginTop={2}
           onClick={handleRelink}
           size="sm"
@@ -114,7 +113,7 @@ export default function BotLinkStatus({ bot, username }) {
       {bot.lastSendStatus === "challenge_required" ? (
         <Button
           as="a"
-          color={colorButton}
+          color="fg"
           href={`/my-bots/challenge/${bot.id}`}
           marginTop={2}
           size="sm"
@@ -146,7 +145,7 @@ export default function BotLinkStatus({ bot, username }) {
               </Dialog.Body>
               <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>
-                  <Button color={colorButton} variant="outline">
+                  <Button color="fg" variant="outline">
                     Done
                   </Button>
                 </Dialog.ActionTrigger>

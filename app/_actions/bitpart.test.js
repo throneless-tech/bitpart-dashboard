@@ -80,6 +80,7 @@ describe("createBotBitpart", () => {
       "bot-1",
       "PC",
       "bp:5000",
+      604800,
     );
 
     const socket = lastSocket();
@@ -100,6 +101,7 @@ describe("createBotBitpart", () => {
             },
           ],
           default_flow: "Default",
+          expire_timer: 604800,
         },
       },
     ]);
@@ -132,8 +134,8 @@ describe("createBotBitpart", () => {
 });
 
 describe("linkChannelBitpart", () => {
-  it("sends the profile name and expire timer in LinkChannel", async () => {
-    await linkChannelBitpart("bot-1", "bp:5000", "Acme", 604800);
+  it("sends the profile name in LinkChannel", async () => {
+    await linkChannelBitpart("bot-1", "bp:5000", "Acme");
 
     expect(lastSocket().url).toBe("ws://bp:5000/ws");
     expect(lastSocket().sent).toEqual([
@@ -144,7 +146,6 @@ describe("linkChannelBitpart", () => {
           bot_id: "bot-1",
           device_name: "bitpart",
           profile_name: "Acme",
-          expire_timer: 604800,
         },
       },
     ]);

@@ -30,11 +30,14 @@ const getTransport = () => {
   return transport;
 };
 
-export const sendMail = async ({ to, subject, text }) => {
-  const from = requireEnv("MAIL_FROM");
+const fromAddress = () => {
+  const from = requireEnv("MAIL_FROM").trim();
 
-  return getTransport().sendMail({ from, to, subject, text });
+  return from.includes("<") ? from : { name: "Bitpart", address: from };
 };
+
+export const sendMail = async ({ to, subject, text }) =>
+  getTransport().sendMail({ from: fromAddress(), to, subject, text });
 
 // absolute link to a page on this site, for use in emails
 export const appUrl = (path) => {

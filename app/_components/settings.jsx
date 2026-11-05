@@ -29,7 +29,6 @@ import {
 
 // components
 import { Button } from "@/app/_components/ui/button";
-import { useColorModeValue } from "@/app/_components/ui/color-mode";
 
 // fonts
 import { geistMono } from "@/app/fonts";
@@ -69,7 +68,6 @@ const CurrentPassword = ({ state }) => (
 
 export default function Settings({ account }) {
   const router = useRouter();
-  const colorButton = useColorModeValue("black", "white");
   const [notice, setNotice] = useState(null);
   const [notify, setNotify] = useState(account.notifyBotIssues);
   const [notifyNotice, setNotifyNotice] = useState(null);
@@ -121,28 +119,28 @@ export default function Settings({ account }) {
   return (
     <>
       <Section title="Account">
-        <Text className={geistMono.className} fontWeight="bold">
+        <Text className={geistMono.className} fontSize="sm" fontWeight="bold">
           Username
         </Text>
-        <Text>{account.username}</Text>
+        <Text fontSize="sm">{account.username}</Text>
       </Section>
 
       <Section title="Email">
         {account.email ? (
           <Stack alignItems="center" direction="row">
-            <Text>{account.email}</Text>
+            <Text fontSize="sm">{account.email}</Text>
             <Badge colorPalette={account.emailVerified ? "green" : "yellow"}>
               {account.emailVerified ? "Confirmed" : "Not confirmed"}
             </Badge>
           </Stack>
         ) : (
-          <Text>
+          <Text fontSize="sm">
             Your account has no email address. Without one, you won't be able to
             reset your password if you forget it.
           </Text>
         )}
         {account.pendingEmail ? (
-          <Text marginTop={4}>
+          <Text fontSize="sm" marginTop={4}>
             Waiting for you to confirm {account.pendingEmail}. Until then, your
             current email address stays in use.
           </Text>
@@ -150,7 +148,7 @@ export default function Settings({ account }) {
         {account.pendingEmail || (account.email && !account.emailVerified) ? (
           <Stack direction="row" marginTop={4}>
             <Button
-              color={colorButton}
+              color="fg"
               onClick={handleResend}
               size="sm"
               variant="outline"
@@ -159,7 +157,7 @@ export default function Settings({ account }) {
             </Button>
             {account.pendingEmail ? (
               <Button
-                color={colorButton}
+                color="fg"
                 onClick={handleCancel}
                 size="sm"
                 variant="outline"
@@ -208,13 +206,13 @@ export default function Settings({ account }) {
         {account.email ? (
           <form action={removeAction}>
             <input name="username" type="hidden" value={account.username} />
-            <Text marginTop={10}>
+            <Text fontSize="sm" marginTop={10}>
               Remove your email address. You won't be able to reset your
               password if you forget it.
             </Text>
             <CurrentPassword state={removeState} />
             <Button
-              color={colorButton}
+              color="fg"
               disabled={removePending}
               marginTop={6}
               type="submit"
@@ -275,7 +273,7 @@ export default function Settings({ account }) {
             </Field.Label>
             <PasswordInput name="passwordConfirm" size="lg" />
           </Field.Root>
-          <Text fontStyle="italic" marginTop={4}>
+          <Text fontSize="sm" fontStyle="italic" marginTop={4}>
             Changing your password logs you out on every device, including this
             one.
           </Text>

@@ -124,7 +124,6 @@ export const relinkBot = async (botId, username) => {
     bot.bitpartId,
     bot.instance,
     bot.botName,
-    bot.expireTimer,
   );
 
   if (channelLink?.message_type === "Error") {

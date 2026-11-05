@@ -53,7 +53,8 @@ export const acquireLease = async (ttlMs, holder = instanceId) => {
 };
 
 // which alert kinds apply to a bot right now, and which past problems have
-// cleared. "unlinked" only fires when a bot that was linked stops being linked.
+// cleared. "unlinked" only fires when a bot that was linked stops being linked;
+// a failing bot alerts even if it was never seen linked.
 export const evaluateBot = (bot, health) => {
   const alerts = [];
   const cleared = [];
@@ -61,8 +62,8 @@ export const evaluateBot = (bot, health) => {
   if (health.status === "linked") {
     cleared.push("unlinked");
   } else if (
-    bot.lastLinkStatus === "linked" &&
-    (health.status === "failing" || health.status === "unlinked")
+    (health.status === "failing" && bot.lastLinkStatus !== "failing") ||
+    (health.status === "unlinked" && bot.lastLinkStatus === "linked")
   ) {
     alerts.push("unlinked");
   }

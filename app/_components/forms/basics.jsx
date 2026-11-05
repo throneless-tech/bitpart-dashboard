@@ -62,7 +62,7 @@ export const BasicsForm = ({ bot }) => {
       </Field>
       {bot ? (
         <Field
-          helperText="This is only set when the bot is linked."
+          helperText="This is set when the bot is created and applies to new conversations."
           label="Disappearing messages"
           marginBottom={6}
           width="320px"
@@ -73,7 +73,7 @@ export const BasicsForm = ({ bot }) => {
         <>
           <Field
             errorText={!!errors?.expireTimer && errors.expireTimer.message}
-            helperText="Messages sent by the bot will disappear after this amount of time. This is only set when the bot is linked."
+            helperText="Messages in new conversations with the bot will disappear after this amount of time."
             invalid={!!errors?.expireTimer}
             label="Disappearing messages"
             marginBottom={6}

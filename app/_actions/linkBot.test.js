@@ -196,7 +196,7 @@ describe("getBotStatus", () => {
 });
 
 describe("relinkBot", () => {
-  it("sends LinkChannel with the stored name and timer and saves the new link", async () => {
+  it("sends LinkChannel with the stored name and saves the new link", async () => {
     mocks.linkChannelBitpart.mockResolvedValue({
       message_type: "Response",
       data: { response: "sgnl://linkdevice?uuid=abc" },
@@ -208,7 +208,6 @@ describe("relinkBot", () => {
       "bot-1",
       "bp:5000",
       "Acme",
-      604800,
     );
     expect(mocks.update).toHaveBeenCalledWith({
       where: { id: "row-1", creatorId: "user-1" },

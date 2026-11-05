@@ -39,11 +39,21 @@ describe("sendMail", () => {
       auth: { user: "mailer", pass: "secret" },
     });
     expect(mocks.sendMail).toHaveBeenCalledWith({
-      from: "no-reply@bitp.art",
+      from: { name: "Bitpart", address: "no-reply@bitp.art" },
       to: "a@b.org",
       subject: "Hi",
       text: "Body",
     });
+  });
+
+  it("keeps a sender name already given in MAIL_FROM", async () => {
+    vi.stubEnv("MAIL_FROM", "Bitpart Dev <dev@bitp.art>");
+
+    await sendMail({ to: "a@b.org", subject: "Hi", text: "Body" });
+
+    expect(mocks.sendMail).toHaveBeenCalledWith(
+      expect.objectContaining({ from: "Bitpart Dev <dev@bitp.art>" }),
+    );
   });
 
   it("uses SMTPS when SMTP_SECURE is true", async () => {

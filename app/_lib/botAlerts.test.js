@@ -149,6 +149,24 @@ describe("evaluateBot", () => {
     ).toEqual([]);
   });
 
+  it("alerts when a bot is failing before the poller ever saw it linked", () => {
+    expect(
+      evaluateBot({ lastLinkStatus: null }, health({ status: "failing" }))
+        .alerts,
+    ).toEqual(["unlinked"]);
+    expect(
+      evaluateBot({ lastLinkStatus: "unlinked" }, health({ status: "failing" }))
+        .alerts,
+    ).toEqual(["unlinked"]);
+  });
+
+  it("doesn't alert again while a bot stays failing", () => {
+    expect(
+      evaluateBot({ lastLinkStatus: "failing" }, health({ status: "failing" }))
+        .alerts,
+    ).toEqual([]);
+  });
+
   it("alerts for each negative send status", () => {
     ["failed", "challenge_required", "rate_limited"].forEach((sendStatus) => {
       expect(evaluateBot({}, health({ sendStatus })).alerts).toEqual([

@@ -14,7 +14,13 @@ import { emsUrl, sendBitpartMessage } from "@/app/_lib/bitpart";
 import { expireTimerSeconds } from "@/app/_lib/expireTimer";
 
 // create the bot on the bitpart server
-export const createBotBitpart = async (data, bitpartId, passcode, host) => {
+export const createBotBitpart = async (
+  data,
+  bitpartId,
+  passcode,
+  host,
+  expireTimer,
+) => {
   const appsEndpoint = emsUrl("ems");
 
   // format csml
@@ -34,18 +40,14 @@ export const createBotBitpart = async (data, bitpartId, passcode, host) => {
         },
       ],
       default_flow: "Default",
+      expire_timer: expireTimer,
     },
   };
 
   return sendBitpartMessage(host, jsonCreateBot);
 };
 
-export const linkChannelBitpart = async (
-  botId,
-  host,
-  profileName,
-  expireTimer,
-) => {
+export const linkChannelBitpart = async (botId, host, profileName) => {
   const jsonLinkChannel = {
     message_type: "LinkChannel",
     data: {
@@ -53,7 +55,6 @@ export const linkChannelBitpart = async (
       bot_id: botId,
       device_name: "bitpart",
       profile_name: profileName,
-      expire_timer: expireTimer,
     },
   };
 
@@ -124,6 +125,7 @@ export const createBot = async (data, bitpartId, username, passcode) => {
             bitpartId,
             passcode,
             host,
+            expireTimer,
           );
 
           if (bitpartBot?.message_type === "Error") {
@@ -134,7 +136,6 @@ export const createBot = async (data, bitpartId, username, passcode) => {
             bitpartBot.data.response.bot.id,
             host,
             data.botName,
-            expireTimer,
           );
 
           if (channelLink?.message_type === "Error") {
