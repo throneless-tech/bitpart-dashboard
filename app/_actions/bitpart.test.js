@@ -28,6 +28,10 @@ const mocks = await vi.hoisted(async () => {
       this.sent.push(JSON.parse(json));
       setTimeout(() => this.emit("message", JSON.stringify(mocks.reply)));
     }
+
+    close() {
+      this.closed = true;
+    }
   }
 
   return {
@@ -106,6 +110,12 @@ describe("createBotBitpart", () => {
       },
     ]);
     expect(result).toEqual({ message_type: "Ok" });
+  });
+
+  it("closes the socket once bitpart replies", async () => {
+    await createBotBitpart({ botName: "Acme" }, "bot-1", "PC", "bp:5000", 0);
+
+    expect(lastSocket().closed).toBe(true);
   });
 
   it("throws when EMS_SERVER_HOST is not configured", async () => {

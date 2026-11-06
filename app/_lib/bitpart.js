@@ -47,6 +47,10 @@ class WSConnection {
     });
   }
 
+  close() {
+    this._socket?.close();
+  }
+
   _connected(data) {
     if (data === false) {
       this._readyPromise.reject();
@@ -72,8 +76,11 @@ export const sendBitpartMessage = async (host, message) => {
   return ws
     .start()
     .then(async () => {
-      const response = await ws.sendMessage(JSON.stringify(message));
-      return response;
+      try {
+        return await ws.sendMessage(JSON.stringify(message));
+      } finally {
+        ws.close();
+      }
     })
     .catch((err) => {
       throw new Error(
