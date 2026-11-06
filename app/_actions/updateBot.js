@@ -3,7 +3,6 @@
 // base imports
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import WebSocket from "ws";
 
 // actions
 import { formatCsml } from "./formatBot";
@@ -11,70 +10,12 @@ import { getUser } from "./getUser";
 
 // utils
 import { escapeSpecials } from "@/app/_utils/escapeSpecials";
-
-// inspired by https://lee-sherwood.com/2022/01/resolving-javascript-promises-externally-from-other-class-methods/
-class WSConnection {
-  _socket = null;
-  _readyPromise = null;
-
-  constructor(url) {
-    this.url = url;
-  }
-
-  start(json) {
-    this._socket = new WebSocket(this.url, {
-      headers: {
-        Authorization: process.env.BITPART_SERVER_TOKEN,
-      },
-    });
-
-    this._socket.on("error", (err) => {
-      this._connected(false);
-      throw new Error(err.message);
-    });
-
-    this._socket.on("open", () => {
-      this._connected(json);
-    });
-    return new Promise((resolve, reject) => {
-      this._readyPromise = { resolve, reject };
-    });
-  }
-
-  sendMessage(json) {
-    return new Promise((resolve, reject) => {
-      this._socket.send(json);
-      this._socket.on("message", (data) => {
-        if (data.message_type === "Error") {
-          reject(data);
-        } else {
-          const parsed = JSON.parse(data);
-          resolve(parsed);
-        }
-      });
-    });
-  }
-
-  _connected(data) {
-    if (data === false) {
-      this._readyPromise.reject();
-    } else {
-      const response = data ? JSON.parse(data) : null;
-
-      if (null !== this._readyPromise) {
-        if (this._socket.readyState !== this._socket.OPEN) {
-          this._readyPromise.reject(response.errorMessage);
-        } else {
-          this._readyPromise.resolve();
-        }
-        this._readyPromise = null;
-      }
-    }
-  }
-}
+import { emsUrl, sendBitpartMessage } from "@/app/_lib/bitpart";
 
 // update the bot on the bitpart server
 export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
+  const appsEndpoint = emsUrl("ems");
+
   // format csml
   const formattedCsml = await formatCsml(data, passcode);
 
@@ -82,8 +23,7 @@ export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
     message_type: "CreateBot",
     data: {
       id: bitpartId,
-      name: data.botName,
-      apps_endpoint: `http://${process.env.EMS_SERVER_HOST}/ems`,
+      apps_endpoint: appsEndpoint,
       flows: [
         {
           id: "Default",
@@ -96,25 +36,7 @@ export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
     },
   };
 
-  const jsonStringUpdateBot = JSON.stringify(jsonUpdateBot);
-
-  const ws = new WSConnection(`ws://${host}/ws`);
-
-  const response = ws
-    .start()
-    .then(async () => {
-      const response = await ws.sendMessage(jsonStringUpdateBot);
-      return response;
-    })
-    .catch((err) => {
-      throw new Error(
-        err?.message
-          ? err.message
-          : "Web socket connection was refused.Make sure the server is running.",
-      );
-    });
-
-  return response;
+  return sendBitpartMessage(host, jsonUpdateBot);
 };
 
 export const updateBot = async (
@@ -134,6 +56,16 @@ export const updateBot = async (
       result = await prisma.$transaction(
         async (tx) => {
           delete data.csv; // we are not saving the codes here
+
+          // the disappearing messages timer is only set when the bot is created
+          delete data.expireTimer;
+          delete data.expireTimerCustomValue;
+          delete data.expireTimerCustomUnit;
+
+          // maintained by the alert poller, not the edit form
+          delete data.lastLinkStatus;
+          delete data.lastSendStatus;
+          delete data.challengeToken;
 
           const formattedData = escapeSpecials(data);
 

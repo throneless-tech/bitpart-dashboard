@@ -93,13 +93,18 @@ export function LoginForm() {
             <Field.Label className={geistMono.className}>Password</Field.Label>
             <PasswordInput name="password" size="lg" />
           </Field.Root>
+          <Text marginTop={2}>
+            <Link color={color} href="/forgot-password" variant="plain">
+              Forgot your password?
+            </Link>
+          </Text>
           <Submit />
         </Box>
         <Box marginLeft="auto" marginRight="auto" maxW={500}>
           <Text fontStyle="italic" marginTop={8}>
-            Don't have an account? Create one with an invite code{" "}
-            <Link color={color} href="/" variant="plain">
-              here
+            Don't have an account?{" "}
+            <Link color={color} href="/signup" variant="plain">
+              Create one here
             </Link>
             .
           </Text>

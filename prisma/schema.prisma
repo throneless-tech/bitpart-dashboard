@@ -9,16 +9,22 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  email         String?   @unique
-  password      String
-  accounts      Account[]
-  sessions      Session[]
-  bots          Bot[]
-  consent_agree Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  username        String    @unique
+  email           String?   @unique
+  emailVerified   DateTime?
+  pendingEmail    String?
+  password        String
+  // bumped on password change/reset to sign out existing sessions
+  sessionVersion  Int       @default(0)
+  // email alerts about bot problems; only sent when the user has an email
+  notifyBotIssues Boolean   @default(true)
+  accounts        Account[]
+  sessions        Session[]
+  bots            Bot[]
+  consent_agree   Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Account {
@@ -61,10 +67,10 @@ model VerificationToken {
 }
 
 model Bot {
-  id                     String   @id @default(cuid())
+  id                     String     @id @default(cuid())
   botType                String
   botName                String
-  bitpartId              String   @unique
+  bitpartId              String     @unique
   phone                  String?
   countryCode            String
   name                   String
@@ -87,17 +93,48 @@ model Bot {
   vpnName                String?
   instance               String
   qrLink                 String
+  expireTimer            Int        @default(0)
+  // last signal link and send status seen by the alert poller
+  lastLinkStatus         String?
+  lastSendStatus         String?
+  // captcha token from bitpart while a challenge is outstanding
+  challengeToken         String?
+  alerts                 BotAlert[]
   creatorId              String
-  creator                User     @relation(fields: [creatorId], references: [id])
+  creator                User       @relation(fields: [creatorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model InviteCode {
-  id   Int     @id @default(autoincrement())
-  code String  @unique
-  used Boolean @default(false)
+// successful sign-ups, for per-IP rate limiting. stores an HMAC of the IP,
+// never the address itself.
+model SignupAttempt {
+  id        Int      @id @default(autoincrement())
+  ipHash    String
+  createdAt DateTime @default(now())
+
+  @@index([ipHash, createdAt])
+}
+
+// when each kind of alert was last emailed for a bot, for the cooldown
+model BotAlert {
+  id         Int      @id @default(autoincrement())
+  botId      String
+  bot        Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+  kind       String
+  lastSentAt DateTime
+
+  @@unique([botId, kind])
+}
+
+// which dashboard instance currently runs the bot alert poller. the holder
+// renews it while polling; a lease past expiresAt can be taken over, so a
+// crashed instance doesn't stop polling for good.
+model PollerLease {
+  name      String   @id
+  holder    String
+  expiresAt DateTime
 }
 
 model State {

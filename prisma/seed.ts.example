@@ -1,16 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
-import bcrypt from "bcryptjs"
 
 async function main() {
-  const inviteCodes = await prisma.inviteCode.createMany({
-    data: [
-      { code: 'a-unique-invite-code' },
-      { code: 'another-unique-code' },
-    ],
-    skipDuplicates: true,
-  })
-
   const state = await prisma.state.upsert({
     where: { name: "default" },
     create: {

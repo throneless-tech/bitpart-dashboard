@@ -8,6 +8,7 @@ import { Box, Card, ClientOnly, Stack, Switch, Text } from "@chakra-ui/react";
 // components imports
 import { Button } from "@/app/_components/ui/button";
 import { useColorModeValue } from "@/app/_components/ui/color-mode";
+import BotLinkStatus from "@/app/_components/botLinkStatus";
 
 // icons imports
 import Bullhorn from "@/app/_icons/bullhorn";
@@ -74,6 +75,7 @@ export default function BotCard(props) {
           {bot.botName}
         </Card.Title>
         <ClientOnly>
+          <BotLinkStatus bot={bot} username={username} />
           <Box>
             {botPhone ? <Text>{botPhone}</Text> : null}
             <Stack alignItems="flex-start" direction="row" marginTop={2}>

@@ -1,8 +1,8 @@
 // base imports
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 // chakra imports
-import { Input, Separator, Text } from "@chakra-ui/react";
+import { Input, Separator, Stack, Text } from "@chakra-ui/react";
 
 // component imports
 import { Button } from "@/app/_components/ui/button";
@@ -15,12 +15,21 @@ import {
 // country codes
 import { CountryCodes } from "./countryCodes";
 
+// disappearing messages
+import {
+  EXPIRE_TIMER_OPTIONS,
+  EXPIRE_TIMER_UNITS,
+  formatExpireTimer,
+} from "@/app/_lib/expireTimer";
+
 export const BasicsForm = ({ bot }) => {
   const {
     register,
     control,
     formState: { errors },
   } = useFormContext();
+
+  const expireTimer = useWatch({ control, name: "expireTimer" });
 
   // const { register, control, formState: { errors }, } = useFormContext({
   //   defaultValues: {
@@ -41,7 +50,7 @@ export const BasicsForm = ({ bot }) => {
     <>
       <Field
         errorText={!!errors?.botName && errors.botName.message}
-        helperText="Give your bot a name. (This is for you, and won't appear to your users. Note that special characters are not allowed.)"
+        helperText="Give your bot a name. This is also the bot's Signal profile name, which is only set when the bot is linked, so changing it later won't update Signal until the bot is re-linked. (Note that special characters are not allowed.)"
         invalid={!!errors?.botName}
         label="Bot name"
         marginBottom={6}
@@ -51,6 +60,72 @@ export const BasicsForm = ({ bot }) => {
       >
         <Input {...register("botName")} />
       </Field>
+      {bot ? (
+        <Field
+          helperText="This is set when the bot is created and applies to new conversations."
+          label="Disappearing messages"
+          marginBottom={6}
+          width="320px"
+        >
+          <Text>{formatExpireTimer(bot.expireTimer)}</Text>
+        </Field>
+      ) : (
+        <>
+          <Field
+            errorText={!!errors?.expireTimer && errors.expireTimer.message}
+            helperText="Messages in new conversations with the bot will disappear after this amount of time."
+            invalid={!!errors?.expireTimer}
+            label="Disappearing messages"
+            marginBottom={6}
+            width="320px"
+          >
+            <NativeSelectRoot>
+              <NativeSelectField {...register("expireTimer")} defaultValue="0">
+                {EXPIRE_TIMER_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+                <option value="custom">Custom</option>
+              </NativeSelectField>
+            </NativeSelectRoot>
+          </Field>
+          {expireTimer === "custom" ? (
+            <Stack direction="row" marginBottom={6} width="320px">
+              <Field
+                errorText={
+                  !!errors?.expireTimerCustomValue &&
+                  errors.expireTimerCustomValue.message
+                }
+                invalid={!!errors?.expireTimerCustomValue}
+                label="Time"
+                required
+              >
+                <Input
+                  min={1}
+                  step={1}
+                  type="number"
+                  {...register("expireTimerCustomValue")}
+                />
+              </Field>
+              <Field label="Unit">
+                <NativeSelectRoot>
+                  <NativeSelectField
+                    {...register("expireTimerCustomUnit")}
+                    defaultValue="86400"
+                  >
+                    {EXPIRE_TIMER_UNITS.map((unit) => (
+                      <option key={unit.value} value={unit.value}>
+                        {unit.label}
+                      </option>
+                    ))}
+                  </NativeSelectField>
+                </NativeSelectRoot>
+              </Field>
+            </Stack>
+          ) : null}
+        </>
+      )}
       {/* <Fieldset.Root marginTop={8}>
         <Stack>
           <Fieldset.Legend>Bot phone number details (OPTIONAL)</Fieldset.Legend>

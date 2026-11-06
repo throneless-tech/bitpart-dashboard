@@ -1,12 +1,30 @@
 // form validation imports
 import * as yup from "yup";
 
+import { expireTimerSeconds } from "@/app/_lib/expireTimer";
+
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const schema = yup.object({
   botType: yup.string().required("Choose a bot type"),
   botName: yup.string().required("Bot name is required"),
+  expireTimer: yup.string().optional(),
+  expireTimerCustomValue: yup.string().when("expireTimer", {
+    is: "custom",
+    then: () =>
+      yup
+        .string()
+        .required("Enter a time")
+        .test(
+          "valid-expire-timer",
+          "Enter a whole number greater than 0, up to about 68 years",
+          function () {
+            return expireTimerSeconds(this.parent) !== null;
+          },
+        ),
+  }),
+  expireTimerCustomUnit: yup.string().optional(),
   // phone: yup.string().matches(phoneRegExp, {
   //   message: "Phone number is not valid",
   //   excludeEmptyString: true,

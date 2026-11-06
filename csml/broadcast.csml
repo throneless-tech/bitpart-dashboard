@@ -72,7 +72,7 @@ admin_interface_step:
     say "Please send me your message now."
     hold
 
-    shout event
+    shout Text(event, attachments=event.attachments)
 
     say "Your message has been sent."
 

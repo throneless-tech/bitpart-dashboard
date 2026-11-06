@@ -108,6 +108,7 @@ Please share your tip with us.")
       goto delete_data_step
     } else { 
       remember tip = event  
+      remember tip_attachments = event.attachments
       
       goto tip_reply_step
     }
@@ -147,6 +148,7 @@ Reply with 'Delete' to delete your data.")
     hold
 
     remember tip = event  
+    remember tip_attachments = event.attachments
     
     goto tip_reply_step
 
@@ -195,9 +197,9 @@ We may want to follow up with you. Do you give permission for one of our team to
   } else if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper "A user sent the following anonymous tip: {{tip}}.
+    whisper Text("A user sent the following anonymous tip: {{tip}}.
     
-They did not wish to be contacted."
+They did not wish to be contacted.", attachments=tip_attachments, strip_file_names=true)
 
     goto end
   } else if (event.to_lowercase() == "my data") {
@@ -257,9 +259,9 @@ record_number_step:
 
   say "Thanks, we will send your information to our team. Please message us again if you have another tip."
   
-  whisper "A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  whisper Text("A user sent a tip and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
   
-Here is the tip they provided: {{tip}}"
+Here is the tip they provided: {{tip}}", attachments=tip_attachments, strip_file_names=true)
 
   goto end
 
@@ -273,9 +275,9 @@ Reply 'Back' to go to the previous menu of options")
   if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you. Thanks again for the tip."
 
-    whisper "A user sent the following anonymous tip: {{tip}}.
+    whisper Text("A user sent the following anonymous tip: {{tip}}.
     
-They did not wish to be contacted."
+They did not wish to be contacted.", attachments=tip_attachments, strip_file_names=true)
 
     delete
     goto end

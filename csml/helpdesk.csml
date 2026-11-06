@@ -290,6 +290,7 @@ Please type your question:"
   hold
 
   remember problem = event
+  remember problem_attachments = event.attachments
 
   if (event.to_lowercase() == "delete") {
     goto delete_data_step
@@ -353,9 +354,9 @@ record_number_step:
   remember contact_number = event
 
   // flag relevant data to bitpart
-  whisper "A user had a problem not covered by the helpdesk, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
+  whisper Text("A user had a problem not covered by the helpdesk, and provided the following contact information: Via {{contact_preference}}, contact {{contact_number}}.
   
-Here is the problem they experienced: {{problem}}"
+Here is the problem they experienced: {{problem}}", attachments=problem_attachments)
 
   say "Thank you. An admin will continue this conversation. They will aim to be in touch with you within [responseTime]."
 
@@ -371,9 +372,9 @@ Reply 'Back' to go to the previous menu of options")
   if (event.to_lowercase() == "no") {
     say "Ok, we will not contact you."
 
-    whisper "A user had a problem not covered by the helpdesk: {{problem}}.
+    whisper Text("A user had a problem not covered by the helpdesk: {{problem}}.
     
-They sent this problem anonymously and did not wish to be contacted."
+They sent this problem anonymously and did not wish to be contacted.", attachments=problem_attachments)
 
     goto end
   } else if (event.to_lowercase() == "back") {

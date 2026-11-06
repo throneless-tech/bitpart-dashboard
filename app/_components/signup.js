@@ -1,13 +1,13 @@
 "use client";
 
 // react imports
-import React, { useActionState, useEffect } from "react";
+import React, { useActionState } from "react";
 
 // actions imports
 import { register } from "@/app/_actions/register";
 
 // chakra ui imports
-import { Container, Field, Input } from "@chakra-ui/react";
+import { Container, Field, Input, Text } from "@chakra-ui/react";
 import { PasswordInput } from "@/app/_components/ui/password-input";
 
 // components
@@ -15,6 +15,8 @@ import { Button } from "@/app/_components/ui/button";
 
 // fonts
 import { geistMono } from "../fonts";
+
+import { MIN_PASSWORD_LENGTH } from "@/app/_lib/definitions";
 
 const initialState = {
   error: "",
@@ -26,18 +28,12 @@ export function SignupForm() {
   return (
     <form action={formAction}>
       <Container marginLeft="auto" marginRight="auto" maxW="lg">
-        <Field.Root invalid={state?.error} required>
-          <Field.Label className={geistMono.className}>
-            Enter your invite code
-          </Field.Label>
-          <PasswordInput name="code" placeholder="invite-code-here" size="lg" />
-          {state?.error ? (
-            <Field.ErrorText>
-              {state?.error?.general || state?.error?.code}
-            </Field.ErrorText>
-          ) : null}
-        </Field.Root>
-        <Field.Root invalid={state?.error?.username} marginTop={12}>
+        {state?.error?.general ? (
+          <Text color="red.500" marginBottom={8} role="alert">
+            {state.error.general}
+          </Text>
+        ) : null}
+        <Field.Root invalid={state?.error?.email}>
           <Field.Label className={geistMono.className}>
             Enter your email address
           </Field.Label>
@@ -69,6 +65,10 @@ export function SignupForm() {
             placeholder="AVeryGoodPassword"
             size="lg"
           />
+          <Field.HelperText>
+            At least {MIN_PASSWORD_LENGTH} characters. A few random words strung
+            together make a strong password that's easy to remember.
+          </Field.HelperText>
           {state?.error?.password ? (
             <Field.ErrorText>{state.error.password}</Field.ErrorText>
           ) : null}

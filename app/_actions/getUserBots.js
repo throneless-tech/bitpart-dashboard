@@ -5,6 +5,9 @@ import { prisma } from "@/lib/prisma";
 // actions
 import { getUser } from "./getUser";
 
+// the captcha token only needs to reach bitpart, never the browser
+const omit = { challengeToken: true };
+
 export const getUserBots = async (username) => {
   try {
     const user = await getUser(username);
@@ -13,6 +16,7 @@ export const getUserBots = async (username) => {
       where: {
         creatorId: user.id,
       },
+      omit,
     });
 
     return {
@@ -34,6 +38,7 @@ export const getBot = async (botId, username) => {
         id: botId,
         creatorId: user.id,
       },
+      omit,
     });
 
     return bot;

@@ -1,9 +1,16 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { LoginSchema } from "../_lib/definitions";
+import { SignupSchema } from "../_lib/definitions";
+import { sendVerificationEmail } from "@/app/_lib/accountEmails";
+import {
+  clientIp,
+  recordSignup,
+  signupAllowed,
+} from "@/app/_lib/signupRateLimit";
 
 export const register = async (prevState, formData) => {
   let redirectPath = null;
@@ -11,16 +18,19 @@ export const register = async (prevState, formData) => {
   const password = formData.get("password");
   const passwordConfirm = formData.get("passwordConfirm");
   const username = formData.get("username");
-  const email = formData.get("email");
+  // email is optional; normalize a blank field to null so it doesn't collide
+  // on the unique constraint or match other email-less accounts
+  const email = formData.get("email")?.trim() || null;
 
   try {
     // validate form fields
-    const validatedFields = await LoginSchema.validate({ username, password });
-
-    // If any form fields are invalid, return early
-    if (!validatedFields.username || !validatedFields.password) {
+    try {
+      await SignupSchema.validate({ username, password });
+    } catch (validationError) {
       return {
-        error: validatedFields,
+        error: {
+          [validationError.path ?? "general"]: validationError.message,
+        },
       };
     }
 
@@ -33,9 +43,28 @@ export const register = async (prevState, formData) => {
       };
     }
 
+    const ip = clientIp(await headers());
+
+    if (!(await signupAllowed(ip))) {
+      return {
+        error: {
+          general:
+            "Too many accounts have been created from your network recently. Please try again later.",
+        },
+      };
+    }
+
     const userFound = await prisma.user.findFirst({
       where: {
-        OR: [{ email }, { username }],
+        OR: [
+          { username },
+          ...(email
+            ? [
+                { email: { equals: email, mode: "insensitive" } },
+                { pendingEmail: { equals: email, mode: "insensitive" } },
+              ]
+            : []),
+        ],
       },
     });
 
@@ -47,35 +76,6 @@ export const register = async (prevState, formData) => {
       };
     }
 
-    const inviteCode = await prisma.inviteCode.findUnique({
-      where: {
-        code: formData.get("code"),
-      },
-    });
-
-    if (!inviteCode) {
-      return {
-        error: {
-          code: "Invite code is not valid. Please try again.",
-        },
-      };
-    } else if (inviteCode.used) {
-      return {
-        error: {
-          code: "Invite code has already been used. Please enter a different code or contact an administrator.",
-        },
-      };
-    }
-
-    const updateInviteCode = await prisma.inviteCode.update({
-      where: {
-        code: inviteCode.code,
-      },
-      data: {
-        used: true,
-      },
-    });
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -85,6 +85,17 @@ export const register = async (prevState, formData) => {
         password: hashedPassword,
       },
     });
+
+    await recordSignup(ip);
+
+    if (email) {
+      try {
+        await sendVerificationEmail(user);
+      } catch (error) {
+        // the account is created either way; they can resend from settings
+        console.error("Failed to send confirmation email", error);
+      }
+    }
 
     redirectPath = "/login?message=SignUpSuccess";
   } catch (e) {

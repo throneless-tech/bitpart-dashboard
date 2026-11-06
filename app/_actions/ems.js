@@ -1,4 +1,5 @@
 "use server";
+import { emsUrl } from "@/app/_lib/bitpart";
 
 export async function sendToEMS(botId, botType, json) {
   let data = {};
@@ -18,7 +19,7 @@ export async function sendToEMS(botId, botType, json) {
   const endpoint =
     botType === "esim" ? "esim_codes" : botType === "vpn" ? "vpn_tokens" : "";
 
-  fetch(`http://${process.env.EMS_SERVER_HOST}/${endpoint}`, {
+  fetch(emsUrl(endpoint), {
     method: "post",
     headers: {
       Accept: "application/json",
@@ -35,4 +36,9 @@ export async function sendToEMS(botId, botType, json) {
     .catch((err) => {
       throw new Error(err.message);
     });
+}
+
+// STUB: removes a bot's codes/tokens from the EMS on deletion.
+export async function deleteFromEMS(_botId, _botType) {
+  return;
 }

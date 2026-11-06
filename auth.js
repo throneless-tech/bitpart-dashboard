@@ -3,16 +3,19 @@ import authConfig from "@/auth.config";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import { checkSessionVersion } from "@/app/_lib/sessionVersion";
 
 const paths = [
   "/create",
   "/edit",
   "/my-bots",
+  "/settings",
   "/view"
 ]
 
 export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
   debug: !!process.env.AUTH_DEBUG,
+  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   session: {
     maxAge: 60 * 60,
@@ -24,32 +27,21 @@ export const { handlers, signIn, signOut, newUser, auth } = NextAuth({
       if (paths.find((p) => p == pathname)) return !!auth
       return true
     },
-    jwt({ token, trigger, user, account }) {
-      if (trigger === "update") token.name = session.user.username;
-      // if (account?.provider === "credentials") {
-      //   token.credentials = true;
-      // }
+    async jwt({ token, user }) {
       if (user) {
         // User is available during sign-in
-        // token.id = user.id;
         token.name = user.username;
       }
 
-      return token;
+      return checkSessionVersion({ token, user });
     },
     session({ session, token }) {
-      // if (token?.id) session.id = token.id;
-      // if (token?.name) session.name = token.name;
-
       return session;
     },
   },
   credentials: {
     username: {},
     password: {},
-  },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
   },
   pages: {
     error: "/error",

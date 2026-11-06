@@ -109,6 +109,15 @@ export default function Header(props) {
                               </Link>
                             </Menu.Item>
                             <Menu.Item>
+                              <Link
+                                color={textColor}
+                                href="/settings"
+                                variant="plain"
+                              >
+                                Settings
+                              </Link>
+                            </Menu.Item>
+                            <Menu.Item>
                               <form action={onSubmit}>
                                 <Button
                                   color={textColor}
@@ -172,9 +181,14 @@ export default function Header(props) {
               <Flex gap={4}>
                 <ClientOnly>
                   {session && (
-                    <Link color={textColor} href="/my-bots" variant="plain">
-                      My Bots
-                    </Link>
+                    <>
+                      <Link color={textColor} href="/my-bots" variant="plain">
+                        My Bots
+                      </Link>
+                      <Link color={textColor} href="/settings" variant="plain">
+                        Settings
+                      </Link>
+                    </>
                   )}
                   <Link color={textColor} href="/about" variant="plain">
                     About Us

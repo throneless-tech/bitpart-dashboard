@@ -1,5 +1,5 @@
 "use server";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { unstable_rethrow } from "next/navigation";
 import { signOut } from "@/auth";
 
 export const logout = async () => {
@@ -8,12 +8,10 @@ export const logout = async () => {
 
     return {
       success: true,
-      message: "Your account has been successfully logged in.",
+      message: "Your account has been successfully logged out.",
     };
   } catch (error) {
-    if (isRedirectError(error)) {
-      return { success: false, message: formatError(error) };
-    }
+    unstable_rethrow(error);
     return { success: false, message: error.type };
   }
 };
