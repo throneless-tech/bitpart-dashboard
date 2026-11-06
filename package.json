@@ -13,6 +13,7 @@
     "lint:strict": "next lint '*/**/*.{js,jsx,ts,tsx}'",
     "prettier": "prettier --write */**/*.{js,jsx,json,ts,css,md}",
     "prepare": "husky",
+    "resave-bots": "tsx --tsconfig tsconfig.json scripts/resave-bots.ts",
     "data-migration:add-instance": "npx tsx ./prisma/migrations/20250902173425_add_instance_to_settings_and_bot/data-migration.ts",
     "data-migration:update-instance": "npx tsx ./prisma/migrations/20250902190702_update_current_instance_to_last_instance/data-migration.ts",
     "data-migration:add-name-to-state": "npx tsx ./prisma/migrations/20250902192248_add_name_to_state/data-migration.ts",
