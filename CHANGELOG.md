@@ -1,3 +1,23 @@
+## 1.1.0 (2026-11-06)
+
+### Feat
+
+- Add email alerts and raise minimum password length to 15 in accordance with NIST 2026 guidelines.
+- Enable email verification and password reset workflows, remove invite codes.
+- Expose Signal link status and allow relinking bots.
+- Add expire timer and profile name to settings.
+
+### Fix
+
+- Close bitpart socket after sending message.
+- Add temporary resave-bots script.
+- Add attachment handling to csml templates.
+- Miscellaneous fixes from release testing.
+- Only write to bot alert table if the status has changed.
+- Print QR code URI on re-link flow.
+- Abstract websocket connection into its own file.
+- Bump dependencies and add additional checks around bot deletions and empty environment variables.
+
 ## 1.0.10 (2026-03-03)
 
 ### Fix
