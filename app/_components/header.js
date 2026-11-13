@@ -9,6 +9,7 @@ import { geistMono } from "@/app/fonts";
 
 // actions imports
 import { logout } from "@/app/_actions/logout";
+import { refreshSession } from "@/app/_lib/authClient";
 
 // chakra ui imports
 import {
@@ -49,6 +50,7 @@ export default function Header(props) {
       const res = await logout();
 
       if (res.success) {
+        refreshSession();
         router.push("/");
       } else {
         console.log(res.message);

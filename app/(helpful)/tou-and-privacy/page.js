@@ -2,7 +2,7 @@
 
 // base imports
 import React from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/app/_lib/authClient";
 
 // chakra ui imports
 import {

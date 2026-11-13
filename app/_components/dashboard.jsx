@@ -1,5 +1,4 @@
 "use client";
-import { useSession } from "next-auth/react";
 
 // chakra ui imports
 import { Box, Container, Heading, Spinner, Text } from "@chakra-ui/react";

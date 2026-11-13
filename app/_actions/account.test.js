@@ -1,15 +1,29 @@
 import bcrypt from "bcryptjs";
+import { signJWT } from "better-auth/crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const SECRET = vi.hoisted(() => "test-secret-test-secret-test-secret");
 
 const mocks = vi.hoisted(() => ({
   users: [],
+  accounts: [],
   getUser: vi.fn(),
-  consumeToken: vi.fn(),
-  clearTokens: vi.fn(),
   sendVerificationEmail: vi.fn(),
   sendPasswordResetEmail: vi.fn(),
   sendEmailChangedNotice: vi.fn(),
   sendPasswordChangedNotice: vi.fn(),
+  clearMailThrottle: vi.fn(),
+  clearResetTokens: vi.fn(),
+  deleteSessions: vi.fn(),
+  api: {
+    requestPasswordReset: vi.fn(),
+    resetPassword: vi.fn(),
+    verifyEmail: vi.fn(),
+    sendVerificationEmail: vi.fn(),
+    changeEmail: vi.fn(),
+    changePassword: vi.fn(),
+    signOut: vi.fn(),
+  },
   redirect: vi.fn((path) => {
     throw Object.assign(new Error("NEXT_REDIRECT"), { path });
   }),
@@ -46,31 +60,36 @@ vi.mock("@/lib/prisma", () => ({
       ),
       update: vi.fn(async ({ where, data }) => {
         const user = mocks.users.find((u) => rowMatches(u, where));
-        for (const [k, v] of Object.entries(data)) {
-          if (v && typeof v === "object" && "increment" in v) {
-            user[k] += v.increment;
-          } else {
-            user[k] = v;
-          }
-        }
-        if (
-          user.email &&
-          mocks.users.some((u) => u !== user && u.email === user.email)
-        ) {
-          throw Object.assign(new Error("Unique constraint"), {
-            code: "P2002",
-          });
-        }
+        Object.assign(user, data);
         return user;
       }),
+      updateMany: vi.fn(async ({ where, data }) => {
+        const found = mocks.users.filter((u) => rowMatches(u, where));
+        found.forEach((u) => Object.assign(u, data));
+        return { count: found.length };
+      }),
     },
+    account: {
+      findFirst: vi.fn(
+        async ({ where }) =>
+          mocks.accounts.find((a) => rowMatches(a, where)) ?? null,
+      ),
+    },
+    session: { deleteMany: mocks.deleteSessions },
   },
 }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
+vi.mock("next/headers", () => ({ headers: async () => new Headers() }));
 vi.mock("./getUser", () => ({ getUser: mocks.getUser }));
-vi.mock("@/app/_lib/tokens", () => ({
-  consumeToken: mocks.consumeToken,
-  clearTokens: mocks.clearTokens,
+vi.mock("@/auth", () => ({
+  betterAuthServer: {
+    api: mocks.api,
+    $context: Promise.resolve({ secret: SECRET }),
+  },
+}));
+vi.mock("@/app/_lib/mailThrottle", () => ({
+  clearMailThrottle: mocks.clearMailThrottle,
+  clearResetTokens: mocks.clearResetTokens,
 }));
 vi.mock("@/app/_lib/accountEmails", () => ({
   sendVerificationEmail: mocks.sendVerificationEmail,
@@ -79,11 +98,15 @@ vi.mock("@/app/_lib/accountEmails", () => ({
   sendPasswordChangedNotice: mocks.sendPasswordChangedNotice,
 }));
 
+import { authMailCallback } from "@/app/_lib/authMail";
 import {
+  cancelEmailChange,
   changeEmail,
   changePassword,
+  getAccountSettings,
   removeEmail,
   requestPasswordReset,
+  resendVerificationEmail,
   resetPassword,
   setBotIssueNotifications,
   verifyEmail,
@@ -105,17 +128,31 @@ const redirectOf = async (promise) => {
   return null;
 };
 
+// what better auth puts in its email links
+const changeToken = (user, updateTo) =>
+  signJWT(
+    {
+      email: user.email,
+      updateTo,
+      requestType: "change-email-verification",
+      userId: user.id,
+    },
+    SECRET,
+  );
+const verifyToken = (user) =>
+  signJWT({ email: user.email, userId: user.id }, SECRET);
+
+const PLACEHOLDER = "0b6e6f2e-7c4e-4a43-9d0f-2f7f3b1d9b11@no-email.invalid";
+
 let alice;
 
 beforeEach(async () => {
   alice = {
     id: "user-1",
     username: "alice",
-    email: "Alice@Mail.org",
-    emailVerified: null,
+    email: "alice@mail.org",
+    emailVerified: false,
     pendingEmail: null,
-    password: await bcrypt.hash("old-password", 4),
-    sessionVersion: 0,
     notifyBotIssues: true,
   };
   mocks.users.length = 0;
@@ -123,20 +160,54 @@ beforeEach(async () => {
     id: "user-2",
     username: "bob",
     email: "bob@mail.org",
-    emailVerified: new Date(),
+    emailVerified: true,
     pendingEmail: null,
-    password: "x",
-    sessionVersion: 0,
+  });
+  mocks.accounts.length = 0;
+  mocks.accounts.push({
+    userId: "user-1",
+    providerId: "credential",
+    password: await bcrypt.hash("old-password", 4),
   });
   mocks.getUser.mockImplementation(async (username) =>
     username === "alice" ? alice : null,
   );
   mocks.sendVerificationEmail.mockResolvedValue(true);
   mocks.sendPasswordResetEmail.mockResolvedValue(true);
+
+  // better auth asks for its emails through the send callbacks
+  mocks.api.requestPasswordReset.mockImplementation(async ({ body }) => {
+    const user = mocks.users.find((u) => u.email === body.email);
+    await authMailCallback("reset-password")({ user, token: "reset-tok" });
+  });
+  mocks.api.sendVerificationEmail.mockImplementation(async ({ body }) => {
+    const user = mocks.users.find((u) => u.email === body.email);
+    await authMailCallback("verify-email")({ user, token: "verify-tok" });
+  });
+  mocks.api.changeEmail.mockImplementation(async ({ body }) => {
+    if (!alice.emailVerified) {
+      alice.email = body.newEmail;
+    }
+    await authMailCallback("verify-email")({
+      user: { ...alice, email: body.newEmail },
+      token: "change-tok",
+    });
+  });
 });
 
 afterEach(() => {
   vi.clearAllMocks();
+});
+
+describe("getAccountSettings", () => {
+  it("doesn't show a placeholder email", async () => {
+    alice.email = PLACEHOLDER;
+
+    expect(await getAccountSettings("alice")).toMatchObject({
+      email: null,
+      emailVerified: false,
+    });
+  });
 });
 
 describe("requestPasswordReset", () => {
@@ -155,16 +226,22 @@ describe("requestPasswordReset", () => {
     await ask("alice");
     await ask("alice@mail.ORG");
 
-    expect(mocks.sendPasswordResetEmail).toHaveBeenCalledTimes(2);
-    expect(mocks.sendPasswordResetEmail).toHaveBeenCalledWith(alice);
+    expect(mocks.api.requestPasswordReset).toHaveBeenCalledTimes(2);
+    expect(mocks.api.requestPasswordReset).toHaveBeenCalledWith({
+      body: { email: "alice@mail.org" },
+    });
+    expect(mocks.sendPasswordResetEmail).toHaveBeenCalledWith({
+      user: alice,
+      token: "reset-tok",
+    });
   });
 
-  it("sends nothing for an account without an email", async () => {
-    alice.email = null;
+  it("sends nothing for an account with a placeholder email", async () => {
+    alice.email = PLACEHOLDER;
 
-    const result = await ask("alice");
-
-    expect(result.success).toMatch(/If an account/);
+    expect((await ask("alice")).success).toMatch(/If an account/);
+    expect((await ask(PLACEHOLDER)).success).toMatch(/If an account/);
+    expect(mocks.api.requestPasswordReset).not.toHaveBeenCalled();
     expect(mocks.sendPasswordResetEmail).not.toHaveBeenCalled();
   });
 
@@ -173,7 +250,7 @@ describe("requestPasswordReset", () => {
 
     await ask("new@mail.org");
 
-    expect(mocks.sendPasswordResetEmail).not.toHaveBeenCalled();
+    expect(mocks.api.requestPasswordReset).not.toHaveBeenCalled();
   });
 
   it("hides mail failures behind the same answer", async () => {
@@ -188,26 +265,21 @@ describe("resetPassword", () => {
   const reset = (password, passwordConfirm = password) =>
     resetPassword(undefined, form({ token: "tok", password, passwordConfirm }));
 
-  it("sets the new password, signs out sessions and redirects", async () => {
-    mocks.consumeToken.mockResolvedValue("user-1");
-
+  it("resets through better auth and redirects", async () => {
     expect(await redirectOf(reset("a-long-new-password"))).toBe(
       "/login?message=PasswordResetSuccess",
     );
-    expect(mocks.consumeToken).toHaveBeenCalledWith("reset-password", "tok");
-    expect(await bcrypt.compare("a-long-new-password", alice.password)).toBe(
-      true,
-    );
-    expect(alice.sessionVersion).toBe(1);
+    expect(mocks.api.resetPassword).toHaveBeenCalledWith({
+      body: { newPassword: "a-long-new-password", token: "tok" },
+    });
   });
 
   it("rejects an invalid or expired token", async () => {
-    mocks.consumeToken.mockResolvedValue(null);
+    mocks.api.resetPassword.mockRejectedValue(new Error("INVALID_TOKEN"));
 
     const result = await reset("a-long-new-password");
 
     expect(result.error.general).toMatch(/invalid or has expired/);
-    expect(alice.sessionVersion).toBe(0);
   });
 
   it("checks the password before using up the token", async () => {
@@ -217,46 +289,123 @@ describe("resetPassword", () => {
     expect(
       (await reset("a-long-new-password", "other")).error.password,
     ).toMatch(/do not match/);
-    expect(mocks.consumeToken).not.toHaveBeenCalled();
+    expect(mocks.api.resetPassword).not.toHaveBeenCalled();
   });
 });
 
 describe("verifyEmail", () => {
   it("confirms the current email", async () => {
-    mocks.consumeToken.mockResolvedValue("user-1");
+    const token = await verifyToken(alice);
 
-    expect(await verifyEmail("tok")).toEqual({ email: "Alice@Mail.org" });
-    expect(alice.emailVerified).toBeInstanceOf(Date);
-    expect(mocks.consumeToken).toHaveBeenCalledWith("verify-email", "tok");
+    expect(await verifyEmail(token)).toEqual({ email: "alice@mail.org" });
+    expect(mocks.api.verifyEmail).toHaveBeenCalledWith({ query: { token } });
   });
 
-  it("swaps in a pending email and notifies the old address", async () => {
+  it("applies the waiting email change and notifies the old address", async () => {
+    alice.emailVerified = true;
     alice.pendingEmail = "new@mail.org";
-    mocks.consumeToken.mockResolvedValue("user-1");
+    const token = await changeToken(alice, "new@mail.org");
 
-    expect(await verifyEmail("tok")).toEqual({ email: "new@mail.org" });
-    expect(alice.email).toBe("new@mail.org");
+    expect(await verifyEmail(token)).toEqual({ email: "new@mail.org" });
+    expect(mocks.api.verifyEmail).toHaveBeenCalledWith({ query: { token } });
     expect(alice.pendingEmail).toBeNull();
-    expect(alice.emailVerified).toBeInstanceOf(Date);
     expect(mocks.sendEmailChangedNotice).toHaveBeenCalledWith({
       username: "alice",
-      oldEmail: "Alice@Mail.org",
+      oldEmail: "alice@mail.org",
       newEmail: "new@mail.org",
     });
   });
 
-  it("refuses if the pending email was taken in the meantime", async () => {
-    alice.pendingEmail = "bob@mail.org";
-    mocks.consumeToken.mockResolvedValue("user-1");
+  it("refuses a change link after the change was cancelled", async () => {
+    alice.emailVerified = true;
+    alice.pendingEmail = "new@mail.org";
+    const token = await changeToken(alice, "new@mail.org");
 
-    expect((await verifyEmail("tok")).error).toMatch(/another account/);
+    await cancelEmailChange("alice");
+
+    expect((await verifyEmail(token)).error).toMatch(/invalid or has expired/);
+    expect(mocks.api.verifyEmail).not.toHaveBeenCalled();
+  });
+
+  it("refuses a change link for an earlier, replaced change", async () => {
+    alice.emailVerified = true;
+    alice.pendingEmail = "newer@mail.org";
+    const token = await changeToken(alice, "new@mail.org");
+
+    expect((await verifyEmail(token)).error).toMatch(/invalid or has expired/);
+    expect(mocks.api.verifyEmail).not.toHaveBeenCalled();
+  });
+
+  it("refuses if the pending email was taken in the meantime", async () => {
+    alice.emailVerified = true;
+    alice.pendingEmail = "bob@mail.org";
+    const token = await changeToken(alice, "bob@mail.org");
+
+    expect((await verifyEmail(token)).error).toMatch(/another account/);
+    expect(mocks.api.verifyEmail).not.toHaveBeenCalled();
   });
 
   it("rejects an invalid token", async () => {
-    mocks.consumeToken.mockResolvedValue(null);
+    expect((await verifyEmail("not-a-token")).error).toMatch(
+      /invalid or has expired/,
+    );
+    const forged = await signJWT(
+      { email: alice.email, userId: alice.id },
+      "some-other-secret-some-other-secret",
+    );
+    expect((await verifyEmail(forged)).error).toMatch(/invalid or has expired/);
+    expect(mocks.api.verifyEmail).not.toHaveBeenCalled();
+  });
 
-    expect((await verifyEmail("tok")).error).toMatch(/invalid or has expired/);
-    expect(alice.emailVerified).toBeNull();
+  it("maps a better auth failure to the same message", async () => {
+    mocks.api.verifyEmail.mockRejectedValue(new Error("TOKEN_EXPIRED"));
+
+    expect((await verifyEmail(await verifyToken(alice))).error).toMatch(
+      /invalid or has expired/,
+    );
+  });
+});
+
+describe("resendVerificationEmail", () => {
+  it("resends for an unconfirmed real email", async () => {
+    expect((await resendVerificationEmail("alice")).success).toMatch(/sent/);
+    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith({
+      user: alice,
+      token: "verify-tok",
+    });
+  });
+
+  it("resends the link for a waiting email change", async () => {
+    alice.emailVerified = true;
+    alice.pendingEmail = "new@mail.org";
+
+    expect((await resendVerificationEmail("alice")).success).toMatch(/sent/);
+    expect(mocks.api.changeEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ body: { newEmail: "new@mail.org" } }),
+    );
+    expect(alice.pendingEmail).toBe("new@mail.org");
+  });
+
+  it("sends nothing to a placeholder or confirmed email", async () => {
+    alice.email = PLACEHOLDER;
+    expect((await resendVerificationEmail("alice")).error).toMatch(
+      /couldn't send/,
+    );
+
+    alice.email = "alice@mail.org";
+    alice.emailVerified = true;
+    expect((await resendVerificationEmail("alice")).error).toMatch(
+      /couldn't send/,
+    );
+    expect(mocks.sendVerificationEmail).not.toHaveBeenCalled();
+  });
+
+  it("reports a throttled resend", async () => {
+    mocks.sendVerificationEmail.mockResolvedValue(false);
+
+    expect((await resendVerificationEmail("alice")).error).toMatch(
+      /wait a couple of minutes/,
+    );
   });
 });
 
@@ -268,43 +417,68 @@ describe("changeEmail", () => {
     const result = await change("new@mail.org", "wrong");
 
     expect(result.error.currentPassword).toMatch(/incorrect/);
+    expect(mocks.api.changeEmail).not.toHaveBeenCalled();
+  });
+
+  it("keeps a confirmed email until the new one is confirmed", async () => {
+    alice.emailVerified = true;
+
+    const result = await change("New@Mail.org");
+
+    expect(result.success).toMatch(/sent a confirmation link to new@mail.org/);
+    expect(mocks.api.changeEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ body: { newEmail: "new@mail.org" } }),
+    );
+    expect(alice.email).toBe("alice@mail.org");
+    expect(alice.pendingEmail).toBe("new@mail.org");
+    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith({
+      user: expect.objectContaining({ email: "new@mail.org" }),
+      token: "change-tok",
+    });
+  });
+
+  it("switches an unconfirmed email straight away", async () => {
+    const result = await change("new@mail.org");
+
+    expect(result.success).toMatch(/sent a confirmation link/);
+    expect(alice.email).toBe("new@mail.org");
     expect(alice.pendingEmail).toBeNull();
   });
 
-  it("keeps the old email until the new one is confirmed", async () => {
-    const result = await change(" new@mail.org ");
-
-    expect(result.success).toMatch(/new@mail.org/);
-    expect(alice.email).toBe("Alice@Mail.org");
-    expect(alice.pendingEmail).toBe("new@mail.org");
-    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ pendingEmail: "new@mail.org" }),
-    );
-  });
-
-  it("uses the new email straight away when there was none", async () => {
-    alice.email = null;
+  it("replaces a placeholder straight away", async () => {
+    alice.email = PLACEHOLDER;
 
     await change("new@mail.org");
 
     expect(alice.email).toBe("new@mail.org");
-    expect(alice.emailVerified).toBeNull();
     expect(alice.pendingEmail).toBeNull();
+  });
+
+  it("says when the link couldn't be sent", async () => {
+    mocks.sendVerificationEmail.mockRejectedValue(new Error("smtp down"));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+
+    expect((await change("new@mail.org")).success).toMatch(/couldn't send/);
   });
 
   it("rejects an email used by another account, in any case", async () => {
     expect((await change("BOB@mail.org")).error.email).toMatch(/in use/);
   });
 
-  it("rejects an invalid email and the current email", async () => {
-    expect((await change("not-an-email")).error.email).toMatch(/valid/);
-    expect((await change("alice@mail.org")).error.email).toMatch(/already/);
+  it("rejects an invalid email, a placeholder and the current email", async () => {
+    expect((await change("nope")).error.email).toMatch(/valid/);
+    expect((await change(PLACEHOLDER)).error.email).toMatch(/valid/);
+    expect((await change("ALICE@mail.org")).error.email).toMatch(/already/);
+    expect(mocks.api.changeEmail).not.toHaveBeenCalled();
   });
 
   it("refuses when not logged in as that user", async () => {
-    mocks.getUser.mockResolvedValue(null);
+    const result = await changeEmail(
+      undefined,
+      form({ username: "bob", currentPassword: "x", email: "n@mail.org" }),
+    );
 
-    expect((await change("new@mail.org")).error.general).toMatch(/logged in/);
+    expect(result.error.general).toMatch(/logged in/);
   });
 });
 
@@ -316,68 +490,79 @@ describe("removeEmail", () => {
     );
 
     expect(result.error.currentPassword).toMatch(/incorrect/);
-    expect(alice.email).toBe("Alice@Mail.org");
+    expect(alice.email).toBe("alice@mail.org");
   });
 
-  it("clears the email, confirmation and any pending change", async () => {
+  it("swaps in a new placeholder and clears any pending change", async () => {
+    alice.emailVerified = true;
     alice.pendingEmail = "new@mail.org";
-    alice.emailVerified = new Date();
 
-    await removeEmail(
+    const result = await removeEmail(
       undefined,
       form({ username: "alice", currentPassword: "old-password" }),
     );
 
-    expect(alice.email).toBeNull();
-    expect(alice.emailVerified).toBeNull();
+    expect(result.success).toMatch(/removed/);
+    expect(alice.email).toMatch(/^[0-9a-f-]{36}@no-email\.invalid$/);
+    expect(alice.emailVerified).toBe(false);
     expect(alice.pendingEmail).toBeNull();
+    expect(mocks.clearResetTokens).toHaveBeenCalledWith("user-1");
   });
 });
 
 describe("changePassword", () => {
-  const change = (fields) =>
+  const changeTo = (password, passwordConfirm = password, current) =>
     changePassword(
       undefined,
       form({
         username: "alice",
-        currentPassword: "old-password",
-        password: "a-long-new-password",
-        passwordConfirm: "a-long-new-password",
-        ...fields,
+        currentPassword: current ?? "old-password",
+        password,
+        passwordConfirm,
       }),
     );
 
   it("requires the current password", async () => {
-    const result = await change({ currentPassword: "wrong" });
+    const result = await changeTo("a-long-new-password", undefined, "wrong");
 
     expect(result.error.currentPassword).toMatch(/incorrect/);
-    expect(alice.sessionVersion).toBe(0);
+    expect(mocks.api.changePassword).not.toHaveBeenCalled();
   });
 
-  it("stores a hash, signs out every session and notifies by email", async () => {
-    expect(await redirectOf(change({}))).toBe(
+  it("changes it, logs out everywhere and notifies by email", async () => {
+    expect(await redirectOf(changeTo("a-long-new-password"))).toBe(
       "/login?message=PasswordChangeSuccess",
     );
-    expect(alice.password).not.toBe("a-long-new-password");
-    expect(await bcrypt.compare("a-long-new-password", alice.password)).toBe(
-      true,
+    expect(mocks.api.changePassword).toHaveBeenCalledWith(
+      expect.objectContaining({
+        body: {
+          currentPassword: "old-password",
+          newPassword: "a-long-new-password",
+          revokeOtherSessions: true,
+        },
+      }),
     );
-    expect(alice.sessionVersion).toBe(1);
-    expect(mocks.sendPasswordChangedNotice).toHaveBeenCalled();
+    expect(mocks.deleteSessions).toHaveBeenCalledWith({
+      where: { userId: "user-1" },
+    });
+    expect(mocks.api.signOut).toHaveBeenCalled();
+    expect(mocks.sendPasswordChangedNotice).toHaveBeenCalledWith(alice);
+  });
+
+  it("doesn't notify a placeholder email", async () => {
+    alice.email = PLACEHOLDER;
+
+    await redirectOf(changeTo("a-long-new-password"));
+
+    expect(mocks.sendPasswordChangedNotice).not.toHaveBeenCalled();
   });
 
   it("checks the new password", async () => {
+    expect((await changeTo("short")).error.password).toMatch(/at least 15/);
     expect(
-      (
-        await change({
-          password: "fourteen-chars",
-          passwordConfirm: "fourteen-chars",
-        })
-      ).error.password,
-    ).toMatch(/at least 15/);
-    expect(
-      (await change({ passwordConfirm: "different" })).error.password,
+      (await changeTo("a-long-new-password", "different")).error.password,
     ).toMatch(/do not match/);
+    expect(mocks.api.changePassword).not.toHaveBeenCalled();
   });
 });
 
@@ -388,12 +573,14 @@ describe("setBotIssueNotifications", () => {
     );
     expect(alice.notifyBotIssues).toBe(false);
 
-    await setBotIssueNotifications("alice", true);
+    expect((await setBotIssueNotifications("alice", true)).success).toMatch(
+      /get an email/,
+    );
     expect(alice.notifyBotIssues).toBe(true);
   });
 
-  it("can't be turned on without an email", async () => {
-    alice.email = null;
+  it("can't be turned on without a real email", async () => {
+    alice.email = PLACEHOLDER;
     alice.notifyBotIssues = false;
 
     expect((await setBotIssueNotifications("alice", true)).error).toMatch(
@@ -403,11 +590,8 @@ describe("setBotIssueNotifications", () => {
   });
 
   it("refuses when not logged in as that user", async () => {
-    mocks.getUser.mockResolvedValue(null);
-
-    expect((await setBotIssueNotifications("alice", false)).error).toMatch(
+    expect((await setBotIssueNotifications("bob", false)).error).toMatch(
       /logged in/,
     );
-    expect(alice.notifyBotIssues).toBe(true);
   });
 });

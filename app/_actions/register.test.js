@@ -7,13 +7,22 @@ const mocks = vi.hoisted(() => ({
   recordSignup: vi.fn(),
   redirect: vi.fn((path) => path),
   sendVerificationEmail: vi.fn(),
+  apiSendVerificationEmail: vi.fn(),
 }));
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     user: {
       findFirst: mocks.findFirst,
-      create: mocks.createUser,
+    },
+  },
+}));
+
+vi.mock("@/auth", () => ({
+  betterAuthServer: {
+    api: {
+      signUpEmail: mocks.createUser,
+      sendVerificationEmail: mocks.apiSendVerificationEmail,
     },
   },
 }));
@@ -34,9 +43,13 @@ vi.mock("@/app/_lib/signupRateLimit", async (importOriginal) => ({
 
 vi.mock("@/app/_lib/accountEmails", () => ({
   sendVerificationEmail: mocks.sendVerificationEmail,
+  sendPasswordResetEmail: vi.fn(),
 }));
 
+import { authMailCallback } from "@/app/_lib/authMail";
 import { register } from "./register";
+
+const PLACEHOLDER = /^[0-9a-f-]{36}@no-email\.invalid$/;
 
 const buildFormData = ({ username, password, email }) => {
   const formData = new FormData();
@@ -51,7 +64,14 @@ beforeEach(() => {
   // no existing user, under the rate limit, successful writes by default
   mocks.findFirst.mockResolvedValue(null);
   mocks.signupAllowed.mockResolvedValue(true);
-  mocks.createUser.mockResolvedValue({ id: "user-1" });
+  mocks.createUser.mockResolvedValue({ token: null, user: { id: "user-1" } });
+  // better auth hands the link to the send callback
+  mocks.apiSendVerificationEmail.mockImplementation(async ({ body }) =>
+    authMailCallback("verify-email")({
+      user: { id: "user-1", username: "alice", email: body.email },
+      token: "verify-tok",
+    }),
+  );
 });
 
 afterEach(() => {
@@ -70,7 +90,7 @@ describe("register email normalization", () => {
     );
 
     expect(mocks.createUser).toHaveBeenCalledTimes(1);
-    expect(mocks.createUser.mock.calls[0][0].data.email).toBeNull();
+    expect(mocks.createUser.mock.calls[0][0].body.email).toMatch(PLACEHOLDER);
   });
 
   it("does not query by email when the email field is blank", async () => {
@@ -114,7 +134,7 @@ describe("register email normalization", () => {
       }),
     );
 
-    expect(mocks.createUser.mock.calls[0][0].data.email).toBeNull();
+    expect(mocks.createUser.mock.calls[0][0].body.email).toMatch(PLACEHOLDER);
     const where = mocks.findFirst.mock.calls[0][0].where;
     expect(where.OR).toEqual([{ username: "alice" }]);
   });
@@ -129,7 +149,7 @@ describe("register email normalization", () => {
       }),
     );
 
-    expect(mocks.createUser.mock.calls[0][0].data.email).toBe("alice@mail.org");
+    expect(mocks.createUser.mock.calls[0][0].body.email).toBe("alice@mail.org");
     const where = mocks.findFirst.mock.calls[0][0].where;
     expect(where.OR).toContainEqual({
       email: { equals: "alice@mail.org", mode: "insensitive" },
@@ -172,12 +192,6 @@ describe("register email normalization", () => {
 
 describe("register confirmation email", () => {
   it("sends a confirmation email when an email is given", async () => {
-    mocks.createUser.mockResolvedValue({
-      id: "user-1",
-      username: "alice",
-      email: "alice@mail.org",
-    });
-
     await register(
       undefined,
       buildFormData({
@@ -187,9 +201,33 @@ describe("register confirmation email", () => {
       }),
     );
 
-    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith(
-      expect.objectContaining({ id: "user-1", email: "alice@mail.org" }),
+    expect(mocks.createUser.mock.calls[0][0].body).toEqual({
+      email: "alice@mail.org",
+      password: "a-long-enough-password",
+      name: "alice",
+      username: "alice",
+    });
+    expect(mocks.apiSendVerificationEmail).toHaveBeenCalledWith({
+      body: { email: "alice@mail.org" },
+    });
+    expect(mocks.sendVerificationEmail).toHaveBeenCalledWith({
+      user: expect.objectContaining({ id: "user-1", email: "alice@mail.org" }),
+      token: "verify-tok",
+    });
+  });
+
+  it("stores emails in lowercase", async () => {
+    await register(
+      undefined,
+      buildFormData({
+        username: "Alice",
+        password: "a-long-enough-password",
+        email: "Alice@Mail.org",
+      }),
     );
+
+    expect(mocks.createUser.mock.calls[0][0].body.email).toBe("alice@mail.org");
+    expect(mocks.createUser.mock.calls[0][0].body.username).toBe("Alice");
   });
 
   it("sends nothing without an email", async () => {
@@ -202,6 +240,7 @@ describe("register confirmation email", () => {
       }),
     );
 
+    expect(mocks.apiSendVerificationEmail).not.toHaveBeenCalled();
     expect(mocks.sendVerificationEmail).not.toHaveBeenCalled();
   });
 

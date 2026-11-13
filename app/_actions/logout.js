@@ -1,17 +1,17 @@
 "use server";
-import { unstable_rethrow } from "next/navigation";
-import { signOut } from "@/auth";
+import { headers } from "next/headers";
+import { betterAuthServer } from "@/auth";
 
 export const logout = async () => {
   try {
-    await signOut({ redirect: false });
+    await betterAuthServer.api.signOut({ headers: await headers() });
 
     return {
       success: true,
       message: "Your account has been successfully logged out.",
     };
   } catch (error) {
-    unstable_rethrow(error);
-    return { success: false, message: error.type };
+    console.error("ERROR: ", error);
+    return { success: false, message: error.message };
   }
 };

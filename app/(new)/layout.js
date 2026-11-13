@@ -4,9 +4,6 @@ import React from "react";
 //chakra provider
 import { Provider } from "@/app/_components/ui/provider";
 
-// auth session provider
-import { SessionProvider } from "next-auth/react";
-
 // import localFont from "next/font/local";
 // import "./globals.css";
 
@@ -29,9 +26,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return (
-    <SessionProvider>
-      <Provider>{children}</Provider>
-    </SessionProvider>
-  );
+  return <Provider>{children}</Provider>;
 }

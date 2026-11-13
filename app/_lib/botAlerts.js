@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { readBotBitpart, signalChannelHealth } from "@/app/_lib/bitpart";
 import { sendBotAlert } from "@/app/_lib/accountEmails";
+import { realEmail } from "@/app/_lib/placeholderEmail";
 
 const LEASE_NAME = "bot-alerts";
 
@@ -109,7 +110,7 @@ export const claimAlert = async (botId, kind, cooldownMs) => {
   }
 };
 
-const canEmail = (user) => !!user?.email && user.notifyBotIssues;
+const canEmail = (user) => !!realEmail(user) && user.notifyBotIssues;
 
 export const checkBot = async (bot, { cooldownMs }) => {
   let response;

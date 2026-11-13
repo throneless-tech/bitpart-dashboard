@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 // actions imports
 import { login } from "@/app/_actions/login";
+import { refreshSession } from "@/app/_lib/authClient";
 
 // chakra ui imports
 import {
@@ -61,6 +62,7 @@ export function LoginForm() {
       const res = await login(formData);
 
       if (res.success) {
+        refreshSession();
         router.push("/my-bots");
       } else {
         console.log(res.message);

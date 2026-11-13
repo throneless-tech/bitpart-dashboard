@@ -1,18 +1,15 @@
 import { appUrl, sendMail } from "@/app/_lib/mail";
-import { createToken } from "@/app/_lib/tokens";
+import { claimMailSlot, clearResetTokens } from "@/app/_lib/mailThrottle";
+import { prisma } from "@/lib/prisma";
+import { realEmail } from "@/app/_lib/placeholderEmail";
 
-// send a confirmation link to the user's pending email, or to their current
-// email if it isn't confirmed yet. returns false if throttled.
-export const sendVerificationEmail = async (user) => {
-  const to = user.pendingEmail || (!user.emailVerified && user.email);
+// send a confirmation link from better auth. user.email is the address being
+// confirmed (the new one for an email change). returns false if throttled or
+// there is no real address.
+export const sendVerificationEmail = async ({ user, token }) => {
+  const to = realEmail(user);
 
-  if (!to) {
-    return false;
-  }
-
-  const token = await createToken("verify-email", user.id);
-
-  if (!token) {
+  if (!to || !(await claimMailSlot("verify-email", user.id))) {
     return false;
   }
 
@@ -31,15 +28,23 @@ If you didn't ask for this, you can ignore this email.`,
   return true;
 };
 
-export const sendPasswordResetEmail = async (user) => {
-  const token = await createToken("reset-password", user.id);
+// send a reset link from better auth. only the latest link works: older ones
+// are removed, and a throttled request's token is dropped. returns false if
+// throttled or there is no real address.
+export const sendPasswordResetEmail = async ({ user, token }) => {
+  const to = realEmail(user);
 
-  if (!token) {
+  if (!to || !(await claimMailSlot("reset-password", user.id))) {
+    await prisma.verification.deleteMany({
+      where: { identifier: `reset-password:${token}` },
+    });
     return false;
   }
 
+  await clearResetTokens(user.id, token);
+
   await sendMail({
-    to: user.email,
+    to,
     subject: "Reset your Bitpart password",
     text: `Hi ${user.username},
 
@@ -112,7 +117,7 @@ export const sendBotAlert = async ({ user, bot, kind, retryAt }) => {
   const { subject, text } = botAlertBodies[kind]({ bot, retryAt });
 
   return sendMail({
-    to: user.email,
+    to: realEmail(user),
     subject,
     text: `Hi ${user.username},\n\n${text}\n\n${alertFooter()}`,
   });
@@ -120,7 +125,7 @@ export const sendBotAlert = async ({ user, bot, kind, retryAt }) => {
 
 export const sendPasswordChangedNotice = async (user) =>
   sendMail({
-    to: user.email,
+    to: realEmail(user),
     subject: "Your Bitpart password was changed",
     text: `Hi ${user.username},
 

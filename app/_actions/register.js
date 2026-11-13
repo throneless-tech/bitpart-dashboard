@@ -1,11 +1,15 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { betterAuthServer } from "@/auth";
 import { SignupSchema } from "../_lib/definitions";
-import { sendVerificationEmail } from "@/app/_lib/accountEmails";
+import { collectAuthMail, sendAuthMail } from "@/app/_lib/authMail";
+import {
+  isPlaceholderEmail,
+  newPlaceholderEmail,
+} from "@/app/_lib/placeholderEmail";
 import {
   clientIp,
   recordSignup,
@@ -20,7 +24,7 @@ export const register = async (prevState, formData) => {
   const username = formData.get("username");
   // email is optional; normalize a blank field to null so it doesn't collide
   // on the unique constraint or match other email-less accounts
-  const email = formData.get("email")?.trim() || null;
+  const email = formData.get("email")?.trim().toLowerCase() || null;
 
   try {
     // validate form fields
@@ -68,7 +72,7 @@ export const register = async (prevState, formData) => {
       },
     });
 
-    if (userFound) {
+    if (userFound || isPlaceholderEmail(email)) {
       return {
         error: {
           username: "A user with these credentials already exists.",
@@ -76,13 +80,12 @@ export const register = async (prevState, formData) => {
       };
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: {
-        email,
+    await betterAuthServer.api.signUpEmail({
+      body: {
+        email: email ?? newPlaceholderEmail(),
+        password,
+        name: username,
         username,
-        password: hashedPassword,
       },
     });
 
@@ -90,7 +93,10 @@ export const register = async (prevState, formData) => {
 
     if (email) {
       try {
-        await sendVerificationEmail(user);
+        const { mail } = await collectAuthMail(() =>
+          betterAuthServer.api.sendVerificationEmail({ body: { email } }),
+        );
+        await sendAuthMail(mail);
       } catch (error) {
         // the account is created either way; they can resend from settings
         console.error("Failed to send confirmation email", error);

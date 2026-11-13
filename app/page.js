@@ -2,7 +2,7 @@
 
 // base imports
 import React, { Suspense } from "react";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/app/_lib/authClient";
 
 // fonts
 import { funnel, geistMono } from "./fonts";
