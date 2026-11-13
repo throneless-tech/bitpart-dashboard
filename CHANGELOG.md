@@ -1,3 +1,19 @@
+## 1.2.0 (2026-11-13)
+
+### Feat
+
+- Add OpenTelemetry support.
+- Add MFA and passkeys.
+- Migrate to Better Auth.
+
+### Fix
+
+- Unreadable button on MFA code page.
+- **ci**: package-lock fix.
+- **ci**: Downgrade package-lock.json for npm 10.x
+- Update packages for non-breaking security updates.
+- Fix changelog generation for releases.
+
 ## 1.1.0 (2026-11-06)
 
 ### Feat
