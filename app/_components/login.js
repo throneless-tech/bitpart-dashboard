@@ -86,7 +86,8 @@ function SecondFactor({ methods, onDone }) {
         <Stack direction="row" marginTop={4} wrap="wrap">
           {methods.map((m) => (
             <Button
-              color="fg"
+              color={m === method ? "white" : "fg"}
+              colorPalette={m === method ? "purple" : undefined}
               key={m}
               onClick={() => {
                 setMethod(m);
