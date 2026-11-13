@@ -1,38 +1,37 @@
 name: Build test image
 
-# trigger this workflow on any push to develop
 on:
-  push:
-    branches:
-      - develop
+  workflow_run:
+    workflows: ["Run checks"]
+    branches: [develop]
+    types:
+      - completed
 
 env:
   IMAGE_NAME: bitpart-dashboard
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  release_version:
+  test_image:
     runs-on: ubuntu-latest
     name: "Build test image"
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
     steps:
       - name: Check out
-        id: check_out
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ env.BRANCH_NAME }}
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Set timestamp
-        id: set_timestamp
-        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-      - name: Buildah Action
+        run: echo "TIMESTAMP=$(date +%s)" >> "$GITHUB_ENV"
+      - name: Build image
         id: build_image
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056
+        uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 # v3.1.0
         with:
           image: ${{ env.IMAGE_NAME }}
-          tags: develop-${{ github.sha }}-${{ env.TIMESTAMP}}
+          tags: develop-${{ github.event.workflow_run.head_sha }}-${{ env.TIMESTAMP }}
           containerfiles: |
             ./Dockerfile
       - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c
+        uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 # v3.0.0
         id: push
         env:
           IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}

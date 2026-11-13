@@ -1,49 +1,56 @@
 name: Build release version
 
-# trigger this workflow on any push to main
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Run checks"]
+    branches: [main]
+    types:
+      - completed
 
 env:
   IMAGE_NAME: bitpart-dashboard
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  BRANCH_NAME: ${{ github.event.workflow_run.head_branch }}
 
 jobs:
   bump_version:
     runs-on: ubuntu-latest
     name: "Bump version, create changelog"
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
     outputs:
       version: ${{ steps.cz.outputs.version }}
-      body: ${{ steps.cz.outputs.body}}
+      body: ${{ steps.get_body.outputs.body }}
     steps:
       - name: Check out
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           ref: ${{ env.BRANCH_NAME }}
       - id: cz
         name: Create bump and changelog
-        uses: commitizen-tools/commitizen-action@5b0848cd060263e24602d1eba03710e056ef7711
+        uses: commitizen-tools/commitizen-action@338bbd841b75aaee6bf5340e1fa12f6ab58ff9ff # 0.27.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           changelog_increment_filename: body.md
+          commitizen_version: '4.19.0'
       - name: Read body.md file
         id: get_body
+        if: steps.cz.outputs.version != ''
         run: |
-          echo 'body<<EOF' >> $GITHUB_OUTPUT
-          echo "$(cat body.md)" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          {
+            echo 'body<<EOF'
+            cat body.md
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Print Version
         run: echo "Bumped to version ${{ steps.cz.outputs.version }}"
-  build_release:
+  release:
     runs-on: ubuntu-latest
-    name: "Build release artifacts"
+    name: "Create GitHub release"
     needs: bump_version
+    if: needs.bump_version.outputs.version != ''
     steps:
       - name: Release
-        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           body: ${{ needs.bump_version.outputs.body }}
           tag_name: ${{ needs.bump_version.outputs.version }}
@@ -52,22 +59,23 @@ jobs:
   build_image:
     runs-on: ubuntu-latest
     name: "Build release image"
-    needs: bump_version
+    needs: [bump_version, release]
+    if: needs.bump_version.outputs.version != ''
     steps:
       - name: Check out
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ env.BRANCH_NAME }}
+          ref: ${{ needs.bump_version.outputs.version }}
       - name: Build image
         id: build_image
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056
+        uses: redhat-actions/buildah-build@719e3c40d8af9790c23eca13f7daa339f2867034 # v3.1.0
         with:
           image: ${{ env.IMAGE_NAME }}
           tags: ${{ needs.bump_version.outputs.version }} latest
           containerfiles: |
             ./Dockerfile
       - name: Push To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c
+        uses: redhat-actions/push-to-registry@94ade333c38ecc0e60e94785125d9a52ca423b37 # v3.0.0
         id: push
         env:
           IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
