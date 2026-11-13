@@ -1,4 +1,5 @@
 "use server";
+import { traceAction } from "@/app/_lib/otel";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "./getUser";
 import { linkChannelBitpart } from "./createBot";
@@ -8,6 +9,14 @@ import {
   signalChannelStatus,
   submitChallengeBitpart,
 } from "@/app/_lib/bitpart";
+import { bitpartInstance } from "@/app/_lib/otel";
+import { errorFields, logger } from "@/app/_lib/logger";
+import { recordBotEvent } from "@/app/_lib/events";
+
+const botFields = (bot) => ({
+  bot_id: bot.bitpartId,
+  "bitpart.instance": bitpartInstance(bot.instance),
+});
 
 // find a bot owned by the logged in user
 const getOwnedBot = async (botId, username) => {
@@ -39,7 +48,7 @@ export const getBotStatus = async (botId, username) => {
     const response = await readBotBitpart(bot.bitpartId, bot.instance);
     return signalChannelStatus(response);
   } catch (error) {
-    console.error("ReadBot failed for bot", bot.bitpartId, error);
+    logger.warn({ ...botFields(bot), ...errorFields(error) }, "ReadBot failed");
     return "unknown";
   }
 };
@@ -54,7 +63,7 @@ export const getBotChallenge = async (botId, username) => {
       await readBotBitpart(bot.bitpartId, bot.instance),
     );
   } catch (error) {
-    console.error("ReadBot failed for bot", bot.bitpartId, error);
+    logger.warn({ ...botFields(bot), ...errorFields(error) }, "ReadBot failed");
   }
 
   return {
@@ -69,78 +78,115 @@ export const getBotChallenge = async (botId, username) => {
 // signal captcha results look like signalcaptcha://<token>
 const CAPTCHA_PATTERN = /^signalcaptcha:\/\/\S+$/;
 
-export const submitBotChallenge = async (prevState, formData) => {
-  const captcha = formData.get("captcha")?.trim();
+export const submitBotChallenge = traceAction(
+  "action.submitBotChallenge",
+  async (prevState, formData) => {
+    const captcha = formData.get("captcha")?.trim();
 
-  if (!captcha || !CAPTCHA_PATTERN.test(captcha)) {
-    return {
-      error:
-        'Paste the whole link from the "Open Signal" button. It starts with signalcaptcha://',
-    };
-  }
-
-  let bot;
-  try {
-    bot = await getOwnedBot(formData.get("botId"), formData.get("username"));
-  } catch (error) {
-    return { error: error.message };
-  }
-
-  try {
-    const response = await submitChallengeBitpart(bot.instance, {
-      botId: bot.bitpartId,
-      captcha,
-    });
-
-    if (response?.message_type === "Error") {
+    if (!captcha || !CAPTCHA_PATTERN.test(captcha)) {
       return {
-        error: `Signal didn't accept that captcha: ${response.data?.response ?? "unknown error"}. Solve a new one and try again.`,
+        error:
+          'Paste the whole link from the "Open Signal" button. It starts with signalcaptcha://',
       };
     }
-  } catch (error) {
-    console.error("SubmitChallenge failed for bot", bot.bitpartId, error);
+
+    let bot;
+    try {
+      bot = await getOwnedBot(formData.get("botId"), formData.get("username"));
+    } catch (error) {
+      return { error: error.message };
+    }
+
+    try {
+      const response = await submitChallengeBitpart(bot.instance, {
+        botId: bot.bitpartId,
+        captcha,
+      });
+
+      if (response?.message_type === "Error") {
+        recordBotEvent({
+          event: "challenge_submitted",
+          botType: bot.botType,
+          botId: bot.bitpartId,
+          outcome: "rejected",
+        });
+        return {
+          error: `Signal didn't accept that captcha: ${response.data?.response ?? "unknown error"}. Solve a new one and try again.`,
+        };
+      }
+    } catch (error) {
+      logger.error(
+        { ...botFields(bot), ...errorFields(error) },
+        "SubmitChallenge failed",
+      );
+      recordBotEvent({
+        event: "challenge_submitted",
+        botType: bot.botType,
+        botId: bot.bitpartId,
+        outcome: "error",
+      });
+      return {
+        error:
+          "We couldn't reach the Bitpart server. Please try again in a few minutes.",
+      };
+    }
+
+    await prisma.bot.update({
+      where: { id: bot.id, creatorId: bot.creatorId },
+      data: { challengeToken: null },
+    });
+    recordBotEvent({
+      event: "challenge_submitted",
+      botType: bot.botType,
+      botId: bot.bitpartId,
+    });
+
     return {
-      error:
-        "We couldn't reach the Bitpart server. Please try again in a few minutes.",
+      success:
+        "Captcha submitted. Your bot should be able to send messages again shortly.",
     };
-  }
-
-  await prisma.bot.update({
-    where: { id: bot.id, creatorId: bot.creatorId },
-    data: { challengeToken: null },
-  });
-
-  return {
-    success:
-      "Captcha submitted. Your bot should be able to send messages again shortly.",
-  };
-};
+  },
+);
 
 // send a new LinkChannel, which replaces the bot's existing signal channel
-export const relinkBot = async (botId, username) => {
-  const bot = await getOwnedBot(botId, username);
+export const relinkBot = traceAction(
+  "action.relinkBot",
+  async (botId, username) => {
+    const bot = await getOwnedBot(botId, username);
 
-  const channelLink = await linkChannelBitpart(
-    bot.bitpartId,
-    bot.instance,
-    bot.botName,
-  );
+    const channelLink = await linkChannelBitpart(
+      bot.bitpartId,
+      bot.instance,
+      bot.botName,
+    );
 
-  if (channelLink?.message_type === "Error") {
-    throw new Error(channelLink.data.response);
-  }
+    if (channelLink?.message_type === "Error") {
+      recordBotEvent({
+        event: "relinked",
+        botType: bot.botType,
+        botId: bot.bitpartId,
+        outcome: "error",
+      });
+      throw new Error(channelLink.data.response);
+    }
 
-  const qrLink = channelLink.data.response;
+    const qrLink = channelLink.data.response;
 
-  await prisma.bot.update({
-    where: {
-      id: bot.id,
-      creatorId: bot.creatorId,
-    },
-    data: {
-      qrLink,
-    },
-  });
+    await prisma.bot.update({
+      where: {
+        id: bot.id,
+        creatorId: bot.creatorId,
+      },
+      data: {
+        qrLink,
+      },
+    });
 
-  return { qr: qrLink };
-};
+    recordBotEvent({
+      event: "relinked",
+      botType: bot.botType,
+      botId: bot.bitpartId,
+    });
+    return { qr: qrLink };
+  },
+);

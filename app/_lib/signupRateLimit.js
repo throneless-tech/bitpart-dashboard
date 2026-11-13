@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { prisma } from "@/lib/prisma";
+import { logger } from "@/app/_lib/logger";
 
 const DEFAULT_MAX = 5;
 const DEFAULT_WINDOW_MINUTES = 60;
@@ -53,8 +54,8 @@ const ipHash = (ip) => {
 // true if another sign-up from this IP is allowed right now
 export const signupAllowed = async (ip) => {
   if (!ip) {
-    console.warn(
-      "Could not determine the client IP for sign-up rate limiting; check TRUSTED_PROXY_HOPS.",
+    logger.warn(
+      "could not determine the client IP for sign-up rate limiting; check TRUSTED_PROXY_HOPS.",
     );
   }
 

@@ -1,4 +1,5 @@
 "use server";
+import { errorFields, logger } from "@/app/_lib/logger";
 
 // base imports
 import fs from "node:fs/promises";
@@ -52,7 +53,7 @@ export const formatCsml = async (data, passcode) => {
 
   const template = await fs.readFile(file, "utf8", (err, data) => {
     if (err) {
-      console.error(err);
+      logger.error(errorFields(err), "failed to read csml template");
       return;
     }
     return data;

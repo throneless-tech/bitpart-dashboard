@@ -1,4 +1,6 @@
 "use server";
+import { traceAction } from "@/app/_lib/otel";
+import { recordBotEvent } from "@/app/_lib/events";
 
 // base imports
 import { Prisma } from "@prisma/client";
@@ -39,75 +41,82 @@ export const updateBotBitpart = async (data, bitpartId, passcode, host) => {
   return sendBitpartMessage(host, jsonUpdateBot);
 };
 
-export const updateBot = async (
-  data,
-  botId,
-  bitpartId,
-  username,
-  passcode,
-  host,
-) => {
-  const MAX_RETRIES = 5;
-  let retries = 0;
+export const updateBot = traceAction(
+  "action.updateBot",
+  async (data, botId, bitpartId, username, passcode, host) => {
+    const MAX_RETRIES = 5;
+    let retries = 0;
 
-  let result;
-  while (retries < MAX_RETRIES) {
-    try {
-      result = await prisma.$transaction(
-        async (tx) => {
-          delete data.csv; // we are not saving the codes here
+    let result;
+    while (retries < MAX_RETRIES) {
+      try {
+        result = await prisma.$transaction(
+          async (tx) => {
+            delete data.csv; // we are not saving the codes here
 
-          // the disappearing messages timer is only set when the bot is created
-          delete data.expireTimer;
-          delete data.expireTimerCustomValue;
-          delete data.expireTimerCustomUnit;
+            // the disappearing messages timer is only set when the bot is created
+            delete data.expireTimer;
+            delete data.expireTimerCustomValue;
+            delete data.expireTimerCustomUnit;
 
-          // maintained by the alert poller, not the edit form
-          delete data.lastLinkStatus;
-          delete data.lastSendStatus;
-          delete data.challengeToken;
+            // maintained by the alert poller, not the edit form
+            delete data.lastLinkStatus;
+            delete data.lastSendStatus;
+            delete data.challengeToken;
 
-          const formattedData = escapeSpecials(data);
+            const formattedData = escapeSpecials(data);
 
-          // update bot on bitpart server
-          const updatedBitpartBot = await updateBotBitpart(
-            formattedData,
-            bitpartId,
-            passcode,
-            host,
-          );
+            // update bot on bitpart server
+            const updatedBitpartBot = await updateBotBitpart(
+              formattedData,
+              bitpartId,
+              passcode,
+              host,
+            );
 
-          if (updatedBitpartBot?.message_type === "Error") {
-            throw new Error(updatedBitpartBot.data.response);
-          }
+            if (updatedBitpartBot?.message_type === "Error") {
+              throw new Error(updatedBitpartBot.data.response);
+            }
 
-          // find the user to attach the bot to
-          const user = await getUser(username);
+            // find the user to attach the bot to
+            const user = await getUser(username);
 
-          // update the bot in the prisma db
-          const bot = await tx.bot.update({
-            where: {
-              id: botId,
-              creatorId: user.id,
-            },
-            data: {
-              ...data,
-            },
-          });
+            // update the bot in the prisma db
+            const bot = await tx.bot.update({
+              where: {
+                id: botId,
+                creatorId: user.id,
+              },
+              data: {
+                ...data,
+              },
+            });
 
-          return bot;
-        },
-        {
-          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-        },
-      );
-      return result;
-    } catch (error) {
-      if (error.code === "P2034") {
-        retries++;
-        continue;
+            return bot;
+          },
+          {
+            isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+          },
+        );
+        recordBotEvent({
+          event: "edited",
+          botType: data.botType ?? result?.botType,
+          botId: bitpartId,
+        });
+        return result;
+      } catch (error) {
+        if (error.code === "P2034") {
+          retries++;
+          continue;
+        }
+        recordBotEvent({
+          event: "edited",
+          botType: data?.botType,
+          botId: bitpartId,
+          outcome: "error",
+        });
+        throw new Error(error.message);
       }
-      throw new Error(error.message);
     }
-  }
-};
+  },
+);

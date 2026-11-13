@@ -41,7 +41,6 @@ export default function BotLinkStatus({ bot, username }) {
     try {
       setStatus(await getBotStatus(bot.id, username));
     } catch (error) {
-      console.log(error);
       setStatus("unknown");
     }
   }, [bot.id, username]);
@@ -61,7 +60,6 @@ export default function BotLinkStatus({ bot, username }) {
       setQRLink(response.qr);
       console.log(response.qr);
     } catch (error) {
-      console.log(error);
       setLinkError(
         "A server error occurred while trying to re-link this bot. Please contact an admin for assistance.",
       );

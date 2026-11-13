@@ -1,7 +1,21 @@
 "use server";
 import { emsUrl } from "@/app/_lib/bitpart";
+import { withSpan } from "@/app/_lib/otel";
 
+// the upload is traced by its size only, never the codes themselves
 export async function sendToEMS(botId, botType, json) {
+  return withSpan(
+    "ems.upload",
+    {
+      bot_id: botId,
+      "bot.type": botType,
+      "ems.items": Array.isArray(json) ? json.length : 0,
+    },
+    async () => uploadToEMS(botId, botType, json),
+  );
+}
+
+const uploadToEMS = async (botId, botType, json) => {
   let data = {};
 
   if (botType === "esim") {
@@ -36,7 +50,7 @@ export async function sendToEMS(botId, botType, json) {
     .catch((err) => {
       throw new Error(err.message);
     });
-}
+};
 
 // STUB: removes a bot's codes/tokens from the EMS on deletion.
 export async function deleteFromEMS(_botId, _botType) {

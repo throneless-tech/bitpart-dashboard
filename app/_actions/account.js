@@ -1,4 +1,7 @@
 "use server";
+import { traceAction } from "@/app/_lib/otel";
+import { errorFields, logger } from "@/app/_lib/logger";
+import { recordAccountEvent } from "@/app/_lib/events";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWT } from "better-auth/crypto";
@@ -57,7 +60,7 @@ const trySend = async (label, send) => {
   try {
     return await send();
   } catch (error) {
-    console.error(`Failed to send ${label} email`, error);
+    logger.warn({ email_kind: label, ...errorFields(error) }, "email not sent");
     return false;
   }
 };
@@ -113,7 +116,7 @@ const securitySettings = async (user) => {
       });
       backupCodesRemaining = backupCodes.length;
     } catch (error) {
-      console.error("Failed to read backup codes", error);
+      logger.error(errorFields(error), "failed to read backup codes");
     }
   }
 
@@ -133,93 +136,104 @@ const securitySettings = async (user) => {
   };
 };
 
-export const setBotIssueNotifications = async (username, enabled) => {
-  const user = await getUser(username);
+export const setBotIssueNotifications = traceAction(
+  "action.setBotIssueNotifications",
+  async (username, enabled) => {
+    const user = await getUser(username);
 
-  if (!user) {
-    return { error: "You must be logged in to do this." };
-  }
+    if (!user) {
+      return { error: "You must be logged in to do this." };
+    }
 
-  if (enabled && !realEmail(user)) {
-    return { error: "Add an email address to turn on notifications." };
-  }
+    if (enabled && !realEmail(user)) {
+      return { error: "Add an email address to turn on notifications." };
+    }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { notifyBotIssues: !!enabled },
-  });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { notifyBotIssues: !!enabled },
+    });
 
-  return {
-    success: enabled
-      ? "You'll get an email when one of your bots has a problem."
-      : "Bot problem emails are turned off.",
-  };
-};
+    return {
+      success: enabled
+        ? "You'll get an email when one of your bots has a problem."
+        : "Bot problem emails are turned off.",
+    };
+  },
+);
 
 // forgot password: always gives the same answer, so it can't be used to find
 // out which accounts exist
-export const requestPasswordReset = async (prevState, formData) => {
-  const identifier = formData.get("identifier")?.trim();
+export const requestPasswordReset = traceAction(
+  "action.requestPasswordReset",
+  async (prevState, formData) => {
+    const identifier = formData.get("identifier")?.trim();
 
-  if (!identifier) {
-    return { error: { identifier: "Enter your username or email address." } };
-  }
-
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [{ username: identifier }, { email: emailIs(identifier) }],
-    },
-  });
-
-  // resets go to User.email only: the confirmed address, or the only
-  // (unconfirmed) one if none has been confirmed. pendingEmail never gets one.
-  const email = realEmail(user);
-
-  if (email) {
-    await trySend("password reset", () =>
-      callAndSend("password reset", () =>
-        betterAuthServer.api.requestPasswordReset({ body: { email } }),
-      ),
-    );
-  }
-
-  return { success: RESET_REQUESTED_MESSAGE };
-};
-
-export const resetPassword = async (prevState, formData) => {
-  const password = formData.get("password");
-  const invalid = checkNewPassword(password, formData.get("passwordConfirm"));
-
-  if (invalid) {
-    return { error: { password: invalid } };
-  }
-
-  const token = formData.get("token");
-
-  try {
-    if (!token || typeof token !== "string") {
-      throw new Error("No reset token");
+    if (!identifier) {
+      return { error: { identifier: "Enter your username or email address." } };
     }
 
-    // also ends the user's sessions (revokeSessionsOnPasswordReset)
-    await betterAuthServer.api.resetPassword({
-      body: { newPassword: password, token },
-    });
-  } catch {
-    return {
-      error: {
-        general:
-          "This reset link is invalid or has expired. Please request a new one.",
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ username: identifier }, { email: emailIs(identifier) }],
       },
-    };
-  }
+    });
 
-  redirect("/login?message=PasswordResetSuccess");
-};
+    // resets go to User.email only: the confirmed address, or the only
+    // (unconfirmed) one if none has been confirmed. pendingEmail never gets one.
+    const email = realEmail(user);
+
+    if (email) {
+      recordAccountEvent("password_reset_requested", user.id);
+      await trySend("password reset", () =>
+        callAndSend("password reset", () =>
+          betterAuthServer.api.requestPasswordReset({ body: { email } }),
+        ),
+      );
+    }
+
+    return { success: RESET_REQUESTED_MESSAGE };
+  },
+);
+
+export const resetPassword = traceAction(
+  "action.resetPassword",
+  async (prevState, formData) => {
+    const password = formData.get("password");
+    const invalid = checkNewPassword(password, formData.get("passwordConfirm"));
+
+    if (invalid) {
+      return { error: { password: invalid } };
+    }
+
+    const token = formData.get("token");
+
+    try {
+      if (!token || typeof token !== "string") {
+        throw new Error("No reset token");
+      }
+
+      // also ends the user's sessions (revokeSessionsOnPasswordReset)
+      await betterAuthServer.api.resetPassword({
+        body: { newPassword: password, token },
+      });
+    } catch {
+      return {
+        error: {
+          general:
+            "This reset link is invalid or has expired. Please request a new one.",
+        },
+      };
+    }
+
+    recordAccountEvent("password_reset");
+    redirect("/login?message=PasswordResetSuccess");
+  },
+);
 
 // confirms an address from a better auth link: either the user's own
 // address, or the new one of an email change
-export const verifyEmail = async (token) => {
+export const verifyEmail = traceAction("action.verifyEmail", async (token) => {
   if (!token || typeof token !== "string") {
     return { error: INVALID_CONFIRMATION_LINK };
   }
@@ -272,6 +286,7 @@ export const verifyEmail = async (token) => {
   }
 
   if (!newEmail) {
+    recordAccountEvent("email_verified", user.id);
     return { email: payload.email };
   }
 
@@ -292,220 +307,242 @@ export const verifyEmail = async (token) => {
     );
   }
 
+  recordAccountEvent("email_changed", user.id);
   return { email: newEmail };
-};
+});
 
-export const resendVerificationEmail = async (username) => {
-  const user = await getUser(username);
+export const resendVerificationEmail = traceAction(
+  "action.resendVerificationEmail",
+  async (username) => {
+    const user = await getUser(username);
 
-  if (!user) {
-    return { error: "You must be logged in to do this." };
-  }
+    if (!user) {
+      return { error: "You must be logged in to do this." };
+    }
 
-  const email = realEmail(user);
-  let sent = false;
+    const email = realEmail(user);
+    let sent = false;
 
-  if (user.pendingEmail) {
-    // a new link for the change that is waiting. a change left over from
-    // before better auth, from an unconfirmed address, now applies at once.
-    sent = await trySend("confirmation", () =>
-      callAndSend("confirmation", async () =>
-        betterAuthServer.api.changeEmail({
-          body: { newEmail: user.pendingEmail },
-          headers: await headers(),
-        }),
-      ),
+    if (user.pendingEmail) {
+      // a new link for the change that is waiting. a change left over from
+      // before better auth, from an unconfirmed address, now applies at once.
+      sent = await trySend("confirmation", () =>
+        callAndSend("confirmation", async () =>
+          betterAuthServer.api.changeEmail({
+            body: { newEmail: user.pendingEmail },
+            headers: await headers(),
+          }),
+        ),
+      );
+
+      await prisma.user.updateMany({
+        where: { id: user.id, email: user.pendingEmail.toLowerCase() },
+        data: { pendingEmail: null },
+      });
+    } else if (email && !user.emailVerified) {
+      sent = await trySend("confirmation", () =>
+        callAndSend("confirmation", async () =>
+          betterAuthServer.api.sendVerificationEmail({
+            body: { email },
+            headers: await headers(),
+          }),
+        ),
+      );
+    }
+
+    return sent
+      ? { success: "Confirmation email sent. Check your inbox." }
+      : {
+          error:
+            "We couldn't send a confirmation email right now. If you just requested one, wait a couple of minutes and try again.",
+        };
+  },
+);
+
+export const changeEmail = traceAction(
+  "action.changeEmail",
+  async (prevState, formData) => {
+    const { user, error } = await getVerifiedUser(
+      formData.get("username"),
+      formData.get("currentPassword"),
     );
 
-    await prisma.user.updateMany({
-      where: { id: user.id, email: user.pendingEmail.toLowerCase() },
-      data: { pendingEmail: null },
-    });
-  } else if (email && !user.emailVerified) {
-    sent = await trySend("confirmation", () =>
-      callAndSend("confirmation", async () =>
-        betterAuthServer.api.sendVerificationEmail({
-          body: { email },
-          headers: await headers(),
-        }),
-      ),
-    );
-  }
+    if (error) {
+      return { error };
+    }
 
-  return sent
-    ? { success: "Confirmation email sent. Check your inbox." }
-    : {
-        error:
-          "We couldn't send a confirmation email right now. If you just requested one, wait a couple of minutes and try again.",
-      };
-};
+    const email = normalizeEmail(formData.get("email"));
 
-export const changeEmail = async (prevState, formData) => {
-  const { user, error } = await getVerifiedUser(
-    formData.get("username"),
-    formData.get("currentPassword"),
-  );
+    if (
+      !email ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      isPlaceholderEmail(email)
+    ) {
+      return { error: { email: "Enter a valid email address." } };
+    }
 
-  if (error) {
-    return { error };
-  }
+    const current = realEmail(user);
 
-  const email = normalizeEmail(formData.get("email"));
+    if (email === current?.toLowerCase()) {
+      return { error: { email: "This is already your email address." } };
+    }
 
-  if (
-    !email ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-    isPlaceholderEmail(email)
-  ) {
-    return { error: { email: "Enter a valid email address." } };
-  }
-
-  const current = realEmail(user);
-
-  if (email === current?.toLowerCase()) {
-    return { error: { email: "This is already your email address." } };
-  }
-
-  if (await emailInUse(email, user.id)) {
-    return { error: { email: "This email address is already in use." } };
-  }
-
-  // a confirmed address stays until the new one is confirmed. otherwise
-  // (unconfirmed or no address) better auth switches to the new one straight
-  // away, unconfirmed.
-  const pending = !!current && !!user.emailVerified;
-
-  // a new address gets its link straight away, like a new token used to
-  await clearMailThrottle("verify-email", user.id);
-
-  let mail;
-
-  try {
-    ({ mail } = await collectAuthMail(async () =>
-      betterAuthServer.api.changeEmail({
-        body: { newEmail: email },
-        headers: await headers(),
-      }),
-    ));
-  } catch (err) {
-    if (isUniqueViolation(err)) {
+    if (await emailInUse(email, user.id)) {
       return { error: { email: "This email address is already in use." } };
     }
-    throw err;
-  }
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { pendingEmail: pending ? email : null },
-  });
+    // a confirmed address stays until the new one is confirmed. otherwise
+    // (unconfirmed or no address) better auth switches to the new one straight
+    // away, unconfirmed.
+    const pending = !!current && !!user.emailVerified;
 
-  const sent = await trySend("confirmation", () => sendAuthMail(mail));
+    // a new address gets its link straight away, like a new token used to
+    await clearMailThrottle("verify-email", user.id);
 
-  return {
-    success: sent
-      ? `We've sent a confirmation link to ${email}.`
-      : `Saved, but we couldn't send a confirmation link to ${email}. Try "Resend confirmation email" in a few minutes.`,
-  };
-};
+    let mail;
 
-export const cancelEmailChange = async (username) => {
-  const user = await getUser(username);
+    try {
+      ({ mail } = await collectAuthMail(async () =>
+        betterAuthServer.api.changeEmail({
+          body: { newEmail: email },
+          headers: await headers(),
+        }),
+      ));
+    } catch (err) {
+      if (isUniqueViolation(err)) {
+        return { error: { email: "This email address is already in use." } };
+      }
+      throw err;
+    }
 
-  if (!user) {
-    return { error: "You must be logged in to do this." };
-  }
-
-  // verifyEmail refuses the change's link once pendingEmail is cleared
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { pendingEmail: null },
-  });
-  await clearMailThrottle("verify-email", user.id);
-
-  return { success: "Email change cancelled." };
-};
-
-export const removeEmail = async (prevState, formData) => {
-  const { user, error } = await getVerifiedUser(
-    formData.get("username"),
-    formData.get("currentPassword"),
-  );
-
-  if (error) {
-    return { error };
-  }
-
-  // email sign-in codes need the address
-  if (user.emailOtpEnabled) {
-    return {
-      error: {
-        general:
-          "Turn off email sign-in codes (under Security) before removing your email address.",
-      },
-    };
-  }
-
-  // links sent to the old address stop working, as it's no longer the user's
-  await prisma.user.update({
-    where: { id: user.id },
-    data: {
-      email: newPlaceholderEmail(),
-      emailVerified: false,
-      pendingEmail: null,
-    },
-  });
-  await clearResetTokens(user.id);
-  await clearMailThrottle("verify-email", user.id);
-  await clearMailThrottle("reset-password", user.id);
-
-  return { success: "Your email address has been removed." };
-};
-
-export const changePassword = async (prevState, formData) => {
-  const currentPassword = formData.get("currentPassword");
-  const { user, error } = await getVerifiedUser(
-    formData.get("username"),
-    currentPassword,
-  );
-
-  if (error) {
-    return { error };
-  }
-
-  const password = formData.get("password");
-  const invalid = checkNewPassword(password, formData.get("passwordConfirm"));
-
-  if (invalid) {
-    return { error: { password: invalid } };
-  }
-
-  const requestHeaders = await headers();
-
-  try {
-    await betterAuthServer.api.changePassword({
-      body: {
-        currentPassword,
-        newPassword: password,
-        revokeOtherSessions: true,
-      },
-      headers: requestHeaders,
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { pendingEmail: pending ? email : null },
     });
-  } catch (err) {
-    return { error: { general: err.message } };
-  }
-
-  // log out everywhere, this browser too (better auth keeps a new session
-  // for it), then clear the cookie
-  await prisma.session.deleteMany({ where: { userId: user.id } });
-  await betterAuthServer.api.signOut({ headers: requestHeaders });
-  await clearResetTokens(user.id);
-  await clearMailThrottle("reset-password", user.id);
-
-  if (realEmail(user)) {
-    await trySend("password changed notice", () =>
-      sendPasswordChangedNotice(user),
+    recordAccountEvent(
+      pending ? "email_change_requested" : "email_changed",
+      user.id,
     );
-  }
 
-  redirect("/login?message=PasswordChangeSuccess");
-};
+    const sent = await trySend("confirmation", () => sendAuthMail(mail));
+
+    return {
+      success: sent
+        ? `We've sent a confirmation link to ${email}.`
+        : `Saved, but we couldn't send a confirmation link to ${email}. Try "Resend confirmation email" in a few minutes.`,
+    };
+  },
+);
+
+export const cancelEmailChange = traceAction(
+  "action.cancelEmailChange",
+  async (username) => {
+    const user = await getUser(username);
+
+    if (!user) {
+      return { error: "You must be logged in to do this." };
+    }
+
+    // verifyEmail refuses the change's link once pendingEmail is cleared
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { pendingEmail: null },
+    });
+    await clearMailThrottle("verify-email", user.id);
+
+    return { success: "Email change cancelled." };
+  },
+);
+
+export const removeEmail = traceAction(
+  "action.removeEmail",
+  async (prevState, formData) => {
+    const { user, error } = await getVerifiedUser(
+      formData.get("username"),
+      formData.get("currentPassword"),
+    );
+
+    if (error) {
+      return { error };
+    }
+
+    // email sign-in codes need the address
+    if (user.emailOtpEnabled) {
+      return {
+        error: {
+          general:
+            "Turn off email sign-in codes (under Security) before removing your email address.",
+        },
+      };
+    }
+
+    // links sent to the old address stop working, as it's no longer the user's
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        email: newPlaceholderEmail(),
+        emailVerified: false,
+        pendingEmail: null,
+      },
+    });
+    await clearResetTokens(user.id);
+    await clearMailThrottle("verify-email", user.id);
+    await clearMailThrottle("reset-password", user.id);
+
+    recordAccountEvent("email_removed", user.id);
+    return { success: "Your email address has been removed." };
+  },
+);
+
+export const changePassword = traceAction(
+  "action.changePassword",
+  async (prevState, formData) => {
+    const currentPassword = formData.get("currentPassword");
+    const { user, error } = await getVerifiedUser(
+      formData.get("username"),
+      currentPassword,
+    );
+
+    if (error) {
+      return { error };
+    }
+
+    const password = formData.get("password");
+    const invalid = checkNewPassword(password, formData.get("passwordConfirm"));
+
+    if (invalid) {
+      return { error: { password: invalid } };
+    }
+
+    const requestHeaders = await headers();
+
+    try {
+      await betterAuthServer.api.changePassword({
+        body: {
+          currentPassword,
+          newPassword: password,
+          revokeOtherSessions: true,
+        },
+        headers: requestHeaders,
+      });
+    } catch (err) {
+      return { error: { general: err.message } };
+    }
+
+    // log out everywhere, this browser too (better auth keeps a new session
+    // for it), then clear the cookie
+    await prisma.session.deleteMany({ where: { userId: user.id } });
+    await betterAuthServer.api.signOut({ headers: requestHeaders });
+    await clearResetTokens(user.id);
+    await clearMailThrottle("reset-password", user.id);
+    recordAccountEvent("password_changed", user.id);
+
+    if (realEmail(user)) {
+      await trySend("password changed notice", () =>
+        sendPasswordChangedNotice(user),
+      );
+    }
+
+    redirect("/login?message=PasswordChangeSuccess");
+  },
+);

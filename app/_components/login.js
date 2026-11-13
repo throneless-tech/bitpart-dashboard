@@ -205,7 +205,6 @@ export function LoginForm() {
         loggedIn();
       }
     } catch (error) {
-      console.log(error);
       showError(INVALID);
     } finally {
       setPending(false);

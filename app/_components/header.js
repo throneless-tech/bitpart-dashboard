@@ -53,14 +53,12 @@ export default function Header(props) {
         refreshSession();
         router.push("/");
       } else {
-        console.log(res.message);
         toaster.create({
           title: "Logout not successful. Contact an administrator.",
           type: "error",
         });
       }
     } catch (error) {
-      console.log(error);
       toaster.create({
         title: "Logout not successful. Contact an administrator.",
         type: "error",

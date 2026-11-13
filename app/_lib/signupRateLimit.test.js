@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { logger } from "@/app/_lib/logger";
 
 // a tiny in-memory stand-in for the SignupAttempt table
 const mocks = vi.hoisted(() => {
@@ -116,12 +117,12 @@ describe("signupAllowed", () => {
   });
 
   it("puts requests with no known IP in one shared bucket", async () => {
-    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
     vi.stubEnv("SIGNUP_RATE_LIMIT_MAX", "1");
     await recordSignup(null);
 
     expect(await signupAllowed(null)).toBe(false);
-    expect(console.warn).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalled();
   });
 
   it("throws when AUTH_SECRET is not configured", async () => {

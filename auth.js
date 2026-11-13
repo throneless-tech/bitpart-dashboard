@@ -12,6 +12,7 @@ import { MIN_PASSWORD_LENGTH } from "@/app/_lib/definitions";
 import { authMailCallback } from "@/app/_lib/authMail";
 import { EMAIL_CODE_MINUTES } from "@/app/_lib/accountEmails";
 import { sendTwoFactorOTP, twoFactorMethods } from "@/app/_lib/mfa";
+import { loginTelemetry } from "@/app/_lib/authTelemetry";
 import { realEmail } from "@/app/_lib/placeholderEmail";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? process.env.APP_URL;
@@ -135,6 +136,8 @@ export const authOptions = {
     }),
     // after twoFactor, to fix up the methods it lists
     twoFactorMethods(),
+    // after twoFactorMethods, to see the final response
+    loginTelemetry(),
     passkey({
       rpID: siteURL?.hostname,
       rpName: "Bitpart",

@@ -1,4 +1,4 @@
-import { appUrl, sendMail } from "@/app/_lib/mail";
+import { appUrl, countEmail, sendMail } from "@/app/_lib/mail";
 import { claimMailSlot, clearResetTokens } from "@/app/_lib/mailThrottle";
 import { prisma } from "@/lib/prisma";
 import { realEmail } from "@/app/_lib/placeholderEmail";
@@ -9,11 +9,18 @@ import { realEmail } from "@/app/_lib/placeholderEmail";
 export const sendVerificationEmail = async ({ user, token }) => {
   const to = realEmail(user);
 
-  if (!to || !(await claimMailSlot("verify-email", user.id))) {
+  if (!to) {
+    countEmail("verify", "skipped");
+    return false;
+  }
+
+  if (!(await claimMailSlot("verify-email", user.id))) {
+    countEmail("verify", "throttled");
     return false;
   }
 
   await sendMail({
+    kind: "verify",
     to,
     subject: "Confirm your Bitpart email address",
     text: `Hi ${user.username},
@@ -34,7 +41,14 @@ If you didn't ask for this, you can ignore this email.`,
 export const sendPasswordResetEmail = async ({ user, token }) => {
   const to = realEmail(user);
 
-  if (!to || !(await claimMailSlot("reset-password", user.id))) {
+  const outcome = !to
+    ? "skipped"
+    : !(await claimMailSlot("reset-password", user.id))
+      ? "throttled"
+      : null;
+
+  if (outcome) {
+    countEmail("reset", outcome);
     await prisma.verification.deleteMany({
       where: { identifier: `reset-password:${token}` },
     });
@@ -44,6 +58,7 @@ export const sendPasswordResetEmail = async ({ user, token }) => {
   await clearResetTokens(user.id, token);
 
   await sendMail({
+    kind: "reset",
     to,
     subject: "Reset your Bitpart password",
     text: `Hi ${user.username},
@@ -65,6 +80,7 @@ export const EMAIL_CODE_MINUTES = 5;
 // and confirmed
 export const sendTwoFactorCode = async ({ user, code }) =>
   sendMail({
+    kind: "sign_in_code",
     to: realEmail(user),
     subject: "Your Bitpart sign-in code",
     text: `Hi ${user.username},
@@ -80,6 +96,7 @@ export const sendEmailChangedNotice = async ({
   newEmail,
 }) =>
   sendMail({
+    kind: "email_changed",
     to: oldEmail,
     subject: "Your Bitpart email address was changed",
     text: `Hi ${username},
@@ -133,6 +150,7 @@ export const sendBotAlert = async ({ user, bot, kind, retryAt }) => {
   const { subject, text } = botAlertBodies[kind]({ bot, retryAt });
 
   return sendMail({
+    kind: "bot_alert",
     to: realEmail(user),
     subject,
     text: `Hi ${user.username},\n\n${text}\n\n${alertFooter()}`,
@@ -141,6 +159,7 @@ export const sendBotAlert = async ({ user, bot, kind, retryAt }) => {
 
 export const sendPasswordChangedNotice = async (user) =>
   sendMail({
+    kind: "password_changed",
     to: realEmail(user),
     subject: "Your Bitpart password was changed",
     text: `Hi ${user.username},

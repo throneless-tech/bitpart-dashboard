@@ -261,7 +261,6 @@ export default function CreateBotFlow({ username }) {
 
       setCreatedBot(response.bot);
     } catch (error) {
-      console.log(error);
       alert(
         "A server error occurred while trying to create this bot. Please contact an admin for assistance.",
       );

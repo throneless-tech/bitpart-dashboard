@@ -1,6 +1,7 @@
 import { createAuthMiddleware } from "better-auth/api";
 import { sendTwoFactorCode } from "@/app/_lib/accountEmails";
 import { realEmail } from "@/app/_lib/placeholderEmail";
+import { countEmail } from "@/app/_lib/mail";
 
 // better auth keeps one twoFactorEnabled flag per user and offers email codes
 // to everyone who has it. we track totp (a verified TwoFactor row) and email
@@ -22,6 +23,7 @@ export const loginMethods = (user, twoFactor) => [
 // twoFactorEnabled, so check email codes are on and the address can get them.
 export const sendTwoFactorOTP = async ({ user, otp }) => {
   if (!user?.emailOtpEnabled || !canUseEmailCodes(user)) {
+    countEmail("sign_in_code", "skipped");
     return;
   }
 

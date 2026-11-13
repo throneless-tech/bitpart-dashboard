@@ -3,8 +3,36 @@ import { prisma } from "@/lib/prisma";
 import { readBotBitpart, signalChannelHealth } from "@/app/_lib/bitpart";
 import { sendBotAlert } from "@/app/_lib/accountEmails";
 import { realEmail } from "@/app/_lib/placeholderEmail";
+import {
+  bitpartInstance,
+  count,
+  recordDuration,
+  withSpan,
+} from "@/app/_lib/otel";
+import { errorFields, logger } from "@/app/_lib/logger";
 
 const LEASE_NAME = "bot-alerts";
+
+// until when this replica holds the lease, as far as it knows
+let leaseHeldUntil = 0;
+
+// whether this replica holds the poller lease (it reports the database
+// gauges, see app/_lib/dbGauges.js)
+export const holdsPollerLease = (now = Date.now()) => now < leaseHeldUntil;
+
+// for tests
+export const setLeaseHeldUntil = (time) => {
+  leaseHeldUntil = time;
+};
+
+// what the poller last saw for each bot: linked, unlinked, failing, or
+// unknown when bitpart couldn't tell it. in memory only.
+const lastStatuses = new Map();
+
+export const linkStatuses = () => [...lastStatuses.values()];
+
+const rememberStatus = (bot, status) =>
+  lastStatuses.set(bot.id, { status, instance: bot.instance });
 
 const numberEnv = (name, fallback) => {
   const value = Number(process.env[name]);
@@ -119,14 +147,24 @@ export const checkBot = async (bot, { cooldownMs }) => {
     response = await readBotBitpart(bot.bitpartId, bot.instance);
   } catch (error) {
     // bitpart unreachable: not the owner's problem, and not worth an email
-    console.error("Alert poller: ReadBot failed for bot", bot.bitpartId, error);
-    return;
+    logger.warn(
+      {
+        bot_id: bot.bitpartId,
+        "bitpart.instance": bitpartInstance(bot.instance),
+        ...errorFields(error),
+      },
+      "alert poller: ReadBot failed",
+    );
+    rememberStatus(bot, "unknown");
+    return "unknown";
   }
 
   const health = signalChannelHealth(response);
 
+  rememberStatus(bot, health.status);
+
   if (health.status === "unknown") {
-    return;
+    return "unknown";
   }
 
   const { alerts, cleared } = evaluateBot(bot, health);
@@ -151,7 +189,10 @@ export const checkBot = async (bot, { cooldownMs }) => {
   }
 
   if (!canEmail(bot.creator)) {
-    return;
+    for (const kind of alerts) {
+      count("dashboard.alerts", { kind, outcome: "skipped" });
+    }
+    return health.status;
   }
 
   for (const kind of alerts) {
@@ -163,14 +204,47 @@ export const checkBot = async (bot, { cooldownMs }) => {
           kind,
           retryAt: health.retryAt,
         });
+        count("dashboard.alerts", { kind, outcome: "sent" });
+        logger.info({ bot_id: bot.bitpartId, kind }, "bot alert sent");
       } catch (error) {
         // let it try again on a later poll instead of waiting out the cooldown
         await prisma.botAlert.deleteMany({ where: { botId: bot.id, kind } });
-        console.error("Alert poller: failed to email alert", kind, error);
+        count("dashboard.alerts", { kind, outcome: "failed" });
+        logger.warn(
+          { bot_id: bot.bitpartId, kind, ...errorFields(error) },
+          "alert poller: failed to email alert",
+        );
       }
+    } else {
+      count("dashboard.alerts", { kind, outcome: "cooldown" });
     }
   }
+
+  return health.status;
 };
+
+// checkBot in its own span
+const checkBotTraced = (bot, options) =>
+  withSpan(
+    "poller.check_bot",
+    {
+      bot_id: bot.bitpartId,
+      "bitpart.instance": bitpartInstance(bot.instance),
+    },
+    async (span) => {
+      const result = await checkBot(bot, options);
+      span.setAttribute("result", result ?? "unknown");
+      logger.debug(
+        {
+          bot_id: bot.bitpartId,
+          "bitpart.instance": bitpartInstance(bot.instance),
+          result,
+        },
+        "alert poller: checked bot",
+      );
+      return result;
+    },
+  );
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -214,9 +288,12 @@ export const pollOnce = async (
       }
 
       try {
-        await checkBot(bot, { cooldownMs });
+        await checkBotTraced(bot, { cooldownMs });
       } catch (error) {
-        console.error("Alert poller: error checking bot", bot.bitpartId, error);
+        logger.error(
+          { bot_id: bot.bitpartId, ...errorFields(error) },
+          "alert poller: error checking bot",
+        );
       }
     }
   };
@@ -225,8 +302,35 @@ export const pollOnce = async (
     Array.from({ length: Math.min(concurrency, schedule.length) }, worker),
   );
 
+  // forget deleted bots
+  const ids = new Set(bots.map((bot) => bot.id));
+  for (const id of lastStatuses.keys()) {
+    if (!ids.has(id)) lastStatuses.delete(id);
+  }
+
   return bots.length;
 };
+
+// one poller run, traced and measured
+const pollRun = (settings) =>
+  withSpan("poller.run", {}, async (span) => {
+    const started = performance.now();
+    let outcome = "ok";
+
+    try {
+      span.setAttribute("bots", await pollOnce(settings));
+    } catch (error) {
+      outcome = "error";
+      throw error;
+    } finally {
+      count("dashboard.poller.runs", { outcome });
+      recordDuration(
+        "dashboard.poller.run.duration",
+        (performance.now() - started) / 1000,
+        { outcome },
+      );
+    }
+  });
 
 let started = false;
 
@@ -238,15 +342,29 @@ export const startBotAlertPoller = () => {
   }
 
   started = true;
+  logger.info({ interval_ms: settings.intervalMs }, "alert poller started");
 
   const run = async () => {
     try {
       // hold the lease a little longer than one run takes
-      if (await acquireLease(settings.intervalMs * 2)) {
-        await pollOnce(settings);
+      const ttlMs = settings.intervalMs * 2;
+      const held = holdsPollerLease();
+      const acquired = await acquireLease(ttlMs);
+
+      leaseHeldUntil = acquired ? Date.now() + ttlMs : 0;
+
+      if (acquired !== held) {
+        logger.info(
+          { holder: acquired },
+          acquired ? "alert poller lease taken" : "alert poller lease lost",
+        );
+      }
+
+      if (acquired) {
+        await pollRun(settings);
       }
     } catch (error) {
-      console.error("Alert poller: run failed", error);
+      logger.error(errorFields(error), "alert poller: run failed");
     } finally {
       // start the next run after this one, with jitter so instances that
       // booted together don't keep checking the lease in lockstep

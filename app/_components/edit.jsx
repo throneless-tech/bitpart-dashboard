@@ -149,7 +149,6 @@ export default function EditBotFlow({ botId, username }) {
 
       router.push(`/my-bots/view/${bot.id}`);
     } catch (error) {
-      console.log(error);
       alert(
         "A server error occurred while trying to update this bot. Please contact an admin for assistance.",
       );

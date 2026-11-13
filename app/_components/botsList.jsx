@@ -62,7 +62,7 @@ export default function BotsList({ username }) {
       await fetchBots();
       setIsFetching(false);
     } catch (error) {
-      console.log("error: ", error);
+      // keep showing the list we have
     }
   }
 

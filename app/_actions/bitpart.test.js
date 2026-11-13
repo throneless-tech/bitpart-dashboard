@@ -15,13 +15,9 @@ const mocks = await vi.hoisted(async () => {
       this.sent = [];
       this.readyState = mocks.fail ? 3 : 1;
       sockets.push(this);
-      setTimeout(() => {
-        try {
-          this.emit(mocks.fail ? "error" : "open", new Error("refused"));
-        } catch {
-          // the error listener rethrows after rejecting; swallow it here
-        }
-      });
+      setTimeout(() =>
+        this.emit(mocks.fail ? "error" : "open", new Error("refused")),
+      );
     }
 
     send(json) {

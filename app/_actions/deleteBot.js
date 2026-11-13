@@ -1,9 +1,12 @@
 "use server";
+import { traceAction } from "@/app/_lib/otel";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getUser } from "./getUser";
 import { deleteFromEMS } from "./ems";
 import { sendBitpartMessage } from "@/app/_lib/bitpart";
+import { errorFields, logger } from "@/app/_lib/logger";
+import { recordBotEvent } from "@/app/_lib/events";
 
 const deleteBotBitpart = async (botBitpartId, host) => {
   const jsonDeleteBot = {
@@ -18,24 +21,45 @@ const deleteBotBitpart = async (botBitpartId, host) => {
 
 // botBitpartId and host are accepted for backwards compatibility with
 // existing but are intentionally ignored
-export const deleteBot = async (botId, _botBitpartId, username, _host) => {
-  const user = await getUser(username);
+export const deleteBot = traceAction(
+  "action.deleteBot",
+  async (botId, _botBitpartId, username, _host) => {
+    const user = await getUser(username);
 
-  if (!user) {
-    throw new Error("Not authorized to delete this bot.");
-  }
+    if (!user) {
+      throw new Error("Not authorized to delete this bot.");
+    }
 
-  const bot = await prisma.bot.findFirst({
-    where: {
-      id: botId,
-      creatorId: user.id,
-    },
-  });
+    const bot = await prisma.bot.findFirst({
+      where: {
+        id: botId,
+        creatorId: user.id,
+      },
+    });
 
-  if (!bot) {
-    throw new Error("Bot not found.");
-  }
+    if (!bot) {
+      throw new Error("Bot not found.");
+    }
 
+    const event = {
+      event: "deleted",
+      botType: bot.botType,
+      botId: bot.bitpartId,
+      userId: user.id,
+    };
+
+    try {
+      await removeBot(bot, user);
+    } catch (error) {
+      recordBotEvent({ ...event, outcome: "error" });
+      throw error;
+    }
+
+    recordBotEvent(event);
+  },
+);
+
+const removeBot = async (bot, user) => {
   const deletedBitpartBot = await deleteBotBitpart(bot.bitpartId, bot.instance);
 
   if (deletedBitpartBot?.message_type === "Error") {
@@ -80,6 +104,9 @@ export const deleteBot = async (botId, _botBitpartId, username, _host) => {
   try {
     await deleteFromEMS(bot.bitpartId, bot.botType);
   } catch (error) {
-    console.error("EMS cleanup failed for bot", bot.bitpartId, error);
+    logger.error(
+      { bot_id: bot.bitpartId, ...errorFields(error) },
+      "EMS cleanup failed",
+    );
   }
 };

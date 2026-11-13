@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import { count, withSpan } from "@/app/_lib/otel";
+import { errorFields, logger } from "@/app/_lib/logger";
 
 let transport = null;
 
@@ -36,8 +38,34 @@ const fromAddress = () => {
   return from.includes("<") ? from : { name: "Bitpart", address: from };
 };
 
-export const sendMail = async ({ to, subject, text }) =>
-  getTransport().sendMail({ from: fromAddress(), to, subject, text });
+// emails not sent at all (throttled, or no real address)
+export const countEmail = (kind, outcome) =>
+  count("dashboard.emails", { kind, outcome });
+
+// kind says what the email is for (verify, reset, bot_alert, ...); it, not
+// the address, is what gets traced and logged
+export const sendMail = async ({ kind = "other", to, subject, text }) =>
+  withSpan("mail.send", { kind }, async (span) => {
+    try {
+      const result = await getTransport().sendMail({
+        from: fromAddress(),
+        to,
+        subject,
+        text,
+      });
+
+      span.setAttribute("outcome", "sent");
+      countEmail(kind, "sent");
+      logger.info({ kind }, "email sent");
+
+      return result;
+    } catch (error) {
+      span.setAttribute("outcome", "failed");
+      countEmail(kind, "failed");
+      logger.error({ kind, ...errorFields(error) }, "email not sent");
+      throw error;
+    }
+  });
 
 // absolute link to a page on this site, for use in emails
 export const appUrl = (path) => {
