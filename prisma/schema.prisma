@@ -11,24 +11,64 @@ generator client {
 // user, session, account, verification and rateLimit are the better auth
 // models (see auth.js). the password hash lives on the credential account.
 model User {
-  id              String    @id @default(cuid())
+  id               String     @id @default(cuid())
   // better auth's display name; kept equal to username
-  name            String
-  username        String    @unique
+  name             String
+  username         String     @unique
   // accounts without an email get a placeholder (app/_lib/placeholderEmail.js)
-  email           String    @unique
-  emailVerified   Boolean   @default(false)
-  image           String?
+  email            String     @unique
+  emailVerified    Boolean    @default(false)
+  image            String?
   // new address waiting for confirmation, while the current one stays in use
-  pendingEmail    String?
+  pendingEmail     String?
   // email alerts about bot problems; only sent when the user has an email
-  notifyBotIssues Boolean   @default(true)
-  accounts        Account[]
-  sessions        Session[]
-  bots            Bot[]
-  consent_agree   Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  notifyBotIssues  Boolean    @default(true)
+  // second factor at password login: totp (TwoFactor.verified) and/or email
+  // codes. better auth sets twoFactorEnabled; emailOtpEnabled is ours, as
+  // better auth can't turn email codes on per user (see app/_lib/mfa.js)
+  twoFactorEnabled Boolean    @default(false)
+  emailOtpEnabled  Boolean    @default(false)
+  accounts         Account[]
+  sessions         Session[]
+  twoFactor        TwoFactor?
+  passkeys         Passkey[]
+  bots             Bot[]
+  consent_agree    Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+}
+
+// totp secret and backup codes, both encrypted with the auth secret. a row
+// with verified false holds backup codes for email-code-only users.
+model TwoFactor {
+  id                      String    @id
+  secret                  String
+  backupCodes             String
+  userId                  String    @unique
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified                Boolean   @default(true)
+  failedVerificationCount Int       @default(0)
+  lockedUntil             DateTime?
+
+  @@index([secret])
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@index([userId])
+  @@index([credentialID])
 }
 
 model Session {

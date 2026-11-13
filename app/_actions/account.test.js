@@ -76,6 +76,8 @@ vi.mock("@/lib/prisma", () => ({
       ),
     },
     session: { deleteMany: mocks.deleteSessions },
+    twoFactor: { findUnique: vi.fn(async () => null) },
+    passkey: { findMany: vi.fn(async () => []) },
   },
 }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
@@ -490,6 +492,19 @@ describe("removeEmail", () => {
     );
 
     expect(result.error.currentPassword).toMatch(/incorrect/);
+    expect(alice.email).toBe("alice@mail.org");
+  });
+
+  it("refuses while email sign-in codes are on", async () => {
+    alice.emailVerified = true;
+    alice.emailOtpEnabled = true;
+
+    const result = await removeEmail(
+      undefined,
+      form({ username: "alice", currentPassword: "old-password" }),
+    );
+
+    expect(result.error.general).toMatch(/Turn off email sign-in codes/);
     expect(alice.email).toBe("alice@mail.org");
   });
 

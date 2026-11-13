@@ -29,6 +29,7 @@ import {
 
 // components
 import { Button } from "@/app/_components/ui/button";
+import SecuritySettings from "@/app/_components/securitySettings";
 
 // fonts
 import { geistMono } from "@/app/fonts";
@@ -245,6 +246,10 @@ export default function Settings({ account }) {
             : "Add an email address above to get notified when one of your bots has a problem."}
         </Text>
         <Message state={notifyNotice} />
+      </Section>
+
+      <Section title="Security">
+        <SecuritySettings account={account} />
       </Section>
 
       <Section title="Password">

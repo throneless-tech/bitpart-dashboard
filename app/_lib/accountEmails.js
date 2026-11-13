@@ -58,6 +58,22 @@ If you didn't ask for this, you can ignore this email. Your password won't chang
   return true;
 };
 
+// how long an email sign-in code works, in minutes
+export const EMAIL_CODE_MINUTES = 5;
+
+// a sign-in code for email two-factor; callers check the address is real
+// and confirmed
+export const sendTwoFactorCode = async ({ user, code }) =>
+  sendMail({
+    to: realEmail(user),
+    subject: "Your Bitpart sign-in code",
+    text: `Hi ${user.username},
+
+Your Bitpart sign-in code is ${code}. It expires in ${EMAIL_CODE_MINUTES} minutes.
+
+If you didn't just try to log in, someone else may know your password. Change it from your settings page.`,
+  });
+
 export const sendEmailChangedNotice = async ({
   username,
   oldEmail,

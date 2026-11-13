@@ -23,6 +23,7 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@better-auth/passkey": "1.7.23",
     "@chakra-ui/react": "^3.2.3",
     "@emotion/react": "^11.14.0",
     "@hookform/resolvers": "^3.9.1",
@@ -40,6 +41,7 @@
     "nodemailer": "^7.0.13",
     "papaparse": "^5.5.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",

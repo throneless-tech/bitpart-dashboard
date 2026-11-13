@@ -1,11 +1,12 @@
 "use server";
-import bcrypt from "bcryptjs";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifyJWT } from "better-auth/crypto";
 import { prisma } from "@/lib/prisma";
 import { betterAuthServer } from "@/auth";
 import { getUser } from "./getUser";
+import { getVerifiedUser } from "@/app/_lib/verifiedUser";
+import { canUseEmailCodes } from "@/app/_lib/mfa";
 import { collectAuthMail, sendAuthMail } from "@/app/_lib/authMail";
 import { clearMailThrottle, clearResetTokens } from "@/app/_lib/mailThrottle";
 import {
@@ -69,32 +70,6 @@ const callAndSend = async (label, call) => {
   return trySend(label, () => sendAuthMail(mail));
 };
 
-// the logged in user, checked against their current password
-const getVerifiedUser = async (username, currentPassword) => {
-  const user = await getUser(username);
-
-  if (!user) {
-    return { error: { general: "You must be logged in to do this." } };
-  }
-
-  const account = currentPassword
-    ? await prisma.account.findFirst({
-        where: { userId: user.id, providerId: "credential" },
-      })
-    : null;
-
-  if (
-    !account?.password ||
-    !(await bcrypt.compare(currentPassword, account.password))
-  ) {
-    return {
-      error: { currentPassword: "Your current password is incorrect." },
-    };
-  }
-
-  return { user };
-};
-
 const emailInUse = async (email, userId) =>
   !!(await prisma.user.findFirst({
     where: {
@@ -118,6 +93,43 @@ export const getAccountSettings = async (username) => {
     emailVerified: !!realEmail(user) && !!user.emailVerified,
     pendingEmail: user.pendingEmail,
     notifyBotIssues: user.notifyBotIssues,
+    security: await securitySettings(user),
+  };
+};
+
+// which second factors and passkeys the user has; never secrets
+const securitySettings = async (user) => {
+  const twoFactor = await prisma.twoFactor.findUnique({
+    where: { userId: user.id },
+    select: { verified: true },
+  });
+
+  let backupCodesRemaining = 0;
+
+  if (twoFactor) {
+    try {
+      const { backupCodes } = await betterAuthServer.api.viewBackupCodes({
+        body: { userId: user.id },
+      });
+      backupCodesRemaining = backupCodes.length;
+    } catch (error) {
+      console.error("Failed to read backup codes", error);
+    }
+  }
+
+  const passkeys = await prisma.passkey.findMany({
+    where: { userId: user.id },
+    select: { id: true, name: true, createdAt: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  return {
+    totp: !!twoFactor?.verified,
+    emailCodes: !!user.emailOtpEnabled,
+    canUseEmailCodes: canUseEmailCodes(user),
+    hasBackupCodes: !!twoFactor,
+    backupCodesRemaining,
+    passkeys,
   };
 };
 
@@ -421,6 +433,16 @@ export const removeEmail = async (prevState, formData) => {
 
   if (error) {
     return { error };
+  }
+
+  // email sign-in codes need the address
+  if (user.emailOtpEnabled) {
+    return {
+      error: {
+        general:
+          "Turn off email sign-in codes (under Security) before removing your email address.",
+      },
+    };
   }
 
   // links sent to the old address stop working, as it's no longer the user's
